@@ -9,4 +9,4 @@
 - (추가적으로 진행되어야 할 과제 혹은 다음 과제를 작성해주세요)
 
 ## Jira 링크
-- [BE/FE/AI/Infra issue번호]
+- [BE/FE/AI/Infra #issue번호]
