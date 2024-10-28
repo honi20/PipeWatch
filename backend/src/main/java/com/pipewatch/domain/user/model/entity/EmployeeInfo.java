@@ -22,7 +22,7 @@ public class EmployeeInfo {
 
 	private String empClass;
 
-	@OneToOne
+	@OneToOne(fetch= FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	private User user;
 }

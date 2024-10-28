@@ -19,10 +19,6 @@ public class User extends BaseEntity {
     @Column(name = "user_id")
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "enterprise_id")
-    private Enterprise enterprise;
-
     @Email
     private String email;
 
@@ -33,4 +29,8 @@ public class User extends BaseEntity {
     private State state;
 
     private Role role;
+
+    @ManyToOne(fetch= FetchType.LAZY)
+    @JoinColumn(name = "enterprise_id")
+    private Enterprise enterprise;
 }
