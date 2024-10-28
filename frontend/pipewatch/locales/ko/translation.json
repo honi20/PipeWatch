@@ -1,0 +1,15 @@
+{
+  "header": {
+    "lang": "한국어",
+    "subMenu": {
+      "home": "Home",
+      "aboutus": "About us",
+      "modelList": "모델 리스트",
+      "createModel": "모델 생성",
+      "contact": "Contact"
+    },
+    "login": "로그인"
+  },
+  "greeting1": "PipeWatch로",
+  "greeting2": "당신의 작업 효율을 높여보세요."
+}
