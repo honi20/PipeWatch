@@ -1,30 +1,26 @@
 package com.pipewatch.global.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.MappedSuperclass;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreUpdate;
-import lombok.Data;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
-@Data
+@Getter
 @MappedSuperclass
+@SuperBuilder
+@NoArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 public class BaseEntity {
+	@CreatedDate
 	@Column(updatable = false)
 	private LocalDateTime created_at;
 
+	@LastModifiedDate
 	private LocalDateTime updated_at;
 
-	@PrePersist
-	public void persist() {
-		LocalDateTime now = LocalDateTime.now();
-		created_at = now;
-		updated_at = now;
-	}
-
-	@PreUpdate
-	public void preUpdate() {
-		updated_at = LocalDateTime.now();
-	}
 }
