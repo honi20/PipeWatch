@@ -1,4 +1,4 @@
-package com.pipewatch.user.model.entity;
+package com.pipewatch.domain.user.model.entity;
 
 public enum Role {
     ROLE_EMPLOYEE("사원"),

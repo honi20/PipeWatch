@@ -1,6 +1,6 @@
-package com.pipewatch.user.model.entity;
+package com.pipewatch.domain.user.model.entity;
 
-import com.pipewatch.enterprise.model.entity.Enterprise;
+import com.pipewatch.domain.enterprise.model.entity.Enterprise;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.AccessLevel;
