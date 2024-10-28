@@ -10,6 +10,9 @@
     },
     "login": "Login"
   },
-  "greeting1": "Boost your Efficiency",
-  "greeting2": "with PipeWatch."
+  "home" : {
+
+    "greeting1": "Boost your Efficiency",
+    "greeting2": "with PipeWatch."
+  }
 }
