@@ -18,7 +18,7 @@ public class PipelineProperty {
 
 	private Integer outerDiameter;
 
-	private Integer InnerDiameter;
+	private Integer innerDiameter;
 
 	private Double velocity;
 
