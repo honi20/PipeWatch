@@ -19,8 +19,8 @@ function Layout() {
   }, [theme]);
 
   return (
-    <div className="bg-white dark:bg-black">
-      <Header handleTheme={handleTheme} />
+    <div className="h-full bg-white text-black dark:bg-black dark:text-white ">
+      <Header handleTheme={handleTheme} currentTheme={theme} />
       <Outlet />
     </div>
   );

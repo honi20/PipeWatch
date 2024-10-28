@@ -10,8 +10,20 @@
 
 body {
   font-family: "Pretendard";
-  min-width: 768px;
-  min-height: 1024px;
+  /* min-width: 768px; */
+  /* min-height: 1024px; */
+}
+
+body,
+html {
+  width: 100%;
+  margin: 0;
+}
+
+html,
+body,
+#root {
+  height: 100%;
 }
 
 @media (prefers-color-scheme: light) {
