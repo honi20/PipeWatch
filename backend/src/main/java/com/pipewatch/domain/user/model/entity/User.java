@@ -1,26 +1,23 @@
-package com.pipewatch.user.model.entity;
+package com.pipewatch.domain.user.model.entity;
 
-import com.pipewatch.enterprise.model.entity.Enterprise;
+import com.pipewatch.domain.enterprise.model.entity.Enterprise;
+import com.pipewatch.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 @Entity
-@Builder
+@SuperBuilder
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class User {
+public class User extends BaseEntity {
 
     @Id @GeneratedValue
     @Column(name = "user_id")
     private Long id;
-
-    @ManyToOne
-    @JoinColumn(name = "enterprise_id")
-    private Enterprise enterprise;
 
     @Email
     private String email;
@@ -32,4 +29,8 @@ public class User {
     private State state;
 
     private Role role;
+
+    @ManyToOne(fetch= FetchType.LAZY)
+    @JoinColumn(name = "enterprise_id")
+    private Enterprise enterprise;
 }
