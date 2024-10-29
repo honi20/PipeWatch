@@ -6,4 +6,6 @@ import java.security.NoSuchAlgorithmException;
 
 public interface AuthService {
     void sendEmailCode(AuthDto.EmailCodeSendRequestDto requestDto) throws NoSuchAlgorithmException;
+
+    void verifyEmailCode(AuthDto.EmailCodeVerifyRequestDto requestDto);
 }

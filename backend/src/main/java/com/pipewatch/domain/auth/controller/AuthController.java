@@ -22,6 +22,20 @@ public class AuthController {
     private final JwtService jwtService;
     private final RedisUtil redisUtil;
 
+    @PostMapping("/send-email-code")
+    public ResponseEntity<?> emailCodeSend(@RequestBody AuthDto.EmailCodeSendRequestDto requestDto) throws NoSuchAlgorithmException {
+        authService.sendEmailCode(requestDto);
+
+        return new ResponseEntity<>(ResponseDto.success(EMAIL_CODE_SEND_OK, null), HttpStatus.OK);
+    }
+
+    @PostMapping("/verify-email-code")
+    public ResponseEntity<?> emailCodeVerify(@RequestBody AuthDto.EmailCodeVerifyRequestDto requestDto) {
+        authService.verifyEmailCode(requestDto);
+
+        return new ResponseEntity<>(ResponseDto.success(EMAIL_VERIFIED, null), HttpStatus.OK);
+    }
+
     @PostMapping("/enterprise")
     public ResponseEntity<?> enterpriseAdd(@RequestBody AuthDto.EnterpriseRegistRequestDto enterpriseRegistRequestDto) {
 
@@ -31,18 +45,6 @@ public class AuthController {
     @PostMapping
     public ResponseEntity<?> signup(@RequestBody AuthDto.SignupRequestDto signupRequestDto) {
         return new ResponseEntity<>(ResponseDto.success(USER_CREATED, null), HttpStatus.CREATED);
-    }
-
-    @PostMapping("/send-email-code")
-    public ResponseEntity<?> emailCodeSend(@RequestBody AuthDto.EmailCodeSendRequestDto requestDto) throws NoSuchAlgorithmException {
-        authService.sendEmailCode(requestDto);
-
-        return new ResponseEntity<>(ResponseDto.success(EMAIL_CODE_SEND_OK, null), HttpStatus.OK);
-    }
-
-    @PostMapping("/verify-email-code")
-    public ResponseEntity<?> emailCodeVerify(@RequestBody AuthDto.EmailCodeVerifyRequestDto emailCodeVerifyRequestDto) {
-        return new ResponseEntity<>(ResponseDto.success(EMAIL_VERIFIED, null), HttpStatus.OK);
     }
 
     @PostMapping("/signin")

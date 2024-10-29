@@ -41,4 +41,18 @@ public class AuthServiceImpl implements AuthService {
         }
         throw new BaseException(DUPLICATE_EMAIL);
     }
+
+    @Override
+    public void verifyEmailCode(AuthDto.EmailCodeVerifyRequestDto requestDto) {
+        String verify = ((JwtToken) redisUtil.getData(requestDto.getEmail() + "_verify")).getVerify();
+
+        if (verify == null) {
+            throw new BaseException(VERIFY_NOT_FOUND);
+        }
+
+        if (!verify.equals(requestDto.getVerifyCode())) {
+            throw new BaseException(INVALID_EMAIL_CODE);
+        }
+
+    }
 }

@@ -48,7 +48,7 @@ public class AuthDto {
     @AllArgsConstructor
     public static class EmailCodeVerifyRequestDto {
         private String email;
-        private String code;
+        private String verifyCode;
     }
 
     @Getter
