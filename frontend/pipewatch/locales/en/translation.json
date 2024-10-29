@@ -4,16 +4,15 @@
     "subMenu": {
       "home": "Home",
       "aboutus": "About us",
-      "aboutService" : "Our Service",
-      "aboutTeam" : "Our Team",
-      "modelList": "Model List",
-      "createModel": "Create Model",
+      "aboutService": "Our Service",
+      "aboutTeam": "Our Team",
+      "pipeViewer": "Pipe Viewer",
+      "pipeGenerator": "Pipe Generator",
       "contact": "Contact"
     },
     "login": "Login"
   },
-  "home" : {
-
+  "home": {
     "greeting1": "Boost your Efficiency",
     "greeting2": "with PipeWatch."
   }

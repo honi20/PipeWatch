@@ -11,6 +11,7 @@ import { CreateModel } from "./pages/CreateModel";
 import { ModelList } from "./pages/ModelList";
 import { Contact } from "./pages/Contact";
 
+import { Account } from "./pages/Account/Account";
 import { LoginPage } from "./pages/Account/LoginPage";
 import { FindPassword } from "./pages/Account/FindPassword";
 import { SignUpPage } from "./pages/Account/SignUpPage";
@@ -44,21 +45,23 @@ function App() {
               <Route path="/enterprise/view" element={<EmpView />} />
             </Route>
 
-            <Route path="/manage-account" element={<ManageAccount />} />
-            <Route path="/manage-account/edit-info" element={<EditInfo />} />
+            <Route path="/account/manage" element={<ManageAccount />} />
+            <Route path="/account/manage/edit-info" element={<EditInfo />} />
             <Route
-              path="/manage-account/change-pw"
+              path="/account/manage/change-pw"
               element={<ChangePassword />}
             />
             <Route
-              path="/manage-account/delete-account"
+              path="/account/manage/delete-account"
               element={<DeleteAccount />}
             />
-          </Route>
 
-          <Route path="/account/login" element={<LoginPage />} />
-          <Route path="/account/find-pw" element={<FindPassword />} />
-          <Route path="/account/sign-up" element={<SignUpPage />} />
+            <Route path="/account/auth" element={<Account />}>
+              <Route path="/account/auth/login" element={<LoginPage />} />
+              <Route path="/account/auth/find-pw" element={<FindPassword />} />
+              <Route path="/account/auth/sign-up" element={<SignUpPage />} />
+            </Route>
+          </Route>
         </Routes>
       </Router>
     </>

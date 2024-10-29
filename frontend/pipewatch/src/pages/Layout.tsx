@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 
 import { Header } from "../components/common/Header";
 
@@ -13,6 +13,11 @@ function Layout() {
         : (localStorage.theme = "dark")
     );
   };
+
+  const location = useLocation();
+  // console.log("first location: ", location);
+  const isAuth = location.pathname.includes("/account/auth");
+  // console.log("isAuth: ", isAuth);
 
   useEffect(() => {
     // if (theme === "dark") {
@@ -31,7 +36,9 @@ function Layout() {
 
   return (
     <div className="h-full text-black bg-white dark:bg-black dark:text-white ">
-      <Header handleTheme={handleTheme} currentTheme={localStorage.theme} />
+      {isAuth ? null : (
+        <Header handleTheme={handleTheme} currentTheme={localStorage.theme} />
+      )}
       <Outlet />
     </div>
   );

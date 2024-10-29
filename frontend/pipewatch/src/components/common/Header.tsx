@@ -116,7 +116,7 @@ export const Header = ({ handleTheme, currentTheme }: Props) => {
           }
           to="/create-model"
         >
-          {t("header.subMenu.createModel")}
+          {t("header.subMenu.pipeGenerator")}
         </NavLink>
 
         <NavLink
@@ -129,7 +129,7 @@ export const Header = ({ handleTheme, currentTheme }: Props) => {
           }
           to="/model-list"
         >
-          {t("header.subMenu.modelList")}
+          {t("header.subMenu.pipeViewer")}
         </NavLink>
 
         <NavLink
@@ -160,7 +160,7 @@ export const Header = ({ handleTheme, currentTheme }: Props) => {
         >
           {isDark ? <LightModeIcon /> : <DarkModeIcon />}
         </div>
-        <Link className="" to="/account/login">
+        <Link className="" to="/account/auth/login">
           <Button className="px-4 py-2 bg-white border-2 border-black border-solid rounded-lg text-s dark:bg-black dark:border-white hover:text-primary-200">
             {t("header.login")}
           </Button>
