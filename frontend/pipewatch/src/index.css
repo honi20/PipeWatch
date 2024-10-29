@@ -8,6 +8,12 @@
   src: url("assets/fonts/PretendardVariable.ttf") format("truetype");
 }
 
+@font-face {
+  font-family: "Esamanru";
+  font-weight: bold;
+  src: url("assets/fonts/esamanru\nBold.ttf") format("truetype");
+}
+
 body {
   font-family: "Pretendard";
   min-width: 768px;

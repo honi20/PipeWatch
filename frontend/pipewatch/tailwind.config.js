@@ -4,6 +4,10 @@ export default {
   darkMode: "class",
   theme: {
     extend: {},
+    fontFamily: {
+      Pretendard: ["Pretendard"],
+      Esamanru: ["Esamanru"],
+    },
     screens: {
       sm: "480px",
       md: "768px",
