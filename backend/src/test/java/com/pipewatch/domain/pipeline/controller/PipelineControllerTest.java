@@ -102,9 +102,9 @@ class PipelineControllerTest {
 		);
 
 		actions
-				.andExpect(status().isOk())
-				.andExpect(jsonPath("$.header.httpStatusCode").value(FILE_UPLOAD_OK.getHttpStatusCode()))
-				.andExpect(jsonPath("$.header.message").value(FILE_UPLOAD_OK.getMessage()))
+				.andExpect(status().isCreated())
+				.andExpect(jsonPath("$.header.httpStatusCode").value(FILE_UPLOAD_AND_MODEL_CREATED.getHttpStatusCode()))
+				.andExpect(jsonPath("$.header.message").value(FILE_UPLOAD_AND_MODEL_CREATED.getMessage()))
 				.andDo(document(
 						"모델링 파일 업로드 성공",
 						preprocessRequest(prettyPrint()),
@@ -148,12 +148,12 @@ class PipelineControllerTest {
 				.andExpect(jsonPath("$.header.httpStatusCode").value(MODEL_INIT_OK.getHttpStatusCode()))
 				.andExpect(jsonPath("$.header.message").value(MODEL_INIT_OK.getMessage()))
 				.andDo(document(
-						"모델 초기 정보 설정 성공",
+						"파이프라인 모델 초기정보 설정 성공",
 						preprocessRequest(prettyPrint()),
 						preprocessResponse(prettyPrint()),
 						resource(ResourceSnippetParameters.builder()
 								.tag("Pipeline API")
-								.summary("모델 초기 정보 설정 API")
+								.summary("파이프라인 모델 초기정보 설정 API")
 								.pathParameters(
 										parameterWithName("modelId").description("모델 Id")
 								)
@@ -167,7 +167,7 @@ class PipelineControllerTest {
 												fieldWithPath("body").ignored()
 										)
 								)
-								.requestSchema(Schema.schema("모델 초기 정보 설정 Request"))
+								.requestSchema(Schema.schema("파이프라인 모델 초기정보 설정 Request"))
 								.build()
 						)));
 	}
@@ -195,12 +195,12 @@ class PipelineControllerTest {
 				.andExpect(jsonPath("$.header.httpStatusCode").value(MODEL_MODIFIED_OK.getHttpStatusCode()))
 				.andExpect(jsonPath("$.header.message").value(MODEL_MODIFIED_OK.getMessage()))
 				.andDo(document(
-						"모델 정보 수정 성공",
+						"파이프라인 모델 정보 수정 성공",
 						preprocessRequest(prettyPrint()),
 						preprocessResponse(prettyPrint()),
 						resource(ResourceSnippetParameters.builder()
 								.tag("Pipeline API")
-								.summary("모델 정보 수정 API")
+								.summary("파이프라인 모델 정보 수정 API")
 								.pathParameters(
 										parameterWithName("modelId").description("모델 Id")
 								)
@@ -213,7 +213,47 @@ class PipelineControllerTest {
 												fieldWithPath("body").ignored()
 										)
 								)
-								.requestSchema(Schema.schema("모델 정보 수정 Request"))
+								.requestSchema(Schema.schema("파이프라인 모델 정보 수정 Request"))
+								.build()
+						)));
+	}
+
+	@Test
+	void 모델_상세_조회_성공() throws Exception {
+		ResultActions actions = mockMvc.perform(
+				get("/api/models/{modelId}", 1L)
+						.contentType(MediaType.APPLICATION_JSON)
+						.accept(MediaType.APPLICATION_JSON)
+						.characterEncoding("UTF-8")
+		);
+
+		actions
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.header.httpStatusCode").value(MODEL_DETAIL_OK.getHttpStatusCode()))
+				.andExpect(jsonPath("$.header.message").value(MODEL_DETAIL_OK.getMessage()))
+				.andDo(document(
+						"파이프라인 모델 상세조회 성공",
+						preprocessRequest(prettyPrint()),
+						preprocessResponse(prettyPrint()),
+						resource(ResourceSnippetParameters.builder()
+								.tag("Pipeline API")
+								.summary("파이프라인 모델 상세조회 API")
+								.pathParameters(
+										parameterWithName("modelId").description("모델 Id")
+								)
+								.responseFields(
+										getCommonResponseFields(
+												fieldWithPath("body.name").type(JsonFieldType.STRING).description("모델명"),
+												fieldWithPath("body.description").type(JsonFieldType.STRING).description("모델 설명"),
+												fieldWithPath("body.modelingUrl").type(JsonFieldType.STRING).description("모델링 파일 url"),
+												fieldWithPath("body.isCompleted").type(JsonFieldType.BOOLEAN).description("모델링 완료 여부"),
+												fieldWithPath("body.updatedAt").type(JsonFieldType.STRING).description("마지막 수정일"),
+												fieldWithPath("body.creator").type(JsonFieldType.OBJECT).description("생성자"),
+												fieldWithPath("body.creator.userId").type(JsonFieldType.NUMBER).description("생성자 Id"),
+												fieldWithPath("body.creator.userName").type(JsonFieldType.STRING).description("생성자 이름")
+										)
+								)
+								.responseSchema(Schema.schema("파이프라인 모델 상세조회 Response"))
 								.build()
 						)));
 	}

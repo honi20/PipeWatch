@@ -41,7 +41,7 @@ public class PipelineController {
 				.modelId(1L)
 				.build();
 
-		return new ResponseEntity<>(ResponseDto.success(FILE_UPLOAD_OK, responseDto), HttpStatus.OK);
+		return new ResponseEntity<>(ResponseDto.success(FILE_UPLOAD_AND_MODEL_CREATED, responseDto), HttpStatus.CREATED);
 	}
 
 	@PatchMapping("/init/{modelId}")
@@ -53,4 +53,19 @@ public class PipelineController {
 	public ResponseEntity<?> modelModify(@PathVariable Long modelId) {
 		return new ResponseEntity<>(ResponseDto.success(MODEL_MODIFIED_OK, null), HttpStatus.OK);
 	}
+
+	@GetMapping("/{modelId}")
+	public ResponseEntity<?> modelDetail(@PathVariable Long modelId) {
+		PipelineModelResponse.DetailDto responseDto = PipelineModelResponse.DetailDto.builder()
+				.name("파이프라인 모델")
+				.description("주기적인 점검 필요")
+				.modelingUrl("s3 url")
+				.isCompleted(true)
+				.updatedAt(LocalDateTime.now())
+				.creator(new PipelineModelResponse.Creator(1L, "김싸피"))
+				.build();
+
+		return new ResponseEntity<>(ResponseDto.success(MODEL_DETAIL_OK, responseDto), HttpStatus.OK);
+	}
+
 }
