@@ -59,4 +59,9 @@ public class PipelineController {
 		return new ResponseEntity<>(ResponseDto.success(PIPE_MEMO_CREATED, null), HttpStatus.CREATED);
 	}
 
+	@DeleteMapping("/pipes/{memoId}")
+	public ResponseEntity<?> pipeMemoCreate(@PathVariable Long memoId) {
+		return new ResponseEntity<>(ResponseDto.success(PIPE_MEMO_DELETED, null), HttpStatus.NO_CONTENT);
+	}
+
 }

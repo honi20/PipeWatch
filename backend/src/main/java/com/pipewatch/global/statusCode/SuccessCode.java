@@ -47,6 +47,7 @@ public enum SuccessCode {
 	// pipe
 	PIPE_MEMO_LIST_OK(HttpStatus.OK.value(), "파이프 메모 리스트 조회에 성공했습니다."),
 	PIPE_MEMO_CREATED(HttpStatus.CREATED.value(), "파이프 메모가 생성되었습니다."),
+	PIPE_MEMO_DELETED(HttpStatus.NO_CONTENT.value(), "메모 삭제에 성공했습니다."),
 	;
 
 	private final int httpStatusCode;

@@ -271,4 +271,38 @@ class PipelineControllerTest {
 								.build()
 						)));
 	}
+
+	@Test
+	void 파이프_메모_삭제_성공() throws Exception {
+		ResultActions actions = mockMvc.perform(
+				delete("/api/pipelines/pipes/{memoId}", 1L)
+						.contentType(MediaType.APPLICATION_JSON)
+						.accept(MediaType.APPLICATION_JSON)
+						.characterEncoding("UTF-8")
+						.with(csrf())
+		);
+
+		actions
+				.andExpect(status().isNoContent())
+				.andExpect(jsonPath("$.header.httpStatusCode").value(PIPE_MEMO_DELETED.getHttpStatusCode()))
+				.andExpect(jsonPath("$.header.message").value(PIPE_MEMO_DELETED.getMessage()))
+				.andDo(document(
+						"파이프 메모 삭제 성공",
+						preprocessRequest(prettyPrint()),
+						preprocessResponse(prettyPrint()),
+						resource(ResourceSnippetParameters.builder()
+								.tag("Pipeline API")
+								.summary("파이프 메모 삭제 API")
+								.pathParameters(
+										parameterWithName("memoId").description("메모 Id")
+								)
+								.responseFields(
+										getCommonResponseFields(
+												fieldWithPath("body").ignored()
+										)
+								)
+								.requestSchema(Schema.schema("파이프 메모 삭제 Request"))
+								.build()
+						)));
+	}
 }
