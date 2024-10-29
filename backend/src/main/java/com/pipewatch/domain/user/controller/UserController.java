@@ -1,7 +1,7 @@
 package com.pipewatch.domain.user.controller;
 
-import com.pipewatch.domain.user.model.dto.UserRequestDto;
-import com.pipewatch.domain.user.model.dto.UserResponseDto;
+import com.pipewatch.domain.user.model.dto.UserRequest;
+import com.pipewatch.domain.user.model.dto.UserResponse;
 import com.pipewatch.global.response.ResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,7 +16,7 @@ import static com.pipewatch.global.statusCode.SuccessCode.*;
 public class UserController {
 	@GetMapping("/mypage")
 	public ResponseEntity<?> myPage() {
-		UserResponseDto.MyPageDto responseDto = UserResponseDto.MyPageDto.builder()
+		UserResponse.MyPageDto responseDto = UserResponse.MyPageDto.builder()
 				.name("김싸피")
 				.email("kim@ssafy.com")
 				.enterpriseName("ssafy")
@@ -31,12 +31,12 @@ public class UserController {
 	}
 
 	@PutMapping("/mypage")
-	public ResponseEntity<?> mypageModify(@RequestBody UserRequestDto.MyPageModifyDto requestDto) {
+	public ResponseEntity<?> mypageModify(@RequestBody UserRequest.MyPageModifyDto requestDto) {
 		return new ResponseEntity<>(ResponseDto.success(MYPAGE_MODIFIED_OK, null), HttpStatus.OK);
 	}
 
 	@PatchMapping("/modify-pwd")
-	public ResponseEntity<?> passwordModify(@RequestBody UserRequestDto.PasswordModifyDto requestDto) {
+	public ResponseEntity<?> passwordModify(@RequestBody UserRequest.PasswordModifyDto requestDto) {
 		return new ResponseEntity<>(ResponseDto.success(PASSWORD_MODIFIED_OK, null), HttpStatus.OK);
 	}
 

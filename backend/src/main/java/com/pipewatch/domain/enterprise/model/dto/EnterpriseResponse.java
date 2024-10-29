@@ -4,7 +4,7 @@ import lombok.*;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class EnterpriseResponseDto {
+public class EnterpriseResponse {
 	@Getter
 	@Setter
 	@Builder

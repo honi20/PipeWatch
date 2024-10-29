@@ -3,7 +3,7 @@ package com.pipewatch.domain.user.controller;
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.epages.restdocs.apispec.Schema;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.pipewatch.domain.user.model.dto.UserRequestDto;
+import com.pipewatch.domain.user.model.dto.UserRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -82,7 +82,7 @@ class UserControllerTest {
 
 	@Test
 	void 개인정보_수정_성공() throws Exception {
-		UserRequestDto.MyPageModifyDto dto = UserRequestDto.MyPageModifyDto.builder()
+		UserRequest.MyPageModifyDto dto = UserRequest.MyPageModifyDto.builder()
 				.department("IT개발팀")
 				.empClass("부장")
 				.build();
@@ -125,7 +125,7 @@ class UserControllerTest {
 
 	@Test
 	void 비밀번호_수정_성공() throws Exception {
-		UserRequestDto.PasswordModifyDto dto = UserRequestDto.PasswordModifyDto.builder()
+		UserRequest.PasswordModifyDto dto = UserRequest.PasswordModifyDto.builder()
 				.newPassword("new1234")
 				.build();
 
