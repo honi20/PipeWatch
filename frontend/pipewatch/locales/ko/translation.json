@@ -14,6 +14,7 @@
   },
   "home": {
     "greeting1": "PipeWatch로",
-    "greeting2": "당신의 작업 효율을 높여보세요."
+    "greeting2": "당신의 작업 효율을 높여보세요.",
+    "signUp": "회원가입"
   }
 }

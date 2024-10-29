@@ -35,11 +35,13 @@ function Layout() {
   }, [theme]);
 
   return (
-    <div className="h-full text-black bg-white dark:bg-black dark:text-white ">
+    <div className="h-full overflow-auto text-black bg-white pt-28 dark:bg-black dark:text-white ">
       {isAuth ? null : (
         <Header handleTheme={handleTheme} currentTheme={localStorage.theme} />
       )}
-      <Outlet />
+      <div className="h-full">
+        <Outlet />
+      </div>
     </div>
   );
 }
