@@ -1,7 +1,6 @@
-package com.pipewatch.domain.pipeline.controller;
+package com.pipewatch.domain.pipelineModel.controller;
 
-import com.pipewatch.domain.enterprise.model.dto.EnterpriseResponse;
-import com.pipewatch.domain.pipeline.model.dto.PipelineModelResponse;
+import com.pipewatch.domain.pipelineModel.model.dto.PipelineModelResponse;
 import com.pipewatch.global.response.ResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,7 +17,7 @@ import static com.pipewatch.global.statusCode.SuccessCode.*;
 @RestController
 @RequestMapping("${api_prefix}/models")
 @RequiredArgsConstructor
-public class PipelineController {
+public class PipelineModelController {
 	@GetMapping
 	public ResponseEntity<?> modelList(@RequestParam(required = false) String building, @RequestParam(required = false) Integer floor) {
 		PipelineModelResponse.PipelineModelDto model1 = new PipelineModelResponse.PipelineModelDto(1L, "model1", "previewUrl1", LocalDateTime.now());

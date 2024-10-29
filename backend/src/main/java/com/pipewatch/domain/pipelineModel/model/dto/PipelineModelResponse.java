@@ -1,4 +1,4 @@
-package com.pipewatch.domain.pipeline.model.dto;
+package com.pipewatch.domain.pipelineModel.model.dto;
 
 import lombok.*;
 

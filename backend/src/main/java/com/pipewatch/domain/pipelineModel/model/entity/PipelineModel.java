@@ -1,4 +1,4 @@
-package com.pipewatch.domain.pipeline.model.entity;
+package com.pipewatch.domain.pipelineModel.model.entity;
 
 import com.pipewatch.domain.enterprise.model.entity.BuildingAndFloor;
 import com.pipewatch.domain.user.model.entity.User;

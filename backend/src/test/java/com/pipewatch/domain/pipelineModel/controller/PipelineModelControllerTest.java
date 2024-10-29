@@ -1,9 +1,9 @@
-package com.pipewatch.domain.pipeline.controller;
+package com.pipewatch.domain.pipelineModel.controller;
 
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.epages.restdocs.apispec.Schema;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.pipewatch.domain.pipeline.model.dto.PipelineModelRequest;
+import com.pipewatch.domain.pipelineModel.model.dto.PipelineModelRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,7 +24,6 @@ import static com.epages.restdocs.apispec.ResourceDocumentation.parameterWithNam
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
 import static com.pipewatch.domain.util.ResponseFieldUtil.getCommonResponseFields;
 import static com.pipewatch.global.statusCode.SuccessCode.*;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -38,9 +37,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @AutoConfigureRestDocs
 @ExtendWith(RestDocumentationExtension.class)
-@DisplayName("Pipeline API 명세서")
+@DisplayName("Pipeline Model API 명세서")
 @WithMockUser
-class PipelineControllerTest {
+class PipelineModelControllerTest {
 	@Autowired
 	private MockMvc mockMvc;
 
@@ -65,7 +64,7 @@ class PipelineControllerTest {
 						preprocessRequest(prettyPrint()),
 						preprocessResponse(prettyPrint()),
 						resource(ResourceSnippetParameters.builder()
-								.tag("Pipeline API")
+								.tag("Pipeline Model API")
 								.summary("파이프라인 모델 리스트 조회 API")
 								.queryParameters(
 										parameterWithName("building").description("건물명").optional(),
@@ -113,7 +112,7 @@ class PipelineControllerTest {
 								partWithName("file").description("업로드할 파일 (gltf 확장자만 가능)")
 						),
 						resource(ResourceSnippetParameters.builder()
-								.tag("Pipeline API")
+								.tag("Pipeline Model API")
 								.summary("모델링 파일 업로드 API")
 								.responseFields(
 										getCommonResponseFields(
@@ -152,7 +151,7 @@ class PipelineControllerTest {
 						preprocessRequest(prettyPrint()),
 						preprocessResponse(prettyPrint()),
 						resource(ResourceSnippetParameters.builder()
-								.tag("Pipeline API")
+								.tag("Pipeline Model API")
 								.summary("파이프라인 모델 초기정보 설정 API")
 								.pathParameters(
 										parameterWithName("modelId").description("모델 Id")
@@ -199,7 +198,7 @@ class PipelineControllerTest {
 						preprocessRequest(prettyPrint()),
 						preprocessResponse(prettyPrint()),
 						resource(ResourceSnippetParameters.builder()
-								.tag("Pipeline API")
+								.tag("Pipeline Model API")
 								.summary("파이프라인 모델 정보 수정 API")
 								.pathParameters(
 										parameterWithName("modelId").description("모델 Id")
@@ -236,7 +235,7 @@ class PipelineControllerTest {
 						preprocessRequest(prettyPrint()),
 						preprocessResponse(prettyPrint()),
 						resource(ResourceSnippetParameters.builder()
-								.tag("Pipeline API")
+								.tag("Pipeline Model API")
 								.summary("파이프라인 모델 상세조회 API")
 								.pathParameters(
 										parameterWithName("modelId").description("모델 Id")
@@ -276,7 +275,7 @@ class PipelineControllerTest {
 						preprocessRequest(prettyPrint()),
 						preprocessResponse(prettyPrint()),
 						resource(ResourceSnippetParameters.builder()
-								.tag("Pipeline API")
+								.tag("Pipeline Model API")
 								.summary("파이프라인 모델 삭제 API")
 								.pathParameters(
 										parameterWithName("modelId").description("모델 Id")
