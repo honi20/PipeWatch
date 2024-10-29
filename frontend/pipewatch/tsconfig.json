@@ -1,7 +1,12 @@
 {
+  "compilerOptions": {
+    "composite": true,    // 반드시 추가해야 합니다.
+    "skipLibCheck": true
+  },
   "files": [],
   "references": [
     { "path": "./tsconfig.app.json" },
     { "path": "./tsconfig.node.json" }
-  ]
+  ],
+  "include": ["src"]
 }

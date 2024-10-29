@@ -16,5 +16,14 @@
     "greeting1": "Boost your Efficiency",
     "greeting2": "with PipeWatch.",
     "signUp": "Sign Up"
+  },
+  "account": {
+    "login": "Login",
+    "findPassword": "Forgot Password?",
+    "signUp": "Sign Up",
+    "email": "Email",
+    "emailError": "Please enter a valid email.",
+    "password": "Password",
+    "passwordError": "Password must be at least 8 characters long and include at least one letter, one number, and one special character (e.g., !@#$%^&*)."
   }
 }

@@ -16,5 +16,14 @@
     "greeting1": "PipeWatch로",
     "greeting2": "당신의 작업 효율을 높여보세요.",
     "signUp": "회원가입"
+  },
+  "account": {
+    "login": "로그인",
+    "findPassword": "비밀번호 찾기",
+    "signUp": "회원가입",
+    "email": "이메일",
+    "emailError": "이메일을 다시 확인하세요.",
+    "password": "비밀번호",
+    "passwordError": "비밀번호는 최소 8자 이상이어야 하며, 최소 하나의 영문자, 숫자, 특수 문자(예: !@#$%^&*)를 포함해야 합니다."
   }
 }
