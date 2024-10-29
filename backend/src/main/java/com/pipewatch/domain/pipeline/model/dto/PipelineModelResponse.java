@@ -18,9 +18,6 @@ public class PipelineModelResponse {
 	}
 
 	@Getter
-	@Setter
-	@Builder
-	@NoArgsConstructor
 	@AllArgsConstructor
 	public static class BuildingListDto {
 		private String building;
@@ -28,9 +25,6 @@ public class PipelineModelResponse {
 	}
 
 	@Getter
-	@Setter
-	@Builder
-	@NoArgsConstructor
 	@AllArgsConstructor
 	public static class FloorListDto {
 		private Integer floor;
@@ -38,7 +32,6 @@ public class PipelineModelResponse {
 	}
 
 	@Getter
-	@NoArgsConstructor
 	@AllArgsConstructor
 	public static class PipelineModelDto {
 		private Long modelId;
@@ -71,7 +64,6 @@ public class PipelineModelResponse {
 	}
 
 	@Getter
-	@NoArgsConstructor
 	@AllArgsConstructor
 	public static class Creator {
 		private Long userId;
