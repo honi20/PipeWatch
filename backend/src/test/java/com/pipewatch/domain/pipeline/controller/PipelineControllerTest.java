@@ -227,4 +227,48 @@ class PipelineControllerTest {
 								.build()
 						)));
 	}
+
+	@Test
+	void 파이프_메모_생성_성공() throws Exception {
+		PipelineRequest.CreateMemoDto dto = PipelineRequest.CreateMemoDto.builder()
+				.memo("최대한 빨리 점검 요청할 것!")
+				.build();
+
+		String content = objectMapper.writeValueAsString(dto);
+
+		ResultActions actions = mockMvc.perform(
+				post("/api/pipelines/pipes/{pipeUuid}", "pipe_abd34412jd_1")
+						.content(content)
+						.contentType(MediaType.APPLICATION_JSON)
+						.accept(MediaType.APPLICATION_JSON)
+						.characterEncoding("UTF-8")
+						.with(csrf())
+		);
+
+		actions
+				.andExpect(status().isCreated())
+				.andExpect(jsonPath("$.header.httpStatusCode").value(PIPE_MEMO_CREATED.getHttpStatusCode()))
+				.andExpect(jsonPath("$.header.message").value(PIPE_MEMO_CREATED.getMessage()))
+				.andDo(document(
+						"파이프 메모 생성 성공",
+						preprocessRequest(prettyPrint()),
+						preprocessResponse(prettyPrint()),
+						resource(ResourceSnippetParameters.builder()
+								.tag("Pipeline API")
+								.summary("파이프 메모 생성 API")
+								.pathParameters(
+										parameterWithName("pipeUuid").description("파이프 Uuid")
+								)
+								.requestFields(
+										fieldWithPath("memo").type(JsonFieldType.STRING).description("메모 텍스트")
+								)
+								.responseFields(
+										getCommonResponseFields(
+												fieldWithPath("body").ignored()
+										)
+								)
+								.requestSchema(Schema.schema("파이프 메모 생성 Request"))
+								.build()
+						)));
+	}
 }

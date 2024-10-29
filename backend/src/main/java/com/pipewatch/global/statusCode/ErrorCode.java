@@ -17,7 +17,8 @@ public enum ErrorCode {
 	EMAIL_NOT_FOUND(HttpStatus.NOT_FOUND.value(), "해당 이메일로 가입된 회원이 존재하지 않습니다."),
 	USER_NOT_FOUND(HttpStatus.NOT_FOUND.value(), "해당 유저가 존재하지 않습니다."),
 	PIPELINE_MODEL_NOT_FOUND(HttpStatus.NOT_FOUND.value(), "해당 파이프라인 모델이 존재하지 않습니다."),
-	PIPELINE_NOT_FOUND(HttpStatus.NOT_FOUND.value(), "해당 파이프라인이 존재하지 않습니다.")
+	PIPELINE_NOT_FOUND(HttpStatus.NOT_FOUND.value(), "해당 파이프라인이 존재하지 않습니다."),
+	PIPE_NOT_FOUND(HttpStatus.NOT_FOUND.value(), "해당 파이프가 존재하지 않습니다.")
 	;
 
 	private final int httpStatusCode;

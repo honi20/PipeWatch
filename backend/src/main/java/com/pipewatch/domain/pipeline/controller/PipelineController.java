@@ -54,4 +54,9 @@ public class PipelineController {
 		return new ResponseEntity<>(ResponseDto.success(PIPE_MEMO_LIST_OK, responseDto), HttpStatus.OK);
 	}
 
+	@PostMapping("/pipes/{pipeUuid}")
+	public ResponseEntity<?> pipeMemoCreate(@PathVariable String pipeUuid) {
+		return new ResponseEntity<>(ResponseDto.success(PIPE_MEMO_CREATED, null), HttpStatus.CREATED);
+	}
+
 }
