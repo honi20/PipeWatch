@@ -290,4 +290,49 @@ class PipelineModelControllerTest {
 						)));
 	}
 
+	@Test
+	void 모델링_생성_성공() throws Exception {
+		PipelineModelRequest.ModelingDto dto = PipelineModelRequest.ModelingDto.builder()
+				.userId(1L)
+				.previewImgUrl("preview image url")
+				.modelUrl("model file url")
+				.build();
+
+		String content = objectMapper.writeValueAsString(dto);
+
+		ResultActions actions = mockMvc.perform(
+				post("/api/models/modeling")
+						.content(content)
+						.contentType(MediaType.APPLICATION_JSON)
+						.accept(MediaType.APPLICATION_JSON)
+						.characterEncoding("UTF-8")
+						.with(csrf())
+		);
+
+		actions
+				.andExpect(status().isCreated())
+				.andExpect(jsonPath("$.header.httpStatusCode").value(PIPELINE_MODELING_CREATED.getHttpStatusCode()))
+				.andExpect(jsonPath("$.header.message").value(PIPELINE_MODELING_CREATED.getMessage()))
+				.andDo(document(
+						"파이프라인 모델링 생성 성공",
+						preprocessRequest(prettyPrint()),
+						preprocessResponse(prettyPrint()),
+						resource(ResourceSnippetParameters.builder()
+								.tag("Pipeline Model API")
+								.summary("파이프라인 모델링 생성 API - FastAPI와의 통신")
+								.requestFields(
+										fieldWithPath("userId").type(JsonFieldType.NUMBER).description("생성자 Id"),
+										fieldWithPath("previewImgUrl").type(JsonFieldType.STRING).description("미리보기 이미지 url"),
+										fieldWithPath("modelUrl").type(JsonFieldType.STRING).description("모델링 파일 url")
+								)
+								.responseFields(
+										getCommonResponseFields(
+												fieldWithPath("body").ignored()
+										)
+								)
+								.requestSchema(Schema.schema("파이프라인 모델링 생성 Request"))
+								.build()
+						)));
+	}
+
 }

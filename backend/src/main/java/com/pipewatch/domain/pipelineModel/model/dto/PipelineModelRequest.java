@@ -25,4 +25,15 @@ public class PipelineModelRequest {
 		private String name;
 		private String description;
 	}
+
+	@Getter
+	@Setter
+	@Builder
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class ModelingDto {
+		private Long userId;
+		private String previewImgUrl;
+		private String modelUrl;
+	}
 }

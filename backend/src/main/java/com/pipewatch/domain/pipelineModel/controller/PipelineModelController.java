@@ -71,4 +71,9 @@ public class PipelineModelController {
 	public ResponseEntity<?> modelDelete(@PathVariable Long modelId) {
 		return new ResponseEntity<>(ResponseDto.success(MODEL_DELETED, null), HttpStatus.NO_CONTENT);
 	}
+
+	@PostMapping("/modeling")
+	public ResponseEntity<?> modelingCreate() {
+		return new ResponseEntity<>(ResponseDto.success(PIPELINE_MODELING_CREATED, null), HttpStatus.CREATED);
+	}
 }
