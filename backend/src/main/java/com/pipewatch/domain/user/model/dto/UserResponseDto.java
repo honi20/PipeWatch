@@ -10,7 +10,7 @@ public class UserResponseDto {
 	@Builder
 	@NoArgsConstructor
 	@AllArgsConstructor
-	public static class MyPageResponseDto {
+	public static class MyPageDto {
 		private String name;
 		private String email;
 		private String enterpriseName;

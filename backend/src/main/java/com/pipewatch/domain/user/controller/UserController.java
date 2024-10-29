@@ -11,12 +11,12 @@ import org.springframework.web.bind.annotation.*;
 import static com.pipewatch.global.statusCode.SuccessCode.*;
 
 @RestController
-@RequestMapping("${api_prefix}/user")
+@RequestMapping("${api_prefix}/users")
 @RequiredArgsConstructor
 public class UserController {
 	@GetMapping("/mypage")
 	public ResponseEntity<?> myPage() {
-		UserResponseDto.MyPageResponseDto responseDto = UserResponseDto.MyPageResponseDto.builder()
+		UserResponseDto.MyPageDto responseDto = UserResponseDto.MyPageDto.builder()
 				.name("김싸피")
 				.email("kim@ssafy.com")
 				.enterpriseName("ssafy")
@@ -31,12 +31,12 @@ public class UserController {
 	}
 
 	@PutMapping("/mypage")
-	public ResponseEntity<?> mypageModify(@RequestBody UserRequestDto.MyPageModifyRequestDto requestDto) {
+	public ResponseEntity<?> mypageModify(@RequestBody UserRequestDto.MyPageModifyDto requestDto) {
 		return new ResponseEntity<>(ResponseDto.success(MYPAGE_MODIFIED_OK, null), HttpStatus.OK);
 	}
 
 	@PatchMapping("/modify-pwd")
-	public ResponseEntity<?> passwordModify(@RequestBody UserRequestDto.PasswordModifyRequestDto requestDto) {
+	public ResponseEntity<?> passwordModify(@RequestBody UserRequestDto.PasswordModifyDto requestDto) {
 		return new ResponseEntity<>(ResponseDto.success(PASSWORD_MODIFIED_OK, null), HttpStatus.OK);
 	}
 

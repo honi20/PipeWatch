@@ -46,7 +46,7 @@ class UserControllerTest {
 	@Test
 	void 마이페이지_조회_성공() throws Exception {
 		ResultActions actions = mockMvc.perform(
-				get("/api/user/mypage")
+				get("/api/users/mypage")
 						.contentType(MediaType.APPLICATION_JSON)
 						.accept(MediaType.APPLICATION_JSON)
 						.characterEncoding("UTF-8")
@@ -82,7 +82,7 @@ class UserControllerTest {
 
 	@Test
 	void 개인정보_수정_성공() throws Exception {
-		UserRequestDto.MyPageModifyRequestDto dto = UserRequestDto.MyPageModifyRequestDto.builder()
+		UserRequestDto.MyPageModifyDto dto = UserRequestDto.MyPageModifyDto.builder()
 				.department("IT개발팀")
 				.empClass("부장")
 				.build();
@@ -90,7 +90,7 @@ class UserControllerTest {
 		String content = objectMapper.writeValueAsString(dto);
 
 		ResultActions actions = mockMvc.perform(
-				put("/api/user/mypage")
+				put("/api/users/mypage")
 						.content(content)
 						.contentType(MediaType.APPLICATION_JSON)
 						.accept(MediaType.APPLICATION_JSON)
@@ -125,14 +125,14 @@ class UserControllerTest {
 
 	@Test
 	void 비밀번호_수정_성공() throws Exception {
-		UserRequestDto.PasswordModifyRequestDto dto = UserRequestDto.PasswordModifyRequestDto.builder()
+		UserRequestDto.PasswordModifyDto dto = UserRequestDto.PasswordModifyDto.builder()
 				.newPassword("new1234")
 				.build();
 
 		String content = objectMapper.writeValueAsString(dto);
 
 		ResultActions actions = mockMvc.perform(
-				patch("/api/user/modify-pwd")
+				patch("/api/users/modify-pwd")
 						.content(content)
 						.contentType(MediaType.APPLICATION_JSON)
 						.accept(MediaType.APPLICATION_JSON)
@@ -167,7 +167,7 @@ class UserControllerTest {
 	@Test
 	void 회원_탈퇴_성공() throws Exception {
 		ResultActions actions = mockMvc.perform(
-				delete("/api/user/withdraw")
+				delete("/api/users/withdraw")
 						.contentType(MediaType.APPLICATION_JSON)
 						.accept(MediaType.APPLICATION_JSON)
 						.characterEncoding("UTF-8")

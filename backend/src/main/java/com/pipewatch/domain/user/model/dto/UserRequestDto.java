@@ -10,7 +10,7 @@ public class UserRequestDto {
 	@Builder
 	@NoArgsConstructor
 	@AllArgsConstructor
-	public static class MyPageModifyRequestDto {
+	public static class MyPageModifyDto {
 		private String department;
 		private String empClass;
 	}
@@ -20,7 +20,7 @@ public class UserRequestDto {
 	@Builder
 	@NoArgsConstructor
 	@AllArgsConstructor
-	public static class PasswordModifyRequestDto {
+	public static class PasswordModifyDto {
 		private String newPassword;
 	}
 }
