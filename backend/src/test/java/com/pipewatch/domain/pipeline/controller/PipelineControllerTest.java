@@ -3,6 +3,7 @@ package com.pipewatch.domain.pipeline.controller;
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.epages.restdocs.apispec.Schema;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.pipewatch.domain.pipeline.model.dto.PipelineModelRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,11 +23,9 @@ import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.docume
 import static com.epages.restdocs.apispec.ResourceDocumentation.parameterWithName;
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
 import static com.pipewatch.domain.util.ResponseFieldUtil.getCommonResponseFields;
-import static com.pipewatch.global.statusCode.SuccessCode.FILE_UPLOAD_OK;
-import static com.pipewatch.global.statusCode.SuccessCode.MODEL_LIST_OK;
+import static com.pipewatch.global.statusCode.SuccessCode.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.multipart;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.request.RequestDocumentation.partWithName;
@@ -124,4 +123,99 @@ class PipelineControllerTest {
 								.build()
 						)));
 	}
+
+	@Test
+	void 모델_초기정보_설정_성공() throws Exception {
+		PipelineModelRequest.InitDto dto = PipelineModelRequest.InitDto.builder()
+				.name("새로운 모델명")
+				.building("역삼 멀티캠퍼스")
+				.floor(10)
+				.build();
+
+		String content = objectMapper.writeValueAsString(dto);
+
+		ResultActions actions = mockMvc.perform(
+				patch("/api/models/init/{modelId}", 1L)
+						.content(content)
+						.contentType(MediaType.APPLICATION_JSON)
+						.accept(MediaType.APPLICATION_JSON)
+						.characterEncoding("UTF-8")
+						.with(csrf())
+		);
+
+		actions
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.header.httpStatusCode").value(MODEL_INIT_OK.getHttpStatusCode()))
+				.andExpect(jsonPath("$.header.message").value(MODEL_INIT_OK.getMessage()))
+				.andDo(document(
+						"모델 초기 정보 설정 성공",
+						preprocessRequest(prettyPrint()),
+						preprocessResponse(prettyPrint()),
+						resource(ResourceSnippetParameters.builder()
+								.tag("Pipeline API")
+								.summary("모델 초기 정보 설정 API")
+								.pathParameters(
+										parameterWithName("modelId").description("모델 Id")
+								)
+								.requestFields(
+										fieldWithPath("name").type(JsonFieldType.STRING).description("모델명"),
+										fieldWithPath("building").type(JsonFieldType.STRING).description("건물명"),
+										fieldWithPath("floor").type(JsonFieldType.NUMBER).description("층수")
+								)
+								.responseFields(
+										getCommonResponseFields(
+												fieldWithPath("body").ignored()
+										)
+								)
+								.requestSchema(Schema.schema("모델 초기 정보 설정 Request"))
+								.build()
+						)));
+	}
+
+	@Test
+	void 모델_정보_수정_성공() throws Exception {
+		PipelineModelRequest.ModifyDto dto = PipelineModelRequest.ModifyDto.builder()
+				.name("새로운 모델명")
+				.description("어제 점검했는데 중단됨.")
+				.build();
+
+		String content = objectMapper.writeValueAsString(dto);
+
+		ResultActions actions = mockMvc.perform(
+				patch("/api/models/{modelId}", 1L)
+						.content(content)
+						.contentType(MediaType.APPLICATION_JSON)
+						.accept(MediaType.APPLICATION_JSON)
+						.characterEncoding("UTF-8")
+						.with(csrf())
+		);
+
+		actions
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.header.httpStatusCode").value(MODEL_MODIFIED_OK.getHttpStatusCode()))
+				.andExpect(jsonPath("$.header.message").value(MODEL_MODIFIED_OK.getMessage()))
+				.andDo(document(
+						"모델 정보 수정 성공",
+						preprocessRequest(prettyPrint()),
+						preprocessResponse(prettyPrint()),
+						resource(ResourceSnippetParameters.builder()
+								.tag("Pipeline API")
+								.summary("모델 정보 수정 API")
+								.pathParameters(
+										parameterWithName("modelId").description("모델 Id")
+								)
+								.requestFields(
+										fieldWithPath("name").type(JsonFieldType.STRING).description("모델명"),
+										fieldWithPath("description").type(JsonFieldType.STRING).description("설명")
+								)
+								.responseFields(
+										getCommonResponseFields(
+												fieldWithPath("body").ignored()
+										)
+								)
+								.requestSchema(Schema.schema("모델 정보 수정 Request"))
+								.build()
+						)));
+	}
+
 }

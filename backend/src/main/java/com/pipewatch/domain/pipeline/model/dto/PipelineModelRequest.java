@@ -10,10 +10,10 @@ public class PipelineModelRequest {
 	@Builder
 	@NoArgsConstructor
 	@AllArgsConstructor
-	public static class UpdateDto {
+	public static class InitDto {
 		private String name;
 		private String building;
-		private String floor;
+		private Integer floor;
 	}
 
 	@Getter

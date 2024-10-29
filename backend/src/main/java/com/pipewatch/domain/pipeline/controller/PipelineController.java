@@ -13,8 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static com.pipewatch.global.statusCode.SuccessCode.FILE_UPLOAD_OK;
-import static com.pipewatch.global.statusCode.SuccessCode.MODEL_LIST_OK;
+import static com.pipewatch.global.statusCode.SuccessCode.*;
 
 @RestController
 @RequestMapping("${api_prefix}/models")
@@ -43,5 +42,15 @@ public class PipelineController {
 				.build();
 
 		return new ResponseEntity<>(ResponseDto.success(FILE_UPLOAD_OK, responseDto), HttpStatus.OK);
+	}
+
+	@PatchMapping("/init/{modelId}")
+	public ResponseEntity<?> modelInit(@PathVariable Long modelId) {
+		return new ResponseEntity<>(ResponseDto.success(MODEL_INIT_OK, null), HttpStatus.OK);
+	}
+
+	@PatchMapping("/{modelId}")
+	public ResponseEntity<?> modelModify(@PathVariable Long modelId) {
+		return new ResponseEntity<>(ResponseDto.success(MODEL_MODIFIED_OK, null), HttpStatus.OK);
 	}
 }
