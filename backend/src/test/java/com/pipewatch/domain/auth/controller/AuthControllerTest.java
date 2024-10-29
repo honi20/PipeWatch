@@ -71,7 +71,7 @@ class AuthControllerTest {
                         preprocessResponse(prettyPrint()),
                         resource(ResourceSnippetParameters.builder()
                                 .tag("Auth API")
-                                .summary("Enterprise 등록 API")
+                                .summary("기업 등록 API")
                                 .requestFields(
                                         fieldWithPath("name").description("기업명"),
                                         fieldWithPath("industry").description("산업분류"),
@@ -83,7 +83,7 @@ class AuthControllerTest {
                                                 fieldWithPath("body").ignored()
                                         )
                                 )
-                                .requestSchema(Schema.schema("Enterprise 등록 Request"))
+                                .requestSchema(Schema.schema("기업 등록 Request"))
                                 .build()
                         )));
     }
@@ -221,6 +221,78 @@ class AuthControllerTest {
                                         )
                                 )
                                 .requestSchema(Schema.schema("이메일 인증코드 확인 Request"))
+                                .build()
+                        )));
+    }
+
+    @Test
+    void 로그인_성공() throws Exception {
+        AuthDto.SigninRequestDto dto = AuthDto.SigninRequestDto.builder()
+                .email("kim@ssafy.com")
+                .password("ssafy1234")
+                .build();
+
+        String content = objectMapper.writeValueAsString(dto);
+
+        ResultActions actions = mockMvc.perform(
+                post("/api/auth/signin")
+                        .content(content)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8")
+                        .with(csrf())
+        );
+
+        actions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.header.httpStatusCode").value(SIGNIN_OK.getHttpStatusCode()))
+                .andExpect(jsonPath("$.header.message").value(SIGNIN_OK.getMessage()))
+                .andDo(document(
+                        "로그인 성공",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        resource(ResourceSnippetParameters.builder()
+                                .tag("Auth API")
+                                .summary("로그인 API")
+                                .requestFields(
+                                        fieldWithPath("email").description("이메일"),
+                                        fieldWithPath("password").description("비밀번호")
+                                )
+                                .responseFields(
+                                        getCommonResponseFields(
+                                                fieldWithPath("body").ignored()
+                                        )
+                                )
+                                .requestSchema(Schema.schema("로그인 Request"))
+                                .build()
+                        )));
+    }
+
+    @Test
+    void 로그아웃_성공() throws Exception {
+        ResultActions actions = mockMvc.perform(
+                get("/api/auth/logout")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8")
+        );
+
+        actions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.header.httpStatusCode").value(LOGOUT_OK.getHttpStatusCode()))
+                .andExpect(jsonPath("$.header.message").value(LOGOUT_OK.getMessage()))
+                .andDo(document(
+                        "로그아웃 성공",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        resource(ResourceSnippetParameters.builder()
+                                .tag("Auth API")
+                                .summary("로그아웃 API")
+                                .responseFields(
+                                        getCommonResponseFields(
+                                                fieldWithPath("body").ignored()
+                                        )
+                                )
                                 .build()
                         )));
     }

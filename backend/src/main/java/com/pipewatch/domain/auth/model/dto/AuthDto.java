@@ -53,7 +53,9 @@ public class AuthDto {
 
     @Getter
     @Setter
+    @Builder
     @NoArgsConstructor
+    @AllArgsConstructor
     public static class SigninRequestDto {
         private String email;
         private String password;

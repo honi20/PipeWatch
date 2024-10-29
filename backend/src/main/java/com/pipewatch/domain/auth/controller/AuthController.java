@@ -5,10 +5,7 @@ import com.pipewatch.global.response.ResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import static com.pipewatch.global.statusCode.SuccessCode.*;
 
@@ -23,7 +20,7 @@ public class AuthController {
     }
 
     @PostMapping
-    public ResponseEntity<?> userAdd(@RequestBody AuthDto.SignupRequestDto signupRequestDto) {
+    public ResponseEntity<?> signup(@RequestBody AuthDto.SignupRequestDto signupRequestDto) {
         return new ResponseEntity<>(ResponseDto.success(USER_CREATED, null), HttpStatus.CREATED);
     }
 
@@ -35,5 +32,15 @@ public class AuthController {
     @PostMapping("/verify-email-code")
     public ResponseEntity<?> emailCodeVerify(@RequestBody AuthDto.EmailCodeVerifyRequestDto emailCodeVerifyRequestDto) {
         return new ResponseEntity<>(ResponseDto.success(EMAIL_CODE_VERIFY_OK, null), HttpStatus.OK);
+    }
+
+    @PostMapping("/signin")
+    public ResponseEntity<?> signin(@RequestBody AuthDto.SigninRequestDto signinRequestDto) {
+        return new ResponseEntity<>(ResponseDto.success(SIGNIN_OK, null), HttpStatus.OK);
+    }
+
+    @GetMapping("/logout")
+    public ResponseEntity<?> logout() {
+        return new ResponseEntity<>(ResponseDto.success(LOGOUT_OK, null), HttpStatus.OK);
     }
 }
