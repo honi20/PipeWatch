@@ -40,7 +40,7 @@ export const Header = ({ handleTheme, currentTheme }: Props) => {
   const isDark = currentTheme === "dark";
 
   return (
-    <header className="flex items-center justify-between p-2 text-black dark:text-white">
+    <header className="fixed top-0 left-0 right-0 flex items-center justify-between p-2 text-black bg-white dark:bg-black dark:text-white">
       <div className="flex items-center gap-4">
         <Link className="p-2 hover:text-primary-200 " to="/">
           <img
@@ -161,7 +161,7 @@ export const Header = ({ handleTheme, currentTheme }: Props) => {
           {isDark ? <LightModeIcon /> : <DarkModeIcon />}
         </div>
         <Link className="" to="/account/auth/login">
-          <Button className="px-4 py-2 bg-white border-2 border-black border-solid rounded-lg text-s dark:bg-black dark:border-white hover:text-primary-200">
+          <Button className="px-4 py-2 bg-white border-[1px] border-black border-solid rounded-lg text-s dark:bg-black dark:border-white hover:text-primary-200">
             {t("header.login")}
           </Button>
         </Link>
