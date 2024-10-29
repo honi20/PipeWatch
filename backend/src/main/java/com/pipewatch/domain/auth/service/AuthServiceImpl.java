@@ -1,6 +1,6 @@
 package com.pipewatch.domain.auth.service;
 
-import com.pipewatch.domain.auth.model.dto.AuthDto;
+import com.pipewatch.domain.auth.model.dto.AuthRequest;
 import com.pipewatch.domain.user.model.entity.User;
 import com.pipewatch.domain.user.repository.UserRepository;
 import com.pipewatch.global.exception.BaseException;
@@ -34,7 +34,7 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public void sendEmailCode(AuthDto.EmailCodeSendRequestDto requestDto) throws NoSuchAlgorithmException {
+    public void sendEmailCode(AuthRequest.EmailCodeSendDto requestDto) throws NoSuchAlgorithmException {
         User user = userRepository.findByEmail(requestDto.getEmail());
 
         if (user == null) {
@@ -48,7 +48,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public void verifyEmailCode(AuthDto.EmailCodeVerifyRequestDto requestDto) {
+    public void verifyEmailCode(AuthRequest.EmailCodeVerifyDto requestDto) {
         String verify = ((JwtToken) redisUtil.getData(requestDto.getEmail() + "_verify")).getVerify();
 
         if (verify == null) {
@@ -63,7 +63,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     @Transactional
-    public String signup(AuthDto.SignupRequestDto requestDto) {
+    public String signup(AuthRequest.SignupDto requestDto) {
         String uuid = UUID.randomUUID().toString();
 
         if (userRepository.findByEmail(requestDto.getEmail()) != null){

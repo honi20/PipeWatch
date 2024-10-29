@@ -1,6 +1,7 @@
 package com.pipewatch.domain.auth.controller;
 
-import com.pipewatch.domain.auth.model.dto.AuthDto;
+import com.pipewatch.domain.auth.model.dto.AuthRequest;
+import com.pipewatch.domain.auth.model.dto.AuthResponse;
 import com.pipewatch.domain.auth.service.AuthService;
 import com.pipewatch.global.jwt.service.JwtService;
 import com.pipewatch.global.redis.RedisUtil;
@@ -23,37 +24,37 @@ public class AuthController {
     private final RedisUtil redisUtil;
 
     @PostMapping("/send-email-code")
-    public ResponseEntity<?> emailCodeSend(@RequestBody AuthDto.EmailCodeSendRequestDto requestDto) throws NoSuchAlgorithmException {
+    public ResponseEntity<?> emailCodeSend(@RequestBody AuthRequest.EmailCodeSendDto requestDto) throws NoSuchAlgorithmException {
         authService.sendEmailCode(requestDto);
 
         return new ResponseEntity<>(ResponseDto.success(EMAIL_CODE_SEND_OK, null), HttpStatus.OK);
     }
 
     @PostMapping("/verify-email-code")
-    public ResponseEntity<?> emailCodeVerify(@RequestBody AuthDto.EmailCodeVerifyRequestDto requestDto) {
+    public ResponseEntity<?> emailCodeVerify(@RequestBody AuthRequest.EmailCodeVerifyDto requestDto) {
         authService.verifyEmailCode(requestDto);
 
         return new ResponseEntity<>(ResponseDto.success(EMAIL_VERIFIED, null), HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<?> signup(@RequestBody AuthDto.SignupRequestDto requestDto) {
+    public ResponseEntity<?> signup(@RequestBody AuthRequest.SignupDto requestDto) {
         String accessToken = authService.signup(requestDto);
 
-        AuthDto.AccessTokenResponseDto responseDto
-                = AuthDto.AccessTokenResponseDto.builder().accessToken(accessToken).build();
+        AuthResponse.AccessTokenDto responseDto
+                = AuthResponse.AccessTokenDto.builder().accessToken(accessToken).build();
 
         return new ResponseEntity<>(ResponseDto.success(USER_CREATED, responseDto), HttpStatus.CREATED);
     }
 
     @PostMapping("/enterprise")
-    public ResponseEntity<?> enterpriseAdd(@RequestBody AuthDto.EnterpriseRegistRequestDto enterpriseRegistRequestDto) {
+    public ResponseEntity<?> enterpriseAdd(@RequestBody AuthRequest.EnterpriseRegistDto enterpriseRegistRequestDto) {
 
         return new ResponseEntity<>(ResponseDto.success(ENTERPRISE_CREATED, null), HttpStatus.CREATED);
     }
 
     @PostMapping("/signin")
-    public ResponseEntity<?> signin(@RequestBody AuthDto.SigninRequestDto signinRequestDto) {
+    public ResponseEntity<?> signin(@RequestBody AuthRequest.SigninDto signinRequestDto) {
         return new ResponseEntity<>(ResponseDto.success(SIGNIN_OK, null), HttpStatus.OK);
     }
 

@@ -8,13 +8,13 @@ import lombok.*;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class AuthDto {
+public class AuthRequest {
     @Getter
     @Setter
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class EmailCodeSendRequestDto {
+    public static class EmailCodeSendDto {
         private String email;
     }
 
@@ -23,7 +23,7 @@ public class AuthDto {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class EmailCodeVerifyRequestDto {
+    public static class EmailCodeVerifyDto {
         private String email;
         private String verifyCode;
     }
@@ -33,7 +33,7 @@ public class AuthDto {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class SignupRequestDto {
+    public static class SignupDto {
         private String email;
         private String password;
         private String name;
@@ -68,16 +68,7 @@ public class AuthDto {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class AccessTokenResponseDto {
-        private String accessToken;
-    }
-
-    @Getter
-    @Setter
-    @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class EnterpriseRegistRequestDto {
+    public static class EnterpriseRegistDto {
         private String name;
         private String industry;
         private String managerEmail;
@@ -89,7 +80,7 @@ public class AuthDto {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class SigninRequestDto {
+    public static class SigninDto {
         private String email;
         private String password;
     }

@@ -1,13 +1,13 @@
 package com.pipewatch.domain.auth.service;
 
-import com.pipewatch.domain.auth.model.dto.AuthDto;
+import com.pipewatch.domain.auth.model.dto.AuthRequest;
 
 import java.security.NoSuchAlgorithmException;
 
 public interface AuthService {
-    void sendEmailCode(AuthDto.EmailCodeSendRequestDto requestDto) throws NoSuchAlgorithmException;
+    void sendEmailCode(AuthRequest.EmailCodeSendDto requestDto) throws NoSuchAlgorithmException;
 
-    void verifyEmailCode(AuthDto.EmailCodeVerifyRequestDto requestDto);
+    void verifyEmailCode(AuthRequest.EmailCodeVerifyDto requestDto);
 
-    String signup(AuthDto.SignupRequestDto requestDto);
+    String signup(AuthRequest.SignupDto requestDto);
 }
