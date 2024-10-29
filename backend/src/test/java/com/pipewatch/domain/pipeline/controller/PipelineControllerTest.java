@@ -11,6 +11,7 @@ import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDoc
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -21,11 +22,16 @@ import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.docume
 import static com.epages.restdocs.apispec.ResourceDocumentation.parameterWithName;
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
 import static com.pipewatch.domain.util.ResponseFieldUtil.getCommonResponseFields;
+import static com.pipewatch.global.statusCode.SuccessCode.FILE_UPLOAD_OK;
 import static com.pipewatch.global.statusCode.SuccessCode.MODEL_LIST_OK;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.multipart;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.request.RequestDocumentation.partWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParts;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -80,6 +86,41 @@ class PipelineControllerTest {
 										)
 								)
 								.responseSchema(Schema.schema("파이프라인 모델 리스트 조회 Response"))
+								.build()
+						)));
+	}
+
+	@Test
+	void 모델링_파일_업로드_성공() throws Exception {
+		MockMultipartFile file = new MockMultipartFile("file", "sample.gltf", "model/gltf+json", "sample.gltf".getBytes());
+
+		ResultActions actions = mockMvc.perform(
+				multipart("/api/models/upload-file")
+						.file(file)
+						.contentType(MediaType.MULTIPART_FORM_DATA)
+						.characterEncoding("UTF-8")
+						.with(csrf())
+		);
+
+		actions
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.header.httpStatusCode").value(FILE_UPLOAD_OK.getHttpStatusCode()))
+				.andExpect(jsonPath("$.header.message").value(FILE_UPLOAD_OK.getMessage()))
+				.andDo(document(
+						"모델링 파일 업로드 성공",
+						preprocessRequest(prettyPrint()),
+						preprocessResponse(prettyPrint()),
+						requestParts(
+								partWithName("file").description("업로드할 파일 (gltf 확장자만 가능)")
+						),
+						resource(ResourceSnippetParameters.builder()
+								.tag("Pipeline API")
+								.summary("모델링 파일 업로드 API")
+								.responseFields(
+										getCommonResponseFields(
+												fieldWithPath("body.modelId").type(JsonFieldType.NUMBER).description("생성된 모델 Id")
+										)
+								)
 								.build()
 						)));
 	}

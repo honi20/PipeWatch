@@ -5,15 +5,15 @@ import com.pipewatch.domain.pipeline.model.dto.PipelineModelResponse;
 import com.pipewatch.global.response.ResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static com.pipewatch.global.statusCode.SuccessCode.FILE_UPLOAD_OK;
 import static com.pipewatch.global.statusCode.SuccessCode.MODEL_LIST_OK;
 
 @RestController
@@ -34,5 +34,14 @@ public class PipelineController {
 				.build();
 
 		return new ResponseEntity<>(ResponseDto.success(MODEL_LIST_OK, responseDto), HttpStatus.OK);
+	}
+
+	@PostMapping(value = "/upload-file", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+	public ResponseEntity<?> fileUpload(@RequestPart(value = "file", required = false) MultipartFile file) {
+		PipelineModelResponse.FileUploadDto responseDto = PipelineModelResponse.FileUploadDto.builder()
+				.modelId(1L)
+				.build();
+
+		return new ResponseEntity<>(ResponseDto.success(FILE_UPLOAD_OK, responseDto), HttpStatus.OK);
 	}
 }
