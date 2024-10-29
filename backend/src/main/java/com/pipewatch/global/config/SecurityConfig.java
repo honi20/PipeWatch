@@ -1,5 +1,6 @@
 package com.pipewatch.global.config;
 
+import com.pipewatch.global.jwt.filter.JwtBearerAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,6 +11,7 @@ import org.springframework.security.config.annotation.web.configurers.HeadersCon
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.CorsUtils;
@@ -23,6 +25,7 @@ import java.util.List;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
+	private final JwtBearerAuthenticationFilter jwtBearerAuthenticationFilter;
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -31,12 +34,16 @@ public class SecurityConfig {
 				.cors(cors -> cors.configurationSource(corsConfigurationSource()))
 				.formLogin(AbstractHttpConfigurer::disable)
 				.authorizeHttpRequests(auth -> auth
-								.requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-								// [TODO] 추후 api 제한
-								.requestMatchers("**").permitAll()
-								.anyRequest().authenticated()
+						.requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
+						.requestMatchers(
+								"/api/auth/enterprise", "/api/auth/signup", "/auth/users/signin",
+								"/api/auth/send-email-code", "/api/auth/verify-email-code",
+								"/docs/**", "/swagger-ui/**", "/v3-docs/**", "/h2-console/**").permitAll()
+						.anyRequest().authenticated()
 				)
 		;
+
+		http.addFilterBefore(jwtBearerAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
 		return http.build();
 	}
