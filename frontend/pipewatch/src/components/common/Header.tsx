@@ -16,9 +16,15 @@ type Props = {
   currentTheme: string;
 };
 
+// 로컬스토리지에 저장하기
+const saveLanguageToStorage = (language: string) => {
+  localStorage.setItem("language", language);
+};
+
 export const Header = ({ handleTheme, currentTheme }: Props) => {
   const { t, i18n } = useTranslation();
   const handleLanguage = (language: string) => {
+    saveLanguageToStorage(language);
     i18n.changeLanguage(language);
   };
 
