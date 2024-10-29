@@ -44,11 +44,12 @@ class AuthControllerTest {
 
     @Test
     void 기업_생성_성공() throws Exception {
-        AuthDto.EnterpriseRegistRequestDto dto = new AuthDto.EnterpriseRegistRequestDto();
-        dto.setName("ssafy");
-        dto.setIndustry("제조업");
-        dto.setManagerEmail("paori@ssafy.com");
-        dto.setManagerPhoneNumber("010-1234-5678");
+        AuthDto.EnterpriseRegistRequestDto dto = AuthDto.EnterpriseRegistRequestDto.builder()
+                .name("ssafy")
+                .industry("제조업")
+                .managerEmail("paori@ssafy.com")
+                .managerPhoneNumber("010-1234-5678")
+                .build();
 
         String content = objectMapper.writeValueAsString(dto);
 

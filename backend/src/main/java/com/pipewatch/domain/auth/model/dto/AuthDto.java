@@ -7,7 +7,9 @@ import lombok.*;
 public class AuthDto {
     @Getter
     @Setter
+    @Builder
     @NoArgsConstructor
+    @AllArgsConstructor
     public static class EnterpriseRegistRequestDto {
         private String name;
         private String industry;
