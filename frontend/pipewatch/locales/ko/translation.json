@@ -4,6 +4,8 @@
     "subMenu": {
       "home": "Home",
       "aboutUs": "About us",
+      "aboutService": "서비스 소개",
+      "aboutTeam": "팀 소개",
       "modelList": "모델 리스트",
       "createModel": "모델 생성",
       "contact": "Contact"

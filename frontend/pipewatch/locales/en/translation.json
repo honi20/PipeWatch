@@ -4,6 +4,8 @@
     "subMenu": {
       "home": "Home",
       "aboutus": "About us",
+      "aboutService" : "Our Service",
+      "aboutTeam" : "Our Team",
       "modelList": "Model List",
       "createModel": "Create Model",
       "contact": "Contact"

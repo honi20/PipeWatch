@@ -1,4 +1,7 @@
 import { Link } from "react-router-dom";
+import { ChevronDownIcon } from "@heroicons/react/20/solid";
+
+import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
 
 import { useTranslation } from "react-i18next";
 import LogoHeaderDark from "../../assets/images/logo_header_dark.png";
@@ -26,46 +29,82 @@ export const Header = ({ handleTheme, currentTheme }: Props) => {
   const isDark = currentTheme === "dark";
 
   return (
-    <div className="flex items-center justify-between text-black dark:text-white">
-      <div className="flex ">
-        {isDark ? (
-          <img src={LogoHeaderDark} width="100px" />
-        ) : (
-          <img src={LogoHeaderLight} width="100px" />
-        )}
-        <Link className="p-5" to="/">
+    <div className="flex items-center justify-between p-2 text-black dark:text-white">
+      <div className="flex items-center">
+        <Link className="p-2 hover:text-primary-200" to="/">
+          <img
+            className="w-16 h-10"
+            src={isDark ? LogoHeaderDark : LogoHeaderLight}
+          />
+        </Link>
+        <Link className="p-5 hover:text-primary-200" to="/">
           Home
         </Link>
-        <Link className="p-5" to="/about-us/service">
-          {t("header.subMenu.aboutUs")}
-        </Link>
-        <Link className="p-5" to="/create-model">
+        <Popover className="p-5 group">
+          {({ open, close }) => (
+            <>
+              <PopoverButton className="flex gap-1 items-center bg-white dark:bg-black focus:outline-none data-[active]:text-primary-200  data-[hover]:text-primary-200 data-[focus]:outline-1 data-[focus]:outline-white">
+                {t("header.subMenu.aboutUs")}
+                <ChevronDownIcon className="size-5 group-data-[open]:rotate-180" />
+              </PopoverButton>
+              {open && (
+                <PopoverPanel
+                  transition
+                  anchor="bottom"
+                  className="my-3 divide-y divide-white/5 rounded-xl bg-gray-200 dark:bg-white/5 text-sm/6 transition duration-200 ease-in-out [--anchor-gap:var(--spacing-5)] data-[closed]:-translate-y-1 data-[closed]:opacity-0"
+                >
+                  <div className="p-3 text-black dark:text-white">
+                    <Link
+                      className="block px-3 py-2 transition rounded-lg hover:bg-white/5 hover:text-primary-200"
+                      to="/about-us/service"
+                      onClick={() => close()}
+                    >
+                      <p className=""> {t("header.subMenu.aboutService")}</p>
+                    </Link>
+                    <Link
+                      className="block px-3 py-2 transition rounded-lg hover:bg-white/5 hover:text-primary-200"
+                      to="/about-us/team"
+                      onClick={() => close()}
+                    >
+                      <p className=""> {t("header.subMenu.aboutTeam")}</p>
+                    </Link>
+                  </div>
+                </PopoverPanel>
+              )}
+            </>
+          )}
+        </Popover>
+        <Link className="p-5 hover:text-primary-200" to="/create-model">
           {t("header.subMenu.createModel")}
         </Link>
-        <Link className="p-5" to="/model-list">
+        <Link className="p-5 hover:text-primary-200" to="/model-list">
           {t("header.subMenu.modelList")}
         </Link>
-        <Link className="p-5" to="/contact">
+        <Link className="p-5 hover:text-primary-200" to="/contact">
           {t("header.subMenu.contact")}
         </Link>
       </div>
 
-      <div className="gap-3 flex items-center">
+      <div className="flex items-center gap-3">
         <div
-          className="flex gap-2"
+          className="flex gap-2 cursor-pointer hover:text-primary-200"
           onClick={() => handleLanguage(toggleLanguage)}
         >
           <LanguageIcon />
           <div className="w-8">{buttonText}</div>
         </div>
 
-        <div onClick={() => handleTheme()}>
+        <div
+          className="cursor-pointer hover:text-primary-200"
+          onClick={() => handleTheme()}
+        >
           {isDark ? <LightModeIcon /> : <DarkModeIcon />}
         </div>
-        <Link to="/account/login">
-          <button className="w-20 border-solid rounded-lg border-2 p-3 bg-white text-black border-black dark:border-white dark:bg-black dark:text-white">
-            {t("header.login")}
-          </button>
+        <Link
+          className="w-20 px-4 py-3 border-2 border-black border-solid rounded-lg dark:border-white hover:text-primary-200"
+          to="/account/login"
+        >
+          {t("header.login")}
         </Link>
       </div>
     </div>
