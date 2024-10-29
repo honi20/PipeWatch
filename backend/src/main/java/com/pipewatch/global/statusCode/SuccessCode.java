@@ -13,7 +13,10 @@ public enum SuccessCode {
 	EMAIL_CODE_VERIFY_OK(HttpStatus.OK.value(), "이메일 인증에 성공했습니다."),
 	SIGNIN_OK(HttpStatus.OK.value(), "로그인에 성공했습니다."),
 	LOGOUT_OK(HttpStatus.OK.value(), "로그아웃되었습니다."),
-	MYPAGE_OK(HttpStatus.OK.value(), "개인정보 조회에 성공했습니다.")
+	MYPAGE_DETAIL_OK(HttpStatus.OK.value(), "개인정보 조회에 성공했습니다."),
+	MYPAGE_MODIFIED_OK(HttpStatus.OK.value(), "개인정보 수정에 성공했습니다."),
+	PASSWORD_MODIFIED_OK(HttpStatus.OK.value(), "비밀번호 수정에 성공했습니다."),
+	USER_DELETE_OK(HttpStatus.NO_CONTENT.value(), "회원 탈퇴에 성공했습니다.")
 	;
 
 	private final int httpStatusCode;
