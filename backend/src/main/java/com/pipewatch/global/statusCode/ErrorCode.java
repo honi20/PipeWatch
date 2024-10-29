@@ -11,6 +11,7 @@ public enum ErrorCode {
 	INVALID_EMAIL_CODE(HttpStatus.FORBIDDEN.value(), "인증에 실패했습니다. 인증번호를 확인해 주세요."),
 	INVALID_PASSWORD(HttpStatus.FORBIDDEN.value(), "이메일과 비밀번호가 일치하지 않습니다."),
 	FORBIDDEN_USER_ROLL(HttpStatus.FORBIDDEN.value(), "접근 권한이 없는 유저입니다."),
+	INVALID_ROLL(HttpStatus.NOT_FOUND.value(), "입력된 Roll이 존재하지 않습니다."),
 	EMAIL_NOT_FOUNT(HttpStatus.NOT_FOUND.value(), "입력받은 이메일로 가입된 회원을 찾을 수 없습니다."),
 	USER_NOT_FOUND(HttpStatus.NOT_FOUND.value(), "해당 유저를 찾을 수 없습니다."),
 	PIPELINE_MODEL_NOT_FOUND(HttpStatus.NOT_FOUND.value(), "해당 파이프라인 모델을 찾을 수 없습니다.")
