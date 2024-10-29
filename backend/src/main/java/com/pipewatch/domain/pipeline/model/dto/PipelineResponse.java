@@ -16,7 +16,7 @@ public class PipelineResponse {
 	public static class DetailDto {
 		private String name;
 		private LocalDateTime updatedAt;
-		private PropertyDto properties;
+		private PropertyDto property;
 		private List<DefectDto> defects;
 	}
 
