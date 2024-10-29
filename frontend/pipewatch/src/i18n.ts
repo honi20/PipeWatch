@@ -1,7 +1,7 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
-import enTranslations from "../locales/en/translation.json";
-import koTranslations from "../locales/ko/translation.json";
+import enTranslations from "@locales/en/translation.json";
+import koTranslations from "@locales/ko/translation.json";
 
 type LanguageType = "ko" | "en";
 
