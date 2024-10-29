@@ -30,6 +30,8 @@ public class User extends BaseEntity {
 
     private Role role;
 
+    private String uuid;
+
     @ManyToOne(fetch= FetchType.LAZY)
     @JoinColumn(name = "enterprise_id")
     private Enterprise enterprise;
