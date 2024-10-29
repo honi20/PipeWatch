@@ -73,5 +73,16 @@
       "email": "jjhoneyyyy@gmail.com",
       "description": "역할 설명"
     }
+  },
+  "pipeGenerator": {
+    "title": "파이프 모델 생성",
+    "description": "관리할 파이프 모델을 생성해보세요.",
+    "menus": {
+      "menu1": "파이프 사진 촬영",
+      "menu2": "파이프 모델 업로드",
+      "menu3": "파이프 데이터 입력",
+      "menu4": "모델 렌더링",
+      "menu5": "모델 생성 완료"
+    }
   }
 }
