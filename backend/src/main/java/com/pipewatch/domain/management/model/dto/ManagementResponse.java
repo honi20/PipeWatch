@@ -45,7 +45,6 @@ public class ManagementResponse {
 	}
 
 	@Getter
-	@NoArgsConstructor
 	@AllArgsConstructor
 	public static class EmployeeDto {
 		private Long userId;
@@ -58,7 +57,6 @@ public class ManagementResponse {
 	}
 
 	@Getter
-	@NoArgsConstructor
 	@AllArgsConstructor
 	public static class BuildingDto {
 		private String building;

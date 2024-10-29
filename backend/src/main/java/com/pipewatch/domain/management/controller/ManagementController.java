@@ -43,7 +43,7 @@ public class ManagementController {
 	}
 
 	@GetMapping("/search")
-	public ResponseEntity<?> employeeDetail(@RequestParam String keyword) {
+	public ResponseEntity<?> employeeDetail(@RequestParam(required = false) String keyword) {
 		ManagementResponse.EmployeeDto employee1 = new ManagementResponse.EmployeeDto(1L, "이싸피", "lee@ssafy.com", 121212L, "경영지원부", "사원", "사원");
 		ManagementResponse.EmployeeDto employee2 = new ManagementResponse.EmployeeDto(2L, "박싸피", "park@ssafy.com", 333333L, "IT개발부", "팀장", "관리자");
 		ManagementResponse.EmployeeSearchDto responseDto = ManagementResponse.EmployeeSearchDto.builder()
