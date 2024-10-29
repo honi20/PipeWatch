@@ -25,5 +25,62 @@
     "emailError": "Please enter a valid email.",
     "password": "Password",
     "passwordError": "Password must be at least 8 characters long and include at least one letter, one number, and one special character (e.g., !@#$%^&*)."
+  },
+  "aboutService": {
+    "description1": "Leading Innovation in Pipe System Management and Maintenance.",
+    "description2": "New Standard in Pipe Maintenance.",
+    "feature1": {
+      "title": "Digital Transformation",
+      "description1": "Breaking the Boundaries of Time and Space",
+      "description2": "Automated Solutions for Pipe Rendering and Monitoring"
+    },
+    "feature2": {
+      "title": "Pipe Segmentation Model",
+      "description1": "High-Precision Segmentation Using 2,000+ Pipe Datasets",
+      "description2": ""
+    },
+    "feature3": {
+      "title": "Automated Pipe Rendering",
+      "description1": "3D Modeling Powered by the Blender API",
+      "description2": ""
+    },
+    "feature4": {
+      "title": "User-Friendly UX/UI",
+      "description1": "Designed to Maximize User Productivity",
+      "description2": "Enhanced Accessibility for Seamless Pipe Monitoring"
+    }
+  },
+  "aboutTeam": {
+    "description": "Innovating with Better Technology, Together with TEAM PAORI.",
+    "member1": {
+      "name": "Kyeong-Deok Seo | Team Lead, BE",
+      "email": "zoo54245424@gmail.com",
+      "description": "3D Model Rendering (Blender)"
+    },
+    "member2": {
+      "name": "Ye-Heon Choi | BE",
+      "email": "1594cyh@gmail.com",
+      "description": "Role Description"
+    },
+    "member3": {
+      "name": "Min-Hyeok Ko | AI",
+      "email": "rhalsgur0086@gmail.comI",
+      "description": "Role Description"
+    },
+    "member4": {
+      "name": "Cheol-Min Seong | Infra",
+      "email": "tjdcjfals@gmail.com",
+      "description": "Role Description"
+    },
+    "member5": {
+      "name": "Ju-Yeon Park | FE, UX/UI Design",
+      "email": "krozv.code@gmail.com",
+      "description": "Role Description"
+    },
+    "member6": {
+      "name": "Ji-Hyeon Jang | UX/UI Design, FE",
+      "email": "jjhoneyyyy@gmail.com",
+      "description": "Role Description"
+    }
   }
 }

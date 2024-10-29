@@ -25,5 +25,62 @@
     "emailError": "이메일을 다시 확인하세요.",
     "password": "비밀번호",
     "passwordError": "비밀번호는 최소 8자 이상이어야 하며, 최소 하나의 영문자, 숫자, 특수 문자(예: !@#$%^&*)를 포함해야 합니다."
+  },
+  "aboutService": {
+    "description1": "파이프 시스템 관리, 유지보수의 혁신을 이끌다",
+    "description2": "파이프 유지보수의 새로운 기준.",
+    "feature1": {
+      "title": "디지털 전환",
+      "description1": "시간과 공간의 제약의 해소",
+      "description2": "파이프 렌더링 및 모니터링의 자동화"
+    },
+    "feature2": {
+      "title": "파이프 세그멘테이션 모델",
+      "description1": "약 2,000개의 파이프 데이터셋을 활용한 고정밀 세그멘테이션 기술",
+      "description2": ""
+    },
+    "feature3": {
+      "title": "파이프 렌더링 자동화",
+      "description1": "Blender API를 활용한 3D 모델링",
+      "description2": ""
+    },
+    "feature4": {
+      "title": "사용자 친화 UX/UI",
+      "description1": "사용자의 생산성 증대를 위한 디자인",
+      "description2": "파이프 모니터링의 접근성 확대"
+    }
+  },
+  "aboutTeam": {
+    "description": "더 나은 기술의 혁신, TEAM PAORI와 함께합니다.",
+    "member1": {
+      "name": "서경덕 | 팀장, BE",
+      "email": "zoo54245424@gmail.com",
+      "description": "3D 모델 렌더링(Blender)"
+    },
+    "member2": {
+      "name": "최예헌 | BE",
+      "email": "1594cyh@gmail.com",
+      "description": "역할 설명"
+    },
+    "member3": {
+      "name": "고민혁 | AI",
+      "email": "rhalsgur0086@gmail.comI",
+      "description": "역할 설명"
+    },
+    "member4": {
+      "name": "성철민 | Infra",
+      "email": "tjdcjfals@gmail.com",
+      "description": "역할 설명"
+    },
+    "member5": {
+      "name": "박주연 | FE, UX/UI Design",
+      "email": "krozv.code@gmail.com",
+      "description": "역할 설명"
+    },
+    "member6": {
+      "name": "장지현 | UX/UI Design, FE",
+      "email": "jjhoneyyyy@gmail.com",
+      "description": "역할 설명"
+    }
   }
 }
