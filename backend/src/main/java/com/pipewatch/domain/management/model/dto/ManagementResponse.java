@@ -48,6 +48,7 @@ public class ManagementResponse {
 	@NoArgsConstructor
 	@AllArgsConstructor
 	public static class EmployeeDto {
+		private Long id;
 		private String name;
 		private String email;
 		private Long empNo;

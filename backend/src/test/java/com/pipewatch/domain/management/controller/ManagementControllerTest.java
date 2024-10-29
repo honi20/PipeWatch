@@ -20,6 +20,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+import static com.epages.restdocs.apispec.ResourceDocumentation.parameterWithName;
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
 import static com.pipewatch.domain.util.ResponseFieldUtil.getCommonResponseFields;
 import static com.pipewatch.global.statusCode.SuccessCode.*;
@@ -69,6 +70,7 @@ class ManagementControllerTest {
 								.responseFields(
 										getCommonResponseFields(
 												fieldWithPath("body.employees[]").type(JsonFieldType.ARRAY).description("승인대기 중인 직원 리스트"),
+												fieldWithPath("body.employees[].id").type(JsonFieldType.NUMBER).description("직원 ID"),
 												fieldWithPath("body.employees[].name").type(JsonFieldType.STRING).description("직원 이름"),
 												fieldWithPath("body.employees[].email").type(JsonFieldType.STRING).description("직원 이메일"),
 												fieldWithPath("body.employees[].empNo").type(JsonFieldType.NUMBER).description("직원 사번"),
@@ -105,6 +107,7 @@ class ManagementControllerTest {
 								.responseFields(
 										getCommonResponseFields(
 												fieldWithPath("body.employees[]").type(JsonFieldType.ARRAY).description("직원 리스트"),
+												fieldWithPath("body.employees[].id").type(JsonFieldType.NUMBER).description("직원 ID"),
 												fieldWithPath("body.employees[].name").type(JsonFieldType.STRING).description("직원 이름"),
 												fieldWithPath("body.employees[].email").type(JsonFieldType.STRING).description("직원 이메일"),
 												fieldWithPath("body.employees[].empNo").type(JsonFieldType.NUMBER).description("직원 사번"),
@@ -146,6 +149,9 @@ class ManagementControllerTest {
 						resource(ResourceSnippetParameters.builder()
 								.tag("Management API")
 								.summary("접근 권한 변경 API")
+								.pathParameters(
+										parameterWithName("userId").description("유저 Id")
+								)
 								.requestFields(
 										fieldWithPath("newRoll").type(JsonFieldType.STRING).description("새 역할")
 								)
@@ -155,6 +161,46 @@ class ManagementControllerTest {
 										)
 								)
 								.requestSchema(Schema.schema("접근 권한 변경 Request"))
+								.build()
+						)));
+	}
+
+	@Test
+	void 직원_검색_성공() throws Exception {
+		ResultActions actions = mockMvc.perform(
+				get("/api/management/search?keyword=싸피")
+						.contentType(MediaType.APPLICATION_JSON)
+						.accept(MediaType.APPLICATION_JSON)
+						.characterEncoding("UTF-8")
+		);
+
+		actions
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.header.httpStatusCode").value(EMPLOYEE_SEARCH_OK.getHttpStatusCode()))
+				.andExpect(jsonPath("$.header.message").value(EMPLOYEE_SEARCH_OK.getMessage()))
+				.andDo(document(
+						"직원 검색 성공",
+						preprocessRequest(prettyPrint()),
+						preprocessResponse(prettyPrint()),
+						resource(ResourceSnippetParameters.builder()
+								.tag("Management API")
+								.summary("직원 검색 API")
+								.queryParameters(
+										parameterWithName("keyword").description("검색어").optional()
+								)
+								.responseFields(
+										getCommonResponseFields(
+												fieldWithPath("body.employees[]").type(JsonFieldType.ARRAY).description("직원 리스트"),
+												fieldWithPath("body.employees[].id").type(JsonFieldType.NUMBER).description("직원 ID"),
+												fieldWithPath("body.employees[].name").type(JsonFieldType.STRING).description("직원 이름"),
+												fieldWithPath("body.employees[].email").type(JsonFieldType.STRING).description("직원 이메일"),
+												fieldWithPath("body.employees[].empNo").type(JsonFieldType.NUMBER).description("직원 사번"),
+												fieldWithPath("body.employees[].department").type(JsonFieldType.STRING).description("직원 부서"),
+												fieldWithPath("body.employees[].empClass").type(JsonFieldType.STRING).description("직원 직급"),
+												fieldWithPath("body.employees[].role").type(JsonFieldType.STRING).description("직원 역할 (사원/관리자/기업)")
+										)
+								)
+								.responseSchema(Schema.schema("직원 검색 Response"))
 								.build()
 						)));
 	}
