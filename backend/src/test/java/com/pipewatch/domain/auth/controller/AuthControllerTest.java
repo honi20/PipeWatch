@@ -20,6 +20,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
 import static com.pipewatch.domain.util.ResponseFieldUtil.getCommonResponseFields;
 import static com.pipewatch.global.statusCode.SuccessCode.ENTERPRISE_CREATED;
+import static com.pipewatch.global.statusCode.SuccessCode.USER_CREATED;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
@@ -83,6 +84,59 @@ class AuthControllerTest {
                                         )
                                 )
                                 .requestSchema(Schema.schema("Enterprise 등록 Request"))
+                                .build()
+                        )));
+    }
+
+    @Test
+    void 회원가입_성공() throws Exception {
+        AuthDto.SignupRequestDto dto = AuthDto.SignupRequestDto.builder()
+                .email("kim@ssafy.com")
+                .password("ssafy1234")
+                .name("김싸피")
+                .enterpriseId(1L)
+                .empNo(1123456L)
+                .department("경영지원부")
+                .empClass("사원")
+                .build();
+
+        String content = objectMapper.writeValueAsString(dto);
+
+        ResultActions actions = mockMvc.perform(
+                post("/api/auth")
+                        .content(content)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8")
+                        .with(csrf())
+        );
+
+        actions
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.header.httpStatusCode").value(USER_CREATED.getHttpStatusCode()))
+                .andExpect(jsonPath("$.header.message").value(USER_CREATED.getMessage()))
+                .andDo(document(
+                        "회원가입 성공",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        resource(ResourceSnippetParameters.builder()
+                                .tag("Auth API")
+                                .summary("회원가입 API")
+                                .requestFields(
+                                        fieldWithPath("email").description("이메일"),
+                                        fieldWithPath("password").description("비밀번호"),
+                                        fieldWithPath("name").description("이름"),
+                                        fieldWithPath("enterpriseId").description("기업 번호"),
+                                        fieldWithPath("empNo").description("사번"),
+                                        fieldWithPath("department").description("부서"),
+                                        fieldWithPath("empClass").description("직급")
+                                )
+                                .responseFields(
+                                        getCommonResponseFields(
+                                                fieldWithPath("body").ignored()
+                                        )
+                                )
+                                .requestSchema(Schema.schema("회원가입 Request"))
                                 .build()
                         )));
     }

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import static com.pipewatch.global.statusCode.SuccessCode.ENTERPRISE_CREATED;
+import static com.pipewatch.global.statusCode.SuccessCode.USER_CREATED;
 
 @RestController
 @RequestMapping("${api_prefix}/auth")
@@ -20,5 +21,10 @@ public class AuthController {
     public ResponseEntity<?> enterpriseAdd(@RequestBody AuthDto.EnterpriseRegistRequestDto enterpriseRegistRequestDto) {
 
         return new ResponseEntity<>(ResponseDto.success(ENTERPRISE_CREATED, null), HttpStatus.CREATED);
+    }
+
+    @PostMapping
+    public ResponseEntity<?> userAdd(@RequestBody AuthDto.SignupRequestDto signupRequestDto) {
+        return new ResponseEntity<>(ResponseDto.success(USER_CREATED, null), HttpStatus.CREATED);
     }
 }
