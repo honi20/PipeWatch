@@ -10,7 +10,7 @@ public class EnterpriseResponseDto {
 	@Builder
 	@NoArgsConstructor
 	@AllArgsConstructor
-	public static class EnterpriseDetailResponseDto {
+	public static class DetailDto {
 		private String name;
 		private String industry;
 		private String managerEmail;
