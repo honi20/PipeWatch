@@ -61,12 +61,12 @@ class PipelineControllerTest {
 				.andExpect(jsonPath("$.header.httpStatusCode").value(PIPELINE_DETAIL_OK.getHttpStatusCode()))
 				.andExpect(jsonPath("$.header.message").value(PIPELINE_DETAIL_OK.getMessage()))
 				.andDo(document(
-						"단일 파이프라인 상세조회 성공",
+						"파이프라인 상세조회 성공",
 						preprocessRequest(prettyPrint()),
 						preprocessResponse(prettyPrint()),
 						resource(ResourceSnippetParameters.builder()
 								.tag("Pipeline API")
-								.summary("단일 파이프라인 상세조회 API")
+								.summary("파이프라인 상세조회 API")
 								.pathParameters(
 										parameterWithName("pipelineUuid").description("파이프라인 Uuid")
 								)
@@ -88,7 +88,7 @@ class PipelineControllerTest {
 												fieldWithPath("body.defects[].type").type(JsonFieldType.STRING).description("파이프라인 결함 타입 (CORROSION/CRACK)")
 										)
 								)
-								.responseSchema(Schema.schema("단일 파이프라인 상세조회 Response"))
+								.responseSchema(Schema.schema("파이프라인 상세조회 Response"))
 								.build()
 						)));
 	}
