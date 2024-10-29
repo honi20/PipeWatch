@@ -1,5 +1,9 @@
-import React from "react";
+import SignUpCard from "@src/components/account/SignUpCard";
 
 export const SignUpPage = () => {
-  return <div>SignUpPage</div>;
+  return (
+    <div>
+      <SignUpCard />
+    </div>
+  );
 };

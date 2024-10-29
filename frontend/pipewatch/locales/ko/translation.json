@@ -24,7 +24,15 @@
     "email": "이메일",
     "emailError": "이메일을 다시 확인하세요.",
     "password": "비밀번호",
-    "passwordError": "비밀번호는 최소 8자 이상이어야 하며, 최소 하나의 영문자, 숫자, 특수 문자(예: !@#$%^&*)를 포함해야 합니다."
+    "confirmPassword": "비밀번호 확인",
+    "passwordError": "비밀번호는 최소 8자 이상이어야 하며, 최소 하나의 영문자, 숫자, 특수 문자(예: !@#$%^&*)를 포함해야 합니다.",
+    "name": "성명",
+    "companyName": "기업명",
+    "employeeId": "사번",
+    "employeeDepartment": "부서",
+    "employeePosition": "직급",
+    "employeeInformation": "사원 정보",
+    "termsAndPrivacyConsent": "회원가입 시, 귀하는 당사의 <1>서비스 약관</1>과 <3>개인정보 처리방침</3>에 동의하는 것으로 간주됩니다."
   },
   "aboutService": {
     "description1": "파이프 시스템 관리, 유지보수의 혁신을 이끌다",
