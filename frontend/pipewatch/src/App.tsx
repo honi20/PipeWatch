@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Layout from "./pages/Layout";
 
 import { Home } from "./pages/Home";
+import { AboutUs } from "./pages/AboutUs";
 import { AboutService } from "./pages/AboutService";
 import { AboutTeam } from "./pages/AboutTeam";
 import { CreateModel } from "./pages/CreateModel";
@@ -30,6 +31,7 @@ function App() {
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
 
+            <Route path="/about-us/" element={<AboutUs />} />
             <Route path="/about-us/service" element={<AboutService />} />
             <Route path="/about-us/team" element={<AboutTeam />} />
 

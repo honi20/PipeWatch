@@ -1,7 +1,12 @@
-import { Link } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 
-import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
+import {
+  Button,
+  Popover,
+  PopoverButton,
+  PopoverPanel,
+} from "@headlessui/react";
 
 import { useTranslation } from "react-i18next";
 import LogoHeaderDark from "../../assets/images/logo_header_dark.png";
@@ -35,24 +40,44 @@ export const Header = ({ handleTheme, currentTheme }: Props) => {
   const isDark = currentTheme === "dark";
 
   return (
-    <div className="flex items-center justify-between p-2 text-black dark:text-white">
-      <div className="flex items-center">
-        <Link className="p-2 hover:text-primary-200" to="/">
+    <header className="flex items-center justify-between p-2 text-black dark:text-white">
+      <div className="flex items-center gap-4">
+        <Link className="p-2 hover:text-primary-200 " to="/">
           <img
             className="w-16 h-10"
             src={isDark ? LogoHeaderDark : LogoHeaderLight}
           />
         </Link>
-        <Link className="p-5 hover:text-primary-200" to="/">
+
+        <NavLink
+          className={({ isActive }) =>
+            `p-3 pb-2 hover:text-primary-200 ${
+              isActive
+                ? "text-primary-200 border-solid border-b-2 border-b-primary-200"
+                : ""
+            }`
+          }
+          to="/"
+        >
           Home
-        </Link>
-        <Popover className="p-5 group">
+        </NavLink>
+
+        <Popover className="p-3 pb-2 group">
           {({ open, close }) => (
             <>
-              <PopoverButton className="flex gap-1 items-center bg-white dark:bg-black focus:outline-none data-[active]:text-primary-200  data-[hover]:text-primary-200 data-[focus]:outline-1 data-[focus]:outline-white">
-                {t("header.subMenu.aboutUs")}
-                <ChevronDownIcon className="size-5 group-data-[open]:rotate-180" />
-              </PopoverButton>
+              <NavLink
+                className={({ isActive }) =>
+                  `p-3  hover:text-primary-200 ${
+                    isActive ? "text-primary-200 " : ""
+                  }`
+                }
+                to="/about-us"
+              >
+                <PopoverButton className="flex gap-1 items-center bg-white dark:bg-black focus:outline-none data-[active]:text-primary-200  data-[hover]:text-primary-200 data-[focus]:outline-1 data-[focus]:outline-white">
+                  {t("header.subMenu.aboutUs")}
+                  <ChevronDownIcon className="size-5 group-data-[open]:rotate-180" />
+                </PopoverButton>
+              </NavLink>
               {open && (
                 <PopoverPanel
                   transition
@@ -80,17 +105,46 @@ export const Header = ({ handleTheme, currentTheme }: Props) => {
             </>
           )}
         </Popover>
-        <Link className="p-5 hover:text-primary-200" to="/create-model">
-          {t("header.subMenu.createModel")}
-        </Link>
-        <Link className="p-5 hover:text-primary-200" to="/model-list">
-          {t("header.subMenu.modelList")}
-        </Link>
-        <Link className="p-5 hover:text-primary-200" to="/contact">
-          {t("header.subMenu.contact")}
-        </Link>
-      </div>
 
+        <NavLink
+          className={({ isActive }) =>
+            `p-3 pb-2 hover:text-primary-200  ${
+              isActive
+                ? "text-primary-200 border-solid border-b-2 border-b-primary-200"
+                : ""
+            }`
+          }
+          to="/create-model"
+        >
+          {t("header.subMenu.createModel")}
+        </NavLink>
+
+        <NavLink
+          className={({ isActive }) =>
+            `p-3 pb-2 hover:text-primary-200 ${
+              isActive
+                ? "text-primary-200 border-solid border-b-2 border-b-primary-200"
+                : ""
+            }`
+          }
+          to="/model-list"
+        >
+          {t("header.subMenu.modelList")}
+        </NavLink>
+
+        <NavLink
+          className={({ isActive }) =>
+            `p-3 pb-2 hover:text-primary-200 ${
+              isActive
+                ? "text-primary-200 border-solid border-b-2 border-b-primary-200"
+                : ""
+            }`
+          }
+          to="/contact"
+        >
+          {t("header.subMenu.contact")}
+        </NavLink>
+      </div>
       <div className="flex items-center gap-3">
         <div
           className="flex gap-2 cursor-pointer hover:text-primary-200"
@@ -106,13 +160,12 @@ export const Header = ({ handleTheme, currentTheme }: Props) => {
         >
           {isDark ? <LightModeIcon /> : <DarkModeIcon />}
         </div>
-        <Link
-          className="w-20 px-4 py-3 border-2 border-black border-solid rounded-lg dark:border-white hover:text-primary-200"
-          to="/account/login"
-        >
-          {t("header.login")}
+        <Link className="" to="/account/login">
+          <Button className="px-4 py-2 bg-white border-2 border-black border-solid rounded-lg text-s dark:bg-black dark:border-white hover:text-primary-200">
+            {t("header.login")}
+          </Button>
         </Link>
       </div>
-    </div>
+    </header>
   );
 };
