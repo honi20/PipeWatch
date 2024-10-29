@@ -19,7 +19,8 @@ public enum SuccessCode {
 	USER_DELETE_OK(HttpStatus.NO_CONTENT.value(), "회원 탈퇴에 성공했습니다."),
 	ENTERPRISE_DETAIL_OK(HttpStatus.OK.value(), "기업 정보 조회에 성공했습니다."),
 	WAITING_EMPLOYEE_LIST_OK(HttpStatus.OK.value(), "승인 대기 중인 직원 목록 조회에 성공했습니다."),
-	EMPLOYEE_LIST_OK(HttpStatus.OK.value(), "직원 목록 조회에 성공했습니다.")
+	EMPLOYEE_LIST_OK(HttpStatus.OK.value(), "직원 목록 조회에 성공했습니다."),
+	ROLL_MODIFIED_OK(HttpStatus.OK.value(), "권한 변경에 성공했습니다.")
 	;
 
 	private final int httpStatusCode;

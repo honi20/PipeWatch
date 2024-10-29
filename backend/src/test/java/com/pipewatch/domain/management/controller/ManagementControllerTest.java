@@ -3,6 +3,9 @@ package com.pipewatch.domain.management.controller;
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.epages.restdocs.apispec.Schema;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.pipewatch.domain.auth.model.dto.AuthDto;
+import com.pipewatch.domain.management.model.dto.ManagementRequest;
+import com.pipewatch.domain.management.model.dto.ManagementResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,13 +22,14 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
 import static com.pipewatch.domain.util.ResponseFieldUtil.getCommonResponseFields;
-import static com.pipewatch.global.statusCode.SuccessCode.EMPLOYEE_LIST_OK;
-import static com.pipewatch.global.statusCode.SuccessCode.WAITING_EMPLOYEE_LIST_OK;
+import static com.pipewatch.global.statusCode.SuccessCode.*;
+import static com.pipewatch.global.statusCode.SuccessCode.SIGNIN_OK;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -110,6 +114,47 @@ class ManagementControllerTest {
 										)
 								)
 								.responseSchema(Schema.schema("직원 리스트 조회 Response"))
+								.build()
+						)));
+	}
+
+	@Test
+	void 접근_권한_수정_성공() throws Exception {
+		ManagementRequest.AccessModifyDto dto = ManagementRequest.AccessModifyDto.builder()
+				.newRoll("관리자")
+				.build();
+
+		String content = objectMapper.writeValueAsString(dto);
+
+		ResultActions actions = mockMvc.perform(
+				patch("/api/management/{userId}", 1L)
+						.content(content)
+						.contentType(MediaType.APPLICATION_JSON)
+						.accept(MediaType.APPLICATION_JSON)
+						.characterEncoding("UTF-8")
+						.with(csrf())
+		);
+
+		actions
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.header.httpStatusCode").value(ROLL_MODIFIED_OK.getHttpStatusCode()))
+				.andExpect(jsonPath("$.header.message").value(ROLL_MODIFIED_OK.getMessage()))
+				.andDo(document(
+						"접근 권한 변경 성공",
+						preprocessRequest(prettyPrint()),
+						preprocessResponse(prettyPrint()),
+						resource(ResourceSnippetParameters.builder()
+								.tag("Management API")
+								.summary("접근 권한 변경 API")
+								.requestFields(
+										fieldWithPath("newRoll").type(JsonFieldType.STRING).description("새 역할")
+								)
+								.responseFields(
+										getCommonResponseFields(
+												fieldWithPath("body").ignored()
+										)
+								)
+								.requestSchema(Schema.schema("접근 권한 변경 Request"))
 								.build()
 						)));
 	}

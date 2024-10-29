@@ -5,9 +5,7 @@ import com.pipewatch.global.response.ResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,7 +18,7 @@ public class ManagementController {
 	@GetMapping("/waiting-list")
 	public ResponseEntity<?> waitingEmployeeList() {
 		ManagementResponse.EmployeeDto employee1 = new ManagementResponse.EmployeeDto("김싸피", "kim@ssafy.com", 112345L, "경영지원부", "대리", "사원");
-		ManagementResponse.EmployeeDto employee2 = new ManagementResponse.EmployeeDto("최싸피", "choi@ssafy.com", 116789L, "IT개발부", "팀장", "관리자");
+		ManagementResponse.EmployeeDto employee2 = new ManagementResponse.EmployeeDto("최싸피", "choi@ssafy.com", 116789L, "IT개발부", "팀장", "사원");
 		ManagementResponse.EmployeeWaitingListDto responseDto = ManagementResponse.EmployeeWaitingListDto.builder()
 				.employees(List.of(employee1, employee2))
 				.build();
@@ -37,5 +35,10 @@ public class ManagementController {
 				.build();
 
 		return new ResponseEntity<>(ResponseDto.success(EMPLOYEE_LIST_OK, responseDto), HttpStatus.OK);
+	}
+
+	@PatchMapping("/{userId}")
+	public ResponseEntity<?> userRollModify(@PathVariable Long userId) {
+		return new ResponseEntity<>(ResponseDto.success(ROLL_MODIFIED_OK, null), HttpStatus.OK);
 	}
 }
