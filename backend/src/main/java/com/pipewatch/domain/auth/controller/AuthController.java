@@ -1,11 +1,16 @@
 package com.pipewatch.domain.auth.controller;
 
 import com.pipewatch.domain.auth.model.dto.AuthDto;
+import com.pipewatch.domain.auth.service.AuthService;
+import com.pipewatch.global.jwt.service.JwtService;
+import com.pipewatch.global.redis.RedisUtil;
 import com.pipewatch.global.response.ResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.security.NoSuchAlgorithmException;
 
 import static com.pipewatch.global.statusCode.SuccessCode.*;
 
@@ -13,6 +18,10 @@ import static com.pipewatch.global.statusCode.SuccessCode.*;
 @RequestMapping("${api_prefix}/auth")
 @RequiredArgsConstructor
 public class AuthController {
+    private final AuthService authService;
+    private final JwtService jwtService;
+    private final RedisUtil redisUtil;
+
     @PostMapping("/enterprise")
     public ResponseEntity<?> enterpriseAdd(@RequestBody AuthDto.EnterpriseRegistRequestDto enterpriseRegistRequestDto) {
 
@@ -25,13 +34,15 @@ public class AuthController {
     }
 
     @PostMapping("/send-email-code")
-    public ResponseEntity<?> emailCodeSend(@RequestBody AuthDto.EmailCodeSendRequestDto emailCodeSendRequestDto) {
+    public ResponseEntity<?> emailCodeSend(@RequestBody AuthDto.EmailCodeSendRequestDto requestDto) throws NoSuchAlgorithmException {
+        authService.sendEmailCode(requestDto);
+
         return new ResponseEntity<>(ResponseDto.success(EMAIL_CODE_SEND_OK, null), HttpStatus.OK);
     }
 
     @PostMapping("/verify-email-code")
     public ResponseEntity<?> emailCodeVerify(@RequestBody AuthDto.EmailCodeVerifyRequestDto emailCodeVerifyRequestDto) {
-        return new ResponseEntity<>(ResponseDto.success(EMAIL_CODE_VERIFY_OK, null), HttpStatus.OK);
+        return new ResponseEntity<>(ResponseDto.success(EMAIL_VERIFIED, null), HttpStatus.OK);
     }
 
     @PostMapping("/signin")

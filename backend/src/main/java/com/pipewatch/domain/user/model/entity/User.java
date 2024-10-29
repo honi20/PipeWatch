@@ -6,10 +6,12 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 @Entity
+@Getter
 @SuperBuilder
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
