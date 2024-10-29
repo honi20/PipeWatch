@@ -12,7 +12,8 @@ public enum SuccessCode {
 	EMAIL_CODE_SEND_OK(HttpStatus.OK.value(), "이메일 인증 코드를 해당 이메일로 전송했습니다."),
 	EMAIL_CODE_VERIFY_OK(HttpStatus.OK.value(), "이메일 인증에 성공했습니다."),
 	SIGNIN_OK(HttpStatus.OK.value(), "로그인에 성공했습니다."),
-	LOGOUT_OK(HttpStatus.OK.value(), "로그아웃되었습니다.")
+	LOGOUT_OK(HttpStatus.OK.value(), "로그아웃되었습니다."),
+	MYPAGE_OK(HttpStatus.OK.value(), "개인정보 조회에 성공했습니다.")
 	;
 
 	private final int httpStatusCode;
