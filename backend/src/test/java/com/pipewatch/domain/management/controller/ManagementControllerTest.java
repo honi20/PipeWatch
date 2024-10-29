@@ -3,9 +3,7 @@ package com.pipewatch.domain.management.controller;
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.epages.restdocs.apispec.Schema;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.pipewatch.domain.auth.model.dto.AuthDto;
 import com.pipewatch.domain.management.model.dto.ManagementRequest;
-import com.pipewatch.domain.management.model.dto.ManagementResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,7 +22,6 @@ import static com.epages.restdocs.apispec.ResourceDocumentation.parameterWithNam
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
 import static com.pipewatch.domain.util.ResponseFieldUtil.getCommonResponseFields;
 import static com.pipewatch.global.statusCode.SuccessCode.*;
-import static com.pipewatch.global.statusCode.SuccessCode.SIGNIN_OK;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
@@ -203,5 +200,39 @@ class ManagementControllerTest {
 								.responseSchema(Schema.schema("직원 검색 Response"))
 								.build()
 						)));
+
+	}
+
+	@Test
+	void 건물_리스트_조회_성공() throws Exception {
+		ResultActions actions = mockMvc.perform(
+				get("/api/management/buildings")
+						.contentType(MediaType.APPLICATION_JSON)
+						.accept(MediaType.APPLICATION_JSON)
+						.characterEncoding("UTF-8")
+		);
+
+		actions
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.header.httpStatusCode").value(BUILDING_LIST_OK.getHttpStatusCode()))
+				.andExpect(jsonPath("$.header.message").value(BUILDING_LIST_OK.getMessage()))
+				.andDo(document(
+						"건물 목록 조회 성공",
+						preprocessRequest(prettyPrint()),
+						preprocessResponse(prettyPrint()),
+						resource(ResourceSnippetParameters.builder()
+								.tag("Management API")
+								.summary("건물 목록 조회 API")
+								.responseFields(
+										getCommonResponseFields(
+												fieldWithPath("body.buildings[]").type(JsonFieldType.ARRAY).description("건물 리스트"),
+												fieldWithPath("body.buildings[].building").type(JsonFieldType.STRING).description("건물명"),
+												fieldWithPath("body.buildings[].floors[]").type(JsonFieldType.ARRAY).description("층수 리스트")
+										)
+								)
+								.responseSchema(Schema.schema("건물 목록 조회 Response"))
+								.build()
+						)));
+
 	}
 }

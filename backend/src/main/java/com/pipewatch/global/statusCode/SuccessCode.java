@@ -21,7 +21,8 @@ public enum SuccessCode {
 	WAITING_EMPLOYEE_LIST_OK(HttpStatus.OK.value(), "승인 대기 중인 직원 목록 조회에 성공했습니다."),
 	EMPLOYEE_LIST_OK(HttpStatus.OK.value(), "직원 목록 조회에 성공했습니다."),
 	ROLL_MODIFIED_OK(HttpStatus.OK.value(), "권한 변경에 성공했습니다."),
-	EMPLOYEE_SEARCH_OK(HttpStatus.OK.value(), "사원 검색에 성공했습니다.")
+	EMPLOYEE_SEARCH_OK(HttpStatus.OK.value(), "사원 검색에 성공했습니다."),
+	BUILDING_LIST_OK(HttpStatus.OK.value(), "건물 리스트 조회에 성공했습니다.")
 	;
 
 	private final int httpStatusCode;
