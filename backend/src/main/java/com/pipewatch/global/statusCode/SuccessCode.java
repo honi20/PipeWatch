@@ -23,6 +23,7 @@ public enum SuccessCode {
 	MODEL_INIT_OK(HttpStatus.OK.value(), "모델 초기 정보 설정에 성공했습니다."),
 	MODEL_MODIFIED_OK(HttpStatus.OK.value(), "모델 정보 수정에 성공했습니다."),
 	MODEL_DETAIL_OK(HttpStatus.OK.value(), "모델 상세 조회에 성공했습니다."),
+	MODEL_DELETED(HttpStatus.NO_CONTENT.value(), "모델 삭제에 성공했습니다.")
 	;
 
 	private final int httpStatusCode;

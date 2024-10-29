@@ -258,4 +258,37 @@ class PipelineControllerTest {
 						)));
 	}
 
+	@Test
+	void 모델_삭제_성공() throws Exception {
+		ResultActions actions = mockMvc.perform(
+				delete("/api/models/{modelId}", 1L)
+						.contentType(MediaType.APPLICATION_JSON)
+						.accept(MediaType.APPLICATION_JSON)
+						.characterEncoding("UTF-8")
+		);
+
+		actions
+				.andExpect(status().isNoContent())
+				.andExpect(jsonPath("$.header.httpStatusCode").value(MODEL_DELETED.getHttpStatusCode()))
+				.andExpect(jsonPath("$.header.message").value(MODEL_DELETED.getMessage()))
+				.andDo(document(
+						"파이프라인 모델  성공",
+						preprocessRequest(prettyPrint()),
+						preprocessResponse(prettyPrint()),
+						resource(ResourceSnippetParameters.builder()
+								.tag("Pipeline API")
+								.summary("파이프라인 모델 삭제 API")
+								.pathParameters(
+										parameterWithName("modelId").description("모델 Id")
+								)
+								.responseFields(
+										getCommonResponseFields(
+												fieldWithPath("body").ignored()
+										)
+								)
+								.responseSchema(Schema.schema("파이프라인 모델 삭제 Response"))
+								.build()
+						)));
+	}
+
 }

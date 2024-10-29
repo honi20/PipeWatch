@@ -68,4 +68,8 @@ public class PipelineController {
 		return new ResponseEntity<>(ResponseDto.success(MODEL_DETAIL_OK, responseDto), HttpStatus.OK);
 	}
 
+	@DeleteMapping("/{modelId}")
+	public ResponseEntity<?> modelDelete(@PathVariable Long modelId) {
+		return new ResponseEntity<>(ResponseDto.success(MODEL_DELETED, null), HttpStatus.NO_CONTENT);
+	}
 }
