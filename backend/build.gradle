@@ -60,6 +60,8 @@ dependencies {
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
 	testImplementation 'com.epages:restdocs-api-spec-mockmvc:' + restdocsApiSpecVersion
+	testImplementation 'org.mockito:mockito-core:5.2.0'
+	testImplementation 'com.h2database:h2'
 	swaggerUI 'org.webjars:swagger-ui:4.11.1'
 
 }
