@@ -118,7 +118,7 @@ class UserControllerTest {
 												fieldWithPath("body").ignored()
 										)
 								)
-								.responseSchema(Schema.schema("개인정보 수정 Request"))
+								.responseSchema(Schema.schema("개인정보 수정 Response"))
 								.build()
 						)));
 	}
@@ -159,7 +159,7 @@ class UserControllerTest {
 												fieldWithPath("body").ignored()
 										)
 								)
-								.responseSchema(Schema.schema("비밀번호 수정 Request"))
+								.responseSchema(Schema.schema("비밀번호 수정 Response"))
 								.build()
 						)));
 	}
