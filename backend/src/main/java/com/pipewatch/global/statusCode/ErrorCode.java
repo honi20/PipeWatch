@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 @Getter
 @AllArgsConstructor
 public enum ErrorCode {
-	ERROR_TEST_OK(HttpStatus.FORBIDDEN.value(), "에러 테스트에 성공했습니다.")
+	DUPLICATE_EMAIL(HttpStatus.CONFLICT.value(), "중복된 이메일입니다.")
 	;
 
 	private final int httpStatusCode;

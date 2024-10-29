@@ -19,8 +19,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
 import static com.pipewatch.domain.util.ResponseFieldUtil.getCommonResponseFields;
-import static com.pipewatch.global.statusCode.SuccessCode.ENTERPRISE_CREATED;
-import static com.pipewatch.global.statusCode.SuccessCode.USER_CREATED;
+import static com.pipewatch.global.statusCode.SuccessCode.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
@@ -138,6 +137,47 @@ class AuthControllerTest {
                                         )
                                 )
                                 .requestSchema(Schema.schema("회원가입 Request"))
+                                .build()
+                        )));
+    }
+
+    @Test
+    void 인증코드_전송_성공() throws Exception {
+        AuthDto.EmailCodeSendRequestDto dto = AuthDto.EmailCodeSendRequestDto.builder()
+                .email("kim@ssafy.com")
+                .build();
+
+        String content = objectMapper.writeValueAsString(dto);
+
+        ResultActions actions = mockMvc.perform(
+                post("/api/auth/send-email-code")
+                        .content(content)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8")
+                        .with(csrf())
+        );
+
+        actions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.header.httpStatusCode").value(EMAIL_CODE_SEND_OK.getHttpStatusCode()))
+                .andExpect(jsonPath("$.header.message").value(EMAIL_CODE_SEND_OK.getMessage()))
+                .andDo(document(
+                        "이메일 인증코드 전송 성공",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        resource(ResourceSnippetParameters.builder()
+                                .tag("Auth API")
+                                .summary("이메일 인증코드 전송 API")
+                                .requestFields(
+                                        fieldWithPath("email").description("이메일")
+                                )
+                                .responseFields(
+                                        getCommonResponseFields(
+                                                fieldWithPath("body").ignored()
+                                        )
+                                )
+                                .requestSchema(Schema.schema("이메일 인증코드 전송 Request"))
                                 .build()
                         )));
     }

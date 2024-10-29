@@ -34,7 +34,9 @@ public class AuthDto {
 
     @Getter
     @Setter
+    @Builder
     @NoArgsConstructor
+    @AllArgsConstructor
     public static class EmailCodeSendRequestDto {
         private String email;
     }
