@@ -31,4 +31,9 @@ public class AuthController {
     public ResponseEntity<?> emailCodeSend(@RequestBody AuthDto.EmailCodeSendRequestDto emailCodeSendRequestDto) {
         return new ResponseEntity<>(ResponseDto.success(EMAIL_CODE_SEND_OK, null), HttpStatus.OK);
     }
+
+    @PostMapping("/verify-email-code")
+    public ResponseEntity<?> emailCodeVerify(@RequestBody AuthDto.EmailCodeVerifyRequestDto emailCodeVerifyRequestDto) {
+        return new ResponseEntity<>(ResponseDto.success(EMAIL_CODE_VERIFY_OK, null), HttpStatus.OK);
+    }
 }

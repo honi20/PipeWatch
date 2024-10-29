@@ -181,4 +181,47 @@ class AuthControllerTest {
                                 .build()
                         )));
     }
+
+    @Test
+    void 인증코드_확인_성공() throws Exception {
+        AuthDto.EmailCodeVerifyRequestDto dto = AuthDto.EmailCodeVerifyRequestDto.builder()
+                .email("kim@ssafy.com")
+                .code("abc13df")
+                .build();
+
+        String content = objectMapper.writeValueAsString(dto);
+
+        ResultActions actions = mockMvc.perform(
+                post("/api/auth/verify-email-code")
+                        .content(content)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8")
+                        .with(csrf())
+        );
+
+        actions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.header.httpStatusCode").value(EMAIL_CODE_VERIFY_OK.getHttpStatusCode()))
+                .andExpect(jsonPath("$.header.message").value(EMAIL_CODE_VERIFY_OK.getMessage()))
+                .andDo(document(
+                        "이메일 인증코드 확인 성공",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        resource(ResourceSnippetParameters.builder()
+                                .tag("Auth API")
+                                .summary("이메일 인증코드 확인 API")
+                                .requestFields(
+                                        fieldWithPath("email").description("이메일"),
+                                        fieldWithPath("code").description("인증코드")
+                                )
+                                .responseFields(
+                                        getCommonResponseFields(
+                                                fieldWithPath("body").ignored()
+                                        )
+                                )
+                                .requestSchema(Schema.schema("이메일 인증코드 확인 Request"))
+                                .build()
+                        )));
+    }
 }
