@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.pipewatch.global.statusCode.SuccessCode.PIPELINE_DETAIL_OK;
+import static com.pipewatch.global.statusCode.SuccessCode.PIPELINE_MODIFIED_OK;
 
 @RestController
 @RequestMapping("${api_prefix}/pipelines")
@@ -30,5 +31,10 @@ public class PipelineController {
 				.build();
 
 		return new ResponseEntity<>(ResponseDto.success(PIPELINE_DETAIL_OK, responseDto), HttpStatus.OK);
+	}
+
+	@PutMapping("/{pipelineUuid}")
+	public ResponseEntity<?> pipelineModify(@PathVariable String pipelineUuid) {
+		return new ResponseEntity<>(ResponseDto.success(PIPELINE_MODIFIED_OK, null), HttpStatus.OK);
 	}
 }

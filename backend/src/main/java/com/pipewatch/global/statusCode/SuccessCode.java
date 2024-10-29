@@ -40,7 +40,8 @@ public enum SuccessCode {
 	MODEL_DELETED(HttpStatus.NO_CONTENT.value(), "모델 삭제에 성공했습니다."),
 
 	// pipeline
-	PIPELINE_DETAIL_OK(HttpStatus.OK.value(), "단일 파이프라인 조회에 성공했습니다.")
+	PIPELINE_DETAIL_OK(HttpStatus.OK.value(), "단일 파이프라인 조회에 성공했습니다."),
+	PIPELINE_MODIFIED_OK(HttpStatus.OK.value(), "단일 파이프 기본 정보 수정에 성공했습니다."),
 	;
 
 	private final int httpStatusCode;

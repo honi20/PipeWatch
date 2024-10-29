@@ -3,6 +3,9 @@ package com.pipewatch.domain.pipeline.controller;
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.epages.restdocs.apispec.Schema;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.pipewatch.domain.pipeline.model.dto.PipelineRequest;
+import com.pipewatch.domain.pipeline.model.dto.PipelineResponse;
+import com.pipewatch.domain.pipelineModel.model.dto.PipelineModelRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,10 +26,11 @@ import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
 import static com.pipewatch.domain.util.ResponseFieldUtil.getCommonResponseFields;
 import static com.pipewatch.global.statusCode.SuccessCode.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -85,6 +89,50 @@ class PipelineControllerTest {
 										)
 								)
 								.responseSchema(Schema.schema("단일 파이프라인 상세조회 Response"))
+								.build()
+						)));
+	}
+
+	@Test
+	void 파이프라인_수정_성공() throws Exception {
+		PipelineRequest.ModifyDto dto = PipelineRequest.ModifyDto.builder()
+				.name("변경된 파이프라인 이름")
+				.build();
+
+		String content = objectMapper.writeValueAsString(dto);
+
+		ResultActions actions = mockMvc.perform(
+				put("/api/pipelines/{pipelineUuid}", "pipeline_abd34412jd_1")
+						.content(content)
+						.contentType(MediaType.APPLICATION_JSON)
+						.accept(MediaType.APPLICATION_JSON)
+						.characterEncoding("UTF-8")
+						.with(csrf())
+		);
+
+		actions
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.header.httpStatusCode").value(PIPELINE_MODIFIED_OK.getHttpStatusCode()))
+				.andExpect(jsonPath("$.header.message").value(PIPELINE_MODIFIED_OK.getMessage()))
+				.andDo(document(
+						"파이프라인 정보 수정 성공",
+						preprocessRequest(prettyPrint()),
+						preprocessResponse(prettyPrint()),
+						resource(ResourceSnippetParameters.builder()
+								.tag("Pipeline API")
+								.summary("파이프라인 정보 수정 API")
+								.pathParameters(
+										parameterWithName("pipelineUuid").description("파이프라인 Uuid")
+								)
+								.requestFields(
+										fieldWithPath("name").type(JsonFieldType.STRING).description("단일 파이프라인 이름")
+								)
+								.responseFields(
+										getCommonResponseFields(
+												fieldWithPath("body").ignored()
+										)
+								)
+								.requestSchema(Schema.schema("파이프라인 정보 수정 Request"))
 								.build()
 						)));
 	}
