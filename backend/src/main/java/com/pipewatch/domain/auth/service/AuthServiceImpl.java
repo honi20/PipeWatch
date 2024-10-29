@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.UUID;
 
 import static com.pipewatch.global.statusCode.ErrorCode.*;
 
@@ -28,6 +29,10 @@ public class AuthServiceImpl implements AuthService {
 
     private final MailService mailService;
 
+    private final JwtService jwtService;
+
+    private final PasswordEncoder passwordEncoder;
+
     @Override
     public void sendEmailCode(AuthDto.EmailCodeSendRequestDto requestDto) throws NoSuchAlgorithmException {
         User user = userRepository.findByEmail(requestDto.getEmail());
@@ -39,7 +44,7 @@ public class AuthServiceImpl implements AuthService {
             redisUtil.setDataWithExpiration(requestDto.getEmail() + "_verify", jwtToken, 1000L);
             return;
         }
-        throw new BaseException(DUPLICATE_EMAIL);
+        throw new BaseException(DUPLICATED_EMAIL);
     }
 
     @Override
@@ -54,5 +59,32 @@ public class AuthServiceImpl implements AuthService {
             throw new BaseException(INVALID_EMAIL_CODE);
         }
 
+    }
+
+    @Override
+    @Transactional
+    public String signup(AuthDto.SignupRequestDto requestDto) {
+        String uuid = UUID.randomUUID().toString();
+
+        if (userRepository.findByEmail(requestDto.getEmail()) != null){
+            throw new BaseException(DUPLICATED_EMAIL);
+        }
+
+        String verifyCode = requestDto.getVerifyCode();
+        String key = requestDto.getEmail()+"_verify";
+        String verify = ((JwtToken)redisUtil.getData(key)).getVerify();
+        if(verify == null || !verify.equals(verifyCode)) {
+            throw new BaseException(SIGNUP_BAD_REQUEST);
+        }
+        redisUtil.deleteData(key);
+        String password = passwordEncoder.encode(requestDto.getPassword());
+        requestDto.setPassword(password);
+
+        User user = userRepository.save(requestDto.toEntity(uuid));
+
+        JwtToken jwtToken = requestDto.toRedis(uuid, user.getId(), jwtService.createRefreshToken(uuid));
+        redisUtil.setData(uuid, jwtToken);
+
+        return jwtService.createAccessToken(uuid);
     }
 }

@@ -36,15 +36,20 @@ public class AuthController {
         return new ResponseEntity<>(ResponseDto.success(EMAIL_VERIFIED, null), HttpStatus.OK);
     }
 
+    @PostMapping
+    public ResponseEntity<?> signup(@RequestBody AuthDto.SignupRequestDto requestDto) {
+        String accessToken = authService.signup(requestDto);
+
+        AuthDto.AccessTokenResponseDto responseDto
+                = AuthDto.AccessTokenResponseDto.builder().accessToken(accessToken).build();
+
+        return new ResponseEntity<>(ResponseDto.success(USER_CREATED, responseDto), HttpStatus.CREATED);
+    }
+
     @PostMapping("/enterprise")
     public ResponseEntity<?> enterpriseAdd(@RequestBody AuthDto.EnterpriseRegistRequestDto enterpriseRegistRequestDto) {
 
         return new ResponseEntity<>(ResponseDto.success(ENTERPRISE_CREATED, null), HttpStatus.CREATED);
-    }
-
-    @PostMapping
-    public ResponseEntity<?> signup(@RequestBody AuthDto.SignupRequestDto signupRequestDto) {
-        return new ResponseEntity<>(ResponseDto.success(USER_CREATED, null), HttpStatus.CREATED);
     }
 
     @PostMapping("/signin")

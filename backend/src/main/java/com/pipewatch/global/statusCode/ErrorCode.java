@@ -8,9 +8,10 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 public enum ErrorCode {
 	// Auth
-	DUPLICATE_EMAIL(HttpStatus.CONFLICT.value(), "중복된 이메일입니다."),
+	DUPLICATED_EMAIL(HttpStatus.CONFLICT.value(), "중복된 이메일입니다."),
 	INVALID_PASSWORD(HttpStatus.FORBIDDEN.value(), "비밀번호가 일치하지 않습니다."),
 	EMAIL_NOT_FOUND(HttpStatus.NOT_FOUND.value(), "해당 이메일로 가입된 회원이 존재하지 않습니다."),
+	SIGNUP_BAD_REQUEST(HttpStatus.BAD_REQUEST.value(), "잘못된 회원가입 요청입니다"),
 
 	// mail
 	TEMP_PASSWORD_TIMEOUT(HttpStatus.FORBIDDEN.value(), "인증시간이 만료되었습니다."),
