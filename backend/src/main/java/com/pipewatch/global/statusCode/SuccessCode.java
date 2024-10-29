@@ -14,6 +14,7 @@ public enum SuccessCode {
 	EMAIL_CODE_VERIFY_OK(HttpStatus.OK.value(), "이메일 인증에 성공했습니다."),
 	SIGNIN_OK(HttpStatus.OK.value(), "로그인에 성공했습니다."),
 	LOGOUT_OK(HttpStatus.OK.value(), "로그아웃되었습니다."),
+	ACCESSTOKEN_REISSUED(HttpStatus.CREATED.value(), "accessToken이 재발생되었습니다."),
 
 	// User
 	MYPAGE_DETAIL_OK(HttpStatus.OK.value(), "개인정보 조회에 성공했습니다."),

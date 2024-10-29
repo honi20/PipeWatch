@@ -12,6 +12,8 @@ public enum ErrorCode {
 	INVALID_EMAIL_CODE(HttpStatus.FORBIDDEN.value(), "인증에 실패했습니다. 인증번호를 확인해 주세요."),
 	EMAIL_NOT_FOUND(HttpStatus.NOT_FOUND.value(), "해당 이메일로 가입된 회원이 존재하지 않습니다."),
 	INVALID_PASSWORD(HttpStatus.FORBIDDEN.value(), "이메일과 비밀번호가 일치하지 않습니다."),
+	INVALID_TOKEN(HttpStatus.UNAUTHORIZED.value(), "잘못된 토큰입니다."),
+	EXPIRED_TOKEN(HttpStatus.UNAUTHORIZED.value(), "만료된 토큰입니다"),
 
 	// Management
 	ROLL_NOT_FOUND(HttpStatus.NOT_FOUND.value(), "해당 Roll이 존재하지 않습니다."),
