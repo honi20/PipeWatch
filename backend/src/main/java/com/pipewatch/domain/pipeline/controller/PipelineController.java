@@ -41,4 +41,17 @@ public class PipelineController {
 	public ResponseEntity<?> pipelinePropertyModify(@PathVariable String pipelineUuid) {
 		return new ResponseEntity<>(ResponseDto.success(PIPELINE_PROPERTY_MODIFIED_OK, null), HttpStatus.OK);
 	}
+
+	@GetMapping("/pipes/{pipeUuid}")
+	public ResponseEntity<?> pipeDetail(@PathVariable String pipeUuid) {
+		PipelineResponse.MemoDto memo1 = new PipelineResponse.MemoDto(1L, "부식 위험 있음", new PipelineResponse.Creator(1L, "김싸피"), LocalDateTime.now());
+		PipelineResponse.MemoDto memo2 = new PipelineResponse.MemoDto(2L, "다음주에 점검함", new PipelineResponse.Creator(2L, "최싸피"), LocalDateTime.now());
+
+		PipelineResponse.MemoListDto responseDto = PipelineResponse.MemoListDto.builder()
+				.memos(List.of(memo1, memo2))
+				.build();
+
+		return new ResponseEntity<>(ResponseDto.success(PIPE_MEMO_LIST_OK, responseDto), HttpStatus.OK);
+	}
+
 }

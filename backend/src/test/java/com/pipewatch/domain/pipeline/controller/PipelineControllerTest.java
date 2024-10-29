@@ -188,4 +188,43 @@ class PipelineControllerTest {
 								.build()
 						)));
 	}
+
+	@Test
+	void 파이프_메모_리스트_조회_성공() throws Exception {
+		ResultActions actions = mockMvc.perform(
+				get("/api/pipelines/pipes/{pipeUuid}", "pipe_abd34412jd_1")
+						.contentType(MediaType.APPLICATION_JSON)
+						.accept(MediaType.APPLICATION_JSON)
+						.characterEncoding("UTF-8")
+		);
+
+		actions
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.header.httpStatusCode").value(PIPE_MEMO_LIST_OK.getHttpStatusCode()))
+				.andExpect(jsonPath("$.header.message").value(PIPE_MEMO_LIST_OK.getMessage()))
+				.andDo(document(
+						"파이프 메모 리스트 조회 성공",
+						preprocessRequest(prettyPrint()),
+						preprocessResponse(prettyPrint()),
+						resource(ResourceSnippetParameters.builder()
+								.tag("Pipeline API")
+								.summary("파이프 메모 리스트 조회 API")
+								.pathParameters(
+										parameterWithName("pipeUuid").description("파이프 Uuid")
+								)
+								.responseFields(
+										getCommonResponseFields(
+												fieldWithPath("body.memos[]").type(JsonFieldType.ARRAY).description("파이프 메모 리스트"),
+												fieldWithPath("body.memos[].memoId").type(JsonFieldType.NUMBER).description("메모 Id"),
+												fieldWithPath("body.memos[].memo").type(JsonFieldType.STRING).description("메모 텍스트"),
+												fieldWithPath("body.memos[].creator").type(JsonFieldType.OBJECT).description("메모 생성자"),
+												fieldWithPath("body.memos[].creator.userId").type(JsonFieldType.NUMBER).description("메모 생성자 Id"),
+												fieldWithPath("body.memos[].creator.userName").type(JsonFieldType.STRING).description("메모 생성자 이름"),
+												fieldWithPath("body.memos[].createdAt").type(JsonFieldType.STRING).description("메모 생성일")
+										)
+								)
+								.responseSchema(Schema.schema("파이프 메모 리스트 조회 Response"))
+								.build()
+						)));
+	}
 }

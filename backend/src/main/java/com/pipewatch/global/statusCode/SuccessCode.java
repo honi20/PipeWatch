@@ -41,8 +41,11 @@ public enum SuccessCode {
 
 	// pipeline
 	PIPELINE_DETAIL_OK(HttpStatus.OK.value(), "단일 파이프라인 조회에 성공했습니다."),
-	PIPELINE_MODIFIED_OK(HttpStatus.OK.value(), "단일 파이프 기본 정보 수정에 성공했습니다."),
-	PIPELINE_PROPERTY_MODIFIED_OK(HttpStatus.OK.value(), "단일 파이프 속성 정보 수정에 성공했습니다."),
+	PIPELINE_MODIFIED_OK(HttpStatus.OK.value(), "단일 파이프라인 기본 정보 수정에 성공했습니다."),
+	PIPELINE_PROPERTY_MODIFIED_OK(HttpStatus.OK.value(), "단일 파이프라인 속성 정보 수정에 성공했습니다."),
+	
+	// pipe
+	PIPE_MEMO_LIST_OK(HttpStatus.OK.value(), "파이프 메모 리스트 조회에 성공했습니다."),
 	;
 
 	private final int httpStatusCode;

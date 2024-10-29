@@ -58,8 +58,9 @@ public class PipelineResponse {
 	@AllArgsConstructor
 	public static class MemoDto {
 		private Long memoId;
-		private PositionDto position;
+		private String memo;
 		private Creator creator;
+		private LocalDateTime createdAt;
 	}
 
 	@Getter
