@@ -136,4 +136,56 @@ class PipelineControllerTest {
 								.build()
 						)));
 	}
+
+	@Test
+	void 파이프라인_속성_수정_성공() throws Exception {
+		PipelineRequest.ModifyPropertiesDto dto = PipelineRequest.ModifyPropertiesDto.builder()
+				.pipeMaterial("Aluminum")
+				.outerDiameter(150.0)
+				.innerDiameter(10.0)
+				.fluidMaterial("Water")
+				.velocity(1.0)
+				.build();
+
+		String content = objectMapper.writeValueAsString(dto);
+
+		ResultActions actions = mockMvc.perform(
+				put("/api/pipelines/{pipelineUuid}/properties", "pipeline_abd34412jd_1")
+						.content(content)
+						.contentType(MediaType.APPLICATION_JSON)
+						.accept(MediaType.APPLICATION_JSON)
+						.characterEncoding("UTF-8")
+						.with(csrf())
+		);
+
+		actions
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.header.httpStatusCode").value(PIPELINE_PROPERTY_MODIFIED_OK.getHttpStatusCode()))
+				.andExpect(jsonPath("$.header.message").value(PIPELINE_PROPERTY_MODIFIED_OK.getMessage()))
+				.andDo(document(
+						"파이프라인 속성 정보 수정 성공",
+						preprocessRequest(prettyPrint()),
+						preprocessResponse(prettyPrint()),
+						resource(ResourceSnippetParameters.builder()
+								.tag("Pipeline API")
+								.summary("파이프라인 속성 정보 수정 API")
+								.pathParameters(
+										parameterWithName("pipelineUuid").description("파이프라인 Uuid")
+								)
+								.requestFields(
+										fieldWithPath("pipeMaterial").type(JsonFieldType.STRING).description("파이프 재질"),
+										fieldWithPath("outerDiameter").type(JsonFieldType.NUMBER).description("파이프 외경"),
+										fieldWithPath("innerDiameter").type(JsonFieldType.NUMBER).description("파이프 내경"),
+										fieldWithPath("fluidMaterial").type(JsonFieldType.STRING).description("유체 재질"),
+										fieldWithPath("velocity").type(JsonFieldType.NUMBER).description("유체 유속")
+								)
+								.responseFields(
+										getCommonResponseFields(
+												fieldWithPath("body").ignored()
+										)
+								)
+								.requestSchema(Schema.schema("파이프라인 속성 정보 수정 Request"))
+								.build()
+						)));
+	}
 }

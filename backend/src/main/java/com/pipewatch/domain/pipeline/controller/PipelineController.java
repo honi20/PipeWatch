@@ -10,8 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static com.pipewatch.global.statusCode.SuccessCode.PIPELINE_DETAIL_OK;
-import static com.pipewatch.global.statusCode.SuccessCode.PIPELINE_MODIFIED_OK;
+import static com.pipewatch.global.statusCode.SuccessCode.*;
 
 @RestController
 @RequestMapping("${api_prefix}/pipelines")
@@ -36,5 +35,10 @@ public class PipelineController {
 	@PutMapping("/{pipelineUuid}")
 	public ResponseEntity<?> pipelineModify(@PathVariable String pipelineUuid) {
 		return new ResponseEntity<>(ResponseDto.success(PIPELINE_MODIFIED_OK, null), HttpStatus.OK);
+	}
+
+	@PutMapping("/{pipelineUuid}/properties")
+	public ResponseEntity<?> pipelinePropertyModify(@PathVariable String pipelineUuid) {
+		return new ResponseEntity<>(ResponseDto.success(PIPELINE_PROPERTY_MODIFIED_OK, null), HttpStatus.OK);
 	}
 }
