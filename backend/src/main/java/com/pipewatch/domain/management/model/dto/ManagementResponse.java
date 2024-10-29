@@ -44,7 +44,10 @@ public class ManagementResponse {
 		private List<BuildingDto> buildings;
 	}
 
-	private static class EmployeeDto {
+	@Getter
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class EmployeeDto {
 		private String name;
 		private String email;
 		private Long empNo;
@@ -53,7 +56,10 @@ public class ManagementResponse {
 		private String role;
 	}
 
-	private static class BuildingDto {
+	@Getter
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class BuildingDto {
 		private String building;
 		private List<Integer> floors;
 	}
