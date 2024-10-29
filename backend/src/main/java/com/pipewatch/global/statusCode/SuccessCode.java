@@ -21,17 +21,17 @@ public enum SuccessCode {
 	PASSWORD_MODIFIED_OK(HttpStatus.OK.value(), "비밀번호 수정에 성공했습니다."),
 	USER_DELETE_OK(HttpStatus.NO_CONTENT.value(), "회원 탈퇴에 성공했습니다."),
 
-	// enterprise
+	// Enterprise
 	ENTERPRISE_DETAIL_OK(HttpStatus.OK.value(), "기업 정보 조회에 성공했습니다."),
 
-	// management
+	// Management
 	WAITING_EMPLOYEE_LIST_OK(HttpStatus.OK.value(), "승인 대기 중인 직원 목록 조회에 성공했습니다."),
 	EMPLOYEE_LIST_OK(HttpStatus.OK.value(), "직원 목록 조회에 성공했습니다."),
 	ROLL_MODIFIED_OK(HttpStatus.OK.value(), "권한 변경에 성공했습니다."),
 	EMPLOYEE_SEARCH_OK(HttpStatus.OK.value(), "사원 검색에 성공했습니다."),
 	BUILDING_LIST_OK(HttpStatus.OK.value(), "건물 리스트 조회에 성공했습니다."),
 
-	// pipeline model
+	// Pipeline model
 	MODEL_LIST_OK(HttpStatus.OK.value(), "모델 리스트 조회에 성공했습니다."),
 	FILE_UPLOAD_AND_MODEL_CREATED(HttpStatus.CREATED.value(), "GLTF 파일 업로드에 성공했습니다. 파이프라인 모델이 생성되었습니다."),
 	MODEL_INIT_OK(HttpStatus.OK.value(), "모델 초기 정보 설정에 성공했습니다."),
@@ -39,13 +39,13 @@ public enum SuccessCode {
 	MODEL_DETAIL_OK(HttpStatus.OK.value(), "모델 상세 조회에 성공했습니다."),
 	MODEL_DELETED(HttpStatus.NO_CONTENT.value(), "모델 삭제에 성공했습니다."),
 
-	// pipeline
+	// Pipeline
 	PIPELINE_DETAIL_OK(HttpStatus.OK.value(), "단일 파이프라인 조회에 성공했습니다."),
 	PIPELINE_MODIFIED_OK(HttpStatus.OK.value(), "단일 파이프라인 기본 정보 수정에 성공했습니다."),
 	PIPELINE_PROPERTY_MODIFIED_OK(HttpStatus.OK.value(), "단일 파이프라인 속성 정보 수정에 성공했습니다."),
 	PIPELINE_MODELING_CREATED(HttpStatus.CREATED.value(), "파이프라인 모델링이 생성되었습니다."),
 	
-	// pipe
+	// Pipe
 	PIPE_MEMO_LIST_OK(HttpStatus.OK.value(), "파이프 메모 리스트 조회에 성공했습니다."),
 	PIPE_MEMO_CREATED(HttpStatus.CREATED.value(), "파이프 메모가 생성되었습니다."),
 	PIPE_MEMO_DELETED(HttpStatus.NO_CONTENT.value(), "메모 삭제에 성공했습니다."),
