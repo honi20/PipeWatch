@@ -67,7 +67,7 @@ class ManagementControllerTest {
 								.responseFields(
 										getCommonResponseFields(
 												fieldWithPath("body.employees[]").type(JsonFieldType.ARRAY).description("승인대기 중인 직원 리스트"),
-												fieldWithPath("body.employees[].id").type(JsonFieldType.NUMBER).description("직원 ID"),
+												fieldWithPath("body.employees[].userId").type(JsonFieldType.NUMBER).description("직원 ID"),
 												fieldWithPath("body.employees[].name").type(JsonFieldType.STRING).description("직원 이름"),
 												fieldWithPath("body.employees[].email").type(JsonFieldType.STRING).description("직원 이메일"),
 												fieldWithPath("body.employees[].empNo").type(JsonFieldType.NUMBER).description("직원 사번"),
@@ -104,7 +104,7 @@ class ManagementControllerTest {
 								.responseFields(
 										getCommonResponseFields(
 												fieldWithPath("body.employees[]").type(JsonFieldType.ARRAY).description("직원 리스트"),
-												fieldWithPath("body.employees[].id").type(JsonFieldType.NUMBER).description("직원 ID"),
+												fieldWithPath("body.employees[].userId").type(JsonFieldType.NUMBER).description("직원 ID"),
 												fieldWithPath("body.employees[].name").type(JsonFieldType.STRING).description("직원 이름"),
 												fieldWithPath("body.employees[].email").type(JsonFieldType.STRING).description("직원 이메일"),
 												fieldWithPath("body.employees[].empNo").type(JsonFieldType.NUMBER).description("직원 사번"),
@@ -188,7 +188,7 @@ class ManagementControllerTest {
 								.responseFields(
 										getCommonResponseFields(
 												fieldWithPath("body.employees[]").type(JsonFieldType.ARRAY).description("직원 리스트"),
-												fieldWithPath("body.employees[].id").type(JsonFieldType.NUMBER).description("직원 ID"),
+												fieldWithPath("body.employees[].userId").type(JsonFieldType.NUMBER).description("직원 ID"),
 												fieldWithPath("body.employees[].name").type(JsonFieldType.STRING).description("직원 이름"),
 												fieldWithPath("body.employees[].email").type(JsonFieldType.STRING).description("직원 이메일"),
 												fieldWithPath("body.employees[].empNo").type(JsonFieldType.NUMBER).description("직원 사번"),
