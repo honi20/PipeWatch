@@ -25,9 +25,11 @@
 
     "baseUrl": "./",
     "paths": {
+      "@locales/*": ["locales/*"],
       "@src/*": ["src/*"],
       "@components/*": ["src/components/*"],
       "@pages/*": ["src/pages/*"],
+      "@assets/*": ["src/assets/*"],
     },
     "composite": true,
 
