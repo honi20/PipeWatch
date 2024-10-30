@@ -34,3 +34,9 @@ springdoc:
   default-produces-media-type: application/json;charset=UTF-8
 
 api_prefix: /api
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, metrics
