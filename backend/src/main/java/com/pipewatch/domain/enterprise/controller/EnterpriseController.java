@@ -1,6 +1,7 @@
 package com.pipewatch.domain.enterprise.controller;
 
 import com.pipewatch.domain.enterprise.model.dto.EnterpriseResponse;
+import com.pipewatch.domain.enterprise.service.EnterpriseService;
 import com.pipewatch.global.response.ResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,14 +16,11 @@ import static com.pipewatch.global.statusCode.SuccessCode.ENTERPRISE_DETAIL_OK;
 @RequestMapping("${api_prefix}/enterprises")
 @RequiredArgsConstructor
 public class EnterpriseController {
+	private final EnterpriseService enterpriseService;
+
 	@GetMapping
-	public ResponseEntity<?> myPage() {
-		EnterpriseResponse.DetailDto responseDto = EnterpriseResponse.DetailDto.builder()
-				.name("ssafy")
-				.industry("제조업")
-				.managerEmail("paori@ssafy.com")
-				.managerPhoneNumber("010-1234-5678")
-				.build();
+	public ResponseEntity<?> enterpriseDetail() {
+		EnterpriseResponse.DetailDto responseDto = enterpriseService.detailEnterprise();
 
 		return new ResponseEntity<>(ResponseDto.success(ENTERPRISE_DETAIL_OK, responseDto), HttpStatus.OK);
 	}

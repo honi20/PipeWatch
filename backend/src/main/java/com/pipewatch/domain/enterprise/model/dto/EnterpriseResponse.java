@@ -1,5 +1,6 @@
 package com.pipewatch.domain.enterprise.model.dto;
 
+import com.pipewatch.domain.enterprise.model.entity.Enterprise;
 import lombok.*;
 
 @Getter
@@ -15,5 +16,14 @@ public class EnterpriseResponse {
 		private String industry;
 		private String managerEmail;
 		private String managerPhoneNumber;
+
+		public static DetailDto toDto(Enterprise enterprise) {
+			return DetailDto.builder()
+					.name(enterprise.getName())
+					.industry(enterprise.getIndustry())
+					.managerEmail(enterprise.getManagerEmail())
+					.managerPhoneNumber(enterprise.getManagerPhoneNumber())
+					.build();
+		}
 	}
 }
