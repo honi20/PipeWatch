@@ -35,7 +35,7 @@ function Layout() {
   }, [theme]);
 
   return (
-    <div className="min-h-screen overflow-auto text-black bg-white p-28 dark:bg-black dark:text-white ">
+    <div className="min-h-screen overflow-auto text-black bg-white pt-28 dark:bg-black dark:text-white">
       {isAuth ? null : (
         <Header handleTheme={handleTheme} currentTheme={localStorage.theme} />
       )}
