@@ -50,6 +50,11 @@ springdoc:
 
 api_prefix: /api
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, metrics
 jwt:
   secret: ${JWT_SECRET}
   access:
