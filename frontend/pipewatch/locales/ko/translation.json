@@ -90,5 +90,129 @@
       "email": "jjhoneyyyy@gmail.com",
       "description": "역할 설명"
     }
+  },
+  "pipeGenerator": {
+    "title": "파이프 모델 생성",
+    "description": "관리할 파이프 모델을 생성해보세요.",
+    "commonButtons": {
+      "retry": "다시 시도",
+      "save": "저장"
+    },
+    "procedure": "모델 생성 절차",
+    "menus": {
+      "takePhoto": "파이프 사진 촬영",
+      "uploadModel": "파이프 모델 업로드",
+      "inputData": "파이프 데이터 입력",
+      "rendering": "모델 렌더링",
+      "completed": "모델 생성 완료"
+    },
+    "takePhoto": {
+      "connectRCCar": {
+        "title": "RC카 연결 안내",
+        "instructions": {
+          "checkPower": "1. RC카의 전원이 켜져 있는지 확인하세요.",
+          "pressConnectButton": "2. 연결 버튼을 누르면 RC카가 자동으로 연결됩니다.",
+          "connectionComplete": "3. 연결이 완료되면 연결 완료 메시지가 표시됩니다.",
+          "avoidMovement": "4. 연결 중에는 RC카를 움직이지 말아주세요."
+        },
+        "buttons": {
+          "connect": "RC카 연결"
+        },
+        "statusMessages": {
+          "connecting": "RC카 연결 중",
+          "completed": "RC카 연결 완료",
+          "failed": "RC카 연결 실패"
+        }
+      },
+      "caution": {
+        "title": "주의사항",
+        "instructions": {
+          "pageDescription": "파이프 사진 촬영을 위한 RC카 연결 페이지입니다.",
+          "manualUploadInstruction": "RC카 연결 없이 직접 파이프 모델을 업로드하려면, 아래 [파이프 모델 업로드] 버튼을 눌러주세요."
+        },
+        "buttons": {
+          "upload": "파이프 모델 업로드"
+        }
+      },
+      "takePipePhoto": {
+        "title": "파이프 촬영 안내",
+        "instructions": {
+          "startCapture": "1. 촬영 시작 버튼을 누르면 파이프 촬영이 시작됩니다.",
+          "avoidInterference": "2. 촬영 중에는 RC카 주변을 방해하지 않도록 주의해 주세요.",
+          "autoSave": "3. 촬영 완료 후 결과는 자동으로 저장됩니다.",
+          "stopOnError": "4. 촬영 도중 문제가 발생하면 즉시 중단됩니다."
+        },
+        "buttons": {
+          "startCapture": "촬영 시작"
+        }
+      }
+    },
+    "uploadModel": {
+      "title": "데이터 업로드 안내",
+      "captureStarted": {
+        "instructions": {
+          "modelingProcess": "--작업 중-- 촬영본 바탕으로 Blender 모델링 하는 과정 설명 --작업 중--"
+        },
+        "statusMessages": {
+          "success": "모델링 완료",
+          "failed": "모델링 실패"
+        }
+      },
+      "directUpload": {
+        "instructions": {
+          "uploadModel": "파이프 3D 모델 파일을 업로드 해주세요.",
+          "recommendedFormat": "권장 형식"
+        },
+        "uploadBox": {
+          "selectFile": "파일 선택",
+          "statusMessages": {
+            "uploading": "파일 업로드 중",
+            "success": "업로드가 완료되었습니다.",
+            "failed": "업로드에 실패했습니다."
+          }
+        }
+      }
+    },
+    "inputData": {
+      "title": "데이터 입력 안내",
+      "instructions": {
+        "dataEntryPrompt": "등록할 파이프라인의 이름, 파이프가 위치한 장소와 층 정보를 입력하세요."
+      },
+      "formData": {
+        "pipelineName": "파이프라인 이름",
+        "location": "장소",
+        "select": "선택",
+        "floorInfo": "층 정보",
+        "ground": "지상",
+        "underground": "지하",
+        "floor": "층"
+      }
+    },
+    "rendering": {
+      "title": "모델 렌더링 안내",
+      "instructions": {
+        "completed": {
+          "message": "모델 렌더링이 완료되었습니다.",
+          "previewAndSave": "아래 미리보기를 확인하고 저장 버튼을 눌러 저장하세요."
+        },
+        "failed": {
+          "message": "모델 렌더링에 실패하였습니다. 다시 파이프 촬영을 진행해주세요.",
+          "inquiries": "문제가 계속 발생하면 지원팀에 문의해 주시기 바랍니다."
+        }
+      },
+      "buttons": {
+        "capture": "파이프 사진 촬영"
+      }
+    },
+    "completed": {
+      "title": "생성 완료!",
+      "instructions": {
+        "completionMessage": "모델 생성이 완료되었습니다.",
+        "checkModelList": "모델 리스트에서 생성된 모델을 확인해주세요."
+      },
+      "buttons": {
+        "viewModel": "모델 보기"
+      }
+    }
   }
 }

@@ -90,5 +90,129 @@
       "email": "jjhoneyyyy@gmail.com",
       "description": "Role Description"
     }
+  },
+  "pipeGenerator": {
+    "title": "Create Pipe Model",
+    "description": "Create a pipe model to manage.",
+    "commonButtons": {
+      "retry": "Retry",
+      "save": "Save"
+    },
+    "procedure": "Model Creation Procedure",
+    "menus": {
+      "takePhoto": "Take Pipe Photo",
+      "uploadModel": "Upload Pipe Model",
+      "inputData": "Input Pipe Data",
+      "rendering": "Render Model",
+      "completed": "Model Creation Complete"
+    },
+    "takePhoto": {
+      "connectRCCar": {
+        "title": "RC Car Connection Guide",
+        "instructions": {
+          "checkPower": "1. Make sure the RC car is powered on.",
+          "pressConnectButton": "2. Press the connect button to automatically connect the RC car.",
+          "connectionComplete": "3. A connection complete message will be displayed once the connection is successful.",
+          "avoidMovement": "4. Do not move the RC car during the connection process."
+        },
+        "buttons": {
+          "connect": "Connect RC Car"
+        },
+        "statusMessages": {
+          "connecting": "Connecting...",
+          "completed": "Connected",
+          "failed": "Connection Failed"
+        }
+      },
+      "caution": {
+        "title": "Caution",
+        "instructions": {
+          "pageDescription": "This page is for connecting the RC car to take pipe photos.",
+          "manualUploadInstruction": "If you want to upload the pipe model without connecting the RC car, click the [Upload Pipe Model] button below."
+        },
+        "buttons": {
+          "upload": "Upload Pipe Model"
+        }
+      },
+      "takePipePhoto": {
+        "title": "Pipe Photo Guide",
+        "instructions": {
+          "startCapture": "1. Press the [Start Capture] button to begin taking pipe photos.",
+          "avoidInterference": "2. Avoid obstructing the RC car during photo capture.",
+          "autoSave": "3. The results will be saved automatically upon completion.",
+          "stopOnError": "4. The process will stop immediately if any issues occur."
+        },
+        "buttons": {
+          "startCapture": "Start Capture"
+        }
+      }
+    },
+    "uploadModel": {
+      "title": "Data Upload Guide",
+      "captureStarted": {
+        "instructions": {
+          "modelingProcess": "--In progress-- Description of the process using Blender to model based on captured photos --In progress--"
+        },
+        "statusMessages": {
+          "success": "Modeling Complete",
+          "failed": "Modeling Failed"
+        }
+      },
+      "directUpload": {
+        "instructions": {
+          "uploadModel": "Please upload the 3D model file of the pipe.",
+          "recommendedFormat": "Recommended Format"
+        },
+        "uploadBox": {
+          "selectFile": "Select File",
+          "statusMessages": {
+            "uploading": "Uploading File",
+            "success": "Upload Complete",
+            "failed": "Upload Failed"
+          }
+        }
+      }
+    },
+    "inputData": {
+      "title": "Data Entry Guide",
+      "instructions": {
+        "dataEntryPrompt": "Enter the pipeline name, location, and floor information."
+      },
+      "formData": {
+        "pipelineName": "Pipeline Name",
+        "location": "Location",
+        "select": "select location",
+        "floorInfo": "Floor Information",
+        "ground": "G",
+        "underground": "UG",
+        "floor": "F"
+      }
+    },
+    "rendering": {
+      "title": "Model Rendering Guide",
+      "instructions": {
+        "completed": {
+          "message": "Model rendering is complete.",
+          "previewAndSave": "Check the preview below and press the save button to save."
+        },
+        "failed": {
+          "message": "Model rendering failed. Please retry the pipe photo capture.",
+          "inquiries": "If the issue persists, please contact support."
+        }
+      },
+      "buttons": {
+        "capture": "Take Pipe Photo"
+      }
+    },
+    "completed": {
+      "title": "Creation Complete!",
+      "instructions": {
+        "completionMessage": "Model creation is complete.",
+        "checkModelList": "Please check the created model in the model list."
+      },
+      "buttons": {
+        "viewModel": "View Model"
+      }
+    }
   }
 }

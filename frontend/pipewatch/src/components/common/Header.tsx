@@ -114,7 +114,7 @@ export const Header = ({ handleTheme, currentTheme }: Props) => {
                 : ""
             }`
           }
-          to="/create-model"
+          to="/pipe-generator"
         >
           {t("header.subMenu.pipeGenerator")}
         </NavLink>
@@ -127,7 +127,7 @@ export const Header = ({ handleTheme, currentTheme }: Props) => {
                 : ""
             }`
           }
-          to="/model-list"
+          to="/pipe-viewer"
         >
           {t("header.subMenu.pipeViewer")}
         </NavLink>
