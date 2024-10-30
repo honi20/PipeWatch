@@ -18,6 +18,7 @@ import com.pipewatch.global.jwt.service.JwtService;
 import com.pipewatch.global.mail.MailService;
 import com.pipewatch.global.redis.RedisUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -207,6 +208,15 @@ public class AuthServiceImpl implements AuthService {
         return AuthResponse.AccessTokenDto.builder()
                 .accessToken(jwtService.createAccessToken(user.getUuid()))
                 .build();
+    }
+
+    @Override
+    @Transactional
+    public void logout() {
+        Long userId = jwtService.getUserId(SecurityContextHolder.getContext());
+        String userUuid = userRepository.findById(userId).get().getUuid();
+
+        redisUtil.deleteData(userUuid);
     }
 
     private boolean isEnterpriseDomain(String domain) {

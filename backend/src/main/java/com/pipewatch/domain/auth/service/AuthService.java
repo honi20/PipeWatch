@@ -15,4 +15,6 @@ public interface AuthService {
 	void registEnterprise(AuthRequest.EnterpriseRegistDto requestDto) throws NoSuchAlgorithmException;
 
     AuthResponse.AccessTokenDto signin(AuthRequest.SigninDto requestDto);
+
+    void logout();
 }
