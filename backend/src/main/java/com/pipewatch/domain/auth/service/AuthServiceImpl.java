@@ -78,14 +78,14 @@ public class AuthServiceImpl implements AuthService {
 
         // 메일 전송
         String verifyCode = mailService.sendVerifyEmail(requestDto.getEmail());
-        redisUtil.setDataWithExpiration(verifyCode, requestDto.getEmail(), 600L);
+        redisUtil.setDataWithExpiration("verify_" + verifyCode, requestDto.getEmail(), 600L);
 
         return jwtService.createAccessToken(uuid);
     }
 
     @Override
     public void verifyEmailCode(String token) {
-        String email = redisUtil.getDataByToken(token);
+        String email = redisUtil.getDataByToken("verify_" + token);
 
         if (email == null) {
             throw new BaseException(VERIFY_NOT_FOUND);
@@ -97,7 +97,7 @@ public class AuthServiceImpl implements AuthService {
         }
 
         // 이메일 인증 완료 후 Redis에서 토큰 삭제
-        redisUtil.deleteData(token);
+        redisUtil.deleteData("verify_" + token);
 
         // 해당 유저의 상태를 pending으로 전환 -> 사원 요청 보냄
         user.updateState(State.PENDING);
