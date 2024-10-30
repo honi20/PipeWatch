@@ -32,7 +32,7 @@
     "employeeDepartment": "Department",
     "employeePosition": "Position",
     "employeeInformation": "Employee Information",
-    "termsAndPrivacyConsent": "By signing up, you agree to our <1>Terms of Service</1> and <3>Privacy Policy</3>."
+    "termsAndPrivacyConsent": "By signing up, you consent to our <1>Terms of Service</1> and <3>Privacy Policy</3>."
   },
   "aboutService": {
     "description1": "Leading Innovation in Pipe System Management and Maintenance.",
