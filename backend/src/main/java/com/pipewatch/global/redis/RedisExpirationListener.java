@@ -35,7 +35,8 @@ public class RedisExpirationListener implements MessageListener {
 					employeeRepository.delete(employeeInfo);
 				}
 				userRepository.delete(user);
-				log.info("User and associated EmployeeInfo for email {} have been deleted due to expired verification token.", email);
+				employeeRepository.flush();
+				userRepository.flush();
 			} else {
 				log.warn("User with email {} not found for deletion.", email);
 			}

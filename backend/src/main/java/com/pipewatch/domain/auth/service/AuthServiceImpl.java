@@ -20,6 +20,7 @@ import com.pipewatch.global.statusCode.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.NoSuchAlgorithmException;
@@ -49,8 +50,18 @@ public class AuthServiceImpl implements AuthService {
     public void signup(AuthRequest.SignupDto requestDto) throws NoSuchAlgorithmException {
         String uuid = UUID.randomUUID().toString();
 
-        if (userRepository.findByEmail(requestDto.getEmail()) != null){
-            throw new BaseException(DUPLICATED_EMAIL);
+        User checkUser = userRepository.findByEmail(requestDto.getEmail());
+        if (checkUser != null){
+            if (checkUser.getState() != State.INACTIVE) {
+                throw new BaseException(DUPLICATED_EMAIL);
+            }
+            else {
+                EmployeeInfo employeeInfo = employeeRepository.findByUserId(checkUser.getId());
+                employeeRepository.delete(employeeInfo);
+                userRepository.delete(checkUser);
+                employeeRepository.flush();
+                userRepository.flush();
+            }
         }
 
         String password = passwordEncoder.encode(requestDto.getPassword());
