@@ -4,7 +4,7 @@ VALUES(1L, 'paori', '제조업', 'admin@paori.com', '010-1234-5678', true);
 
 -- user
 INSERT INTO "user"(user_id, email, password, name, state, role, uuid)
-VALUES(123L, 'test@ssafy.com', 'ssafy1234', '테스트', 0, 0, 'asdkljf;alksjdf');
+VALUES(123L, 'test@ssafy.com', '$2a$10$W9WYGcUhi6E2NxqnofecW.DEsMkr42YiOSM8Ou/UEQZsMD3WHL8uy', '테스트', 0, 0, 'asdkljf;alksjdf');
 
 -- employeeInfo
 INSERT INTO employee_info(employee_info_id, emp_no, department, emp_class, user_id, enterprise_id)
