@@ -194,6 +194,46 @@ class AuthControllerTest {
     }
 
     @Test
+    void 인증코드_확인_실패_존재하지_않는_인증정보() throws Exception {
+        AuthRequest.EmailCodeVerifyDto dto = AuthRequest.EmailCodeVerifyDto.builder()
+                .email("nonono@ssafy.com")
+                .verifyCode("999999")
+                .build();
+
+        String content = objectMapper.writeValueAsString(dto);
+
+        doThrow(new BaseException(VERIFY_NOT_FOUND)).when(authService).verifyEmailCode(any(AuthRequest.EmailCodeVerifyDto.class));
+
+        ResultActions actions = mockMvc.perform(
+                post("/api/auth/verify-email-code")
+                        .content(content)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8")
+                        .with(csrf())
+        );
+
+        actions
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.header.httpStatusCode").value(VERIFY_NOT_FOUND.getHttpStatusCode()))
+                .andExpect(jsonPath("$.header.message").value(VERIFY_NOT_FOUND.getMessage()))
+                .andDo(document(
+                        "이메일 인증코드 확인 실패 - 인증정보가 존재하지 않는 이메일",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        resource(ResourceSnippetParameters.builder()
+                                .tag("Auth API")
+                                .responseFields(
+                                        getCommonResponseFields(
+                                                fieldWithPath("body").type(JsonFieldType.OBJECT).description("에러 상세").optional().ignored()
+                                        )
+                                )
+                                .responseSchema(Schema.schema("Error Response"))
+                                .build()
+                        )));
+    }
+
+    @Test
     void 인증코드_확인_실패_잘못된_인증코드() throws Exception {
         AuthRequest.EmailCodeVerifyDto dto = AuthRequest.EmailCodeVerifyDto.builder()
                 .email("paori@ssafy.com")
