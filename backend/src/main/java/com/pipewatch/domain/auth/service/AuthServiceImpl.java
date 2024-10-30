@@ -91,8 +91,10 @@ public class AuthServiceImpl implements AuthService {
         Enterprise enterprise = enterpriseRepository.findById(requestDto.getEnterpriseId())
                 .orElseThrow(() -> new BaseException(ENTERPRISE_NOT_FOUND));
 
+        // 서비스 시연을 위해 gmail/naver 등의 메일 형식은 ssafy 기업이라고 가정
         String domain = getEmailDomain(requestDto.getEmail());
-        if (!domain.equals("ssafy.com") && !getEmailDomain(enterprise.getManagerEmail()).equals(domain)) {
+        domain = isEnterpriseDomain(domain) ? domain : "ssafy.com";
+        if (!getEmailDomain(enterprise.getUser().getEmail()).equals(domain)) {
             throw new BaseException(INVALID_EMAIL_FORMAT);
         }
 
@@ -146,7 +148,12 @@ public class AuthServiceImpl implements AuthService {
     @Override
     @Transactional
     public void registEnterprise(AuthRequest.EnterpriseRegistDto requestDto) throws NoSuchAlgorithmException {
-        String email = "pipewatch_admin@" + getEmailDomain(requestDto.getManagerEmail());
+        String domain = getEmailDomain(requestDto.getManagerEmail());
+
+        // 서비스 시연을 위해 gmail/naver 등의 메일 형식은 ssafy 기업이라고 가정
+        domain = isEnterpriseDomain(domain) ? domain : "ssafy.com";
+        String email = "pipewatch_admin@" + domain;
+
         String password = "pipewatch" + generateRandomNumber();
         String passwordEncode = passwordEncoder.encode(password);
         String uuid = UUID.randomUUID().toString();
@@ -173,6 +180,13 @@ public class AuthServiceImpl implements AuthService {
 
         // 메일 전송
         mailService.sendEnterpriseAccountEmail(requestDto.getManagerEmail(), email, password);
+    }
+
+    private boolean isEnterpriseDomain(String domain) {
+        if (domain.equals("gmail.com") || domain.equals("naver.com")) {
+            return false;
+        }
+        return false;
     }
 
     private String generateRandomNumber() throws NoSuchAlgorithmException {
