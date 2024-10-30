@@ -83,6 +83,7 @@ export const PipeGenerator = () => {
               const IconComponent = menu.icon;
               return (
                 <Tab
+                  key={menu.key}
                   id={index.toString()}
                   className="flex gap-2 items-center p-5 text-[16px] text-left text-gray-500 focus:outline-none rounded-xl bg-block data-[selected]:bg-white data-[selected]:text-gray-800 data-[hover]:bg-white/5 data-[selected]:data-[hover]:bg-gray-200"
                 >
@@ -95,7 +96,9 @@ export const PipeGenerator = () => {
           <TabPanels className="w-[800px] bg-white text-black rounded-e-lg">
             {menus.map((menu, index) => {
               return (
-                <TabPanel id={index.toString()}>{menu.component}</TabPanel>
+                <TabPanel key={menu.key} id={index.toString()}>
+                  {menu.component}
+                </TabPanel>
               );
             })}
           </TabPanels>

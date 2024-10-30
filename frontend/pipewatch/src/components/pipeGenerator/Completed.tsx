@@ -1,5 +1,7 @@
-import React from "react";
+import { useTranslation } from "react-i18next";
 
 export const Completed = () => {
-  return <div>Completed</div>;
+  const { t } = useTranslation();
+
+  return <div>{t("pipeGenerator.completed.title")}</div>;
 };

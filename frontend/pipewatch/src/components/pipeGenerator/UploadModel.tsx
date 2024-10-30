@@ -1,5 +1,7 @@
-import React from "react";
+import { useTranslation } from "react-i18next";
 
 export const UploadModel = () => {
-  return <div>UploadModel</div>;
+  const { t } = useTranslation();
+
+  return <div>{t("pipeGenerator.uploadModel.title")}</div>;
 };
