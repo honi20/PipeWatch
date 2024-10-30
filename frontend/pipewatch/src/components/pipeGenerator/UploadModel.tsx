@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { IconButton } from "@components/common/IconButton";
 
@@ -7,6 +8,60 @@ import ReplayIcon from "@mui/icons-material/Replay";
 
 export const UploadModel = () => {
   const { t } = useTranslation();
+
+  const [file, setFile] = useState<File | null>(null);
+  const [status, setStatus] = useState<
+    "initial" | "uploading" | "success" | "fail"
+  >("initial");
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      setStatus("initial");
+      setFile(e.target.files[0]);
+    }
+  };
+
+  const handleUpload = async () => {
+    if (file) {
+      setStatus("uploading");
+
+      const formData = new FormData();
+      formData.append("file", file);
+
+      try {
+        const result = await fetch("", {
+          method: "POST",
+          body: formData,
+        });
+
+        const data = await result.json();
+
+        console.log(data);
+        setStatus("success");
+      } catch (error) {
+        console.error(error);
+        setStatus("fail");
+      }
+    }
+  };
+
+  const Result = ({ status }: { status: string }) => {
+    if (status === "success") {
+      return t(
+        "pipeGenerator.uploadModel.directUpload.uploadBox.statusMessages.success"
+      );
+    } else if (status === "fail") {
+      return t(
+        "pipeGenerator.uploadModel.directUpload.uploadBox.statusMessages.failed"
+      );
+    } else if (status === "uploading") {
+      return t(
+        "pipeGenerator.uploadModel.directUpload.uploadBox.statusMessages.uploading"
+      );
+    } else {
+      return null;
+    }
+  };
 
   return (
     <div className="p-[40px]">
@@ -27,7 +82,12 @@ export const UploadModel = () => {
         <div className="flex justify-center w-full my-[20px]">
           <div className="w-[500px] h-[300px] flex flex-col justify-center items-center bg-whiteBox shadow-md rounded-[12px] shadow-gray-500">
             <label className="flex flex-col items-center justify-center preview">
-              <input type="file" className="hidden" />
+              <input
+                type="file"
+                className="hidden"
+                multiple
+                onChange={handleFileChange}
+              />
               <DriveFolderUploadIcon
                 sx={{ fontSize: "96px", color: "#D9D9D9" }}
               />
@@ -37,6 +97,23 @@ export const UploadModel = () => {
                 )}
               </p>
             </label>
+
+            {file && (
+              <section>
+                File details:
+                <ul>
+                  <li>Name: {file.name}</li>
+                  <li>Type: {file.type}</li>
+                  <li>Size: {file.size} bytes</li>
+                </ul>
+              </section>
+            )}
+
+            {file && (
+              <button onClick={handleUpload} className="submit">
+                Upload a file
+              </button>
+            )}
 
             <p className="preview_uploading">
               {t(
@@ -55,6 +132,9 @@ export const UploadModel = () => {
             </p>
           </div>
         </div>
+
+        <Result status={status} />
+
         <div className="flex justify-center w-full">
           <IconButton
             handleClick={() => console.log("button Clicked")}
