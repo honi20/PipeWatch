@@ -1,5 +1,6 @@
 package com.pipewatch.domain.enterprise.model.entity;
 
+import com.pipewatch.domain.user.model.entity.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.*;
@@ -27,4 +28,8 @@ public class Enterprise {
 
     @Column(name = "is_active")
     private Boolean isActive;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 }

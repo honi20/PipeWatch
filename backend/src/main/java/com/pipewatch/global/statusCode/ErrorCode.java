@@ -14,6 +14,7 @@ public enum ErrorCode {
 	INVALID_EMAIL_FORMAT(HttpStatus.FORBIDDEN.value(), "선택하신 기업 도메인의 이메일만 등록 가능합니다. {아이디}@{기업 도메인} 형식의 메일로 등록해야 합니다."),
 	INVALID_PASSWORD(HttpStatus.FORBIDDEN.value(), "비밀번호가 일치하지 않습니다."),
 	EMAIL_NOT_FOUND(HttpStatus.NOT_FOUND.value(), "해당 이메일로 가입된 회원이 존재하지 않습니다."),
+	DUPLICATED_ENTERPRISE(HttpStatus.CONFLICT.value(), "이미 등록된 기업입니다."),
 
 	// mail
 	TEMP_PASSWORD_TIMEOUT(HttpStatus.FORBIDDEN.value(), "인증시간이 만료되었습니다."),

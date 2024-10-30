@@ -13,4 +13,14 @@ public class AuthResponse {
     public static class AccessTokenDto {
         private String accessToken;
     }
+
+    @Getter
+    @Setter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class EnterpriseAccountDto {
+        private String email;
+        private String password;
+    }
 }

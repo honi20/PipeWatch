@@ -482,11 +482,13 @@ class AuthControllerTest {
         AuthRequest.EnterpriseRegistDto dto = AuthRequest.EnterpriseRegistDto.builder()
                 .name("ssafy")
                 .industry("제조업")
-                .managerEmail("paori@ssafy.com")
+                .managerEmail("admin@ssafy.com")
                 .managerPhoneNumber("010-1234-5678")
                 .build();
 
         String content = objectMapper.writeValueAsString(dto);
+
+        doNothing().when(authService).registEnterprise(any(AuthRequest.EnterpriseRegistDto.class));
 
         ResultActions actions = mockMvc.perform(
                 post("/api/auth/enterprise")
@@ -509,10 +511,10 @@ class AuthControllerTest {
                                 .tag("Auth API")
                                 .summary("기업 등록 API")
                                 .requestFields(
-                                        fieldWithPath("name").description("기업명"),
-                                        fieldWithPath("industry").description("산업분류"),
-                                        fieldWithPath("managerEmail").description("대표관리자 이메일"),
-                                        fieldWithPath("managerPhoneNumber").description("대표관리자 전화번호")
+                                        fieldWithPath("name").type(JsonFieldType.STRING).description("기업명"),
+                                        fieldWithPath("industry").type(JsonFieldType.STRING).description("산업분류"),
+                                        fieldWithPath("managerEmail").type(JsonFieldType.STRING).description("대표관리자 이메일"),
+                                        fieldWithPath("managerPhoneNumber").type(JsonFieldType.STRING).description("대표관리자 전화번호")
                                 )
                                 .responseFields(
                                         getCommonResponseFields(
@@ -520,6 +522,53 @@ class AuthControllerTest {
                                         )
                                 )
                                 .requestSchema(Schema.schema("기업 등록 Request"))
+                                .build()
+                        )));
+    }
+
+    @Test
+    void 기업_생성_실패_존재하는_기업() throws Exception {
+        AuthRequest.EnterpriseRegistDto dto = AuthRequest.EnterpriseRegistDto.builder()
+                .name("paori")
+                .industry("제조업")
+                .managerEmail("admin@paori.com")
+                .managerPhoneNumber("010-1234-5678")
+                .build();
+
+        String content = objectMapper.writeValueAsString(dto);
+
+        AuthResponse.EnterpriseAccountDto response = AuthResponse.EnterpriseAccountDto.builder()
+                .email("pipewatch_admin@paori.com")
+                .password("pipewatch1234")
+                .build();
+
+        doThrow(new BaseException(DUPLICATED_ENTERPRISE)).when(authService).registEnterprise(any(AuthRequest.EnterpriseRegistDto.class));
+
+        ResultActions actions = mockMvc.perform(
+                post("/api/auth/enterprise")
+                        .content(content)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8")
+                        .with(csrf())
+        );
+
+        actions
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.header.httpStatusCode").value(DUPLICATED_ENTERPRISE.getHttpStatusCode()))
+                .andExpect(jsonPath("$.header.message").value(DUPLICATED_ENTERPRISE.getMessage()))
+                .andDo(document(
+                        "기업 등록 실패 - 이미 등록된 기업",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        resource(ResourceSnippetParameters.builder()
+                                .tag("Auth API")
+                                .responseFields(
+                                        getCommonResponseFields(
+                                                fieldWithPath("body").type(JsonFieldType.OBJECT).description("에러 상세").optional().ignored()
+                                        )
+                                )
+                                .responseSchema(Schema.schema("Error Response"))
                                 .build()
                         )));
     }

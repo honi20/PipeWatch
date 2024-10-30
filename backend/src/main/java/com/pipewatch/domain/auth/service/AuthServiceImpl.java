@@ -1,12 +1,14 @@
 package com.pipewatch.domain.auth.service;
 
 import com.pipewatch.domain.auth.model.dto.AuthRequest;
+import com.pipewatch.domain.auth.model.dto.AuthResponse;
 import com.pipewatch.domain.enterprise.model.entity.Enterprise;
 import com.pipewatch.domain.enterprise.repository.EnterpriseRepository;
 import com.pipewatch.domain.management.model.entity.Waiting;
 import com.pipewatch.domain.management.repository.WaitingRepository;
 import com.pipewatch.domain.user.model.entity.EmployeeInfo;
 import com.pipewatch.domain.user.model.entity.Role;
+import com.pipewatch.domain.user.model.entity.State;
 import com.pipewatch.domain.user.model.entity.User;
 import com.pipewatch.domain.user.repository.EmployeeRepository;
 import com.pipewatch.domain.user.repository.UserRepository;
@@ -21,6 +23,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.util.Random;
 import java.util.UUID;
 
 import static com.pipewatch.global.statusCode.ErrorCode.*;
@@ -87,8 +91,10 @@ public class AuthServiceImpl implements AuthService {
         Enterprise enterprise = enterpriseRepository.findById(requestDto.getEnterpriseId())
                 .orElseThrow(() -> new BaseException(ENTERPRISE_NOT_FOUND));
 
+        // 서비스 시연을 위해 gmail/naver 등의 메일 형식은 ssafy 기업이라고 가정
         String domain = getEmailDomain(requestDto.getEmail());
-        if (!domain.equals("ssafy.com") && !getEmailDomain(enterprise.getManagerEmail()).equals(domain)) {
+        domain = isEnterpriseDomain(domain) ? domain : "ssafy.com";
+        if (!getEmailDomain(enterprise.getUser().getEmail()).equals(domain)) {
             throw new BaseException(INVALID_EMAIL_FORMAT);
         }
 
@@ -137,6 +143,60 @@ public class AuthServiceImpl implements AuthService {
         redisUtil.setData(uuid, jwtToken);
 
         return jwtService.createAccessToken(uuid);
+    }
+
+    @Override
+    @Transactional
+    public void registEnterprise(AuthRequest.EnterpriseRegistDto requestDto) throws NoSuchAlgorithmException {
+        String domain = getEmailDomain(requestDto.getManagerEmail());
+
+        // 서비스 시연을 위해 gmail/naver 등의 메일 형식은 ssafy 기업이라고 가정
+        domain = isEnterpriseDomain(domain) ? domain : "ssafy.com";
+        String email = "pipewatch_admin@" + domain;
+
+        String password = "pipewatch" + generateRandomNumber();
+        String passwordEncode = passwordEncoder.encode(password);
+        String uuid = UUID.randomUUID().toString();
+
+        // 이미 등록된 기업인지 확인
+        if (userRepository.findByEmail(email) != null) {
+            throw new BaseException(DUPLICATED_ENTERPRISE);
+        }
+
+        // 유저 저장
+        User user = User.builder()
+                .email(email)
+                .password(passwordEncode)
+                .name(requestDto.getName())
+                .state(State.ACTIVE)
+                .role(Role.ROLE_ENTERPRISE)
+                .uuid(uuid)
+                .build();
+
+        userRepository.save(user);
+
+        // 기업 저장
+        enterpriseRepository.save(requestDto.toEntity(user));
+
+        // 메일 전송
+        mailService.sendEnterpriseAccountEmail(requestDto.getManagerEmail(), email, password);
+    }
+
+    private boolean isEnterpriseDomain(String domain) {
+        if (domain.equals("gmail.com") || domain.equals("naver.com")) {
+            return false;
+        }
+        return false;
+    }
+
+    private String generateRandomNumber() throws NoSuchAlgorithmException {
+        int lenth = 6;
+        Random random = SecureRandom.getInstanceStrong();
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < lenth; i++) {
+            builder.append(random.nextInt(10));
+        }
+        return builder.toString();
     }
 
     private String getEmailDomain(String email) {
