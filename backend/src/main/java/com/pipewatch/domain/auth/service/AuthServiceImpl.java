@@ -51,18 +51,8 @@ public class AuthServiceImpl implements AuthService {
         String uuid = UUID.randomUUID().toString();
 
         User checkUser = userRepository.findByEmail(requestDto.getEmail());
-        if (checkUser != null){
-            if (checkUser.getState() != State.INACTIVE) {
-                throw new BaseException(DUPLICATED_EMAIL);
-            }
-            else {
-                EmployeeInfo employeeInfo = employeeRepository.findByUserId(checkUser.getId());
-                employeeRepository.delete(employeeInfo);
-                userRepository.delete(checkUser);
-                employeeRepository.flush();
-                userRepository.flush();
-            }
-        }
+
+        validateUser(checkUser);
 
         String password = passwordEncoder.encode(requestDto.getPassword());
         requestDto.setPassword(password);
@@ -98,6 +88,23 @@ public class AuthServiceImpl implements AuthService {
         redisUtil.setData(uuid, jwtToken);
 
         return jwtService.createAccessToken(uuid);
+    }
+
+    private void validateUser(User user) {
+        if (user == null) {
+            return;
+        }
+
+        if (user.getState() != State.INACTIVE) {
+            throw new BaseException(DUPLICATED_EMAIL);
+        }
+        else {
+            EmployeeInfo employeeInfo = employeeRepository.findByUserId(user.getId());
+            employeeRepository.delete(employeeInfo);
+            userRepository.delete(user);
+        }
+        employeeRepository.flush();
+        userRepository.flush();
     }
 
     @Override
