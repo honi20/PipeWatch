@@ -1,5 +1,9 @@
-import React from "react";
+import { FindPasswordCard } from "@src/components/account/FindPasswordCard";
 
 export const FindPassword = () => {
-  return <div>FindPassword</div>;
+  return (
+    <div>
+      <FindPasswordCard />
+    </div>
+  );
 };

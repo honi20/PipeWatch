@@ -17,6 +17,23 @@
     "greeting2": "with PipeWatch.",
     "signUp": "Sign Up"
   },
+  "account": {
+    "login": "Login",
+    "findPassword": "Forgot Password?",
+    "signUp": "Sign Up",
+    "email": "Email",
+    "emailError": "Please enter a valid email.",
+    "password": "Password",
+    "confirmPassword": "Confirm password",
+    "passwordError": "Password must be at least 8 characters long and include at least one letter, one number, and one special character (e.g., !@#$%^&*).",
+    "name": "Name",
+    "companyName": "Company name",
+    "employeeId": "Employee ID",
+    "employeeDepartment": "Department",
+    "employeePosition": "Position",
+    "employeeInformation": "Employee Information",
+    "termsAndPrivacyConsent": "By signing up, you consent to our <1>Terms of Service</1> and <3>Privacy Policy</3>."
+  },
   "aboutService": {
     "description1": "Leading Innovation in Pipe System Management and Maintenance.",
     "description2": "New Standard in Pipe Maintenance.",
