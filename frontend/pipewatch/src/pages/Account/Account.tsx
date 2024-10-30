@@ -1,6 +1,6 @@
-import { LoginPage } from "./LoginPage";
-import { FindPassword } from "./FindPassword";
-import { SignUpPage } from "./SignUpPage";
+import { LoginPage } from "@pages/account/LoginPage";
+import { FindPassword } from "@pages/account/FindPassword";
+import { SignUpPage } from "@pages/account/SignUpPage";
 
 import { useLocation } from "react-router-dom";
 

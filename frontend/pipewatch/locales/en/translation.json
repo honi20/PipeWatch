@@ -214,5 +214,28 @@
         "viewModel": "View Model"
       }
     }
+  },
+  "contact": {
+    "card": {
+      "title": "Contact Us",
+      "subtitle": "A registration guide email will be sent to the email address provided for the person in charge.",
+      "companyName": "Company Name",
+      "industry": "Industry",
+      "contactEmail": "Contact Email",
+      "contactPhoneNumber": "Contact Phone Number (010-0000-0000)",
+      "button": "Register your company now",
+      "error": "Please check your input."
+    },
+    "industryList": {
+      "manufacturing": "Manufacturing",
+      "electricity": "Electricity, Gas, Steam, and Air Conditioning Supply",
+      "construction": "Construction",
+      "science": "Scientific and Technical Services",
+      "other": "Other"
+    },
+    "footer": {
+      "instructions": "For any inquiries regarding pre-contact and registration,<br/>please reach out to our sales team.",
+      "connectEmail": "Go to connect via email"
+    }
   }
 }

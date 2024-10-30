@@ -33,6 +33,7 @@ export default {
         stroke: "#3D444D",
         background: "#151B23",
       },
+      transparent: "transparent"
     },
   },
   plugins: [],
