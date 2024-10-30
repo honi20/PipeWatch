@@ -1,12 +1,11 @@
 import { useTranslation } from "react-i18next";
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
-import {
-  CameraIcon,
-  ArrowUpTrayIcon,
-  PencilIcon,
-  CubeIcon,
-  CheckCircleIcon,
-} from "@heroicons/react/24/solid";
+
+import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
+import DriveFolderUploadIcon from "@mui/icons-material/DriveFolderUpload";
+import KeyboardIcon from "@mui/icons-material/Keyboard";
+import ViewInArIcon from "@mui/icons-material/ViewInAr";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
 import { useNavigate, useLocation } from "react-router-dom";
 import { TakePhoto } from "@components/pipeGenerator/TakePhoto";
@@ -23,25 +22,25 @@ export const PipeGenerator = () => {
   const menus = [
     {
       key: "takePhoto",
-      icon: CameraIcon,
+      icon: PhotoCameraIcon,
       component: <TakePhoto />,
       path: "/pipe-generator/take-photo",
     },
     {
       key: "uploadModel",
-      icon: ArrowUpTrayIcon,
+      icon: DriveFolderUploadIcon,
       component: <UploadModel />,
       path: "/pipe-generator/upload-model",
     },
     {
       key: "inputData",
-      icon: PencilIcon,
+      icon: KeyboardIcon,
       component: <InputData />,
       path: "/pipe-generator/input-data",
     },
     {
       key: "rendering",
-      icon: CubeIcon,
+      icon: ViewInArIcon,
       component: <Rendering />,
       path: "/pipe-generator/rendering",
     },
