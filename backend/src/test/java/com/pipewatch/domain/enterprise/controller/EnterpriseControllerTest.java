@@ -3,10 +3,7 @@ package com.pipewatch.domain.enterprise.controller;
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.epages.restdocs.apispec.Schema;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.pipewatch.domain.auth.model.dto.AuthRequest;
-import com.pipewatch.domain.enterprise.model.dto.EnterpriseDto;
 import com.pipewatch.domain.enterprise.model.dto.EnterpriseResponse;
-import com.pipewatch.domain.enterprise.model.entity.Enterprise;
 import com.pipewatch.domain.enterprise.service.EnterpriseService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -97,8 +94,8 @@ class EnterpriseControllerTest {
 
 	@Test
 	void 기업_리스트_조회_성공() throws Exception {
-		EnterpriseDto enterprise1 = new EnterpriseDto(1L, "paori", "제조업");
-		EnterpriseDto enterprise2 = new EnterpriseDto(2L, "samsung", "제조업");
+		EnterpriseResponse.EnterpriseDto enterprise1 = new EnterpriseResponse.EnterpriseDto(1L, "paori", "제조업");
+		EnterpriseResponse.EnterpriseDto enterprise2 = new EnterpriseResponse.EnterpriseDto(2L, "samsung", "제조업");
 		EnterpriseResponse.ListDto response = EnterpriseResponse.ListDto.builder()
 				.enterprises(List.of(enterprise1, enterprise2))
 				.build();

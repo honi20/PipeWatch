@@ -1,6 +1,5 @@
 package com.pipewatch.domain.enterprise.service;
 
-import com.pipewatch.domain.enterprise.model.dto.EnterpriseDto;
 import com.pipewatch.domain.enterprise.model.dto.EnterpriseResponse;
 import com.pipewatch.domain.enterprise.model.entity.Enterprise;
 import com.pipewatch.domain.enterprise.repository.EnterpriseRepository;
@@ -15,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.pipewatch.global.statusCode.ErrorCode.*;
@@ -50,10 +50,13 @@ public class EnterpriseServiceImpl implements EnterpriseService {
 
     @Override
     public EnterpriseResponse.ListDto getEnterpriseList() {
-        List<EnterpriseDto> enterprises = enterpriseRepository.findAllEnterprise();
+        List<Enterprise> enterprises = enterpriseRepository.findAll();
+
+        List<EnterpriseResponse.EnterpriseDto> enterpriseDtos
+                = enterprises.stream().map(EnterpriseResponse.EnterpriseDto::toDto).toList();
 
         return EnterpriseResponse.ListDto.builder()
-                .enterprises(enterprises)
+                .enterprises(enterpriseDtos)
                 .build();
 
     }

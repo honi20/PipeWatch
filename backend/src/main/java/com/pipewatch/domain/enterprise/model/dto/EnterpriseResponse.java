@@ -37,4 +37,21 @@ public class EnterpriseResponse {
 	public static class ListDto {
 		private List<EnterpriseDto> enterprises;
 	}
+
+	@Getter
+	@Builder
+	@AllArgsConstructor
+	public static class EnterpriseDto {
+		private Long enterpriseId;
+		private String name;
+		private String industry;
+
+		public static EnterpriseDto toDto(Enterprise enterprise) {
+			return EnterpriseDto.builder()
+					.enterpriseId(enterprise.getId())
+					.name(enterprise.getName())
+					.industry(enterprise.getIndustry())
+					.build();
+		}
+	}
 }
