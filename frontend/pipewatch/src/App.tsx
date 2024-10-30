@@ -24,6 +24,12 @@ import { EditInfo } from "./pages/EditInfo";
 import { DeleteAccount } from "./pages/DeleteAccount";
 import { ManageAccount } from "./pages/ManageAccount";
 
+import { TakePhoto } from "./components/pipeGenerator/TakePhoto";
+import { UploadModel } from "./components/pipeGenerator/UploadModel";
+import { InputData } from "./components/pipeGenerator/InputData";
+import { Rendering } from "./components/pipeGenerator/Rendering";
+import { Completed } from "./components/pipeGenerator/Completed";
+
 function App() {
   return (
     <>
@@ -37,7 +43,22 @@ function App() {
             <Route path="/about-us/team" element={<AboutTeam />} />
 
             <Route path="/pipe-viewer" element={<PipeViewer />} />
-            <Route path="/pipe-generator" element={<PipeGenerator />} />
+            <Route path="/pipe-generator" element={<PipeGenerator />}>
+              <Route
+                path="/pipe-generator/take-photo"
+                element={<TakePhoto />}
+              />
+              <Route
+                path="/pipe-generator/upload-model"
+                element={<UploadModel />}
+              />
+              <Route
+                path="/pipe-generator/input-data"
+                element={<InputData />}
+              />
+              <Route path="/pipe-generator/rendering" element={<Rendering />} />
+              <Route path="/pipe-generator/completed" element={<Completed />} />
+            </Route>
             <Route path="/contact" element={<Contact />} />
 
             <Route path="/enterprise" element={<EmpVerification />}>
