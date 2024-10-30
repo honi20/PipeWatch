@@ -58,8 +58,12 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public void verifyEmailCode(AuthRequest.EmailCodeVerifyDto requestDto) {
-        String verify = ((JwtToken) redisUtil.getData(requestDto.getEmail() + "_verify")).getVerify();
+        JwtToken token = ((JwtToken) redisUtil.getData(requestDto.getEmail() + "_verify"));
+        if (token == null) {
+            throw new BaseException(VERIFY_NOT_FOUND);
+        }
 
+        String verify = token.getVerify();
         if (verify == null) {
             throw new BaseException(VERIFY_NOT_FOUND);
         }
