@@ -4,9 +4,6 @@ import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.epages.restdocs.apispec.Schema;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pipewatch.domain.auth.model.dto.AuthRequest;
-import com.pipewatch.global.jwt.entity.JwtToken;
-import com.pipewatch.global.mail.MailService;
-import com.pipewatch.global.redis.RedisUtil;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,10 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationExtension;
-import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -26,7 +21,6 @@ import org.springframework.test.web.servlet.ResultActions;
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
 import static com.pipewatch.domain.util.ResponseFieldUtil.getCommonResponseFields;
 import static com.pipewatch.global.statusCode.SuccessCode.*;
-import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
@@ -49,100 +43,6 @@ class AuthControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @MockBean
-    private RedisUtil redisUtil;
-
-    @MockBean
-    private MailService mailService;
-
-    @Test
-    void 인증코드_전송_성공() throws Exception {
-        AuthRequest.EmailCodeSendDto dto = AuthRequest.EmailCodeSendDto.builder()
-                .email("paori@ssafy.com")
-                .build();
-
-        String content = objectMapper.writeValueAsString(dto);
-
-        given(mailService.sendVerifyEmail(dto.getEmail())).willReturn("239123");
-
-        ResultActions actions = mockMvc.perform(
-                post("/api/auth/send-email-code")
-                        .content(content)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .characterEncoding("UTF-8")
-                        .with(csrf())
-        );
-
-        actions
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.header.httpStatusCode").value(EMAIL_CODE_SEND_OK.getHttpStatusCode()))
-                .andExpect(jsonPath("$.header.message").value(EMAIL_CODE_SEND_OK.getMessage()))
-                .andDo(document(
-                        "이메일 인증코드 전송 성공",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint()),
-                        resource(ResourceSnippetParameters.builder()
-                                .tag("Auth API")
-                                .summary("이메일 인증코드 전송 API")
-                                .requestFields(
-                                        fieldWithPath("email").description("이메일")
-                                )
-                                .responseFields(
-                                        getCommonResponseFields(
-                                                fieldWithPath("body").ignored()
-                                        )
-                                )
-                                .requestSchema(Schema.schema("이메일 인증코드 전송 Request"))
-                                .build()
-                        )));
-    }
-
-    @Test
-    void 인증코드_확인_성공() throws Exception {
-        AuthRequest.EmailCodeVerifyDto dto = AuthRequest.EmailCodeVerifyDto.builder()
-                .email("paori@ssafy.com")
-                .verifyCode("239123")
-                .build();
-
-        String content = objectMapper.writeValueAsString(dto);
-
-        given(redisUtil.getData(dto.getEmail() + "_verify")).willReturn(new JwtToken(null, null, null, "239123"));
-
-        ResultActions actions = mockMvc.perform(
-                post("/api/auth/verify-email-code")
-                        .content(content)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .characterEncoding("UTF-8")
-                        .with(csrf())
-        );
-
-        actions
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.header.httpStatusCode").value(EMAIL_VERIFIED.getHttpStatusCode()))
-                .andExpect(jsonPath("$.header.message").value(EMAIL_VERIFIED.getMessage()))
-                .andDo(document(
-                        "이메일 인증코드 확인 성공",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint()),
-                        resource(ResourceSnippetParameters.builder()
-                                .tag("Auth API")
-                                .summary("이메일 인증코드 확인 API")
-                                .requestFields(
-                                        fieldWithPath("email").description("이메일"),
-                                        fieldWithPath("verifyCode").description("인증코드")
-                                )
-                                .responseFields(
-                                        getCommonResponseFields(
-                                                fieldWithPath("body").ignored()
-                                        )
-                                )
-                                .requestSchema(Schema.schema("이메일 인증코드 확인 Request"))
-                                .build()
-                        )));
-    }
-
     @Test
     void 회원가입_성공() throws Exception {
         AuthRequest.SignupDto dto = AuthRequest.SignupDto.builder()
@@ -153,12 +53,9 @@ class AuthControllerTest {
                 .empNo(1123456L)
                 .department("경영지원부")
                 .empClass("사원")
-                .verifyCode("239123")
                 .build();
 
         String content = objectMapper.writeValueAsString(dto);
-
-        given(redisUtil.getData(dto.getEmail() + "_verify")).willReturn(new JwtToken(null, null, null, "239123"));
 
         ResultActions actions = mockMvc.perform(
                 post("/api/auth")
@@ -187,12 +84,11 @@ class AuthControllerTest {
                                         fieldWithPath("enterpriseId").description("기업 번호"),
                                         fieldWithPath("empNo").description("사번"),
                                         fieldWithPath("department").description("부서"),
-                                        fieldWithPath("empClass").description("직급"),
-                                        fieldWithPath("verifyCode").description("이메일 인증코드")
+                                        fieldWithPath("empClass").description("직급")
                                 )
                                 .responseFields(
                                         getCommonResponseFields(
-                                                fieldWithPath("body.accessToken").type(JsonFieldType.STRING).description("access token")
+                                                fieldWithPath("body").ignored()
                                         )
                                 )
                                 .requestSchema(Schema.schema("회원가입 Request"))

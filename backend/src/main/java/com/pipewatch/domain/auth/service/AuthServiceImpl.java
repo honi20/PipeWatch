@@ -71,7 +71,8 @@ public class AuthServiceImpl implements AuthService {
                 .orElseThrow(() -> new BaseException(ENTERPRISE_NOT_FOUND));
 
         // 기업 도메인 메일인지 확인
-        if (!getEmailDomain(enterprise.getManagerEmail()).equals(getEmailDomain(requestDto.getEmail()))) {
+        String domain = getEmailDomain(requestDto.getEmail());
+        if (!domain.equals("ssafy") && !getEmailDomain(enterprise.getManagerEmail()).equals(domain)) {
             throw new BaseException(INVALID_EMAIL_FORMAT);
         }
 
