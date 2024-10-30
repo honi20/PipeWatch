@@ -72,7 +72,7 @@ public class AuthServiceImpl implements AuthService {
 
         // 기업 도메인 메일인지 확인
         String domain = getEmailDomain(requestDto.getEmail());
-        if (!domain.equals("ssafy") && !getEmailDomain(enterprise.getManagerEmail()).equals(domain)) {
+        if (!domain.equals("ssafy.com") && !getEmailDomain(enterprise.getManagerEmail()).equals(domain)) {
             throw new BaseException(INVALID_EMAIL_FORMAT);
         }
 
@@ -120,7 +120,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     private String getEmailDomain(String email) {
-        String[] parts = email.split("@|\\.");
+        String[] parts = email.split("@");
         if (parts.length < 2) {
             throw new BaseException(INVALID_EMAIL_FORMAT);
         }

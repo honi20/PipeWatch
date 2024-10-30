@@ -4,6 +4,8 @@ import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.epages.restdocs.apispec.Schema;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pipewatch.domain.auth.model.dto.AuthRequest;
+import com.pipewatch.domain.auth.service.AuthService;
+import com.pipewatch.global.exception.BaseException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,8 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -20,7 +24,10 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
 import static com.pipewatch.domain.util.ResponseFieldUtil.getCommonResponseFields;
+import static com.pipewatch.global.statusCode.ErrorCode.*;
 import static com.pipewatch.global.statusCode.SuccessCode.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
@@ -43,6 +50,9 @@ class AuthControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @MockBean
+    private AuthService authService;
+
     @Test
     void 회원가입_성공() throws Exception {
         AuthRequest.SignupDto dto = AuthRequest.SignupDto.builder()
@@ -56,6 +66,8 @@ class AuthControllerTest {
                 .build();
 
         String content = objectMapper.writeValueAsString(dto);
+
+        doNothing().when(authService).signup(any(AuthRequest.SignupDto.class));
 
         ResultActions actions = mockMvc.perform(
                 post("/api/auth")
@@ -94,6 +106,144 @@ class AuthControllerTest {
                                 .requestSchema(Schema.schema("회원가입 Request"))
                                 .build()
                         )));
+    }
+
+    @Test
+    void 회원가입_실패_존재하는_이메일() throws Exception {
+        AuthRequest.SignupDto dto = AuthRequest.SignupDto.builder()
+                .email("test@ssafy.com")
+                .password("ssafy1234")
+                .name("김싸피")
+                .enterpriseId(1L)
+                .empNo(1123456L)
+                .department("경영지원부")
+                .empClass("사원")
+                .build();
+
+        String content = objectMapper.writeValueAsString(dto);
+
+        doThrow(new BaseException(DUPLICATED_EMAIL)).when(authService).signup(any(AuthRequest.SignupDto.class));
+
+        ResultActions actions = mockMvc.perform(
+                multipart("/api/auth")
+                        .content(content)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8")
+                        .with(csrf())
+        );
+
+        actions
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.header.httpStatusCode").value(DUPLICATED_EMAIL.getHttpStatusCode()))
+                .andExpect(jsonPath("$.header.message").value(DUPLICATED_EMAIL.getMessage()))
+                .andDo(document(
+                        "회원가입 실패 - 이미 등록된 이메일인 경우",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        resource(ResourceSnippetParameters.builder()
+                                .tag("Auth API")
+                                .responseFields(
+                                        getCommonResponseFields(
+                                                fieldWithPath("body").type(JsonFieldType.OBJECT).description("에러 상세").optional().ignored()
+                                        )
+                                )
+                                .responseSchema(Schema.schema("Error Response"))
+                                .build()
+                        ))
+                );
+    }
+
+    @Test
+    void 회원가입_실패_존재하지_않는_기업() throws Exception {
+        AuthRequest.SignupDto dto = AuthRequest.SignupDto.builder()
+                .email("test@ssafy.com")
+                .password("ssafy1234")
+                .name("김싸피")
+                .enterpriseId(999L)
+                .empNo(1123456L)
+                .department("경영지원부")
+                .empClass("사원")
+                .build();
+
+        String content = objectMapper.writeValueAsString(dto);
+
+        doThrow(new BaseException(ENTERPRISE_NOT_FOUND)).when(authService).signup(any(AuthRequest.SignupDto.class));
+
+        ResultActions actions = mockMvc.perform(
+                multipart("/api/auth")
+                        .content(content)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8")
+                        .with(csrf())
+        );
+
+        actions
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.header.httpStatusCode").value(ENTERPRISE_NOT_FOUND.getHttpStatusCode()))
+                .andExpect(jsonPath("$.header.message").value(ENTERPRISE_NOT_FOUND.getMessage()))
+                .andDo(document(
+                        "회원가입 실패 - 존재하지 않는 기업",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        resource(ResourceSnippetParameters.builder()
+                                .tag("Auth API")
+                                .responseFields(
+                                        getCommonResponseFields(
+                                                fieldWithPath("body").type(JsonFieldType.OBJECT).description("에러 상세").optional().ignored()
+                                        )
+                                )
+                                .responseSchema(Schema.schema("Error Response"))
+                                .build()
+                        ))
+                );
+    }
+
+    @Test
+    void 회원가입_실패_잘못된_이메일_형식() throws Exception {
+        AuthRequest.SignupDto dto = AuthRequest.SignupDto.builder()
+                .email("test@none.com")
+                .password("ssafy1234")
+                .name("김싸피")
+                .enterpriseId(999L)
+                .empNo(1123456L)
+                .department("경영지원부")
+                .empClass("사원")
+                .build();
+
+        String content = objectMapper.writeValueAsString(dto);
+
+        doThrow(new BaseException(INVALID_EMAIL_FORMAT)).when(authService).signup(any(AuthRequest.SignupDto.class));
+
+        ResultActions actions = mockMvc.perform(
+                multipart("/api/auth")
+                        .content(content)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8")
+                        .with(csrf())
+        );
+
+        actions
+                .andExpect(status().isForbidden())
+                .andExpect(jsonPath("$.header.httpStatusCode").value(INVALID_EMAIL_FORMAT.getHttpStatusCode()))
+                .andExpect(jsonPath("$.header.message").value(INVALID_EMAIL_FORMAT.getMessage()))
+                .andDo(document(
+                        "회원가입 실패 - 잘못된 이메일 형식 (기업 도메인과 형식이 같아야 함. @ssafy.com은 허용)",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        resource(ResourceSnippetParameters.builder()
+                                .tag("Auth API")
+                                .responseFields(
+                                        getCommonResponseFields(
+                                                fieldWithPath("body").type(JsonFieldType.OBJECT).description("에러 상세").optional().ignored()
+                                        )
+                                )
+                                .responseSchema(Schema.schema("Error Response"))
+                                .build()
+                        ))
+                );
     }
 
     @Test
