@@ -1,9 +1,6 @@
 package com.pipewatch.domain.enterprise.model.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.*;
 
@@ -14,7 +11,7 @@ import lombok.*;
 @AllArgsConstructor
 public class Enterprise {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "enterprise_id")
     private Long id;
 
