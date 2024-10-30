@@ -1,6 +1,6 @@
 -- enterprise
 INSERT INTO enterprise(enterprise_id, name, industry, manager_email, manager_phone_number, is_active)
-VALUES(1L, 'ssafy', 'ssafy', 'paori@ssafy.com', '010-1234-5678', true);
+VALUES(1L, 'paori', '제조업', 'admin@paori.com', '010-1234-5678', true);
 
 -- user
 INSERT INTO "user"(user_id, email, password, name, state, role, uuid)
