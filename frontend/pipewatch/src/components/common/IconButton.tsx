@@ -5,7 +5,7 @@ interface Props {
   text: string;
   color: string;
   hoverColor: string;
-  icon: ReactNode;
+  icon?: ReactNode;
 }
 
 export const IconButton = ({

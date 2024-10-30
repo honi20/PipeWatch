@@ -1,3 +1,5 @@
+import { ReactNode } from "react";
+
 interface Props {
   text: string;
   color: string;
