@@ -11,7 +11,7 @@ public enum ErrorCode {
 	DUPLICATED_EMAIL(HttpStatus.CONFLICT.value(), "이미 등록된 이메일입니다."),
 	SIGNUP_BAD_REQUEST(HttpStatus.BAD_REQUEST.value(), "잘못된 회원가입 요청입니다"),
 	ENTERPRISE_NOT_FOUND(HttpStatus.NOT_FOUND.value(), "해당 기업이 존재하지 않습니다."),
-	INVALID_EMAIL_FORMAT(HttpStatus.FORBIDDEN.value(), "선택하신 기업 도메인의 이메일만 등록 가능합니다.\n예시) 기업의 도메인이 ssafy인 경우, poari@ssafy.com"),
+	INVALID_EMAIL_FORMAT(HttpStatus.FORBIDDEN.value(), "선택하신 기업 도메인의 이메일만 등록 가능합니다. {아이디}@{기업 도메인} 형식의 메일로 등록해야 합니다."),
 	INVALID_PASSWORD(HttpStatus.FORBIDDEN.value(), "비밀번호가 일치하지 않습니다."),
 	EMAIL_NOT_FOUND(HttpStatus.NOT_FOUND.value(), "해당 이메일로 가입된 회원이 존재하지 않습니다."),
 

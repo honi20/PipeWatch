@@ -109,6 +109,10 @@ public class AuthServiceImpl implements AuthService {
 
     private String getEmailDomain(String email) {
         String[] parts = email.split("@|\\.");
+        if (parts.length < 2) {
+            throw new BaseException(INVALID_EMAIL_FORMAT);
+        }
+
         return parts[1];
     }
 }
