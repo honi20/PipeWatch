@@ -56,13 +56,18 @@ public class AuthServiceImpl implements AuthService {
         String password = passwordEncoder.encode(requestDto.getPassword());
         requestDto.setPassword(password);
 
+        Enterprise enterprise = enterpriseRepository.findById(requestDto.getEnterpriseId())
+                .orElseThrow(() -> new BaseException(ENTERPRISE_NOT_FOUND));
+
+        // 기업 도메인 메일인지 확인
+        if (!getEmailDomain(enterprise.getManagerEmail()).equals(getEmailDomain(requestDto.getEmail()))) {
+            throw new BaseException(INVALID_EMAIL_FORMAT);
+        }
+
         // 유저 등록
         User user = userRepository.save(requestDto.toEntity(uuid));
 
         // 직원 등록
-        Enterprise enterprise = enterpriseRepository.findById(requestDto.getEnterpriseId())
-                .orElseThrow(() -> new BaseException(ENTERPRISE_NOT_FOUND));
-
         EmployeeInfo employee = EmployeeInfo.builder()
                 .empNo(requestDto.getEmpNo())
                 .department(requestDto.getDepartment())
@@ -102,4 +107,8 @@ public class AuthServiceImpl implements AuthService {
         waitingRepository.save(waiting);
     }
 
+    private String getEmailDomain(String email) {
+        String[] parts = email.split("@|\\.");
+        return parts[1];
+    }
 }
