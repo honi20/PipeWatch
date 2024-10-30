@@ -9,11 +9,11 @@ import {
 } from "@heroicons/react/24/solid";
 
 import { useNavigate, useLocation } from "react-router-dom";
-import { TakePhoto } from "../components/pipeGenerator/TakePhoto";
-import { UploadModel } from "../components/pipeGenerator/UploadModel";
-import { InputData } from "../components/pipeGenerator/InputData";
-import { Rendering } from "../components/pipeGenerator/Rendering";
-import { Completed } from "../components/pipeGenerator/Completed";
+import { TakePhoto } from "@components/pipeGenerator/TakePhoto";
+import { UploadModel } from "@components/pipeGenerator/UploadModel";
+import { InputData } from "@components/pipeGenerator/InputData";
+import { Rendering } from "@components/pipeGenerator/Rendering";
+import { Completed } from "@components/pipeGenerator/Completed";
 
 export const PipeGenerator = () => {
   const { t } = useTranslation();

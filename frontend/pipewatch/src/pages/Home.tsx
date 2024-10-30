@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { Button } from "@headlessui/react";
 
-import HomePipe from "../assets/images/home_pipe.png";
+import HomePipe from "@assets/images/home_pipe.png";
 
 export const Home = () => {
   const { t } = useTranslation();

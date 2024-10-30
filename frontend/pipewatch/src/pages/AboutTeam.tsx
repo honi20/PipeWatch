@@ -1,10 +1,10 @@
 import { useTranslation } from "react-i18next";
-import member1 from "../assets/images/members/member1.png";
-import member2 from "../assets/images/members/member2.png";
-import member3 from "../assets/images/members/member3.png";
-import member4 from "../assets/images/members/member4.png";
-import member5 from "../assets/images/members/member5.png";
-import member6 from "../assets/images/members/member6.png";
+import member1 from "@assets/images/members/member1.png";
+import member2 from "@assets/images/members/member2.png";
+import member3 from "@assets/images/members/member3.png";
+import member4 from "@assets/images/members/member4.png";
+import member5 from "@assets/images/members/member5.png";
+import member6 from "@assets/images/members/member6.png";
 
 export const AboutTeam = () => {
   const { t } = useTranslation();
