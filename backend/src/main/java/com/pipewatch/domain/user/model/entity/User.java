@@ -39,4 +39,8 @@ public class User extends BaseEntity {
 
     @NotNull
     private String uuid;
+
+    public void updateState(State state) {
+        this.state = state;
+    }
 }

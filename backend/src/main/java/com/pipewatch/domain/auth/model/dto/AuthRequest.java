@@ -41,15 +41,14 @@ public class AuthRequest {
         private Long empNo;
         private String department;
         private String empClass;
-        private String verifyCode;
 
         public User toEntity(String uuid) {
             return User.builder()
                     .email(this.email)
                     .password(this.password)
                     .name(this.name)
-                    .state(State.PENDING)
-                    .role(Role.ROLE_EMPLOYEE)
+                    .state(State.INACTIVE)
+                    .role(Role.ROLE_USER)
                     .uuid(uuid)
                     .build();
         }

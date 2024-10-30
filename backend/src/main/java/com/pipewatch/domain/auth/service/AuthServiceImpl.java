@@ -1,13 +1,22 @@
 package com.pipewatch.domain.auth.service;
 
 import com.pipewatch.domain.auth.model.dto.AuthRequest;
+import com.pipewatch.domain.enterprise.model.entity.Enterprise;
+import com.pipewatch.domain.enterprise.repository.EnterpriseRepository;
+import com.pipewatch.domain.management.model.entity.Waiting;
+import com.pipewatch.domain.management.repository.WaitingRepository;
+import com.pipewatch.domain.user.model.entity.EmployeeInfo;
+import com.pipewatch.domain.user.model.entity.Role;
+import com.pipewatch.domain.user.model.entity.State;
 import com.pipewatch.domain.user.model.entity.User;
+import com.pipewatch.domain.user.repository.EmployeeRepository;
 import com.pipewatch.domain.user.repository.UserRepository;
 import com.pipewatch.global.exception.BaseException;
 import com.pipewatch.global.jwt.entity.JwtToken;
 import com.pipewatch.global.jwt.service.JwtService;
 import com.pipewatch.global.mail.MailService;
 import com.pipewatch.global.redis.RedisUtil;
+import com.pipewatch.global.statusCode.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,8 +29,6 @@ import static com.pipewatch.global.statusCode.ErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
-
 public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
 
@@ -33,58 +40,71 @@ public class AuthServiceImpl implements AuthService {
 
     private final PasswordEncoder passwordEncoder;
 
-    @Override
-    public void sendEmailCode(AuthRequest.EmailCodeSendDto requestDto) throws NoSuchAlgorithmException {
-        User user = userRepository.findByEmail(requestDto.getEmail());
-
-        if (user == null) {
-            String verifyCode = mailService.sendVerifyEmail(requestDto.getEmail());
-
-            JwtToken jwtToken = JwtToken.builder().verify(verifyCode).build();
-            redisUtil.setDataWithExpiration(requestDto.getEmail() + "_verify", jwtToken, 1000L);
-            return;
-        }
-        throw new BaseException(DUPLICATED_EMAIL);
-    }
-
-    @Override
-    public void verifyEmailCode(AuthRequest.EmailCodeVerifyDto requestDto) {
-        String verify = ((JwtToken) redisUtil.getData(requestDto.getEmail() + "_verify")).getVerify();
-
-        if (verify == null) {
-            throw new BaseException(VERIFY_NOT_FOUND);
-        }
-
-        if (!verify.equals(requestDto.getVerifyCode())) {
-            throw new BaseException(INVALID_EMAIL_CODE);
-        }
-
-    }
+    private final WaitingRepository waitingRepository;
+    private final EnterpriseRepository enterpriseRepository;
+    private final EmployeeRepository employeeRepository;
 
     @Override
     @Transactional
-    public String signup(AuthRequest.SignupDto requestDto) {
+    public String signup(AuthRequest.SignupDto requestDto) throws NoSuchAlgorithmException {
         String uuid = UUID.randomUUID().toString();
 
         if (userRepository.findByEmail(requestDto.getEmail()) != null){
             throw new BaseException(DUPLICATED_EMAIL);
         }
 
-        String verifyCode = requestDto.getVerifyCode();
-        String key = requestDto.getEmail()+"_verify";
-        String verify = ((JwtToken)redisUtil.getData(key)).getVerify();
-        if(verify == null || !verify.equals(verifyCode)) {
-            throw new BaseException(SIGNUP_BAD_REQUEST);
-        }
-        redisUtil.deleteData(key);
         String password = passwordEncoder.encode(requestDto.getPassword());
         requestDto.setPassword(password);
 
+        // 유저 등록
         User user = userRepository.save(requestDto.toEntity(uuid));
 
-        JwtToken jwtToken = requestDto.toRedis(uuid, user.getId(), jwtService.createRefreshToken(uuid));
-        redisUtil.setData(uuid, jwtToken);
+        // 직원 등록
+        Enterprise enterprise = enterpriseRepository.findById(requestDto.getEnterpriseId())
+                .orElseThrow(() -> new BaseException(ENTERPRISE_NOT_FOUND));
+
+        EmployeeInfo employee = EmployeeInfo.builder()
+                .empNo(requestDto.getEmpNo())
+                .department(requestDto.getDepartment())
+                .empClass(requestDto.getEmpClass())
+                .user(user)
+                .enterprise(enterprise)
+                .build();
+
+        employeeRepository.save(employee);
+
+//        JwtToken jwtToken = requestDto.toRedis(uuid, user.getId(), jwtService.createRefreshToken(uuid));
+//        redisUtil.setData(uuid, jwtToken);
+
+        // 메일 전송
+        String verifyCode = mailService.sendVerifyEmail(requestDto.getEmail());
+        redisUtil.setDataWithExpiration(verifyCode, requestDto.getEmail(), 600L);
 
         return jwtService.createAccessToken(uuid);
     }
+
+    @Override
+    public void verifyEmailCode(String token) {
+        String email = redisUtil.getDataByToken(token);
+
+        if (email == null) {
+            throw new BaseException(VERIFY_NOT_FOUND);
+        }
+
+        User user = userRepository.findByEmail(email);
+        if (user == null) {
+            throw new BaseException(EMAIL_NOT_FOUND);
+        }
+
+        // 이메일 인증 완료 후 Redis에서 토큰 삭제
+        redisUtil.deleteData(token);
+
+        // 해당 유저의 상태를 pending으로 전환 -> 사원 요청 보냄
+        user.updateState(State.PENDING);
+        userRepository.save(user);
+
+        Waiting waiting = Waiting.builder().role(Role.ROLE_EMPLOYEE).user(user).build();
+        waitingRepository.save(waiting);
+    }
+
 }

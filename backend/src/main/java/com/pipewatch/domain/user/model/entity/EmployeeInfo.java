@@ -19,7 +19,7 @@ public class EmployeeInfo {
 	private Long id;
 
 	@NotNull
-	private Integer empNo;
+	private Long empNo;
 
 	@NotNull
 	private String department;
