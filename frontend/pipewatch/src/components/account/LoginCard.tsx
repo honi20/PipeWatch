@@ -1,36 +1,47 @@
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { Input, Button } from "@headlessui/react";
-import { useState, ChangeEvent } from "react";
+import { useState, ChangeEvent, FocusEvent } from "react";
 
 const LoginCard = () => {
   const { t } = useTranslation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isEmailValid, setIsEmailValid] = useState(true);
-  const [isPasswordValid, setIsPasswordValid] = useState(true);
+  const [showEmailError, setShowEmailError] = useState(false);
+  const [showPasswordError, setShowPasswordError] = useState(false);
 
   const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   const passwordPattern =
     /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
 
+  // 유효성 검사
+  const validateEmail = (value: string) =>
+    emailPattern.test(value) && value.trim() !== "";
+  const validatePassword = (value: string) => passwordPattern.test(value);
+
   // 이메일 이벤트 핸들러
   const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setEmail(value);
-    setIsEmailValid(emailPattern.test(value) || value === "");
+    setShowEmailError(!validateEmail(value));
+  };
+  const handleEmailBlur = (e: FocusEvent<HTMLInputElement>) => {
+    setShowEmailError(!validateEmail(e.target.value));
   };
 
   // 비밀번호 이벤트 핸들러
   const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setPassword(value);
-    setIsPasswordValid(passwordPattern.test(value) || value === "");
+    setShowPasswordError(!validatePassword(value));
+  };
+  const handlePasswordBlur = (e: FocusEvent<HTMLInputElement>) => {
+    setShowPasswordError(!validatePassword(e.target.value));
   };
 
   // 로그인 버튼 활성화
   const isFormValid: boolean =
-    isEmailValid && isPasswordValid && email !== "" && password !== "";
+    !showEmailError && !showPasswordError && email !== "" && password !== "";
 
   return (
     <div className="w-[500px] flex flex-col bg-block rounded-[30px] p-[50px] gap-[40px]">
@@ -47,11 +58,14 @@ const LoginCard = () => {
             type="email"
             value={email}
             onChange={handleEmailChange}
+            onBlur={handleEmailBlur}
+            aria-invalid={showEmailError}
+            aria-describedby={showEmailError ? "emailError" : undefined}
             className="h-[56px] w-full px-5 text-gray-500 rounded-[5px]"
             placeholder={t("account.email")}
             required
           />
-          {!isEmailValid && (
+          {showEmailError && (
             <span className="w-full px-2 whitespace-normal text-warn break-keep">
               {t("account.emailError")}
             </span>
@@ -64,11 +78,14 @@ const LoginCard = () => {
             type="password"
             value={password}
             onChange={handlePasswordChange}
+            onBlur={handlePasswordBlur}
+            aria-invalid={showPasswordError}
+            aria-describedby={showPasswordError ? "passwordError" : undefined}
             className="h-[56px] w-full px-5 text-gray-500 rounded-[5px] peer"
             placeholder={t("account.password")}
             required
           />
-          {!isPasswordValid && (
+          {showPasswordError && (
             <span className="w-full px-2 whitespace-normal text-warn break-keep">
               {t("account.passwordError")}
             </span>
