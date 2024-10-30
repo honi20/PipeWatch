@@ -3,6 +3,8 @@ package com.pipewatch.domain.enterprise.model.dto;
 import com.pipewatch.domain.enterprise.model.entity.Enterprise;
 import lombok.*;
 
+import java.util.List;
+
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class EnterpriseResponse {
@@ -25,5 +27,14 @@ public class EnterpriseResponse {
 					.managerPhoneNumber(enterprise.getManagerPhoneNumber())
 					.build();
 		}
+	}
+
+	@Getter
+	@Setter
+	@Builder
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class ListDto {
+		private List<EnterpriseDto> enterprises;
 	}
 }

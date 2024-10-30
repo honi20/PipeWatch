@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import static com.pipewatch.global.statusCode.SuccessCode.ENTERPRISE_DETAIL_OK;
+import static com.pipewatch.global.statusCode.SuccessCode.ENTERPRISE_LIST_OK;
 
 @RestController
 @RequestMapping("${api_prefix}/enterprises")
@@ -20,8 +21,15 @@ public class EnterpriseController {
 
 	@GetMapping
 	public ResponseEntity<?> enterpriseDetail() {
-		EnterpriseResponse.DetailDto responseDto = enterpriseService.detailEnterprise();
+		EnterpriseResponse.DetailDto responseDto = enterpriseService.getEnterpriseDetail();
 
 		return new ResponseEntity<>(ResponseDto.success(ENTERPRISE_DETAIL_OK, responseDto), HttpStatus.OK);
+	}
+
+	@GetMapping("/list")
+	public ResponseEntity<?> enterpriseList() {
+		EnterpriseResponse.ListDto responseDto = enterpriseService.getEnterpriseList();
+
+		return new ResponseEntity<>(ResponseDto.success(ENTERPRISE_LIST_OK, responseDto), HttpStatus.OK);
 	}
 }

@@ -39,6 +39,7 @@ public class SecurityConfig {
 								"/error", "/actuator/**",
 								"/api/auth/enterprise", "/api/auth", "/api/auth/signin",
 								"/api/auth/send-email-code", "/api/auth/verify-email-code",
+                                "/api/enterprises/list",
 								"/docs/**", "/swagger-ui/**", "/v3-docs/**", "/h2-console/**").permitAll()
 						.anyRequest().authenticated()
 				)

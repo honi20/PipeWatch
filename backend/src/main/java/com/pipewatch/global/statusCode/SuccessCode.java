@@ -26,6 +26,7 @@ public enum SuccessCode {
 
 	// Enterprise
 	ENTERPRISE_DETAIL_OK(HttpStatus.OK.value(), "기업 정보 조회에 성공했습니다."),
+	ENTERPRISE_LIST_OK(HttpStatus.OK.value(), "기업 리스트 조회에 성공했습니다."),
 
 	// Management
 	WAITING_EMPLOYEE_LIST_OK(HttpStatus.OK.value(), "승인 대기 중인 직원 목록 조회에 성공했습니다."),
