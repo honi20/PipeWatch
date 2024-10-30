@@ -1,19 +1,18 @@
 import { useTranslation } from "react-i18next";
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
-import {
-  CameraIcon,
-  ArrowUpTrayIcon,
-  PencilIcon,
-  CubeIcon,
-  CheckCircleIcon,
-} from "@heroicons/react/24/solid";
+
+import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
+import DriveFolderUploadIcon from "@mui/icons-material/DriveFolderUpload";
+import KeyboardIcon from "@mui/icons-material/Keyboard";
+import ViewInArIcon from "@mui/icons-material/ViewInAr";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
 import { useNavigate, useLocation } from "react-router-dom";
-import { TakePhoto } from "../components/pipeGenerator/TakePhoto";
-import { UploadModel } from "../components/pipeGenerator/UploadModel";
-import { InputData } from "../components/pipeGenerator/InputData";
-import { Rendering } from "../components/pipeGenerator/Rendering";
-import { Completed } from "../components/pipeGenerator/Completed";
+import { TakePhoto } from "@components/pipeGenerator/TakePhoto";
+import { UploadModel } from "@components/pipeGenerator/UploadModel";
+import { InputData } from "@components/pipeGenerator/InputData";
+import { Rendering } from "@components/pipeGenerator/Rendering";
+import { Completed } from "@components/pipeGenerator/Completed";
 
 export const PipeGenerator = () => {
   const { t } = useTranslation();
@@ -23,25 +22,25 @@ export const PipeGenerator = () => {
   const menus = [
     {
       key: "takePhoto",
-      icon: CameraIcon,
+      icon: PhotoCameraIcon,
       component: <TakePhoto />,
       path: "/pipe-generator/take-photo",
     },
     {
       key: "uploadModel",
-      icon: ArrowUpTrayIcon,
+      icon: DriveFolderUploadIcon,
       component: <UploadModel />,
       path: "/pipe-generator/upload-model",
     },
     {
       key: "inputData",
-      icon: PencilIcon,
+      icon: KeyboardIcon,
       component: <InputData />,
       path: "/pipe-generator/input-data",
     },
     {
       key: "rendering",
-      icon: CubeIcon,
+      icon: ViewInArIcon,
       component: <Rendering />,
       path: "/pipe-generator/rendering",
     },
@@ -83,6 +82,7 @@ export const PipeGenerator = () => {
               const IconComponent = menu.icon;
               return (
                 <Tab
+                  key={menu.key}
                   id={index.toString()}
                   className="flex gap-2 items-center p-5 text-[16px] text-left text-gray-500 focus:outline-none rounded-xl bg-block data-[selected]:bg-white data-[selected]:text-gray-800 data-[hover]:bg-white/5 data-[selected]:data-[hover]:bg-gray-200"
                 >
@@ -95,7 +95,9 @@ export const PipeGenerator = () => {
           <TabPanels className="w-[800px] bg-white text-black rounded-e-lg">
             {menus.map((menu, index) => {
               return (
-                <TabPanel id={index.toString()}>{menu.component}</TabPanel>
+                <TabPanel key={menu.key} id={index.toString()}>
+                  {menu.component}
+                </TabPanel>
               );
             })}
           </TabPanels>

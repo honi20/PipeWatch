@@ -28,6 +28,7 @@ export default {
       },
       block: "#313F4F",
       warn: "#FF5353",
+      warnBackground: "#F1CCCC",
       success: "#499B50",
       button: {
         stroke: "#3D444D",

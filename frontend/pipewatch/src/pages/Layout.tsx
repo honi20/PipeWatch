@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 import { Outlet, useLocation } from "react-router-dom";
 
-import { Header } from "../components/common/Header";
+import { Header } from "@components/common/Header";
 
 function Layout() {
   const [theme, setTheme] = useState("light");
