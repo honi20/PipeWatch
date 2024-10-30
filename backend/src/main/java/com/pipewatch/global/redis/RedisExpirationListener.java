@@ -23,16 +23,22 @@ public class RedisExpirationListener implements MessageListener {
 	public void onMessage(Message message, byte[] pattern) {
 		String expiredKey = message.toString();
 
-		// "verifyToken:"으로 시작하는 키가 만료될 때 유저 삭제
+		// "verify_:"으로 시작하는 키가 만료될 때 유저 삭제
 		if (expiredKey.startsWith("verify_")) {
-			String token = expiredKey.split("_")[1];
-			String email = redisUtil.getDataByToken(token);
+			String email = expiredKey.split("_", 2)[1];
 
+			// 이메일을 이용하여 사용자와 관련된 정보 조회 및 삭제
 			User user = userRepository.findByEmail(email);
-			EmployeeInfo employeeInfo = employeeRepository.findByUserId(user.getId());
-
-			employeeRepository.delete(employeeInfo);
-			userRepository.delete(user);
+			if (user != null) {
+				EmployeeInfo employeeInfo = employeeRepository.findByUserId(user.getId());
+				if (employeeInfo != null) {
+					employeeRepository.delete(employeeInfo);
+				}
+				userRepository.delete(user);
+				log.info("User and associated EmployeeInfo for email {} have been deleted due to expired verification token.", email);
+			} else {
+				log.warn("User with email {} not found for deletion.", email);
+			}
 		}
 	}
 }
