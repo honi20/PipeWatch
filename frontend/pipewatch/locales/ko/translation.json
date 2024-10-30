@@ -214,5 +214,28 @@
         "viewModel": "모델 보기"
       }
     }
+  },
+  "contact": {
+    "card": {
+      "title": "Contact Us",
+      "subtitle": "입력하신 담당자 이메일로<br/>기업 등록 안내 메일이 발송됩니다.",
+      "companyName": "기업명",
+      "industry": "산업",
+      "contactEmail": "담당자 이메일",
+      "contactPhoneNumber": "담당자 전화번호 (010-0000-0000)",
+      "button": "기업 등록",
+      "error": "입력을 확인해주세요."
+    },
+    "industryList": {
+      "manufacturing": "제조업",
+      "electricity": "전기, 가스, 증기 및 공기 조절 공급업",
+      "construction": "건설업",
+      "science": "과학 및 기술 서비스업",
+      "other": "기타"
+    },
+    "footer": {
+      "instructions": "사전 컨택 및 가입 관련 사항은 영업팀에 문의하세요.",
+      "connectEmail": "이메일로 연결"
+    }
   }
 }

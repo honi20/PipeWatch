@@ -11,10 +11,10 @@ import { PipeGenerator } from "./pages/PipeGenerator";
 import { PipeViewer } from "./pages/PipeViewer";
 import { Contact } from "./pages/Contact";
 
-import { Account } from "./pages/Account/Account";
-import { LoginPage } from "./pages/Account/LoginPage";
-import { FindPassword } from "./pages/Account/FindPassword";
-import { SignUpPage } from "./pages/Account/SignUpPage";
+import { Account } from "./pages/account/Account";
+import { LoginPage } from "./pages/account/LoginPage";
+import { FindPassword } from "./pages/account/FindPassword";
+import { SignUpPage } from "./pages/account/SignUpPage";
 
 import { EmpVerification } from "./pages/EmpVerification";
 import { EmpView } from "./pages/EmpView";
