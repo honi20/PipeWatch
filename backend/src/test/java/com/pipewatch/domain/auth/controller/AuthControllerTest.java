@@ -488,7 +488,7 @@ class AuthControllerTest {
 
         String content = objectMapper.writeValueAsString(dto);
 
-        when(authService.registEnterprise(any(AuthRequest.EnterpriseRegistDto.class))).thenReturn(null);
+        doNothing().when(authService).registEnterprise(any(AuthRequest.EnterpriseRegistDto.class));
 
         ResultActions actions = mockMvc.perform(
                 post("/api/auth/enterprise")
