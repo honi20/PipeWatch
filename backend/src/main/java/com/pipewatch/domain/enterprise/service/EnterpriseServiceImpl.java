@@ -4,7 +4,10 @@ import com.pipewatch.domain.enterprise.model.dto.EnterpriseDto;
 import com.pipewatch.domain.enterprise.model.dto.EnterpriseResponse;
 import com.pipewatch.domain.enterprise.model.entity.Enterprise;
 import com.pipewatch.domain.enterprise.repository.EnterpriseRepository;
+import com.pipewatch.domain.user.model.entity.EmployeeInfo;
+import com.pipewatch.domain.user.model.entity.Role;
 import com.pipewatch.domain.user.model.entity.User;
+import com.pipewatch.domain.user.repository.EmployeeRepository;
 import com.pipewatch.domain.user.repository.UserRepository;
 import com.pipewatch.global.exception.BaseException;
 import com.pipewatch.global.jwt.service.JwtService;
@@ -22,13 +25,21 @@ public class EnterpriseServiceImpl implements EnterpriseService {
     private final JwtService jwtService;
     private final UserRepository userRepository;
     private final EnterpriseRepository enterpriseRepository;
+    private final EmployeeRepository employeeRepository;
 
     @Override
     public EnterpriseResponse.DetailDto getEnterpriseDetail() {
         Long userId = jwtService.getUserId(SecurityContextHolder.getContext());
         User user = userRepository.findById(userId).orElseThrow(() -> new BaseException(USER_NOT_FOUND));
 
-        Enterprise enterprise = enterpriseRepository.findByUserId(user.getId());
+        Enterprise enterprise = null;
+        if (user.getRole() == Role.ROLE_ENTERPRISE) {
+            enterprise = enterpriseRepository.findByUserId(user.getId());
+        }
+        else {
+            EmployeeInfo employeeInfo = employeeRepository.findByUserId(userId);
+            enterpriseRepository.findById(employeeInfo.getEnterprise().getId());
+        }
 
         if (enterprise == null) {
             throw new BaseException(ENTERPRISE_NOT_FOUND);
