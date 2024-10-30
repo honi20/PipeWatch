@@ -17,8 +17,8 @@ import static com.pipewatch.global.statusCode.SuccessCode.*;
 public class ManagementController {
 	@GetMapping("/waiting-list")
 	public ResponseEntity<?> waitingEmployeeList() {
-		ManagementResponse.EmployeeDto employee1 = new ManagementResponse.EmployeeDto(3L, "김싸피", "kim@ssafy.com", 112345L, "경영지원부", "대리", "사원");
-		ManagementResponse.EmployeeDto employee2 = new ManagementResponse.EmployeeDto(4L, "최싸피", "choi@ssafy.com", 116789L, "IT개발부", "팀장", "사원");
+		ManagementResponse.EmployeeDto employee1 = new ManagementResponse.EmployeeDto("abcdesfljsa", "김싸피", "kim@ssafy.com", 112345L, "경영지원부", "대리", "사원");
+		ManagementResponse.EmployeeDto employee2 = new ManagementResponse.EmployeeDto("abe2ksfnclk", "최싸피", "choi@ssafy.com", 116789L, "IT개발부", "팀장", "사원");
 		ManagementResponse.EmployeeWaitingListDto responseDto = ManagementResponse.EmployeeWaitingListDto.builder()
 				.employees(List.of(employee1, employee2))
 				.build();
@@ -28,8 +28,8 @@ public class ManagementController {
 
 	@GetMapping
 	public ResponseEntity<?> employeeList() {
-		ManagementResponse.EmployeeDto employee1 = new ManagementResponse.EmployeeDto(1L, "이싸피", "lee@ssafy.com", 121212L, "경영지원부", "사원", "사원");
-		ManagementResponse.EmployeeDto employee2 = new ManagementResponse.EmployeeDto(2L, "박싸피", "park@ssafy.com", 333333L, "IT개발부", "팀장", "관리자");
+		ManagementResponse.EmployeeDto employee1 = new ManagementResponse.EmployeeDto("qkepvmdfljsfj", "이싸피", "lee@ssafy.com", 121212L, "경영지원부", "사원", "사원");
+		ManagementResponse.EmployeeDto employee2 = new ManagementResponse.EmployeeDto("dlkjfwpcjlsdf", "박싸피", "park@ssafy.com", 333333L, "IT개발부", "팀장", "관리자");
 		ManagementResponse.EmployeeListDto responseDto = ManagementResponse.EmployeeListDto.builder()
 				.employees(List.of(employee1, employee2))
 				.build();
@@ -37,15 +37,15 @@ public class ManagementController {
 		return new ResponseEntity<>(ResponseDto.success(EMPLOYEE_LIST_OK, responseDto), HttpStatus.OK);
 	}
 
-	@PatchMapping("/{userId}")
-	public ResponseEntity<?> userRollModify(@PathVariable Long userId) {
+	@PatchMapping("/{userUuid}")
+	public ResponseEntity<?> userRollModify(@PathVariable String userUuid) {
 		return new ResponseEntity<>(ResponseDto.success(ROLL_MODIFIED_OK, null), HttpStatus.OK);
 	}
 
 	@GetMapping("/search")
 	public ResponseEntity<?> employeeDetail(@RequestParam(required = false) String keyword) {
-		ManagementResponse.EmployeeDto employee1 = new ManagementResponse.EmployeeDto(1L, "이싸피", "lee@ssafy.com", 121212L, "경영지원부", "사원", "사원");
-		ManagementResponse.EmployeeDto employee2 = new ManagementResponse.EmployeeDto(2L, "박싸피", "park@ssafy.com", 333333L, "IT개발부", "팀장", "관리자");
+		ManagementResponse.EmployeeDto employee1 = new ManagementResponse.EmployeeDto("qkepvmdfljsfj", "이싸피", "lee@ssafy.com", 121212L, "경영지원부", "사원", "사원");
+		ManagementResponse.EmployeeDto employee2 = new ManagementResponse.EmployeeDto("dlkjfwpcjlsdf", "박싸피", "park@ssafy.com", 333333L, "IT개발부", "팀장", "관리자");
 		ManagementResponse.EmployeeSearchDto responseDto = ManagementResponse.EmployeeSearchDto.builder()
 				.employees(List.of(employee1, employee2))
 				.build();

@@ -1,36 +1,46 @@
 package com.pipewatch.domain.user.model.entity;
 
-import com.pipewatch.domain.enterprise.model.entity.Enterprise;
 import com.pipewatch.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 @Entity
+@Getter
 @SuperBuilder
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class User extends BaseEntity {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private Long id;
 
     @Email
+    @NotNull
+    @Column(unique=true)
     private String email;
 
+    @NotNull
     private String password;
 
+    @NotNull
     private String name;
 
-    private State state;
+    @NotNull
+    @Builder.Default
+    private State state = State.PENDING;
 
-    private Role role;
+    @NotNull
+    @Builder.Default
+    private Role role = Role.ROLE_EMPLOYEE;
 
-    @ManyToOne(fetch= FetchType.LAZY)
-    @JoinColumn(name = "enterprise_id")
-    private Enterprise enterprise;
+    @NotNull
+    private String uuid;
+
+    public void updateState(State state) {
+        this.state = state;
+    }
 }

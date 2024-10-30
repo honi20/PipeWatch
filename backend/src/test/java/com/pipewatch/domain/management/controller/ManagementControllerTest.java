@@ -67,7 +67,7 @@ class ManagementControllerTest {
 								.responseFields(
 										getCommonResponseFields(
 												fieldWithPath("body.employees[]").type(JsonFieldType.ARRAY).description("승인대기 중인 직원 리스트"),
-												fieldWithPath("body.employees[].userId").type(JsonFieldType.NUMBER).description("직원 ID"),
+												fieldWithPath("body.employees[].uuid").type(JsonFieldType.STRING).description("직원 UUID"),
 												fieldWithPath("body.employees[].name").type(JsonFieldType.STRING).description("직원 이름"),
 												fieldWithPath("body.employees[].email").type(JsonFieldType.STRING).description("직원 이메일"),
 												fieldWithPath("body.employees[].empNo").type(JsonFieldType.NUMBER).description("직원 사번"),
@@ -104,7 +104,7 @@ class ManagementControllerTest {
 								.responseFields(
 										getCommonResponseFields(
 												fieldWithPath("body.employees[]").type(JsonFieldType.ARRAY).description("직원 리스트"),
-												fieldWithPath("body.employees[].userId").type(JsonFieldType.NUMBER).description("직원 ID"),
+												fieldWithPath("body.employees[].uuid").type(JsonFieldType.STRING).description("직원 UUID"),
 												fieldWithPath("body.employees[].name").type(JsonFieldType.STRING).description("직원 이름"),
 												fieldWithPath("body.employees[].email").type(JsonFieldType.STRING).description("직원 이메일"),
 												fieldWithPath("body.employees[].empNo").type(JsonFieldType.NUMBER).description("직원 사번"),
@@ -127,7 +127,7 @@ class ManagementControllerTest {
 		String content = objectMapper.writeValueAsString(dto);
 
 		ResultActions actions = mockMvc.perform(
-				patch("/api/management/{userId}", 1L)
+				patch("/api/management/{userUuid}", "ab23cde")
 						.content(content)
 						.contentType(MediaType.APPLICATION_JSON)
 						.accept(MediaType.APPLICATION_JSON)
@@ -147,7 +147,7 @@ class ManagementControllerTest {
 								.tag("Management API")
 								.summary("접근 권한 변경 API")
 								.pathParameters(
-										parameterWithName("userId").description("유저 Id")
+										parameterWithName("userUuid").description("유저 UUID")
 								)
 								.requestFields(
 										fieldWithPath("newRoll").type(JsonFieldType.STRING).description("새 역할")
@@ -188,7 +188,7 @@ class ManagementControllerTest {
 								.responseFields(
 										getCommonResponseFields(
 												fieldWithPath("body.employees[]").type(JsonFieldType.ARRAY).description("직원 리스트"),
-												fieldWithPath("body.employees[].userId").type(JsonFieldType.NUMBER).description("직원 ID"),
+												fieldWithPath("body.employees[].uuid").type(JsonFieldType.STRING).description("직원 UUID"),
 												fieldWithPath("body.employees[].name").type(JsonFieldType.STRING).description("직원 이름"),
 												fieldWithPath("body.employees[].email").type(JsonFieldType.STRING).description("직원 이메일"),
 												fieldWithPath("body.employees[].empNo").type(JsonFieldType.NUMBER).description("직원 사번"),

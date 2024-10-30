@@ -1,5 +1,6 @@
 package com.pipewatch.global.config;
 
+import com.pipewatch.global.jwt.filter.JwtBearerAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,6 +11,7 @@ import org.springframework.security.config.annotation.web.configurers.HeadersCon
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.CorsUtils;
@@ -23,24 +25,29 @@ import java.util.List;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
+	private final JwtBearerAuthenticationFilter jwtBearerAuthenticationFilter;
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(AbstractHttpConfigurer::disable)
-                .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-                .formLogin(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-                        // [TODO] 추후 api 제한
-                        .requestMatchers("/error", "/actuator/**").permitAll()
-                        .requestMatchers("**").permitAll()
-                        .anyRequest().authenticated()
-                )
-        ;
+	@Bean
+	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+		http.csrf(AbstractHttpConfigurer::disable)
+				.headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
+				.cors(cors -> cors.configurationSource(corsConfigurationSource()))
+				.formLogin(AbstractHttpConfigurer::disable)
+				.authorizeHttpRequests(auth -> auth
+						.requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
+						.requestMatchers(
+								"/error", "/actuator/**",
+								"/api/auth/enterprise", "/api/auth", "/auth/users/signin",
+								"/api/auth/send-email-code", "/api/auth/verify-email-code",
+								"/docs/**", "/swagger-ui/**", "/v3-docs/**", "/h2-console/**").permitAll()
+						.anyRequest().authenticated()
+				)
+		;
 
-        return http.build();
-    }
+		http.addFilterBefore(jwtBearerAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
+		return http.build();
+	}
 
     @Bean
     public WebMvcConfigurer corsConfigurer() {
