@@ -4,6 +4,7 @@ import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.epages.restdocs.apispec.Schema;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pipewatch.domain.auth.model.dto.AuthRequest;
+import com.pipewatch.domain.auth.model.dto.AuthResponse;
 import com.pipewatch.domain.auth.service.AuthService;
 import com.pipewatch.global.exception.BaseException;
 import io.swagger.v3.core.util.Json;
@@ -68,7 +69,11 @@ class AuthControllerTest {
 
         String content = objectMapper.writeValueAsString(dto);
 
-        doNothing().when(authService).signup(any(AuthRequest.SignupDto.class));
+        AuthResponse.AccessTokenDto response = AuthResponse.AccessTokenDto.builder()
+                .accessToken("sampleAccessToken")
+                .build();
+
+        when(authService.signup(any(AuthRequest.SignupDto.class))).thenReturn(String.valueOf(response));
 
         ResultActions actions = mockMvc.perform(
                 post("/api/auth")
