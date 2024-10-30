@@ -47,9 +47,9 @@ public class AuthController {
 
     @PostMapping("/enterprise")
     public ResponseEntity<?> enterpriseAdd(@RequestBody AuthRequest.EnterpriseRegistDto requestDto) throws NoSuchAlgorithmException {
-        AuthResponse.EnterpriseAccountDto responseDto = authService.registEnterprise(requestDto);
+        authService.registEnterprise(requestDto);
 
-        return new ResponseEntity<>(ResponseDto.success(ENTERPRISE_CREATED, responseDto), HttpStatus.CREATED);
+        return new ResponseEntity<>(ResponseDto.success(ENTERPRISE_CREATED, null), HttpStatus.CREATED);
     }
 
     @PostMapping("/signin")

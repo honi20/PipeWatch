@@ -488,12 +488,7 @@ class AuthControllerTest {
 
         String content = objectMapper.writeValueAsString(dto);
 
-        AuthResponse.EnterpriseAccountDto response = AuthResponse.EnterpriseAccountDto.builder()
-                .email("pipewatch_admin@paori.com")
-                .password("pipewatch1234")
-                .build();
-
-        when(authService.registEnterprise(any(AuthRequest.EnterpriseRegistDto.class))).thenReturn(response);
+        when(authService.registEnterprise(any(AuthRequest.EnterpriseRegistDto.class))).thenReturn(null);
 
         ResultActions actions = mockMvc.perform(
                 post("/api/auth/enterprise")
@@ -523,8 +518,7 @@ class AuthControllerTest {
                                 )
                                 .responseFields(
                                         getCommonResponseFields(
-                                                fieldWithPath("body.email").type(JsonFieldType.STRING).description("기업 대표 계정 이메일"),
-                                                fieldWithPath("body.password").type(JsonFieldType.STRING).description("기업 대표 계정 비밀번호")
+                                                fieldWithPath("body").ignored()
                                         )
                                 )
                                 .requestSchema(Schema.schema("기업 등록 Request"))

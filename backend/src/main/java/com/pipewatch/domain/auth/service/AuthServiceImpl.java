@@ -145,7 +145,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     @Transactional
-    public AuthResponse.EnterpriseAccountDto registEnterprise(AuthRequest.EnterpriseRegistDto requestDto) throws NoSuchAlgorithmException {
+    public void registEnterprise(AuthRequest.EnterpriseRegistDto requestDto) throws NoSuchAlgorithmException {
         String email = "pipewatch_admin@" + getEmailDomain(requestDto.getManagerEmail());
         String password = "pipewatch" + generateRandomNumber();
         String passwordEncode = passwordEncoder.encode(password);
@@ -173,11 +173,6 @@ public class AuthServiceImpl implements AuthService {
 
         // 메일 전송
         mailService.sendEnterpriseAccountEmail(requestDto.getManagerEmail(), email, password);
-
-        return AuthResponse.EnterpriseAccountDto.builder()
-                .email(email)
-                .password(password)
-                .build();
     }
 
     private String generateRandomNumber() throws NoSuchAlgorithmException {
