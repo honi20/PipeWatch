@@ -294,7 +294,7 @@ class AuthControllerTest {
                 .accessToken("sampleAccessToken")
                 .build();
 
-        when(authService.signup(any(AuthRequest.SignupDto.class))).thenReturn(String.valueOf(response));
+        when(authService.signup(any(AuthRequest.SignupDto.class))).thenReturn(response);
 
         ResultActions actions = mockMvc.perform(
                 post("/api/auth")
@@ -576,11 +576,17 @@ class AuthControllerTest {
     @Test
     void 로그인_성공() throws Exception {
         AuthRequest.SigninDto dto = AuthRequest.SigninDto.builder()
-                .email("kim@ssafy.com")
-                .password("ssafy1234")
+                .email("test@ssafy.com")
+                .password("$2a$10$W9WYGcUhi6E2NxqnofecW.DEsMkr42YiOSM8Ou/UEQZsMD3WHL8uy")
                 .build();
 
         String content = objectMapper.writeValueAsString(dto);
+
+        AuthResponse.AccessTokenDto response = AuthResponse.AccessTokenDto.builder()
+                .accessToken("sampleAccessToken")
+                .build();
+
+        when(authService.signin(any(AuthRequest.SigninDto.class))).thenReturn(response);
 
         ResultActions actions = mockMvc.perform(
                 post("/api/auth/signin")
@@ -603,17 +609,99 @@ class AuthControllerTest {
                                 .tag("Auth API")
                                 .summary("로그인 API")
                                 .requestFields(
-                                        fieldWithPath("email").description("이메일"),
-                                        fieldWithPath("password").description("비밀번호")
+                                        fieldWithPath("email").type(JsonFieldType.STRING).description("이메일"),
+                                        fieldWithPath("password").type(JsonFieldType.STRING).description("비밀번호")
                                 )
                                 .responseFields(
                                         getCommonResponseFields(
-                                                fieldWithPath("body").ignored()
+                                                fieldWithPath("body.accessToken").type(JsonFieldType.STRING).description("access token")
                                         )
                                 )
                                 .requestSchema(Schema.schema("로그인 Request"))
                                 .build()
                         )));
+    }
+
+    @Test
+    void 로그인_실패_존재하지_않는_이메일() throws Exception {
+        AuthRequest.SigninDto dto = AuthRequest.SigninDto.builder()
+                .email("nouser@ssafy.com")
+                .password("$2a$10$W9WYGcUhi6E2NxqnofecW.DEsMkr42YiOSM8Ou/UEQZsMD3WHL8uy")
+                .build();
+
+        String content = objectMapper.writeValueAsString(dto);
+
+        doThrow(new BaseException(EMAIL_NOT_FOUND)).when(authService).signin(any(AuthRequest.SigninDto.class));
+
+        ResultActions actions = mockMvc.perform(
+                multipart("/api/auth/signin")
+                        .content(content)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8")
+                        .with(csrf())
+        );
+
+        actions
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.header.httpStatusCode").value(EMAIL_NOT_FOUND.getHttpStatusCode()))
+                .andExpect(jsonPath("$.header.message").value(EMAIL_NOT_FOUND.getMessage()))
+                .andDo(document(
+                        "로그인 실패 - 존재하지 않는 이메일",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        resource(ResourceSnippetParameters.builder()
+                                .tag("Auth API")
+                                .responseFields(
+                                        getCommonResponseFields(
+                                                fieldWithPath("body").type(JsonFieldType.OBJECT).description("에러 상세").optional().ignored()
+                                        )
+                                )
+                                .responseSchema(Schema.schema("Error Response"))
+                                .build()
+                        ))
+                );
+    }
+
+    @Test
+    void 로그인_실패_잘못된_비밀번호() throws Exception {
+        AuthRequest.SigninDto dto = AuthRequest.SigninDto.builder()
+                .email("test@ssafy.com")
+                .password("invalidPassword")
+                .build();
+
+        String content = objectMapper.writeValueAsString(dto);
+
+        doThrow(new BaseException(INVALID_PASSWORD)).when(authService).signin(any(AuthRequest.SigninDto.class));
+
+        ResultActions actions = mockMvc.perform(
+                multipart("/api/auth/signin")
+                        .content(content)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8")
+                        .with(csrf())
+        );
+
+        actions
+                .andExpect(status().isForbidden())
+                .andExpect(jsonPath("$.header.httpStatusCode").value(INVALID_PASSWORD.getHttpStatusCode()))
+                .andExpect(jsonPath("$.header.message").value(INVALID_PASSWORD.getMessage()))
+                .andDo(document(
+                        "로그인 실패 - 잘못된 비밀번호",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        resource(ResourceSnippetParameters.builder()
+                                .tag("Auth API")
+                                .responseFields(
+                                        getCommonResponseFields(
+                                                fieldWithPath("body").type(JsonFieldType.OBJECT).description("에러 상세").optional().ignored()
+                                        )
+                                )
+                                .responseSchema(Schema.schema("Error Response"))
+                                .build()
+                        ))
+                );
     }
 
     @Test

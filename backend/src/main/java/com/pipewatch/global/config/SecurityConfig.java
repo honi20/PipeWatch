@@ -37,7 +37,7 @@ public class SecurityConfig {
 						.requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
 						.requestMatchers(
 								"/error", "/actuator/**",
-								"/api/auth/enterprise", "/api/auth", "/auth/users/signin",
+								"/api/auth/enterprise", "/api/auth", "/api/auth/signin",
 								"/api/auth/send-email-code", "/api/auth/verify-email-code",
 								"/docs/**", "/swagger-ui/**", "/v3-docs/**", "/h2-console/**").permitAll()
 						.anyRequest().authenticated()
