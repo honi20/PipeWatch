@@ -24,19 +24,28 @@ public class MailService {
 
     private static final String senderEmail= "paoripipe@gmail.com";
 
-    public MimeMessage createVerifyMail(String email, String verify){
+    public MimeMessage createVerifyMail(String email, String verify) {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
 
-        try{
+        try {
             mimeMessage.setFrom(senderEmail);
             mimeMessage.setRecipients(MimeMessage.RecipientType.TO, email);
             mimeMessage.setSubject("PipeWatch 이메일 인증");
+
             String body = "";
-            body += "<h3>" + "요청하신 인증 번호입니다." + "</h3>";
-            body += "<h1>" + verify + "</h1>";
-            body += "<h3>" + "감사합니다." + "</h3>";
-            mimeMessage.setText(body,"UTF-8", "html");
-        }catch (MessagingException e){
+            body += "<div style='border: 2px solid black; padding: 20px; max-width: 600px; margin: auto;'>";
+            body += "<h2 style='text-align: center;'>이메일 인증 코드</h2>";
+            body += "<div style='background-color: #f0f0f0; padding: 20px; text-align: center;'>";
+            body += "<h3>요청하신 인증 코드입니다.</h3>";
+            body += "<p style='font-size: 24px; font-weight: bold;'>" + verify + "</p>";
+            body += "</div>";
+            body += "<div style='text-align: center; margin-top: 20px;'>";
+            body += "<p>감사합니다.</p>";
+            body += "</div>";
+            body += "</div>";
+
+            mimeMessage.setText(body, "UTF-8", "html");
+        } catch (MessagingException e) {
             throw new BaseException(MAIL_SEND_FAILURE);
         }
 
@@ -50,20 +59,29 @@ public class MailService {
         return verify;
     }
 
-    public MimeMessage createEnterpriseAccountMail(String managerEmail, String email, String password){
+    public MimeMessage createEnterpriseAccountMail(String managerEmail, String email, String password) {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
 
-        try{
+        try {
             mimeMessage.setFrom(senderEmail);
             mimeMessage.setRecipients(MimeMessage.RecipientType.TO, managerEmail);
-            mimeMessage.setSubject("PipeWatch 기업 등록");
+            mimeMessage.setSubject("PipeWatch 기업 등록 안내");
+
             String body = "";
-            body += "<h3>" + "기업 대표 계정입니다." + "</h3>";
-            body += "<h1>email : " + email + "</h1>";
-            body += "<h1>password : " + password + "</h1>";
-            body += "<h3>" + "감사합니다." + "</h3>";
-            mimeMessage.setText(body,"UTF-8", "html");
-        }catch (MessagingException e){
+            body += "<div style='border: 2px solid black; padding: 20px; max-width: 600px; margin: auto;'>";
+            body += "<h2 style='text-align: center;'>기업 등록 안내 메일</h2>";
+            body += "<div style='background-color: #f0f0f0; padding: 20px; text-align: center;'>";
+            body += "<h3>관리자 계정</h3>";
+            body += "<p><strong>EMAIL :</strong> " + email + "</p>";
+            body += "<p><strong>PW :</strong> " + password + "</p>";
+            body += "</div>";
+            body += "<div style='text-align: center; margin-top: 20px;'>";
+            body += "<a href='http://localhost:5173' style='display: inline-block; padding: 10px 20px; background-color: #f0f0f0; color: black; text-decoration: none; border-radius: 5px;'>PAORI 사이트로 이동</a>";
+            body += "</div>";
+            body += "</div>";
+
+            mimeMessage.setText(body, "UTF-8", "html");
+        } catch (MessagingException e) {
             throw new BaseException(MAIL_SEND_FAILURE);
         }
 
