@@ -20,6 +20,7 @@ export default {
         500: "#245795",
       },
       white: "#EDEDED",
+      whiteBox: "#FFFFFF",
       black: "#141414",
       gray: {
         200: "#D9D9D9",
@@ -34,7 +35,7 @@ export default {
         stroke: "#3D444D",
         background: "#151B23",
       },
-      transparent: "transparent"
+      transparent: "transparent",
     },
   },
   plugins: [],

@@ -61,17 +61,17 @@ export const PipeGenerator = () => {
   };
 
   return (
-    <div className="h-full">
+    <>
       <div className="mx-6">
         <h2 className="font-bold text-[40px]">{t("pipeGenerator.title")}</h2>
         <p className="text-[24px]">{t("pipeGenerator.description")}</p>
       </div>
 
-      <div className="flex items-center justify-center my-10 ">
+      <div className="flex items-center justify-center h-[640px] my-10 ">
         <TabGroup
           selectedIndex={activeIndex}
           onChange={(index) => handleTabClick(menus[index].path)}
-          className="flex h-[640px] rounded-lg shadow-lg shadow-gray-500 dark:shadow-none"
+          className="flex h-full rounded-lg shadow-lg shadow-gray-500 dark:shadow-none"
         >
           <TabList className="flex flex-col w-[300px] bg-block p-8 rounded-s-lg">
             <div className="py-3 text-[16px] text-white ">
@@ -92,10 +92,14 @@ export const PipeGenerator = () => {
               );
             })}
           </TabList>
-          <TabPanels className="w-[800px] bg-white text-black rounded-e-lg">
+          <TabPanels className="w-[800px] h-full bg-white text-black rounded-e-lg">
             {menus.map((menu, index) => {
               return (
-                <TabPanel key={menu.key} id={index.toString()}>
+                <TabPanel
+                  className="h-full"
+                  key={menu.key}
+                  id={index.toString()}
+                >
                   {menu.component}
                 </TabPanel>
               );
@@ -103,6 +107,6 @@ export const PipeGenerator = () => {
           </TabPanels>
         </TabGroup>
       </div>
-    </div>
+    </>
   );
 };
