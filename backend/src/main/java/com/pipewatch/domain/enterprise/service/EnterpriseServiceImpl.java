@@ -32,13 +32,13 @@ public class EnterpriseServiceImpl implements EnterpriseService {
         Long userId = jwtService.getUserId(SecurityContextHolder.getContext());
         User user = userRepository.findById(userId).orElseThrow(() -> new BaseException(USER_NOT_FOUND));
 
-        Enterprise enterprise = null;
+        Enterprise enterprise;
         if (user.getRole() == Role.ROLE_ENTERPRISE) {
             enterprise = enterpriseRepository.findByUserId(user.getId());
         }
         else {
             EmployeeInfo employeeInfo = employeeRepository.findByUserId(userId);
-            enterpriseRepository.findById(employeeInfo.getEnterprise().getId());
+            enterprise = enterpriseRepository.findById(employeeInfo.getEnterprise().getId()).get();
         }
 
         if (enterprise == null) {
