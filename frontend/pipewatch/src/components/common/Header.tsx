@@ -9,8 +9,8 @@ import {
 } from "@headlessui/react";
 
 import { useTranslation } from "react-i18next";
-import LogoHeaderDark from "../../assets/images/logo_header_dark.png";
-import LogoHeaderLight from "../../assets/images/logo_header_light.png";
+import LogoHeaderDark from "@assets/images/logo_header_dark.png";
+import LogoHeaderLight from "@assets/images/logo_header_light.png";
 
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import LightModeIcon from "@mui/icons-material/LightMode";

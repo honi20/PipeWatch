@@ -28,6 +28,10 @@ export default {
       },
       block: "#313F4F",
       warn: "#FF5353",
+      warnTheme: {
+        background: "#F1CCCC",
+        200: "#FF7878",
+      },
       success: "#499B50",
       button: {
         stroke: "#3D444D",

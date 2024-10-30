@@ -1,4 +1,3 @@
-import { Button } from "@headlessui/react";
 import { ReactNode } from "react";
 
 interface Props {
@@ -17,12 +16,12 @@ export const IconButton = ({
   icon,
 }: Props) => {
   return (
-    <Button
+    <button
       onClick={handleClick}
-      className={`flex items-center justify-center gap-2 rounded-[30px] bg-${color} py-[16px] px-[16px] text-sm text-white data-[hover]:bg-${hoverColor}`}
+      className={`focus:outline-none my-4 flex items-center justify-center gap-2 rounded-[30px] ${color} py-[16px] px-[16px] text-sm text-white ${hoverColor}`}
     >
       {icon}
       <div className="text-[16px]">{text}</div>
-    </Button>
+    </button>
   );
 };
