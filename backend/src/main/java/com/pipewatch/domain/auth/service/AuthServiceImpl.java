@@ -223,7 +223,7 @@ public class AuthServiceImpl implements AuthService {
         if (domain.equals("gmail.com") || domain.equals("naver.com")) {
             return false;
         }
-        return false;
+        return true;
     }
 
     private String generateRandomNumber() throws NoSuchAlgorithmException {
