@@ -3,6 +3,9 @@ package com.pipewatch.domain.enterprise.controller;
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.epages.restdocs.apispec.Schema;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.pipewatch.domain.auth.model.dto.AuthRequest;
+import com.pipewatch.domain.enterprise.model.dto.EnterpriseResponse;
+import com.pipewatch.domain.enterprise.service.EnterpriseService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -10,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.payload.JsonFieldType;
@@ -22,6 +26,8 @@ import static com.pipewatch.domain.util.ResponseFieldUtil.getCommonResponseField
 import static com.pipewatch.global.statusCode.SuccessCode.ENTERPRISE_DETAIL_OK;
 import static com.pipewatch.global.statusCode.SuccessCode.MYPAGE_DETAIL_OK;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
@@ -43,8 +49,20 @@ class EnterpriseControllerTest {
 	@Autowired
 	private ObjectMapper objectMapper;
 
+	@MockBean
+	private EnterpriseService enterpriseService;
+
 	@Test
 	void 기업정보_조회_성공() throws Exception {
+		EnterpriseResponse.DetailDto response = EnterpriseResponse.DetailDto.builder()
+				.name("paori")
+				.industry("제조업")
+				.managerEmail("admin@paori.com")
+				.managerPhoneNumber("010-1234-5678")
+				.build();
+
+		when(enterpriseService.detailEnterprise()).thenReturn(response);
+
 		ResultActions actions = mockMvc.perform(
 				get("/api/enterprises")
 						.contentType(MediaType.APPLICATION_JSON)
