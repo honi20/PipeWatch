@@ -7,6 +7,9 @@ import com.pipewatch.domain.auth.model.dto.AuthRequest;
 import com.pipewatch.domain.auth.model.dto.AuthResponse;
 import com.pipewatch.domain.auth.service.AuthService;
 import com.pipewatch.global.exception.BaseException;
+import com.pipewatch.global.jwt.entity.JwtToken;
+import com.pipewatch.global.mail.MailService;
+import com.pipewatch.global.redis.RedisUtil;
 import io.swagger.v3.core.util.Json;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -29,6 +32,7 @@ import static com.pipewatch.domain.util.ResponseFieldUtil.getCommonResponseField
 import static com.pipewatch.global.statusCode.ErrorCode.*;
 import static com.pipewatch.global.statusCode.SuccessCode.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
@@ -55,6 +59,182 @@ class AuthControllerTest {
     @MockBean
     private AuthService authService;
 
+
+    @MockBean
+    private RedisUtil redisUtil;
+
+    @MockBean
+    private MailService mailService;
+
+    @Test
+    void 인증코드_전송_성공() throws Exception {
+        AuthRequest.EmailCodeSendDto dto = AuthRequest.EmailCodeSendDto.builder()
+                .email("paori@ssafy.com")
+                .build();
+
+        String content = objectMapper.writeValueAsString(dto);
+
+        given(mailService.sendVerifyEmail(dto.getEmail())).willReturn("239123");
+
+        ResultActions actions = mockMvc.perform(
+                post("/api/auth/send-email-code")
+                        .content(content)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8")
+                        .with(csrf())
+        );
+
+        actions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.header.httpStatusCode").value(EMAIL_CODE_SEND_OK.getHttpStatusCode()))
+                .andExpect(jsonPath("$.header.message").value(EMAIL_CODE_SEND_OK.getMessage()))
+                .andDo(document(
+                        "이메일 인증코드 전송 성공",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        resource(ResourceSnippetParameters.builder()
+                                .tag("Auth API")
+                                .summary("이메일 인증코드 전송 API")
+                                .requestFields(
+                                        fieldWithPath("email").description("이메일")
+                                )
+                                .responseFields(
+                                        getCommonResponseFields(
+                                                fieldWithPath("body").ignored()
+                                        )
+                                )
+                                .requestSchema(Schema.schema("이메일 인증코드 전송 Request"))
+                                .build()
+                        )));
+    }
+
+    @Test
+    void 인증코드_전송_실패_중복된_이메일() throws Exception {
+        AuthRequest.EmailCodeSendDto dto = AuthRequest.EmailCodeSendDto.builder()
+                .email("test@ssafy.com")
+                .build();
+
+        String content = objectMapper.writeValueAsString(dto);
+
+        doThrow(new BaseException(DUPLICATED_EMAIL)).when(authService).sendEmailCode(any(AuthRequest.EmailCodeSendDto.class));
+
+        ResultActions actions = mockMvc.perform(
+                post("/api/auth/send-email-code")
+                        .content(content)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8")
+                        .with(csrf())
+        );
+
+        actions
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.header.httpStatusCode").value(DUPLICATED_EMAIL.getHttpStatusCode()))
+                .andExpect(jsonPath("$.header.message").value(DUPLICATED_EMAIL.getMessage()))
+                .andDo(document(
+                        "이메일 인증코드 전송 실패 - 이미 등록된 이메일",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        resource(ResourceSnippetParameters.builder()
+                                .tag("Auth API")
+                                .responseFields(
+                                        getCommonResponseFields(
+                                                fieldWithPath("body").type(JsonFieldType.OBJECT).description("에러 상세").optional().ignored()
+                                        )
+                                )
+                                .responseSchema(Schema.schema("Error Response"))
+                                .build()
+                        )));
+    }
+
+    @Test
+    void 인증코드_확인_성공() throws Exception {
+        AuthRequest.EmailCodeVerifyDto dto = AuthRequest.EmailCodeVerifyDto.builder()
+                .email("paori@ssafy.com")
+                .verifyCode("239123")
+                .build();
+
+        String content = objectMapper.writeValueAsString(dto);
+
+        given(redisUtil.getData(dto.getEmail() + "_verify")).willReturn(new JwtToken(null, null, null, "239123"));
+
+        ResultActions actions = mockMvc.perform(
+                post("/api/auth/verify-email-code")
+                        .content(content)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8")
+                        .with(csrf())
+        );
+
+        actions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.header.httpStatusCode").value(EMAIL_VERIFIED.getHttpStatusCode()))
+                .andExpect(jsonPath("$.header.message").value(EMAIL_VERIFIED.getMessage()))
+                .andDo(document(
+                        "이메일 인증코드 확인 성공",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        resource(ResourceSnippetParameters.builder()
+                                .tag("Auth API")
+                                .summary("이메일 인증코드 확인 API")
+                                .requestFields(
+                                        fieldWithPath("email").description("이메일"),
+                                        fieldWithPath("verifyCode").description("인증코드")
+                                )
+                                .responseFields(
+                                        getCommonResponseFields(
+                                                fieldWithPath("body").ignored()
+                                        )
+                                )
+                                .requestSchema(Schema.schema("이메일 인증코드 확인 Request"))
+                                .build()
+                        )));
+    }
+
+    @Test
+    void 인증코드_확인_실패_잘못된_인증코드() throws Exception {
+        AuthRequest.EmailCodeVerifyDto dto = AuthRequest.EmailCodeVerifyDto.builder()
+                .email("paori@ssafy.com")
+                .verifyCode("999999")
+                .build();
+
+        String content = objectMapper.writeValueAsString(dto);
+
+        given(redisUtil.getData(dto.getEmail() + "_verify")).willReturn(new JwtToken(null, null, null, "239123"));
+
+        doThrow(new BaseException(INVALID_EMAIL_CODE)).when(authService).verifyEmailCode(any(AuthRequest.EmailCodeVerifyDto.class));
+
+        ResultActions actions = mockMvc.perform(
+                post("/api/auth/verify-email-code")
+                        .content(content)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8")
+                        .with(csrf())
+        );
+
+        actions
+                .andExpect(status().isForbidden())
+                .andExpect(jsonPath("$.header.httpStatusCode").value(INVALID_EMAIL_CODE.getHttpStatusCode()))
+                .andExpect(jsonPath("$.header.message").value(INVALID_EMAIL_CODE.getMessage()))
+                .andDo(document(
+                        "이메일 인증코드 확인 실패 - 잘못된 이메일 인증코드",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        resource(ResourceSnippetParameters.builder()
+                                .tag("Auth API")
+                                .responseFields(
+                                        getCommonResponseFields(
+                                                fieldWithPath("body").type(JsonFieldType.OBJECT).description("에러 상세").optional().ignored()
+                                        )
+                                )
+                                .responseSchema(Schema.schema("Error Response"))
+                                .build()
+                        )));
+    }
+
     @Test
     void 회원가입_성공() throws Exception {
         AuthRequest.SignupDto dto = AuthRequest.SignupDto.builder()
@@ -65,6 +245,7 @@ class AuthControllerTest {
                 .empNo(1123456L)
                 .department("경영지원부")
                 .empClass("사원")
+                .verifyCode("sampleCode")
                 .build();
 
         String content = objectMapper.writeValueAsString(dto);
@@ -102,7 +283,8 @@ class AuthControllerTest {
                                         fieldWithPath("enterpriseId").type(JsonFieldType.NUMBER).description("기업 번호"),
                                         fieldWithPath("empNo").type(JsonFieldType.NUMBER).description("사번"),
                                         fieldWithPath("department").type(JsonFieldType.STRING).description("부서"),
-                                        fieldWithPath("empClass").type(JsonFieldType.STRING).description("직급")
+                                        fieldWithPath("empClass").type(JsonFieldType.STRING).description("직급"),
+                                        fieldWithPath("verifyCode").type(JsonFieldType.STRING).description("이메일 인증 코드")
                                 )
                                 .responseFields(
                                         getCommonResponseFields(
@@ -124,6 +306,7 @@ class AuthControllerTest {
                 .empNo(1123456L)
                 .department("경영지원부")
                 .empClass("사원")
+                .verifyCode("sampleCode")
                 .build();
 
         String content = objectMapper.writeValueAsString(dto);
@@ -170,6 +353,7 @@ class AuthControllerTest {
                 .empNo(1123456L)
                 .department("경영지원부")
                 .empClass("사원")
+                .verifyCode("sampleCode")
                 .build();
 
         String content = objectMapper.writeValueAsString(dto);
@@ -216,6 +400,7 @@ class AuthControllerTest {
                 .empNo(1123456L)
                 .department("경영지원부")
                 .empClass("사원")
+                .verifyCode("sampleCode")
                 .build();
 
         String content = objectMapper.writeValueAsString(dto);
