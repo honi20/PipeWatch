@@ -34,6 +34,7 @@ public class AuthController {
     public ResponseEntity<?> emailCodeVerify(@RequestParam("token") String token) {
         authService.verifyEmailCode(token);
 
+        // TODO: pipewatch의 인증 완료 페이지로 이동
         String redirectUrl = "https://www.google.co.kr/?hl=ko";
         return ResponseEntity.status(HttpStatus.FOUND).header("Location", redirectUrl).build();
     }
