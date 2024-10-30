@@ -46,20 +46,11 @@ public class AuthController {
     }
 
     @PostMapping("/enterprise")
-    public ResponseEntity<?> enterpriseAdd(@RequestBody AuthRequest.EnterpriseRegistDto enterpriseRegistRequestDto) {
+    public ResponseEntity<?> enterpriseAdd(@RequestBody AuthRequest.EnterpriseRegistDto requestDto) {
+        AuthResponse.EnterpriseAccountDto responseDto = authService.registEnterprise(requestDto);
 
-        return new ResponseEntity<>(ResponseDto.success(ENTERPRISE_CREATED, null), HttpStatus.CREATED);
+        return new ResponseEntity<>(ResponseDto.success(ENTERPRISE_CREATED, responseDto), HttpStatus.CREATED);
     }
-
-    //    @GetMapping("/verify-email-code")
-//    public ResponseEntity<?> emailCodeVerify(@RequestParam("token") String token) {
-//        String accessToken = authService.verifyEmailCode(token);
-//
-//        // TODO: pipewatch의 인증 완료 페이지로 이동
-//        String redirectUrl = "https://www.google.co.kr/?hl=ko";
-//
-//        return ResponseEntity.status(HttpStatus.FOUND).header("Location", redirectUrl).body(accessToken);
-//    }
 
     @PostMapping("/signin")
     public ResponseEntity<?> signin(@RequestBody AuthRequest.SigninDto signinRequestDto) {

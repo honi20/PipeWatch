@@ -1,5 +1,6 @@
 package com.pipewatch.domain.auth.model.dto;
 
+import com.pipewatch.domain.enterprise.model.entity.Enterprise;
 import com.pipewatch.domain.user.model.entity.Role;
 import com.pipewatch.domain.user.model.entity.State;
 import com.pipewatch.domain.user.model.entity.User;
@@ -73,6 +74,17 @@ public class AuthRequest {
         private String industry;
         private String managerEmail;
         private String managerPhoneNumber;
+
+        public Enterprise toEntity(User user) {
+            return Enterprise.builder()
+                    .name(this.name)
+                    .industry(this.industry)
+                    .managerEmail(this.managerEmail)
+                    .managerPhoneNumber(this.managerPhoneNumber)
+                    .isActive(false)
+                    .user(user)
+                    .build();
+        }
     }
 
     @Getter

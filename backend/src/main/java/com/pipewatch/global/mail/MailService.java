@@ -50,6 +50,31 @@ public class MailService {
         return verify;
     }
 
+    public MimeMessage createEnterpriseAccountMail(String managerEmail, String email, String password){
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+
+        try{
+            mimeMessage.setFrom(senderEmail);
+            mimeMessage.setRecipients(MimeMessage.RecipientType.TO, managerEmail);
+            mimeMessage.setSubject("PipeWatch 기업 등록");
+            String body = "";
+            body += "<h3>" + "기업 대표 계정입니다." + "</h3>";
+            body += "<h1>email : " + email + "</h1>";
+            body += "<h1>password : " + password + "</h1>";
+            body += "<h3>" + "감사합니다." + "</h3>";
+            mimeMessage.setText(body,"UTF-8", "html");
+        }catch (MessagingException e){
+            throw new BaseException(MAIL_SEND_FAILURE);
+        }
+
+        return mimeMessage;
+    }
+
+    public void sendEnterpriseAccountEmail(String managerEmail, String email, String password) {
+        MimeMessage message = createEnterpriseAccountMail(managerEmail, email, password);
+        javaMailSender.send(message);
+    }
+
     //랜덤 인증번호 생성
     private String generateRandomString() throws NoSuchAlgorithmException {
         int lenth = 6;

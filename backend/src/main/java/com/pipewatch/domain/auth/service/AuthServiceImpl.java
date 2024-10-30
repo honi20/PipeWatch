@@ -1,12 +1,14 @@
 package com.pipewatch.domain.auth.service;
 
 import com.pipewatch.domain.auth.model.dto.AuthRequest;
+import com.pipewatch.domain.auth.model.dto.AuthResponse;
 import com.pipewatch.domain.enterprise.model.entity.Enterprise;
 import com.pipewatch.domain.enterprise.repository.EnterpriseRepository;
 import com.pipewatch.domain.management.model.entity.Waiting;
 import com.pipewatch.domain.management.repository.WaitingRepository;
 import com.pipewatch.domain.user.model.entity.EmployeeInfo;
 import com.pipewatch.domain.user.model.entity.Role;
+import com.pipewatch.domain.user.model.entity.State;
 import com.pipewatch.domain.user.model.entity.User;
 import com.pipewatch.domain.user.repository.EmployeeRepository;
 import com.pipewatch.domain.user.repository.UserRepository;
@@ -133,6 +135,43 @@ public class AuthServiceImpl implements AuthService {
         redisUtil.setData(uuid, jwtToken);
 
         return jwtService.createAccessToken(uuid);
+    }
+
+    @Override
+    @Transactional
+    public AuthResponse.EnterpriseAccountDto registEnterprise(AuthRequest.EnterpriseRegistDto requestDto) {
+        String email = "pipewatch_admin@" + getEmailDomain(requestDto.getManagerEmail());
+        String password = "pipewatch" + UUID.randomUUID().toString();
+        String passwordEncode = passwordEncoder.encode(password);
+        String uuid = UUID.randomUUID().toString();
+
+        // 이미 등록된 기업인지 확인
+        if (userRepository.findByEmail(email) != null) {
+            throw new BaseException(DUPLICATED_ENTERPRISE);
+        }
+
+        // 유저 저장
+        User user = User.builder()
+                .email(email)
+                .password(passwordEncode)
+                .name(requestDto.getName())
+                .state(State.ACTIVE)
+                .role(Role.ROLE_ENTERPRISE)
+                .uuid(uuid)
+                .build();
+
+        userRepository.save(user);
+
+        // 기업 저장
+        enterpriseRepository.save(requestDto.toEntity(user));
+
+        // 메일 전송
+        mailService.sendEnterpriseAccountEmail(requestDto.getManagerEmail(), email, password);
+
+        return AuthResponse.EnterpriseAccountDto.builder()
+                .email(email)
+                .password(password)
+                .build();
     }
 
     private String getEmailDomain(String email) {
