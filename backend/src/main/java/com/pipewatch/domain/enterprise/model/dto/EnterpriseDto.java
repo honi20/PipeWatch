@@ -6,7 +6,7 @@ import lombok.*;
 @Setter
 @Builder
 @NoArgsConstructor
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class EnterpriseDto {
     private Long enterpriseId;
     private String name;
