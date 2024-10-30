@@ -10,7 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.NoSuchAlgorithmException;
-import java.util.UUID;
+import java.security.SecureRandom;
+import java.util.Random;
 
 import static com.pipewatch.global.statusCode.ErrorCode.MAIL_SEND_FAILURE;
 
@@ -30,13 +31,10 @@ public class MailService {
             mimeMessage.setFrom(senderEmail);
             mimeMessage.setRecipients(MimeMessage.RecipientType.TO, email);
             mimeMessage.setSubject("PipeWatch 이메일 인증");
-
-            // 인증 링크 구성
-            String verificationLink = "http://localhost:8080/api/auth/verify-email-code?token=" + verify;
-            String body = "<h1>이메일 인증</h1>";
-            body += "<p>회원가입을 완료하려면 아래 링크를 클릭해 주세요:</p>";
-            body += "<a href=\"" + verificationLink + "\">이메일 인증하기</a>";
-
+            String body = "";
+            body += "<h3>" + "요청하신 인증 번호입니다." + "</h3>";
+            body += "<h1>" + verify + "</h1>";
+            body += "<h3>" + "감사합니다." + "</h3>";
             mimeMessage.setText(body,"UTF-8", "html");
         }catch (MessagingException e){
             throw new BaseException(MAIL_SEND_FAILURE);
@@ -46,9 +44,25 @@ public class MailService {
     }
 
     public String sendVerifyEmail(String mail) throws NoSuchAlgorithmException {
-        String verify = UUID.randomUUID().toString();
+        String verify = generateRandomString();
         MimeMessage message = createVerifyMail(mail, verify);
         javaMailSender.send(message);
         return verify;
     }
+
+    //랜덤 인증번호 생성
+    private String generateRandomString() throws NoSuchAlgorithmException {
+        int lenth = 6;
+        try {
+            Random random = SecureRandom.getInstanceStrong();
+            StringBuilder builder = new StringBuilder();
+            for (int i = 0; i < lenth; i++) {
+                builder.append(random.nextInt(10));
+            }
+            return builder.toString();
+        } catch (NoSuchAlgorithmException e) {
+            throw new NoSuchAlgorithmException();
+        }
+    }
 }
+

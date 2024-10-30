@@ -41,19 +41,20 @@ public class AuthRequest {
         private Long empNo;
         private String department;
         private String empClass;
+        private String verifyCode;
 
         public User toEntity(String uuid) {
             return User.builder()
                     .email(this.email)
                     .password(this.password)
                     .name(this.name)
-                    .state(State.INACTIVE)
+                    .state(State.PENDING)
                     .role(Role.ROLE_USER)
                     .uuid(uuid)
                     .build();
         }
 
-        public JwtToken toRedis(String uuid, Long userId, String refreshToken){
+        public JwtToken toRedis(String uuid, Long userId, String refreshToken) {
             return JwtToken.builder()
                     .uuid(uuid)
                     .userId(userId)

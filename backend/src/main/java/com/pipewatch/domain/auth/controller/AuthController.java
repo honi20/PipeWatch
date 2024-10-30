@@ -20,27 +20,29 @@ import static com.pipewatch.global.statusCode.SuccessCode.*;
 @RequiredArgsConstructor
 public class AuthController {
     private final AuthService authService;
-    private final JwtService jwtService;
-    private final RedisUtil redisUtil;
 
-    @PostMapping
-    public ResponseEntity<?> signup(@RequestBody AuthRequest.SignupDto requestDto) throws NoSuchAlgorithmException {
-        String accessToken = authService.signup(requestDto);
+    @PostMapping("/send-email-code")
+    public ResponseEntity<?> emailCodeSend(@RequestBody AuthRequest.EmailCodeSendDto requestDto) throws NoSuchAlgorithmException {
+        authService.sendEmailCode(requestDto);
 
-        AuthResponse.AccessTokenDto responseDto = AuthResponse.AccessTokenDto.builder()
-                .accessToken(accessToken)
-                .build();
-
-        return new ResponseEntity<>(ResponseDto.success(USER_CREATED, responseDto), HttpStatus.CREATED);
+        return new ResponseEntity<>(ResponseDto.success(EMAIL_CODE_SEND_OK, null), HttpStatus.OK);
     }
 
-    @GetMapping("/verify-email-code")
-    public ResponseEntity<?> emailCodeVerify(@RequestParam("token") String token) {
-        authService.verifyEmailCode(token);
+    @PostMapping("/verify-email-code")
+    public ResponseEntity<?> emailCodeVerify(@RequestBody AuthRequest.EmailCodeVerifyDto requestDto) {
+        authService.verifyEmailCode(requestDto);
 
-        // TODO: pipewatch의 인증 완료 페이지로 이동
-        String redirectUrl = "https://www.google.co.kr/?hl=ko";
-        return ResponseEntity.status(HttpStatus.FOUND).header("Location", redirectUrl).build();
+        return new ResponseEntity<>(ResponseDto.success(EMAIL_VERIFIED, null), HttpStatus.OK);
+    }
+
+    @PostMapping
+    public ResponseEntity<?> signup(@RequestBody AuthRequest.SignupDto requestDto) {
+        String accessToken = authService.signup(requestDto);
+
+        AuthResponse.AccessTokenDto responseDto
+                = AuthResponse.AccessTokenDto.builder().accessToken(accessToken).build();
+
+        return new ResponseEntity<>(ResponseDto.success(USER_CREATED, responseDto), HttpStatus.CREATED);
     }
 
     @PostMapping("/enterprise")
@@ -48,6 +50,16 @@ public class AuthController {
 
         return new ResponseEntity<>(ResponseDto.success(ENTERPRISE_CREATED, null), HttpStatus.CREATED);
     }
+
+    //    @GetMapping("/verify-email-code")
+//    public ResponseEntity<?> emailCodeVerify(@RequestParam("token") String token) {
+//        String accessToken = authService.verifyEmailCode(token);
+//
+//        // TODO: pipewatch의 인증 완료 페이지로 이동
+//        String redirectUrl = "https://www.google.co.kr/?hl=ko";
+//
+//        return ResponseEntity.status(HttpStatus.FOUND).header("Location", redirectUrl).body(accessToken);
+//    }
 
     @PostMapping("/signin")
     public ResponseEntity<?> signin(@RequestBody AuthRequest.SigninDto signinRequestDto) {

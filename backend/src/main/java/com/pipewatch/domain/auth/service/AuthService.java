@@ -5,7 +5,10 @@ import com.pipewatch.domain.auth.model.dto.AuthRequest;
 import java.security.NoSuchAlgorithmException;
 
 public interface AuthService {
-    String signup(AuthRequest.SignupDto requestDto) throws NoSuchAlgorithmException;
+    void sendEmailCode(AuthRequest.EmailCodeSendDto requestDto) throws NoSuchAlgorithmException;
 
-    void verifyEmailCode(String token);
+    void verifyEmailCode(AuthRequest.EmailCodeVerifyDto requestDto);
+
+    String signup(AuthRequest.SignupDto requestDto);
+
 }

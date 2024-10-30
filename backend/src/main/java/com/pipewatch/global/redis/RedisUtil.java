@@ -1,5 +1,6 @@
 package com.pipewatch.global.redis;
 
+import com.pipewatch.domain.auth.model.dto.AuthRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
@@ -27,7 +28,7 @@ public class RedisUtil {
 		redisTemplate.delete(key);
 	}
 
-	public String getDataByToken(String token) {
-		return (String) redisTemplate.opsForValue().get(token);
+	public AuthRequest.SignupDto getDataByToken(String token) {
+		return (AuthRequest.SignupDto) redisTemplate.opsForValue().get(token);
 	}
 }

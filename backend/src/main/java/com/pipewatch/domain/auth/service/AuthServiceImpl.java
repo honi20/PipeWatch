@@ -7,7 +7,6 @@ import com.pipewatch.domain.management.model.entity.Waiting;
 import com.pipewatch.domain.management.repository.WaitingRepository;
 import com.pipewatch.domain.user.model.entity.EmployeeInfo;
 import com.pipewatch.domain.user.model.entity.Role;
-import com.pipewatch.domain.user.model.entity.State;
 import com.pipewatch.domain.user.model.entity.User;
 import com.pipewatch.domain.user.repository.EmployeeRepository;
 import com.pipewatch.domain.user.repository.UserRepository;
@@ -16,11 +15,9 @@ import com.pipewatch.global.jwt.entity.JwtToken;
 import com.pipewatch.global.jwt.service.JwtService;
 import com.pipewatch.global.mail.MailService;
 import com.pipewatch.global.redis.RedisUtil;
-import com.pipewatch.global.statusCode.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.NoSuchAlgorithmException;
@@ -46,30 +43,73 @@ public class AuthServiceImpl implements AuthService {
     private final EmployeeRepository employeeRepository;
 
     @Override
+    public void sendEmailCode(AuthRequest.EmailCodeSendDto requestDto) throws NoSuchAlgorithmException {
+        User user = userRepository.findByEmail(requestDto.getEmail());
+
+        if (user != null) {
+            throw new BaseException(DUPLICATED_EMAIL);
+        }
+
+        String verifyCode = mailService.sendVerifyEmail(requestDto.getEmail());
+
+        JwtToken jwtToken = JwtToken.builder().verify(verifyCode).build();
+        redisUtil.setDataWithExpiration(requestDto.getEmail() + "_verify", jwtToken, 1000L);
+    }
+
+    @Override
+    public void verifyEmailCode(AuthRequest.EmailCodeVerifyDto requestDto) {
+        String verify = ((JwtToken) redisUtil.getData(requestDto.getEmail() + "_verify")).getVerify();
+
+        if (verify == null) {
+            throw new BaseException(VERIFY_NOT_FOUND);
+        }
+
+        if (!verify.equals(requestDto.getVerifyCode())) {
+            throw new BaseException(INVALID_EMAIL_CODE);
+        }
+
+    }
+
+    @Override
     @Transactional
-    public String signup(AuthRequest.SignupDto requestDto) throws NoSuchAlgorithmException {
+    public String signup(AuthRequest.SignupDto requestDto) {
         String uuid = UUID.randomUUID().toString();
 
-        User checkUser = userRepository.findByEmail(requestDto.getEmail());
+        if (userRepository.findByEmail(requestDto.getEmail()) != null){
+            throw new BaseException(DUPLICATED_EMAIL);
+        }
 
-        validateUser(checkUser);
-
-        String password = passwordEncoder.encode(requestDto.getPassword());
-        requestDto.setPassword(password);
-
+        // 기업 도메인 메일인지 확인
         Enterprise enterprise = enterpriseRepository.findById(requestDto.getEnterpriseId())
                 .orElseThrow(() -> new BaseException(ENTERPRISE_NOT_FOUND));
 
-        // 기업 도메인 메일인지 확인
         String domain = getEmailDomain(requestDto.getEmail());
         if (!domain.equals("ssafy.com") && !getEmailDomain(enterprise.getManagerEmail()).equals(domain)) {
             throw new BaseException(INVALID_EMAIL_FORMAT);
         }
 
-        // 유저 등록
+        // 이메일 인증 코드 재확인
+        String verifyCode = requestDto.getVerifyCode();
+        String key = requestDto.getEmail()+"_verify";
+        JwtToken token = (JwtToken)redisUtil.getData(key);
+        if(token == null) {
+            throw new BaseException(SIGNUP_BAD_REQUEST);
+        }
+
+        String verify = token.getVerify();
+        if(verify == null || !verify.equals(verifyCode)) {
+            throw new BaseException(SIGNUP_BAD_REQUEST);
+        }
+        redisUtil.deleteData(key);
+
+        // 비밀번호 암호화
+        String password = passwordEncoder.encode(requestDto.getPassword());
+        requestDto.setPassword(password);
+
+        // 유저 저장
         User user = userRepository.save(requestDto.toEntity(uuid));
 
-        // 직원 등록
+        // 직원 정보 저장
         EmployeeInfo employee = EmployeeInfo.builder()
                 .empNo(requestDto.getEmpNo())
                 .department(requestDto.getDepartment())
@@ -80,55 +120,19 @@ public class AuthServiceImpl implements AuthService {
 
         employeeRepository.save(employee);
 
-        // 메일 전송
-        String verifyCode = mailService.sendVerifyEmail(requestDto.getEmail());
-        redisUtil.setDataWithExpiration("verify_" + verifyCode, requestDto.getEmail(), 600L);
+        // 승인대기 저장
+        Waiting waiting = Waiting.builder()
+                .role(Role.ROLE_EMPLOYEE)
+                .user(user)
+                .build();
 
+        waitingRepository.save(waiting);
+
+        // jwt 토큰 발급
         JwtToken jwtToken = requestDto.toRedis(uuid, user.getId(), jwtService.createRefreshToken(uuid));
         redisUtil.setData(uuid, jwtToken);
 
         return jwtService.createAccessToken(uuid);
-    }
-
-    private void validateUser(User user) {
-        if (user == null) {
-            return;
-        }
-
-        if (user.getState() != State.INACTIVE) {
-            throw new BaseException(DUPLICATED_EMAIL);
-        }
-        else {
-            EmployeeInfo employeeInfo = employeeRepository.findByUserId(user.getId());
-            employeeRepository.delete(employeeInfo);
-            userRepository.delete(user);
-        }
-        employeeRepository.flush();
-        userRepository.flush();
-    }
-
-    @Override
-    public void verifyEmailCode(String token) {
-        String email = redisUtil.getDataByToken("verify_" + token);
-
-        if (email == null) {
-            throw new BaseException(VERIFY_NOT_FOUND);
-        }
-
-        User user = userRepository.findByEmail(email);
-        if (user == null) {
-            throw new BaseException(EMAIL_NOT_FOUND);
-        }
-
-        // 이메일 인증 완료 후 Redis에서 토큰 삭제
-        redisUtil.deleteData("verify_" + token);
-
-        // 해당 유저의 상태를 pending으로 전환 -> 사원 요청 보냄
-        user.updateState(State.PENDING);
-        userRepository.save(user);
-
-        Waiting waiting = Waiting.builder().role(Role.ROLE_EMPLOYEE).user(user).build();
-        waitingRepository.save(waiting);
     }
 
     private String getEmailDomain(String email) {
