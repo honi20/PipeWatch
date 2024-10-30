@@ -1,9 +1,6 @@
 package com.pipewatch.domain.pipeline.model.entity.property;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 @AllArgsConstructor
 public class PipeMaterial {
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "pipe_material_id")
 	private Long id;
 

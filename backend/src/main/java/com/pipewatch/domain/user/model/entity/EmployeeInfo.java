@@ -14,7 +14,7 @@ import lombok.RequiredArgsConstructor;
 @AllArgsConstructor
 public class EmployeeInfo {
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "employee_info_id")
 	private Long id;
 
