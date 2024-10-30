@@ -80,7 +80,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     @Transactional
-    public String signup(AuthRequest.SignupDto requestDto) {
+    public AuthResponse.AccessTokenDto signup(AuthRequest.SignupDto requestDto) {
         String uuid = UUID.randomUUID().toString();
 
         if (userRepository.findByEmail(requestDto.getEmail()) != null){
@@ -142,7 +142,9 @@ public class AuthServiceImpl implements AuthService {
         JwtToken jwtToken = requestDto.toRedis(uuid, user.getId(), jwtService.createRefreshToken(uuid));
         redisUtil.setData(uuid, jwtToken);
 
-        return jwtService.createAccessToken(uuid);
+        return AuthResponse.AccessTokenDto.builder()
+                .accessToken(jwtService.createAccessToken(uuid))
+                .build();
     }
 
     @Override
@@ -180,6 +182,31 @@ public class AuthServiceImpl implements AuthService {
 
         // 메일 전송
         mailService.sendEnterpriseAccountEmail(requestDto.getManagerEmail(), email, password);
+    }
+
+    @Override
+    public AuthResponse.AccessTokenDto signin(AuthRequest.SigninDto requestDto) {
+        User user = userRepository.findByEmail(requestDto.getEmail());
+
+        if (user == null) {
+            throw new BaseException(EMAIL_NOT_FOUND);
+        }
+
+        if (passwordEncoder.matches(user.getPassword(), requestDto.getPassword())) {
+            throw new BaseException(INVALID_PASSWORD);
+        }
+
+        JwtToken jwtToken = JwtToken.builder()
+                .userId(user.getId())
+                .uuid(user.getUuid())
+                .refreshToken(jwtService.createRefreshToken(user.getUuid()))
+                .build();
+
+        redisUtil.setData(user.getUuid(), jwtToken);
+
+        return AuthResponse.AccessTokenDto.builder()
+                .accessToken(jwtService.createAccessToken(user.getUuid()))
+                .build();
     }
 
     private boolean isEnterpriseDomain(String domain) {

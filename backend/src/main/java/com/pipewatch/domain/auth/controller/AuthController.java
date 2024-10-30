@@ -3,8 +3,6 @@ package com.pipewatch.domain.auth.controller;
 import com.pipewatch.domain.auth.model.dto.AuthRequest;
 import com.pipewatch.domain.auth.model.dto.AuthResponse;
 import com.pipewatch.domain.auth.service.AuthService;
-import com.pipewatch.global.jwt.service.JwtService;
-import com.pipewatch.global.redis.RedisUtil;
 import com.pipewatch.global.response.ResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -37,10 +35,7 @@ public class AuthController {
 
     @PostMapping
     public ResponseEntity<?> signup(@RequestBody AuthRequest.SignupDto requestDto) {
-        String accessToken = authService.signup(requestDto);
-
-        AuthResponse.AccessTokenDto responseDto
-                = AuthResponse.AccessTokenDto.builder().accessToken(accessToken).build();
+        AuthResponse.AccessTokenDto responseDto = authService.signup(requestDto);
 
         return new ResponseEntity<>(ResponseDto.success(USER_CREATED, responseDto), HttpStatus.CREATED);
     }
@@ -53,8 +48,10 @@ public class AuthController {
     }
 
     @PostMapping("/signin")
-    public ResponseEntity<?> signin(@RequestBody AuthRequest.SigninDto signinRequestDto) {
-        return new ResponseEntity<>(ResponseDto.success(SIGNIN_OK, null), HttpStatus.OK);
+    public ResponseEntity<?> signin(@RequestBody AuthRequest.SigninDto requestDto) {
+        AuthResponse.AccessTokenDto responseDto = authService.signin(requestDto);
+
+        return new ResponseEntity<>(ResponseDto.success(SIGNIN_OK, responseDto), HttpStatus.OK);
     }
 
     @GetMapping("/logout")

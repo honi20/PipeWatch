@@ -10,7 +10,9 @@ public interface AuthService {
 
     void verifyEmailCode(AuthRequest.EmailCodeVerifyDto requestDto);
 
-    String signup(AuthRequest.SignupDto requestDto);
+    AuthResponse.AccessTokenDto signup(AuthRequest.SignupDto requestDto);
 
 	void registEnterprise(AuthRequest.EnterpriseRegistDto requestDto) throws NoSuchAlgorithmException;
+
+    AuthResponse.AccessTokenDto signin(AuthRequest.SigninDto requestDto);
 }
