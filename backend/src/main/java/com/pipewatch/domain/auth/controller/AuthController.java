@@ -25,9 +25,13 @@ public class AuthController {
 
     @PostMapping
     public ResponseEntity<?> signup(@RequestBody AuthRequest.SignupDto requestDto) throws NoSuchAlgorithmException {
-        authService.signup(requestDto);
+        String accessToken = authService.signup(requestDto);
 
-        return new ResponseEntity<>(ResponseDto.success(USER_CREATED, null), HttpStatus.CREATED);
+        AuthResponse.AccessTokenDto responseDto = AuthResponse.AccessTokenDto.builder()
+                .accessToken(accessToken)
+                .build();
+
+        return new ResponseEntity<>(ResponseDto.success(USER_CREATED, responseDto), HttpStatus.CREATED);
     }
 
     @GetMapping("/verify-email-code")

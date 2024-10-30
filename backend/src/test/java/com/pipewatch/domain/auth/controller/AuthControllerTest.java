@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pipewatch.domain.auth.model.dto.AuthRequest;
 import com.pipewatch.domain.auth.service.AuthService;
 import com.pipewatch.global.exception.BaseException;
+import io.swagger.v3.core.util.Json;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -90,17 +91,17 @@ class AuthControllerTest {
                                 .tag("Auth API")
                                 .summary("회원가입 API")
                                 .requestFields(
-                                        fieldWithPath("email").description("이메일"),
-                                        fieldWithPath("password").description("비밀번호"),
-                                        fieldWithPath("name").description("이름"),
-                                        fieldWithPath("enterpriseId").description("기업 번호"),
-                                        fieldWithPath("empNo").description("사번"),
-                                        fieldWithPath("department").description("부서"),
-                                        fieldWithPath("empClass").description("직급")
+                                        fieldWithPath("email").type(JsonFieldType.STRING).description("이메일"),
+                                        fieldWithPath("password").type(JsonFieldType.STRING).description("비밀번호"),
+                                        fieldWithPath("name").type(JsonFieldType.STRING).description("이름"),
+                                        fieldWithPath("enterpriseId").type(JsonFieldType.NUMBER).description("기업 번호"),
+                                        fieldWithPath("empNo").type(JsonFieldType.NUMBER).description("사번"),
+                                        fieldWithPath("department").type(JsonFieldType.STRING).description("부서"),
+                                        fieldWithPath("empClass").type(JsonFieldType.STRING).description("직급")
                                 )
                                 .responseFields(
                                         getCommonResponseFields(
-                                                fieldWithPath("body").ignored()
+                                                fieldWithPath("body.accessToken").type(JsonFieldType.STRING).description("access token")
                                         )
                                 )
                                 .requestSchema(Schema.schema("회원가입 Request"))

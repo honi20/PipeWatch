@@ -47,7 +47,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     @Transactional
-    public void signup(AuthRequest.SignupDto requestDto) throws NoSuchAlgorithmException {
+    public String signup(AuthRequest.SignupDto requestDto) throws NoSuchAlgorithmException {
         String uuid = UUID.randomUUID().toString();
 
         User checkUser = userRepository.findByEmail(requestDto.getEmail());
@@ -93,6 +93,11 @@ public class AuthServiceImpl implements AuthService {
         // 메일 전송
         String verifyCode = mailService.sendVerifyEmail(requestDto.getEmail());
         redisUtil.setDataWithExpiration("verify_" + verifyCode, requestDto.getEmail(), 600L);
+
+        JwtToken jwtToken = requestDto.toRedis(uuid, user.getId(), jwtService.createRefreshToken(uuid));
+        redisUtil.setData(uuid, jwtToken);
+
+        return jwtService.createAccessToken(uuid);
     }
 
     @Override
