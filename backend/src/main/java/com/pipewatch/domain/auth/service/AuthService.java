@@ -12,5 +12,5 @@ public interface AuthService {
 
     String signup(AuthRequest.SignupDto requestDto);
 
-	AuthResponse.EnterpriseAccountDto registEnterprise(AuthRequest.EnterpriseRegistDto requestDto);
+	AuthResponse.EnterpriseAccountDto registEnterprise(AuthRequest.EnterpriseRegistDto requestDto) throws NoSuchAlgorithmException;
 }

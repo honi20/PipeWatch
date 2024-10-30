@@ -23,6 +23,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.util.Random;
 import java.util.UUID;
 
 import static com.pipewatch.global.statusCode.ErrorCode.*;
@@ -143,9 +145,9 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     @Transactional
-    public AuthResponse.EnterpriseAccountDto registEnterprise(AuthRequest.EnterpriseRegistDto requestDto) {
+    public AuthResponse.EnterpriseAccountDto registEnterprise(AuthRequest.EnterpriseRegistDto requestDto) throws NoSuchAlgorithmException {
         String email = "pipewatch_admin@" + getEmailDomain(requestDto.getManagerEmail());
-        String password = "pipewatch" + UUID.randomUUID().toString();
+        String password = "pipewatch" + generateRandomNumber();
         String passwordEncode = passwordEncoder.encode(password);
         String uuid = UUID.randomUUID().toString();
 
@@ -176,6 +178,16 @@ public class AuthServiceImpl implements AuthService {
                 .email(email)
                 .password(password)
                 .build();
+    }
+
+    private String generateRandomNumber() throws NoSuchAlgorithmException {
+        int lenth = 6;
+        Random random = SecureRandom.getInstanceStrong();
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < lenth; i++) {
+            builder.append(random.nextInt(10));
+        }
+        return builder.toString();
     }
 
     private String getEmailDomain(String email) {
