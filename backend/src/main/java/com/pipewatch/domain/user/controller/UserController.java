@@ -33,7 +33,9 @@ public class UserController {
 	}
 
 	@PatchMapping("/modify-pwd")
-	public ResponseEntity<?> passwordModify(@RequestBody UserRequest.PasswordModifyDto requestDto) {
+	public ResponseEntity<?> passwordModify(@AuthenticationPrincipal Long userId, @RequestBody UserRequest.PasswordModifyDto requestDto) {
+		userService.modifyPassword(userId, requestDto);
+
 		return new ResponseEntity<>(ResponseDto.success(PASSWORD_MODIFIED_OK, null), HttpStatus.OK);
 	}
 

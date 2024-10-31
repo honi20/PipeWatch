@@ -7,4 +7,6 @@ public interface UserService {
 	UserResponse.MyPageDto getUserDetail(Long userId);
 
 	void modifyUserDetail(Long userId, UserRequest.MyPageModifyDto requestDto);
+
+	void modifyPassword(Long userId, UserRequest.PasswordModifyDto requestDto);
 }
