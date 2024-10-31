@@ -1,10 +1,12 @@
 package com.pipewatch.domain.management.controller;
 
 import com.pipewatch.domain.management.model.dto.ManagementResponse;
+import com.pipewatch.domain.management.service.ManagementService;
 import com.pipewatch.global.response.ResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,13 +17,11 @@ import static com.pipewatch.global.statusCode.SuccessCode.*;
 @RequestMapping("${api_prefix}/management")
 @RequiredArgsConstructor
 public class ManagementController {
+	private final ManagementService managementService;
+
 	@GetMapping("/waiting-list")
-	public ResponseEntity<?> waitingEmployeeList() {
-		ManagementResponse.EmployeeDto employee1 = new ManagementResponse.EmployeeDto("abcdesfljsa", "김싸피", "kim@ssafy.com", 112345L, "경영지원부", "대리", "사원");
-		ManagementResponse.EmployeeDto employee2 = new ManagementResponse.EmployeeDto("abe2ksfnclk", "최싸피", "choi@ssafy.com", 116789L, "IT개발부", "팀장", "사원");
-		ManagementResponse.EmployeeWaitingListDto responseDto = ManagementResponse.EmployeeWaitingListDto.builder()
-				.employees(List.of(employee1, employee2))
-				.build();
+	public ResponseEntity<?> waitingEmployeeList(@AuthenticationPrincipal Long userId) {
+		ManagementResponse.EmployeeWaitingListDto responseDto = managementService.getWaitingEmployeeList(userId);
 
 		return new ResponseEntity<>(ResponseDto.success(WAITING_EMPLOYEE_LIST_OK, responseDto), HttpStatus.OK);
 	}
