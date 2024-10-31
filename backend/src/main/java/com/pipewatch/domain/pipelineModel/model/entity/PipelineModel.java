@@ -29,11 +29,11 @@ public class PipelineModel extends BaseEntity {
 
 	private Boolean isCompleted;
 
-	@ManyToOne(fetch= FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	private User user;
 
-	@ManyToOne(fetch= FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "building_floor_id")
 	private BuildingAndFloor buildingAndFloor;
 }

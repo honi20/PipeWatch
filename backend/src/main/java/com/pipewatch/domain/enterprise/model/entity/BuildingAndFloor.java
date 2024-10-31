@@ -20,7 +20,7 @@ public class BuildingAndFloor {
 
 	private Integer floor;
 
-	@ManyToOne(fetch= FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "enterprise_id")
 	private Enterprise enterprise;
 }

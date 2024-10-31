@@ -21,41 +21,40 @@ import static com.pipewatch.global.statusCode.ErrorCode.*;
 @Service
 @RequiredArgsConstructor
 public class EnterpriseServiceImpl implements EnterpriseService {
-    private final JwtService jwtService;
-    private final UserRepository userRepository;
-    private final EnterpriseRepository enterpriseRepository;
-    private final EmployeeRepository employeeRepository;
+	private final JwtService jwtService;
+	private final UserRepository userRepository;
+	private final EnterpriseRepository enterpriseRepository;
+	private final EmployeeRepository employeeRepository;
 
-    @Override
-    public EnterpriseResponse.DetailDto getEnterpriseDetail(Long userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new BaseException(USER_NOT_FOUND));
+	@Override
+	public EnterpriseResponse.DetailDto getEnterpriseDetail(Long userId) {
+		User user = userRepository.findById(userId).orElseThrow(() -> new BaseException(USER_NOT_FOUND));
 
-        Enterprise enterprise;
-        if (user.getRole() == Role.ROLE_ENTERPRISE) {
-            enterprise = enterpriseRepository.findByUserId(user.getId());
-        }
-        else {
-            EmployeeInfo employeeInfo = employeeRepository.findByUserId(userId);
-            enterprise = enterpriseRepository.findById(employeeInfo.getEnterprise().getId()).get();
-        }
+		Enterprise enterprise;
+		if (user.getRole() == Role.ROLE_ENTERPRISE) {
+			enterprise = enterpriseRepository.findByUserId(user.getId());
+		} else {
+			EmployeeInfo employeeInfo = employeeRepository.findByUserId(userId);
+			enterprise = enterpriseRepository.findById(employeeInfo.getEnterprise().getId()).get();
+		}
 
-        if (enterprise == null) {
-            throw new BaseException(ENTERPRISE_NOT_FOUND);
-        }
+		if (enterprise == null) {
+			throw new BaseException(ENTERPRISE_NOT_FOUND);
+		}
 
-        return EnterpriseResponse.DetailDto.toDto(enterprise);
-    }
+		return EnterpriseResponse.DetailDto.toDto(enterprise);
+	}
 
-    @Override
-    public EnterpriseResponse.ListDto getEnterpriseList() {
-        List<Enterprise> enterprises = enterpriseRepository.findAll();
+	@Override
+	public EnterpriseResponse.ListDto getEnterpriseList() {
+		List<Enterprise> enterprises = enterpriseRepository.findAll();
 
-        List<EnterpriseResponse.EnterpriseDto> enterpriseDtos
-                = enterprises.stream().map(EnterpriseResponse.EnterpriseDto::toDto).toList();
+		List<EnterpriseResponse.EnterpriseDto> enterpriseDtos
+				= enterprises.stream().map(EnterpriseResponse.EnterpriseDto::toDto).toList();
 
-        return EnterpriseResponse.ListDto.builder()
-                .enterprises(enterpriseDtos)
-                .build();
+		return EnterpriseResponse.ListDto.builder()
+				.enterprises(enterpriseDtos)
+				.build();
 
-    }
+	}
 }

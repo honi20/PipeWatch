@@ -13,30 +13,31 @@ import lombok.*;
 @AllArgsConstructor
 public class Enterprise {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "enterprise_id")
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "enterprise_id")
+	private Long id;
 
-    @NotNull
-    private String name;
+	@NotNull
+	private String name;
 
-    @NotNull
-    private String industry;
+	@NotNull
+	private String industry;
 
-    @NotNull
-    @Column(name = "manager_email")
-    @Email(message = "유효한 이메일 형식을 입력해 주세요")
-    private String managerEmail;
+	@NotNull
+	@Column(name = "manager_email")
+	@Email(message = "유효한 이메일 형식을 입력해 주세요")
+	private String managerEmail;
 
-    @NotNull
-    @Column(name = "manager_phone_number")
-    private String managerPhoneNumber;
+	@NotNull
+	@Column(name = "manager_phone_number")
+	private String managerPhoneNumber;
 
-    @Builder.Default
-    @Column(name = "is_active")
-    private Boolean isActive = false;
+	@Builder.Default
+	@Column(name = "is_active")
+	private Boolean isActive = false;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "user_id")
+	private User user;
 }

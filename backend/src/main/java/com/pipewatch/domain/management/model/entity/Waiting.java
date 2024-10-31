@@ -20,7 +20,7 @@ public class Waiting {
 
 	private Role role;
 
-	@OneToOne(fetch= FetchType.LAZY)
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	private User user;
 }
