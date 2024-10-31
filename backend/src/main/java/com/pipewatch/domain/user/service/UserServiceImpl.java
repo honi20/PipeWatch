@@ -1,9 +1,12 @@
 package com.pipewatch.domain.user.service;
 
+import com.pipewatch.domain.enterprise.model.entity.Enterprise;
+import com.pipewatch.domain.enterprise.repository.EnterpriseRepository;
 import com.pipewatch.domain.user.model.dto.UserRequest;
 import com.pipewatch.domain.user.model.dto.UserResponse;
 import com.pipewatch.domain.user.model.entity.EmployeeInfo;
 import com.pipewatch.domain.user.model.entity.Role;
+import com.pipewatch.domain.user.model.entity.State;
 import com.pipewatch.domain.user.model.entity.User;
 import com.pipewatch.domain.user.repository.EmployeeRepository;
 import com.pipewatch.domain.user.repository.UserCustomRepository;
@@ -26,6 +29,7 @@ public class UserServiceImpl implements UserService {
 	private final EmployeeRepository employeeRepository;
 
 	private final PasswordEncoder passwordEncoder;
+	private final EnterpriseRepository enterpriseRepository;
 
 	@Override
 	public UserResponse.MyPageDto getUserDetail(Long userId) {
@@ -66,5 +70,23 @@ public class UserServiceImpl implements UserService {
 		String password = passwordEncoder.encode(requestDto.getNewPassword());
 		user.updatePassword(password);
 		userRepository.save(user);
+	}
+
+	@Override
+	@Transactional
+	public void deleteUser(Long userId) {
+		// 유저가 존재하는지 확인
+		User user = userRepository.findById(userId)
+				.orElseThrow(() -> new BaseException(USER_NOT_FOUND));
+
+		user.updateState(State.INACTIVE);
+		userRepository.save(user);
+
+		// 기업의 경우는 해당 기업 상태도 업데이트
+		if (user.getRole() == Role.ROLE_ENTERPRISE) {
+			Enterprise enterprise = enterpriseRepository.findByUserId(user.getId());
+			enterprise.updateIsActive(false);
+			enterpriseRepository.save(enterprise);
+		}
 	}
 }

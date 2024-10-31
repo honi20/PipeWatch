@@ -40,7 +40,9 @@ public class UserController {
 	}
 
 	@DeleteMapping("/withdraw")
-	public ResponseEntity<?> withdraw() {
+	public ResponseEntity<?> withdraw(@AuthenticationPrincipal Long userId) {
+		userService.deleteUser(userId);
+
 		return new ResponseEntity<>(ResponseDto.success(USER_DELETE_OK, null), HttpStatus.NO_CONTENT);
 	}
 }

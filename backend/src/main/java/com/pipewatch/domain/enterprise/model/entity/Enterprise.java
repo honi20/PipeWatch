@@ -40,4 +40,8 @@ public class Enterprise {
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	private User user;
+
+	public void updateIsActive(Boolean isActive) {
+		this.isActive = isActive;
+	}
 }

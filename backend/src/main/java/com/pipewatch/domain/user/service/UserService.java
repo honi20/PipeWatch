@@ -9,4 +9,6 @@ public interface UserService {
 	void modifyUserDetail(Long userId, UserRequest.MyPageModifyDto requestDto);
 
 	void modifyPassword(Long userId, UserRequest.PasswordModifyDto requestDto);
+
+	void deleteUser(Long userId);
 }
