@@ -4,6 +4,8 @@ import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.epages.restdocs.apispec.Schema;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pipewatch.domain.user.model.dto.UserRequest;
+import com.pipewatch.domain.user.model.dto.UserResponse;
+import com.pipewatch.domain.user.service.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,16 +13,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.util.List;
+
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
+import static com.pipewatch.domain.user.model.entity.Role.ROLE_EMPLOYEE;
 import static com.pipewatch.domain.util.ResponseFieldUtil.getCommonResponseFields;
 import static com.pipewatch.global.statusCode.SuccessCode.*;
+import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
@@ -43,8 +53,26 @@ class UserControllerTest {
 	@Autowired
 	private ObjectMapper objectMapper;
 
+	@MockBean
+	private UserService userService;
+
 	@Test
-	void 마이페이지_조회_성공() throws Exception {
+	void 직원_마이페이지_조회_성공() throws Exception {
+		SecurityContextHolder.getContext().setAuthentication(
+				new UsernamePasswordAuthenticationToken(123L, null, List.of(new SimpleGrantedAuthority("ROLE_USER")))
+		);
+
+		UserResponse.MyPageDto response = UserResponse.MyPageDto.builder()
+				.name("최싸피")
+				.email("test@ssafy.com")
+				.enterpriseName("paori")
+				.role("ROLE_EMPLOYEE")
+				.state("PENDING")
+				.employee(new UserResponse.EmployeeDto(1243242L, "IT사업부","팀장"))
+				.build();
+
+		when(userService.getUserDetail(123L)).thenReturn(response);
+
 		ResultActions actions = mockMvc.perform(
 				get("/api/users/mypage")
 						.contentType(MediaType.APPLICATION_JSON)
@@ -57,7 +85,7 @@ class UserControllerTest {
 				.andExpect(jsonPath("$.header.httpStatusCode").value(MYPAGE_DETAIL_OK.getHttpStatusCode()))
 				.andExpect(jsonPath("$.header.message").value(MYPAGE_DETAIL_OK.getMessage()))
 				.andDo(document(
-						"마이페이지 조회 성공",
+						"직원 마이페이지 조회 성공",
 						preprocessRequest(prettyPrint()),
 						preprocessResponse(prettyPrint()),
 						resource(ResourceSnippetParameters.builder()
@@ -68,14 +96,65 @@ class UserControllerTest {
 												fieldWithPath("body.name").type(JsonFieldType.STRING).description("이름"),
 												fieldWithPath("body.email").type(JsonFieldType.STRING).description("이메일"),
 												fieldWithPath("body.enterpriseName").type(JsonFieldType.STRING).description("기업명"),
-												fieldWithPath("body.empNo").type(JsonFieldType.NUMBER).description("사번"),
-												fieldWithPath("body.department").type(JsonFieldType.STRING).description("부서"),
-												fieldWithPath("body.empClass").type(JsonFieldType.STRING).description("직급"),
-												fieldWithPath("body.roll").type(JsonFieldType.STRING).description("역할 (사원/관리자/기업)"),
-												fieldWithPath("body.state").type(JsonFieldType.STRING).description("상태 여부 (pending/active/inactive/rejected)")
+												fieldWithPath("body.role").type(JsonFieldType.STRING).description("역할 (사원/관리자/기업)"),
+												fieldWithPath("body.state").type(JsonFieldType.STRING).description("상태 여부 (pending/active/inactive/rejected)"),
+												fieldWithPath("body.employee").type(JsonFieldType.OBJECT).description("직원 정보"),
+												fieldWithPath("body.employee.empNo").type(JsonFieldType.NUMBER).description("사번"),
+												fieldWithPath("body.employee.department").type(JsonFieldType.STRING).description("부서"),
+												fieldWithPath("body.employee.empClass").type(JsonFieldType.STRING).description("직급")
 										)
 								)
-								.responseSchema(Schema.schema("마이페이지 조회 Response"))
+								.responseSchema(Schema.schema("직원 마이페이지 조회 Response"))
+								.build()
+						)));
+	}
+
+	@Test
+	void 기업_마이페이지_조회_성공() throws Exception {
+		SecurityContextHolder.getContext().setAuthentication(
+				new UsernamePasswordAuthenticationToken(124L, null, List.of(new SimpleGrantedAuthority("ROLE_USER")))
+		);
+
+		UserResponse.MyPageDto response = UserResponse.MyPageDto.builder()
+				.name("paori")
+				.email("pipewatch_admin@ssafy.com")
+				.enterpriseName("paori")
+				.role("ROLE_ENTERPRISE")
+				.state("ACTIVE")
+				.employee(null)
+				.build();
+
+		when(userService.getUserDetail(124L)).thenReturn(response);
+
+		ResultActions actions = mockMvc.perform(
+				get("/api/users/mypage")
+						.contentType(MediaType.APPLICATION_JSON)
+						.accept(MediaType.APPLICATION_JSON)
+						.characterEncoding("UTF-8")
+		);
+
+		actions
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.header.httpStatusCode").value(MYPAGE_DETAIL_OK.getHttpStatusCode()))
+				.andExpect(jsonPath("$.header.message").value(MYPAGE_DETAIL_OK.getMessage()))
+				.andDo(document(
+						"기업 마이페이지 조회 성공",
+						preprocessRequest(prettyPrint()),
+						preprocessResponse(prettyPrint()),
+						resource(ResourceSnippetParameters.builder()
+								.tag("User API")
+								.summary("마이페이지 조회 API")
+								.responseFields(
+										getCommonResponseFields(
+												fieldWithPath("body.name").type(JsonFieldType.STRING).description("이름"),
+												fieldWithPath("body.email").type(JsonFieldType.STRING).description("이메일"),
+												fieldWithPath("body.enterpriseName").type(JsonFieldType.STRING).description("기업명"),
+												fieldWithPath("body.role").type(JsonFieldType.STRING).description("역할 (사원/관리자/기업)"),
+												fieldWithPath("body.state").type(JsonFieldType.STRING).description("상태 여부 (pending/active/inactive/rejected)"),
+												fieldWithPath("body.employee").type(JsonFieldType.NULL).description("직원 정보")
+										)
+								)
+								.responseSchema(Schema.schema("기업 마이페이지 조회 Response"))
 								.build()
 						)));
 	}
