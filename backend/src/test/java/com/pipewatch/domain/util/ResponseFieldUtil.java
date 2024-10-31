@@ -9,16 +9,16 @@ import java.util.List;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 
 public class ResponseFieldUtil {
-    public static List<FieldDescriptor> getCommonResponseFields(FieldDescriptor... additionalFields) {
-        List<FieldDescriptor> responseFields = new ArrayList<>();
+	public static List<FieldDescriptor> getCommonResponseFields(FieldDescriptor... additionalFields) {
+		List<FieldDescriptor> responseFields = new ArrayList<>();
 
-        responseFields.add(fieldWithPath("header.httpStatusCode").type(JsonFieldType.NUMBER).description("응답 코드"));
-        responseFields.add(fieldWithPath("header.message").type(JsonFieldType.STRING).description("응답 메시지"));
+		responseFields.add(fieldWithPath("header.httpStatusCode").type(JsonFieldType.NUMBER).description("응답 코드"));
+		responseFields.add(fieldWithPath("header.message").type(JsonFieldType.STRING).description("응답 메시지"));
 
-        if (additionalFields != null && additionalFields.length > 0) {
-            responseFields.addAll(List.of(additionalFields));
-        }
-        return responseFields;
-    }
+		if (additionalFields != null && additionalFields.length > 0) {
+			responseFields.addAll(List.of(additionalFields));
+		}
+		return responseFields;
+	}
 
 }

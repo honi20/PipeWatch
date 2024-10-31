@@ -14,37 +14,38 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 public class User extends BaseEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "user_id")
+	private Long id;
 
-    @Email
-    @NotNull
-    @Column(unique=true)
-    private String email;
+	@Email
+	@NotNull
+	@Column(unique = true)
+	private String email;
 
-    @NotNull
-    private String password;
+	@NotNull
+	private String password;
 
-    @NotNull
-    private String name;
+	@NotNull
+	private String name;
 
-    @NotNull
-    @Builder.Default
-    private State state = State.PENDING;
+	@NotNull
+	@Builder.Default
+	private State state = State.PENDING;
 
-    @NotNull
-    @Builder.Default
-    private Role role = Role.ROLE_USER;
+	@NotNull
+	@Builder.Default
+	private Role role = Role.ROLE_USER;
 
-    @NotNull
-    private String uuid;
+	@NotNull
+	private String uuid;
 
-    public void updatePassword(String password) {
-        this.password = password;
-    }
+	public void updatePassword(String password) {
+		this.password = password;
+	}
 
-    public void updateState(State state) {
-        this.state = state;
-    }
+	public void updateState(State state) {
+		this.state = state;
+	}
 }

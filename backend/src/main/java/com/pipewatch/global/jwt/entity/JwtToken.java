@@ -11,12 +11,12 @@ import org.springframework.data.redis.core.RedisHash;
 @NoArgsConstructor
 @RedisHash(value = "jwt_token")
 public class JwtToken {
-    @Id
-    private String uuid;
+	@Id
+	private String uuid;
 
-    private Long userId;
+	private Long userId;
 
-    private String refreshToken;
+	private String refreshToken;
 
-    private String verify;
+	private String verify;
 }

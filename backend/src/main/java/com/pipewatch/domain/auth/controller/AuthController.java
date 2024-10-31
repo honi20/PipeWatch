@@ -17,61 +17,61 @@ import static com.pipewatch.global.statusCode.SuccessCode.*;
 @RequestMapping("${api_prefix}/auth")
 @RequiredArgsConstructor
 public class AuthController {
-    private final AuthService authService;
+	private final AuthService authService;
 
-    @PostMapping("/send-email-code")
-    public ResponseEntity<?> emailCodeSend(@RequestBody AuthRequest.EmailCodeSendDto requestDto) throws NoSuchAlgorithmException {
-        authService.sendEmailCode(requestDto);
+	@PostMapping("/send-email-code")
+	public ResponseEntity<?> emailCodeSend(@RequestBody AuthRequest.EmailCodeSendDto requestDto) throws NoSuchAlgorithmException {
+		authService.sendEmailCode(requestDto);
 
-        return new ResponseEntity<>(ResponseDto.success(EMAIL_CODE_SEND_OK, null), HttpStatus.OK);
-    }
+		return new ResponseEntity<>(ResponseDto.success(EMAIL_CODE_SEND_OK, null), HttpStatus.OK);
+	}
 
-    @PostMapping("/verify-email-code")
-    public ResponseEntity<?> emailCodeVerify(@RequestBody AuthRequest.EmailCodeVerifyDto requestDto) {
-        authService.verifyEmailCode(requestDto);
+	@PostMapping("/verify-email-code")
+	public ResponseEntity<?> emailCodeVerify(@RequestBody AuthRequest.EmailCodeVerifyDto requestDto) {
+		authService.verifyEmailCode(requestDto);
 
-        return new ResponseEntity<>(ResponseDto.success(EMAIL_VERIFIED, null), HttpStatus.OK);
-    }
+		return new ResponseEntity<>(ResponseDto.success(EMAIL_VERIFIED, null), HttpStatus.OK);
+	}
 
-    @PostMapping
-    public ResponseEntity<?> signup(@RequestBody AuthRequest.SignupDto requestDto) {
-        AuthResponse.AccessTokenDto responseDto = authService.signup(requestDto);
+	@PostMapping
+	public ResponseEntity<?> signup(@RequestBody AuthRequest.SignupDto requestDto) {
+		AuthResponse.AccessTokenDto responseDto = authService.signup(requestDto);
 
-        return new ResponseEntity<>(ResponseDto.success(USER_CREATED, responseDto), HttpStatus.CREATED);
-    }
+		return new ResponseEntity<>(ResponseDto.success(USER_CREATED, responseDto), HttpStatus.CREATED);
+	}
 
-    @PostMapping("/enterprise")
-    public ResponseEntity<?> enterpriseAdd(@RequestBody AuthRequest.EnterpriseRegistDto requestDto) throws NoSuchAlgorithmException {
-        authService.registEnterprise(requestDto);
+	@PostMapping("/enterprise")
+	public ResponseEntity<?> enterpriseAdd(@RequestBody AuthRequest.EnterpriseRegistDto requestDto) throws NoSuchAlgorithmException {
+		authService.registEnterprise(requestDto);
 
-        return new ResponseEntity<>(ResponseDto.success(ENTERPRISE_CREATED, null), HttpStatus.CREATED);
-    }
+		return new ResponseEntity<>(ResponseDto.success(ENTERPRISE_CREATED, null), HttpStatus.CREATED);
+	}
 
-    @PostMapping("/signin")
-    public ResponseEntity<?> signin(@RequestBody AuthRequest.SigninDto requestDto) {
-        AuthResponse.AccessTokenDto responseDto = authService.signin(requestDto);
+	@PostMapping("/signin")
+	public ResponseEntity<?> signin(@RequestBody AuthRequest.SigninDto requestDto) {
+		AuthResponse.AccessTokenDto responseDto = authService.signin(requestDto);
 
-        return new ResponseEntity<>(ResponseDto.success(SIGNIN_OK, responseDto), HttpStatus.OK);
-    }
+		return new ResponseEntity<>(ResponseDto.success(SIGNIN_OK, responseDto), HttpStatus.OK);
+	}
 
-    @GetMapping("/logout")
-    public ResponseEntity<?> logout() {
-        authService.logout();
+	@GetMapping("/logout")
+	public ResponseEntity<?> logout() {
+		authService.logout();
 
-        return new ResponseEntity<>(ResponseDto.success(LOGOUT_OK, null), HttpStatus.OK);
-    }
+		return new ResponseEntity<>(ResponseDto.success(LOGOUT_OK, null), HttpStatus.OK);
+	}
 
-    @PostMapping("/send-pwd-reset")
-    public ResponseEntity<?> passwordResetEmailSend(@RequestBody AuthRequest.EmailPwdSendDto requestDto) {
-        authService.sendPasswordResetEmail(requestDto);
+	@PostMapping("/send-pwd-reset")
+	public ResponseEntity<?> passwordResetEmailSend(@RequestBody AuthRequest.EmailPwdSendDto requestDto) {
+		authService.sendPasswordResetEmail(requestDto);
 
-        return new ResponseEntity<>(ResponseDto.success(PASSWORD_RESET_EMAIL_SEND, null), HttpStatus.OK);
-    }
+		return new ResponseEntity<>(ResponseDto.success(PASSWORD_RESET_EMAIL_SEND, null), HttpStatus.OK);
+	}
 
-    @PostMapping("/reset-pwd")
-    public ResponseEntity<?> passwordReset(@RequestBody AuthRequest.PasswordResetDto requestDto) {
-        authService.resetPassword(requestDto);
+	@PostMapping("/reset-pwd")
+	public ResponseEntity<?> passwordReset(@RequestBody AuthRequest.PasswordResetDto requestDto) {
+		authService.resetPassword(requestDto);
 
-        return new ResponseEntity<>(ResponseDto.success(PASSWORD_RESET_OK, null), HttpStatus.OK);
-    }
+		return new ResponseEntity<>(ResponseDto.success(PASSWORD_RESET_OK, null), HttpStatus.OK);
+	}
 }

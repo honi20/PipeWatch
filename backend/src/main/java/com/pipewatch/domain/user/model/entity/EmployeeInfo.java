@@ -25,7 +25,7 @@ public class EmployeeInfo {
 	@NotNull
 	private String empClass;
 
-	@OneToOne(fetch= FetchType.LAZY)
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	private User user;
 
