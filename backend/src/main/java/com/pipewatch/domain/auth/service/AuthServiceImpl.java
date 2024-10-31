@@ -58,7 +58,7 @@ public class AuthServiceImpl implements AuthService {
         String verifyCode = mailService.sendVerifyEmail(requestDto.getEmail());
 
         JwtToken jwtToken = JwtToken.builder().verify(verifyCode).build();
-        redisUtil.setDataWithExpiration(requestDto.getEmail() + "_verify", jwtToken, 1000L);
+        redisUtil.setDataWithExpiration(requestDto.getEmail() + "_verify", jwtToken, 900L);
     }
 
     @Override
@@ -193,7 +193,7 @@ public class AuthServiceImpl implements AuthService {
             throw new BaseException(EMAIL_NOT_FOUND);
         }
 
-        if (passwordEncoder.matches(user.getPassword(), requestDto.getPassword())) {
+        if (!passwordEncoder.matches(requestDto.getPassword(), user.getPassword())) {
             throw new BaseException(INVALID_PASSWORD);
         }
 
@@ -217,6 +217,42 @@ public class AuthServiceImpl implements AuthService {
         String userUuid = userRepository.findById(userId).get().getUuid();
 
         redisUtil.deleteData(userUuid);
+    }
+
+    @Override
+    public void sendPasswordResetEmail(AuthRequest.EmailPwdSendDto requestDto) {
+        User user = userRepository.findByEmail(requestDto.getEmail());
+        if (user == null) {
+            throw new BaseException(EMAIL_NOT_FOUND);
+        }
+
+        // 메일 전송
+        String pwdUuid = mailService.sendPasswordResetEmail(requestDto.getEmail());
+
+        redisUtil.setDataWithExpiration(pwdUuid + "_pwdUuid", requestDto.getEmail(), 900L);
+    }
+
+    @Override
+    @Transactional
+    public void resetPassword(AuthRequest.PasswordResetDto requestDto) {
+        // pwdUuid를 통해 유저 이메일 찾기
+        String email = redisUtil.getDataByPwdUuid(requestDto.getPwdUuid() + "_pwdUuid");
+
+        if (email == null) {
+            throw new BaseException(VERIFY_NOT_FOUND);
+        }
+
+        // 유저 비밀번호 변경
+        User user = userRepository.findByEmail(email);
+        if (user == null) {
+            throw new BaseException(EMAIL_NOT_FOUND);
+        }
+
+        String password = passwordEncoder.encode(requestDto.getNewPassword());
+        user.updatePassword(password);
+        userRepository.save(user);
+
+        redisUtil.deleteData(requestDto.getPwdUuid() + "_pwdUuid");
     }
 
     private boolean isEnterpriseDomain(String domain) {

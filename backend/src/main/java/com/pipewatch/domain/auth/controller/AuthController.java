@@ -60,4 +60,18 @@ public class AuthController {
 
         return new ResponseEntity<>(ResponseDto.success(LOGOUT_OK, null), HttpStatus.OK);
     }
+
+    @PostMapping("/send-pwd-reset")
+    public ResponseEntity<?> passwordResetEmailSend(@RequestBody AuthRequest.EmailPwdSendDto requestDto) {
+        authService.sendPasswordResetEmail(requestDto);
+
+        return new ResponseEntity<>(ResponseDto.success(PASSWORD_RESET_EMAIL_SEND, null), HttpStatus.OK);
+    }
+
+    @PostMapping("/reset-pwd")
+    public ResponseEntity<?> passwordReset(@RequestBody AuthRequest.PasswordResetDto requestDto) {
+        authService.resetPassword(requestDto);
+
+        return new ResponseEntity<>(ResponseDto.success(PASSWORD_RESET_OK, null), HttpStatus.OK);
+    }
 }
