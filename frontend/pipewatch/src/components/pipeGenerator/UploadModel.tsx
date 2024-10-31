@@ -66,7 +66,7 @@ export const UploadModel = () => {
   return (
     <div className="p-[40px]">
       <div>
-        <div className="text-[24px] font-bold">
+        <div className="text-[24px] font-bold mb-[20px]">
           {t("pipeGenerator.uploadModel.title")}
         </div>
         <p className="text-[16px]">

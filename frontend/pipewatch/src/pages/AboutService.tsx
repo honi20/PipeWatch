@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import SampleImage from "@assets/images/sample.png";
+import SampleImage from "@assets/images/sample/sample.png";
 
 export const AboutService = () => {
   const { t } = useTranslation();

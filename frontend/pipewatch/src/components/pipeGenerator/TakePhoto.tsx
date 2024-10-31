@@ -17,7 +17,7 @@ export const TakePhoto = () => {
   return (
     <div className="p-[40px]">
       <div>
-        <div className="text-[24px] font-bold">
+        <div className="text-[24px] font-bold mb-[20px]">
           {t("pipeGenerator.takePhoto.connectRCCar.title")}
         </div>
         <p className="text-[16px]">
@@ -48,7 +48,7 @@ export const TakePhoto = () => {
       </div>
 
       <div>
-        <div className="text-[24px] font-bold">
+        <div className="text-[24px] font-bold mb-[20px]">
           {t("pipeGenerator.takePhoto.takePipePhoto.title")}
         </div>
         <p className="text-[16px]">

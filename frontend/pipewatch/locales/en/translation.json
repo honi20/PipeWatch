@@ -198,7 +198,8 @@
         "floorInfo": "Floor Information",
         "ground": "G",
         "underground": "UG",
-        "floor": "F"
+        "floor": "F",
+        "error": "Please enter a valid number."
       }
     },
     "rendering": {

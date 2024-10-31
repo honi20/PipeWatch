@@ -1,6 +1,82 @@
+import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
+import { IconButton } from "@components/common/IconButton";
+
+import SamplePipeAnimation from "@assets/images/sample/sample_pipe_animation.gif";
+import SamplePipeVideo from "@assets/images/sample/sample_pipe_video.mp4";
+
+import PlayCircleIcon from "@mui/icons-material/PlayCircle";
+
 export const Rendering = () => {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+
   const { t } = useTranslation();
-  return <div>{t("pipeGenerator.rendering.title")}</div>;
+
+  const handlePlayPause = () => {
+    if (videoRef.current) {
+      if (videoRef.current.paused) {
+        videoRef.current.play();
+        setIsPlaying(true);
+      } else {
+        videoRef.current.pause();
+        setIsPlaying(false);
+      }
+    }
+  };
+
+  return (
+    <div className="p-[40px]">
+      <div className="text-[24px] font-bold mb-[20px]">
+        {t("pipeGenerator.rendering.title")}
+      </div>
+      <p className="text-[16px]">
+        {t("pipeGenerator.rendering.instructions.completed.message")}
+      </p>
+      <p className="text-[16px]">
+        {t("pipeGenerator.rendering.instructions.completed.previewAndSave")}
+      </p>
+
+      {/* 실제 모델 렌더링 방식 논의 후 결정(.mp4/.gif/else?) */}
+
+      <div className="flex justify-center w-full my-[20px]">
+        <div className="w-[500px] h-[300px] flex flex-col justify-center items-center bg-whiteBox shadow-md rounded-[12px] shadow-gray-500">
+          <img
+            src={SamplePipeAnimation}
+            className="w-full h-full object-cover rounded-[12px]"
+          />
+        </div>
+      </div>
+
+      <div className="flex justify-center w-full my-[20px]">
+        <div
+          onClick={handlePlayPause}
+          className="relative cursor-pointer w-[500px] h-[300px] flex flex-col justify-center items-center bg-whiteBox shadow-md rounded-[12px] shadow-gray-500"
+        >
+          {!isPlaying && (
+            <div className="absolute z-50 bg-transparent">
+              <PlayCircleIcon sx={{ fontSize: "96px", color: "#FFFFFF" }} />
+            </div>
+          )}
+          <video
+            ref={videoRef}
+            src={SamplePipeVideo}
+            className="z-10 w-full h-full object-cover rounded-[12px]"
+            loop
+            muted
+          />
+        </div>
+      </div>
+
+      <div className="flex justify-center w-full">
+        <IconButton
+          handleClick={() => console.log("button Clicked")}
+          text={t("pipeGenerator.commonButtons.save")}
+          color={"bg-primary-500"}
+          hoverColor={"hover:bg-primary-500/80"}
+        />
+      </div>
+    </div>
+  );
 };
