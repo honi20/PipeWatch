@@ -16,12 +16,12 @@ export const CompletedCard = () => {
     });
     const messageArray: string[] = Array.isArray(messages) ? messages : [];
     content = (
-      <div className="flex flex-col items-center w-full">
+      <div className="flex flex-col items-center">
         {messageArray.map((message, index) => {
           const parts = message.split(variable); // 메시지를 variable로 분리
           console.log(parts);
           return (
-            <p className="w-full text-center" key={index}>
+            <p className="text-center" key={index}>
               {parts.map((part, partIndex) => (
                 <React.Fragment key={partIndex}>
                   {part}
@@ -61,7 +61,7 @@ export const CompletedCard = () => {
   }
 
   return (
-    <div className="flex flex-col h-full bg-block rounded-[30px] p-[50px] gap-[40px]">
+    <div className="flex flex-col bg-block rounded-[30px] p-[50px] gap-[40px] text-white">
       {/* header */}
       <div className="flex justify-center font-semibold text-[28px]">
         {t("verification.title")}

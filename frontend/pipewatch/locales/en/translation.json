@@ -44,7 +44,8 @@
       "We are processing the company registration for {{variable}}.",
       "Pre-contact and approval status will be sent to the email address provided for the person in charge within 3 days.",
       "Once you receive the email, you can complete the company registration by accessing the website through the attached admin account."
-    ]
+    ],
+    "toHome": "Home"
   },
   "aboutService": {
     "description1": "Leading Innovation in Pipe System Management and Maintenance.",

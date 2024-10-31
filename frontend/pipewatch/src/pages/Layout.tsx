@@ -35,14 +35,12 @@ function Layout() {
   }, [theme]);
 
   return (
-    <div>
-      <div className="h-screen overflow-auto text-black bg-white dark:bg-black dark:text-white">
-        {isAuth ? null : (
-          <Header handleTheme={handleTheme} currentTheme={localStorage.theme} />
-        )}
-        <div className="border border-success p-[108px] v-100vh">
-          <Outlet />
-        </div>
+    <div className="min-w-[850px] w-screen overflow-auto text-black bg-white dark:bg-black dark:text-white">
+      {isAuth ? null : (
+        <Header handleTheme={handleTheme} currentTheme={localStorage.theme} />
+      )}
+      <div className="py-[108px] min-h-full border border-warn">
+        <Outlet />
       </div>
     </div>
   );
