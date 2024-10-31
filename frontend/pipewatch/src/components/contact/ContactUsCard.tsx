@@ -18,9 +18,11 @@ import {
   useEffect,
 } from "react";
 import clsx from "clsx";
+import { useNavigate } from "react-router-dom";
 
 const ContactUsCard = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [companyName, setCompanyName] = useState("");
   const [contactEmail, setContactEmail] = useState("");
   const [contactPhoneNumber, setContactPhoneNumber] = useState("");
@@ -258,6 +260,7 @@ const ContactUsCard = () => {
             : "bg-button-background cursor-not-allowed"
         }`}
         disabled={!isFormValid}
+        onClick={() => navigate("./completed")}
       >
         {t("contact.card.button")}
       </Button>

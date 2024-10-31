@@ -40,7 +40,7 @@ export const Header = ({ handleTheme, currentTheme }: Props) => {
   const isDark = currentTheme === "dark";
 
   return (
-    <header className="fixed top-0 left-0 right-0 flex items-center justify-between p-2 text-black bg-white dark:bg-black dark:text-white">
+    <header className="min-w-[850px] fixed top-0 left-0 right-0 flex items-center justify-between p-2 text-black bg-white dark:bg-black dark:text-white z-10">
       <div className="flex items-center gap-4">
         <Link className="p-2 hover:text-primary-200 " to="/">
           <img
@@ -82,7 +82,7 @@ export const Header = ({ handleTheme, currentTheme }: Props) => {
                 <PopoverPanel
                   transition
                   anchor="bottom"
-                  className="my-3 divide-y divide-white/5 rounded-xl bg-gray-200 dark:bg-white/5 text-sm/6 transition duration-200 ease-in-out [--anchor-gap:var(--spacing-5)] data-[closed]:-translate-y-1 data-[closed]:opacity-0"
+                  className="my-3 divide-y divide-white/5 rounded-xl bg-gray-200 dark:bg-white/5 text-sm/6 transition duration-200 ease-in-out [--anchor-gap:var(--spacing-5)] data-[closed]:-translate-y-1 data-[closed]:opacity-0 z-10"
                 >
                   <div className="p-3 text-black dark:text-white">
                     <Link
