@@ -34,6 +34,47 @@
     "employeeInformation": "Employee Information",
     "termsAndPrivacyConsent": "By signing up, you consent to our <1>Terms of Service</1> and <3>Privacy Policy</3>."
   },
+  "manageAccount": {
+    "dashboard": {
+      "title": "Account Management",
+      "editInfo": "Edit Personal Information",
+      "updatePassword": "Update Password",
+      "withdrawal": "Account Deletion",
+      "inquiry": "1:1 Inquiry"
+    },
+    "goToHomepage": "Go to Homepage",
+    "goToPreviousCard": "Go to Previous Card",
+    "editInfo": {
+      "registrationEmail": "Registered Email",
+      "companyName": "Company Name",
+      "employeeId": "Employee ID",
+      "department": "Department",
+      "position": "Position",
+      "editPersonalInfo": "Edit Personal Information",
+      "complete": "Your personal information has been successfully updated."
+    },
+    "updatePassword": {
+      "currentPassword": "Current Password",
+      "newPassword": "New Password",
+      "confirmNewPassword": "Confirm New Password",
+      "updatePassword": "Update Password",
+      "complete": "Your password has been successfully updated."
+    },
+    "withdrawal": {
+      "registrationEmail": "Registered Email",
+      "withdrawalNoticeConfirmation": "Have you reviewed the withdrawal notice?",
+      "enterPassword": "Enter Password",
+      "confirmWithdrawal": "Confirm Account Deletion",
+      "withdrawalNotices": [
+        "Once deleted, {{recoveryNotPossible}}.",
+        "All personal information and usage history will be permanently erased.",
+        "Re-registration with the same email may be restricted after deletion.",
+        "Some information may be retained for a period of time in accordance with legal obligations, even after account deletion."
+      ],
+      "recoveryNotPossible": "account recovery is not possible",
+      "complete": "Your account has been successfully deleted."
+    }
+  },
   "verification": {
     "title": "Processing Your Authentication",
     "personal": [
