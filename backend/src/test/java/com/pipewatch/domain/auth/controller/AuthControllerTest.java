@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pipewatch.domain.auth.model.dto.AuthRequest;
 import com.pipewatch.domain.auth.model.dto.AuthResponse;
 import com.pipewatch.domain.auth.service.AuthService;
+import com.pipewatch.domain.user.model.dto.UserRequest;
 import com.pipewatch.global.exception.BaseException;
 import com.pipewatch.global.jwt.entity.JwtToken;
 import com.pipewatch.global.mail.MailService;
@@ -75,6 +76,8 @@ class AuthControllerTest {
 		String content = objectMapper.writeValueAsString(dto);
 
 		given(mailService.sendVerifyEmail(dto.getEmail())).willReturn("239123");
+
+		doNothing().when(authService).sendEmailCode(any(AuthRequest.EmailCodeSendDto.class));
 
 		ResultActions actions = mockMvc.perform(
 				post("/api/auth/send-email-code")
@@ -158,6 +161,8 @@ class AuthControllerTest {
 		String content = objectMapper.writeValueAsString(dto);
 
 		given(redisUtil.getData(dto.getEmail() + "_verify")).willReturn(new JwtToken(null, null, null, "239123"));
+
+		doNothing().when(authService).verifyEmailCode(any(AuthRequest.EmailCodeVerifyDto.class));
 
 		ResultActions actions = mockMvc.perform(
 				post("/api/auth/verify-email-code")
