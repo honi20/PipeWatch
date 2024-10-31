@@ -27,9 +27,11 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.util.List;
 
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
-import static com.pipewatch.domain.user.model.entity.Role.ROLE_EMPLOYEE;
 import static com.pipewatch.domain.util.ResponseFieldUtil.getCommonResponseFields;
 import static com.pipewatch.global.statusCode.SuccessCode.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
@@ -162,7 +164,7 @@ class UserControllerTest {
 	@Test
 	void 개인정보_수정_성공() throws Exception {
 		SecurityContextHolder.getContext().setAuthentication(
-				new UsernamePasswordAuthenticationToken(124L, null, List.of(new SimpleGrantedAuthority("ROLE_USER")))
+				new UsernamePasswordAuthenticationToken(123L, null, List.of(new SimpleGrantedAuthority("ROLE_USER")))
 		);
 
 		UserRequest.MyPageModifyDto dto = UserRequest.MyPageModifyDto.builder()
@@ -171,6 +173,8 @@ class UserControllerTest {
 				.build();
 
 		String content = objectMapper.writeValueAsString(dto);
+
+		doNothing().when(userService).modifyUserDetail(anyLong(), any(UserRequest.MyPageModifyDto.class));
 
 		ResultActions actions = mockMvc.perform(
 				put("/api/users/mypage")
@@ -208,11 +212,17 @@ class UserControllerTest {
 
 	@Test
 	void 비밀번호_수정_성공() throws Exception {
+		SecurityContextHolder.getContext().setAuthentication(
+				new UsernamePasswordAuthenticationToken(123L, null, List.of(new SimpleGrantedAuthority("ROLE_USER")))
+		);
+
 		UserRequest.PasswordModifyDto dto = UserRequest.PasswordModifyDto.builder()
 				.newPassword("new1234")
 				.build();
 
 		String content = objectMapper.writeValueAsString(dto);
+
+		doNothing().when(userService).modifyPassword(anyLong(), any(UserRequest.PasswordModifyDto.class));
 
 		ResultActions actions = mockMvc.perform(
 				patch("/api/users/modify-pwd")
