@@ -3,6 +3,8 @@ package com.pipewatch.domain.enterprise.controller;
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.epages.restdocs.apispec.Schema;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.pipewatch.domain.enterprise.model.dto.EnterpriseResponse;
+import com.pipewatch.domain.enterprise.service.EnterpriseService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -10,18 +12,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
 import static com.pipewatch.domain.util.ResponseFieldUtil.getCommonResponseFields;
-import static com.pipewatch.global.statusCode.SuccessCode.ENTERPRISE_DETAIL_OK;
-import static com.pipewatch.global.statusCode.SuccessCode.MYPAGE_DETAIL_OK;
-import static org.junit.jupiter.api.Assertions.*;
+import static com.pipewatch.global.statusCode.SuccessCode.*;
+import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
@@ -31,20 +40,40 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
+@Transactional
 @AutoConfigureMockMvc
 @AutoConfigureRestDocs
 @ExtendWith(RestDocumentationExtension.class)
 @DisplayName("Enterprise API 명세서")
 @WithMockUser
+@ActiveProfiles("test")
 class EnterpriseControllerTest {
+	private final static String UUID = "1604b772-adc0-4212-8a90-81186c57f598";
+
 	@Autowired
 	private MockMvc mockMvc;
 
 	@Autowired
 	private ObjectMapper objectMapper;
 
+	@MockBean
+	private EnterpriseService enterpriseService;
+
 	@Test
 	void 기업정보_조회_성공() throws Exception {
+		SecurityContextHolder.getContext().setAuthentication(
+				new UsernamePasswordAuthenticationToken(123L, null, List.of(new SimpleGrantedAuthority("ROLE_USER")))
+		);
+
+		EnterpriseResponse.DetailDto response = EnterpriseResponse.DetailDto.builder()
+				.name("paori")
+				.industry("제조업")
+				.managerEmail("admin@ssafy.com")
+				.managerPhoneNumber("010-1234-5678")
+				.build();
+
+		when(enterpriseService.getEnterpriseDetail(123L)).thenReturn(response);
+
 		ResultActions actions = mockMvc.perform(
 				get("/api/enterprises")
 						.contentType(MediaType.APPLICATION_JSON)
@@ -75,4 +104,46 @@ class EnterpriseControllerTest {
 								.build()
 						)));
 	}
+
+	@Test
+	void 기업_리스트_조회_성공() throws Exception {
+		EnterpriseResponse.EnterpriseDto enterprise1 = new EnterpriseResponse.EnterpriseDto(1L, "paori", "제조업");
+		EnterpriseResponse.EnterpriseDto enterprise2 = new EnterpriseResponse.EnterpriseDto(2L, "samsung", "제조업");
+		EnterpriseResponse.ListDto response = EnterpriseResponse.ListDto.builder()
+				.enterprises(List.of(enterprise1, enterprise2))
+				.build();
+
+		when(enterpriseService.getEnterpriseList()).thenReturn(response);
+
+		ResultActions actions = mockMvc.perform(
+				get("/api/enterprises/list")
+						.contentType(MediaType.APPLICATION_JSON)
+						.accept(MediaType.APPLICATION_JSON)
+						.characterEncoding("UTF-8")
+		);
+
+		actions
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.header.httpStatusCode").value(ENTERPRISE_LIST_OK.getHttpStatusCode()))
+				.andExpect(jsonPath("$.header.message").value(ENTERPRISE_LIST_OK.getMessage()))
+				.andDo(document(
+						"기업 리스트 조회 성공",
+						preprocessRequest(prettyPrint()),
+						preprocessResponse(prettyPrint()),
+						resource(ResourceSnippetParameters.builder()
+								.tag("Enterprise API")
+								.summary("기업 리스트 조회 API")
+								.responseFields(
+										getCommonResponseFields(
+												fieldWithPath("body.enterprises[]").type(JsonFieldType.ARRAY).description("기업리스트"),
+												fieldWithPath("body.enterprises[].enterpriseId").type(JsonFieldType.NUMBER).description("기업 ID"),
+												fieldWithPath("body.enterprises[].name").type(JsonFieldType.STRING).description("기업명"),
+												fieldWithPath("body.enterprises[].industry").type(JsonFieldType.STRING).description("기업 산업")
+										)
+								)
+								.responseSchema(Schema.schema("기업 리스트 조회 Response"))
+								.build()
+						)));
+	}
+
 }

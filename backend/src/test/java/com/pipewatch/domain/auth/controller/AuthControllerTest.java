@@ -531,16 +531,11 @@ class AuthControllerTest {
         AuthRequest.EnterpriseRegistDto dto = AuthRequest.EnterpriseRegistDto.builder()
                 .name("paori")
                 .industry("제조업")
-                .managerEmail("admin@paori.com")
+                .managerEmail("admin@ssafy.com")
                 .managerPhoneNumber("010-1234-5678")
                 .build();
 
         String content = objectMapper.writeValueAsString(dto);
-
-        AuthResponse.EnterpriseAccountDto response = AuthResponse.EnterpriseAccountDto.builder()
-                .email("pipewatch_admin@paori.com")
-                .password("pipewatch1234")
-                .build();
 
         doThrow(new BaseException(DUPLICATED_ENTERPRISE)).when(authService).registEnterprise(any(AuthRequest.EnterpriseRegistDto.class));
 
