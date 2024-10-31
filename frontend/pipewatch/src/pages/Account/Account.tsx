@@ -3,11 +3,11 @@ import { FindPassword } from "@pages/account/FindPassword";
 import { SignUpPage } from "@pages/account/SignUpPage";
 
 import { useLocation } from "react-router-dom";
+import { CompletedContact } from "@src/pages/CompletedContact";
 
 export const Account = () => {
   const location = useLocation();
   const currentPath = location.pathname.split("/").pop();
-  // console.log(currentPath);
 
   const currentPage = () => {
     switch (currentPath) {
@@ -17,6 +17,8 @@ export const Account = () => {
         return <FindPassword />;
       case "sign-up":
         return <SignUpPage />;
+      case "completed":
+        return <CompletedContact />;
     }
   };
 

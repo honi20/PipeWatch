@@ -44,7 +44,7 @@ const LoginCard = () => {
     !showEmailError && !showPasswordError && email !== "" && password !== "";
 
   return (
-    <div className="w-[500px] flex flex-col bg-block rounded-[30px] p-[50px] gap-[40px]">
+    <div className="w-[500px] flex flex-col bg-block rounded-[30px] p-[50px] gap-[40px] text-white">
       {/* header */}
       <div className="flex justify-center font-semibold text-[28px]">
         {t("account.login")}

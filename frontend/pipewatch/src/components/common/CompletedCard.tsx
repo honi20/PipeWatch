@@ -46,7 +46,7 @@ export const CompletedCard = () => {
           const parts = message.split(variable); // 메시지를 variable로 분리
           console.log(parts);
           return (
-            <p key={index}>
+            <p className="text-center" key={index}>
               {parts.map((part, partIndex) => (
                 <React.Fragment key={partIndex}>
                   {part}

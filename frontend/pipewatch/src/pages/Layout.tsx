@@ -39,7 +39,7 @@ function Layout() {
       {isAuth ? null : (
         <Header handleTheme={handleTheme} currentTheme={localStorage.theme} />
       )}
-      <div className="py-[108px] min-h-full border border-warn">
+      <div className="py-[108px] min-h-full">
         <Outlet />
       </div>
     </div>

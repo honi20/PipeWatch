@@ -30,7 +30,7 @@ import { InputData } from "./components/pipeGenerator/InputData";
 import { Rendering } from "./components/pipeGenerator/Rendering";
 import { Completed } from "./components/pipeGenerator/Completed";
 
-import { CompletedContact } from "@src/pages/Completed";
+import { CompletedContact } from "@pages/CompletedContact";
 
 function App() {
   return (
