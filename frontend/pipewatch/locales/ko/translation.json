@@ -185,7 +185,8 @@
         "floorInfo": "층 정보",
         "ground": "지상",
         "underground": "지하",
-        "floor": "층"
+        "floor": "층",
+        "error": "숫자 형식으로 입력해 주세요."
       }
     },
     "rendering": {

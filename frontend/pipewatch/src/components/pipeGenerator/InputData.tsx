@@ -20,7 +20,7 @@ export const InputData = () => {
 
   const [pipelineName, setPipelineName] = useState("");
   const [groundInfo, setGroundInfo] = useState("G");
-  const [floorNum, setFloorNum] = useState("");
+  const [floorNum, setFloorNum] = useState<number>(0);
   const [query, setQuery] = useState("");
 
   const [selectedLocation, setSelectedLocation] = useState<Location | null>();
@@ -52,12 +52,30 @@ export const InputData = () => {
     setGroundInfo(groundInfo);
   };
 
+  const [isFloorNumInvalid, setIsFloorNumInvalid] = useState(false);
+
+  const handleFloorNumChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+
+    // 숫자 여부를 확인하고 상태를 설정
+    if (/^\d*$/.test(value)) {
+      console.log("value:", value);
+      console.log("floorNum:", floorNum);
+      setFloorNum(Number(value)); // 숫자로 변환하여 설정
+      setIsFloorNumInvalid(false); // 숫자면 경고 색상 해제
+      console.log("floorNumNext:", floorNum);
+    } else {
+      setIsFloorNumInvalid(true); // 숫자가 아니면 경고
+    }
+  };
+
   // 버튼 활성화
   const isFormValid: boolean =
     pipelineName !== "" &&
     selectedLocation?.name !== "선택" &&
     groundInfo !== "" &&
-    floorNum !== "" &&
+    !!floorNum &&
+    !isFloorNumInvalid &&
     !(query === "" && !selectedLocation);
 
   return (
@@ -70,7 +88,7 @@ export const InputData = () => {
       </p>
 
       <div className="flex justify-center w-full mt-[60px]">
-        <div className="text-gray-800 py-[60px] px-[50px] w-[500px] h-[300px] flex flex-col gap-[20px] justify-center items-center bg-whiteBox shadow-md rounded-[12px] shadow-gray-500">
+        <div className="relative text-gray-800 py-[60px] px-[50px] w-[500px] h-[300px] flex flex-col gap-[20px] justify-center items-center bg-whiteBox shadow-md rounded-[12px] shadow-gray-500">
           <div className="flex items-center w-full h-full">
             <label className="flex-[2]">
               {t("pipeGenerator.inputData.formData.pipelineName")}
@@ -135,6 +153,7 @@ export const InputData = () => {
             <label className="flex-[2]">
               {t("pipeGenerator.inputData.formData.floorInfo")}
             </label>
+
             <div className="h-full flex-[4] flex gap-[8px]">
               <div className="h-full flex flex-[3] gap-2">
                 <button
@@ -157,8 +176,11 @@ export const InputData = () => {
               <div className="relative w-full flex flex-[2]">
                 <Input
                   type="text"
-                  onChange={(e) => setFloorNum(e.target.value)}
-                  className="focus:outline-success h-full w-full px-5 bg-white rounded-[5px]"
+                  // onChange={(e) => setFloorNum(e.target.value)}
+                  onChange={handleFloorNumChange}
+                  className={`focus:outline-success h-full w-full px-5 border-black bg-white rounded-[5px] ${
+                    isFloorNumInvalid && "border-solid border-2 border-warn"
+                  }`}
                 />
                 <span className="absolute text-gray-500 transform -translate-y-1/2 right-5 top-1/2">
                   {t("pipeGenerator.inputData.formData.floor")}
@@ -166,6 +188,12 @@ export const InputData = () => {
               </div>
             </div>
           </div>
+
+          {isFloorNumInvalid && (
+            <span className="absolute bottom-6 right-[100px] text-warn text-[12px]">
+              {t("pipeGenerator.inputData.formData.error")}
+            </span>
+          )}
         </div>
       </div>
 
