@@ -2,10 +2,12 @@ package com.pipewatch.domain.user.controller;
 
 import com.pipewatch.domain.user.model.dto.UserRequest;
 import com.pipewatch.domain.user.model.dto.UserResponse;
+import com.pipewatch.domain.user.service.UserService;
 import com.pipewatch.global.response.ResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import static com.pipewatch.global.statusCode.SuccessCode.*;
@@ -14,18 +16,11 @@ import static com.pipewatch.global.statusCode.SuccessCode.*;
 @RequestMapping("${api_prefix}/users")
 @RequiredArgsConstructor
 public class UserController {
+	private final UserService userService;
+
 	@GetMapping("/mypage")
-	public ResponseEntity<?> myPage() {
-		UserResponse.MyPageDto responseDto = UserResponse.MyPageDto.builder()
-				.name("김싸피")
-				.email("kim@ssafy.com")
-				.enterpriseName("ssafy")
-				.empNo(1123456L)
-				.department("경영지원팀")
-				.empClass("대리")
-				.roll("사원")
-				.state("active")
-				.build();
+	public ResponseEntity<?> myPage(@AuthenticationPrincipal Long userId) {
+		UserResponse.MyPageDto responseDto = userService.getUserDetail(userId);
 
 		return new ResponseEntity<>(ResponseDto.success(MYPAGE_DETAIL_OK, responseDto), HttpStatus.OK);
 	}

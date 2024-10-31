@@ -32,10 +32,12 @@ public class User extends BaseEntity {
 
 	@NotNull
 	@Builder.Default
+	@Enumerated(EnumType.STRING)
 	private State state = State.PENDING;
 
 	@NotNull
 	@Builder.Default
+	@Enumerated(EnumType.STRING)
 	private Role role = Role.ROLE_USER;
 
 	@NotNull
