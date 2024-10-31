@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import clsx from "clsx";
 
 import {
   Input,
@@ -14,14 +15,17 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useTranslation } from "react-i18next";
 
 export const InputData = () => {
+  const { t } = useTranslation();
+
+  const [pipelineName, setPipelineName] = useState("");
   const [groundInfo, setGroundInfo] = useState("G");
+  const [floorNum, setFloorNum] = useState("");
   const [query, setQuery] = useState("");
 
-  const updateFloorInfo = (groundInfo: string) => {
-    setGroundInfo(groundInfo);
-  };
-
-  const { t } = useTranslation();
+  const [selectedLocation, setSelectedLocation] = useState<Location | null>({
+    id: 0,
+    name: "선택",
+  });
 
   type Location = {
     id: number;
@@ -38,10 +42,16 @@ export const InputData = () => {
     []
   );
 
-  const [selectedLocation, setSelectedLocation] = useState<Location | null>({
-    id: 0,
-    name: "선택",
-  });
+  const filteredLocation =
+    query === ""
+      ? locationList
+      : locationList.filter((location) => {
+          return location.name.toLowerCase().includes(query.toLowerCase());
+        });
+
+  const updateFloorInfo = (groundInfo: string) => {
+    setGroundInfo(groundInfo);
+  };
 
   return (
     <div className="p-[40px]">
@@ -53,19 +63,20 @@ export const InputData = () => {
       </p>
 
       <div className="flex justify-center w-full my-[80px]">
-        <div className="text-gray-800 p-[60px] w-[500px] h-[300px] flex flex-col gap-[20px] justify-center items-center bg-whiteBox shadow-md rounded-[12px] shadow-gray-500">
+        <div className="text-gray-800 py-[60px] px-[50px] w-[500px] h-[300px] flex flex-col gap-[20px] justify-center items-center bg-whiteBox shadow-md rounded-[12px] shadow-gray-500">
           <div className="flex items-center w-full h-full">
             <label className="flex-[2]">
               {t("pipeGenerator.inputData.formData.pipelineName")}
             </label>
-            <Input
-              type="text"
-              value={""}
-              onChange={(e) => {}}
-              placeholder={"입력"}
-              className="focus:outline-success h-full w-full flex-[3] px-5 bg-white rounded-[5px]"
-              required
-            />
+            <div className="flex-[4] h-full">
+              <Input
+                type="text"
+                value={pipelineName}
+                onChange={(event) => setPipelineName(event.target.value)}
+                className="focus:outline-success h-full w-full px-5 bg-white rounded-[5px] box-border"
+                required
+              />
+            </div>
           </div>
 
           <div className="flex items-center w-full h-full">
@@ -78,12 +89,15 @@ export const InputData = () => {
               onChange={setSelectedLocation}
               onClose={() => setQuery("")}
             >
-              <div className="relative flex-[3]">
+              <div className="relative flex-[4] h-full">
                 <ComboboxInput
                   aria-label="location"
                   displayValue={(location: Location) => location?.name}
                   onChange={(event) => setQuery(event.target.value)}
-                  className="w-full bg-white rounded-[5px] h-[40px] px-5"
+                  placeholder={`${t(
+                    "pipeGenerator.inputData.formData.select"
+                  )}`}
+                  className="w-full focus:outline-success bg-white rounded-[5px] h-full px-5"
                 />
                 <ComboboxButton className="group absolute inset-y-0 right-0 px-2.5 bg-transparent">
                   <ExpandMoreIcon sx={{ fontSize: "20px" }} />
@@ -92,13 +106,15 @@ export const InputData = () => {
 
               <ComboboxOptions
                 anchor="bottom"
-                className="bg-gray-200 border rounded-[5px] empty:invisible"
+                className={clsx(
+                  "w-[var(--input-width)] bg-gray-200 rounded-[5px] border border-white/5 p-1 [--anchor-gap:var(--spacing-1)] empty:invisible",
+                  "transition duration-100 ease-in data-[leave]:data-[closed]:opacity-0"
+                )}
               >
-                {locationList.map((location) => (
+                {filteredLocation.map((location) => (
                   <ComboboxOption
                     key={location.id}
                     value={location}
-                    // className="data-[focus]:bg-blue-100"
                     className="group flex cursor-default items-center gap-2 rounded-lg py-1.5 px-3 select-none data-[focus]:bg-gray-500/20"
                   >
                     {location.name}
@@ -112,24 +128,35 @@ export const InputData = () => {
             <label className="flex-[2]">
               {t("pipeGenerator.inputData.formData.floorInfo")}
             </label>
-            <div className="flex-[3] flex gap-[8px]">
-              <button
-                onClick={() => updateFloorInfo("G")}
-                className={`bg-gray-200 rounded-[24px] w-full px-[16px] py-[4px] text-white ${
-                  groundInfo === "G" ? "bg-gray-500" : "bg-gray-200"
-                }`}
-              >
-                지상
-              </button>
-              <button
-                onClick={() => updateFloorInfo("UG")}
-                className={`bg-gray-200 rounded-[24px] w-full px-[16px] py-[4px] text-white ${
-                  groundInfo === "UG" ? "bg-gray-500" : "bg-gray-200"
-                }`}
-              >
-                지하
-              </button>
-              <Input className="focus:outline-success h-[56px] w-full px-5 bg-white rounded-[5px]" />
+            <div className="h-full flex-[4] flex gap-[8px]">
+              <div className="h-full flex flex-[3] gap-2">
+                <button
+                  onClick={() => updateFloorInfo("G")} // floorInfo 값은 데이터 전송에만 필요하기 때문에 G / UG로 구분함(translation X)
+                  className={`bg-gray-200 w-full h-full rounded-[24px] px-[12px] py-[4px] text-white ${
+                    groundInfo === "G" ? "bg-gray-500" : "bg-gray-200"
+                  }`}
+                >
+                  {t("pipeGenerator.inputData.formData.ground")}
+                </button>
+                <button
+                  onClick={() => updateFloorInfo("UG")}
+                  className={`bg-gray-200 w-full h-full rounded-[24px] px-[12px] py-[4px] text-white ${
+                    groundInfo === "UG" ? "bg-gray-500" : "bg-gray-200"
+                  }`}
+                >
+                  {t("pipeGenerator.inputData.formData.underground")}
+                </button>
+              </div>
+              <div className="relative w-full flex flex-[2]">
+                <Input
+                  type="text"
+                  onChange={(e) => setFloorNum(e.target.value)}
+                  className="focus:outline-success h-full w-full px-5 bg-white rounded-[5px]"
+                />
+                <span className="absolute text-gray-500 transform -translate-y-1/2 right-5 top-1/2">
+                  {t("pipeGenerator.inputData.formData.floor")}
+                </span>
+              </div>
             </div>
           </div>
         </div>
