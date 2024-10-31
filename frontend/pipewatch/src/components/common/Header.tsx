@@ -82,9 +82,9 @@ export const Header = ({ handleTheme, currentTheme }: Props) => {
                 <PopoverPanel
                   transition
                   anchor="bottom"
-                  className="my-3 divide-y divide-white/5 rounded-xl bg-gray-200 dark:bg-white/5 text-sm/6 transition duration-200 ease-in-out [--anchor-gap:var(--spacing-5)] data-[closed]:-translate-y-1 data-[closed]:opacity-0 z-10"
+                  className="my-3 divide-y divide-white/5 rounded-xl bg-block dark:bg-block text-sm/6 transition duration-200 ease-in-out [--anchor-gap:var(--spacing-5)] data-[closed]:-translate-y-1 data-[closed]:opacity-0 z-10"
                 >
-                  <div className="p-3 text-black dark:text-white">
+                  <div className="p-3 text-white dark:text-white">
                     <Link
                       className="block px-3 py-2 transition rounded-lg hover:bg-white/5 hover:text-primary-200"
                       to="/about-us/service"

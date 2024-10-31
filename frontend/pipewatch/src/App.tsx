@@ -19,9 +19,9 @@ import { SignUpPage } from "./pages/account/SignUpPage";
 import { EmpVerification } from "./pages/EmpVerification";
 import { EmpView } from "./pages/EmpView";
 
-import { ChangePassword } from "./pages/ChangePassword";
+import { UpdatePassword } from "./pages/UpdatePassword";
 import { EditInfo } from "./pages/EditInfo";
-import { DeleteAccount } from "./pages/DeleteAccount";
+import { Withdrawal } from "./pages/Withdrawal";
 import { ManageAccount } from "./pages/ManageAccount";
 
 import { TakePhoto } from "./components/pipeGenerator/TakePhoto";
@@ -75,13 +75,10 @@ function App() {
             <Route path="/account/manage" element={<ManageAccount />} />
             <Route path="/account/manage/edit-info" element={<EditInfo />} />
             <Route
-              path="/account/manage/change-pw"
-              element={<ChangePassword />}
+              path="/account/manage/update-pw"
+              element={<UpdatePassword />}
             />
-            <Route
-              path="/account/manage/delete-account"
-              element={<DeleteAccount />}
-            />
+            <Route path="/account/manage/withdrawal" element={<Withdrawal />} />
 
             <Route path="/account/auth" element={<Account />}>
               <Route path="/account/auth/login" element={<LoginPage />} />
