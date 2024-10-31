@@ -27,7 +27,7 @@ public enum ErrorCode {
 	EXPIRED_TOKEN(HttpStatus.UNAUTHORIZED.value(), "만료된 토큰입니다"),
 
 	// Management
-	ROLL_NOT_FOUND(HttpStatus.NOT_FOUND.value(), "해당 Roll이 존재하지 않습니다."),
+	ROLE_NOT_FOUND(HttpStatus.NOT_FOUND.value(), "해당 Role이 존재하지 않습니다."),
 	USER_NOT_FOUND(HttpStatus.NOT_FOUND.value(), "해당 유저가 존재하지 않습니다."),
 
 	// Pipeline Model
@@ -40,7 +40,7 @@ public enum ErrorCode {
 	PIPE_NOT_FOUND(HttpStatus.NOT_FOUND.value(), "해당 파이프가 존재하지 않습니다."),
 
 	// Global
-	FORBIDDEN_USER_ROLL(HttpStatus.FORBIDDEN.value(), "접근 권한이 없는 유저입니다."),
+	FORBIDDEN_USER_ROLE(HttpStatus.FORBIDDEN.value(), "접근 권한이 없는 유저입니다."),
 	;
 
 	private final int httpStatusCode;

@@ -32,4 +32,12 @@ public class EmployeeInfo {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "enterprise_id")
 	private Enterprise enterprise;
+
+	public void updateDepartment(String department) {
+		this.department = department;
+	}
+
+	public void updateEmpClass(String empClass) {
+		this.empClass = empClass;
+	}
 }

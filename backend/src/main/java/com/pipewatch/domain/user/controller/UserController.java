@@ -26,7 +26,9 @@ public class UserController {
 	}
 
 	@PutMapping("/mypage")
-	public ResponseEntity<?> mypageModify(@RequestBody UserRequest.MyPageModifyDto requestDto) {
+	public ResponseEntity<?> mypageModify(@AuthenticationPrincipal Long userId, @RequestBody UserRequest.MyPageModifyDto requestDto) {
+		userService.modifyUserDetail(userId, requestDto);
+
 		return new ResponseEntity<>(ResponseDto.success(MYPAGE_MODIFIED_OK, null), HttpStatus.OK);
 	}
 
