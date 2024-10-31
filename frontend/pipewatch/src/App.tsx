@@ -19,10 +19,10 @@ import { SignUpPage } from "./pages/account/SignUpPage";
 import { EmpVerification } from "./pages/EmpVerification";
 import { EmpView } from "./pages/EmpView";
 
-import { UpdatePassword } from "./pages/UpdatePassword";
-import { EditInfo } from "./pages/EditInfo";
-import { Withdrawal } from "./pages/Withdrawal";
-import { ManageAccount } from "./pages/ManageAccount";
+import { UpdatePassword } from "./pages/ManageAccount/UpdatePassword";
+import { EditInfo } from "./pages/ManageAccount/EditInfo";
+import { Withdrawal } from "./pages/ManageAccount/Withdrawal";
+import { ManageAccount } from "./pages/ManageAccount/ManageAccount";
 
 import { TakePhoto } from "./components/pipeGenerator/TakePhoto";
 import { UploadModel } from "./components/pipeGenerator/UploadModel";
