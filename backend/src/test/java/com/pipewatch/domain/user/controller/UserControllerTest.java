@@ -161,8 +161,12 @@ class UserControllerTest {
 
 	@Test
 	void 개인정보_수정_성공() throws Exception {
+		SecurityContextHolder.getContext().setAuthentication(
+				new UsernamePasswordAuthenticationToken(124L, null, List.of(new SimpleGrantedAuthority("ROLE_USER")))
+		);
+
 		UserRequest.MyPageModifyDto dto = UserRequest.MyPageModifyDto.builder()
-				.department("IT개발팀")
+				.department("마케팅팀")
 				.empClass("부장")
 				.build();
 
