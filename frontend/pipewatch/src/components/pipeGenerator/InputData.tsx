@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import { IconButton } from "@components/common/IconButton";
 import clsx from "clsx";
 
 import {
@@ -22,10 +23,7 @@ export const InputData = () => {
   const [floorNum, setFloorNum] = useState("");
   const [query, setQuery] = useState("");
 
-  const [selectedLocation, setSelectedLocation] = useState<Location | null>({
-    id: 0,
-    name: "선택",
-  });
+  const [selectedLocation, setSelectedLocation] = useState<Location | null>();
 
   type Location = {
     id: number;
@@ -38,6 +36,7 @@ export const InputData = () => {
       { id: 1, name: "역삼 멀티캠퍼스" },
       { id: 2, name: "메가박스 서울숲점" },
       { id: 3, name: "경덕이네 집" },
+      { id: 4, name: "해피해피주연하우스" },
     ],
     []
   );
@@ -53,6 +52,14 @@ export const InputData = () => {
     setGroundInfo(groundInfo);
   };
 
+  // 버튼 활성화
+  const isFormValid: boolean =
+    pipelineName !== "" &&
+    selectedLocation?.name !== "선택" &&
+    groundInfo !== "" &&
+    floorNum !== "" &&
+    !(query === "" && !selectedLocation);
+
   return (
     <div className="p-[40px]">
       <div className="text-[24px] font-bold mb-[20px]">
@@ -62,7 +69,7 @@ export const InputData = () => {
         {t("pipeGenerator.inputData.instructions.dataEntryPrompt")}
       </p>
 
-      <div className="flex justify-center w-full my-[80px]">
+      <div className="flex justify-center w-full mt-[60px]">
         <div className="text-gray-800 py-[60px] px-[50px] w-[500px] h-[300px] flex flex-col gap-[20px] justify-center items-center bg-whiteBox shadow-md rounded-[12px] shadow-gray-500">
           <div className="flex items-center w-full h-full">
             <label className="flex-[2]">
@@ -107,7 +114,7 @@ export const InputData = () => {
               <ComboboxOptions
                 anchor="bottom"
                 className={clsx(
-                  "w-[var(--input-width)] bg-gray-200 rounded-[5px] border border-white/5 p-1 [--anchor-gap:var(--spacing-1)] empty:invisible",
+                  "w-[var(--input-width)] bg-gray-200 rounded-[5px] my-[8px] border border-white/5 p-1 [--anchor-gap:var(--spacing-1)] empty:invisible",
                   "transition duration-100 ease-in data-[leave]:data-[closed]:opacity-0"
                 )}
               >
@@ -115,7 +122,7 @@ export const InputData = () => {
                   <ComboboxOption
                     key={location.id}
                     value={location}
-                    className="group flex cursor-default items-center gap-2 rounded-lg py-1.5 px-3 select-none data-[focus]:bg-gray-500/20"
+                    className="group flex cursor-default items-center gap-2 rounded-lg py-3 px-3 select-none data-[focus]:bg-gray-500/20"
                   >
                     {location.name}
                   </ComboboxOption>
@@ -161,6 +168,17 @@ export const InputData = () => {
           </div>
         </div>
       </div>
+
+      {isFormValid && (
+        <div className="flex justify-center w-full my-[20px]">
+          <IconButton
+            handleClick={() => console.log("button Clicked")}
+            text={t("pipeGenerator.commonButtons.save")}
+            color={"bg-primary-500"}
+            hoverColor={"hover:bg-primary-500/80"}
+          />
+        </div>
+      )}
     </div>
   );
 };
