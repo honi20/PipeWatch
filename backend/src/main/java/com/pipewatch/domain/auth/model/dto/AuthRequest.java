@@ -81,7 +81,7 @@ public class AuthRequest {
 					.industry(this.industry)
 					.managerEmail(this.managerEmail)
 					.managerPhoneNumber(this.managerPhoneNumber)
-					.isActive(false)
+					.isActive(true)
 					.user(user)
 					.build();
 		}

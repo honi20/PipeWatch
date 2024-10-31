@@ -35,9 +35,13 @@ public class Enterprise {
 
 	@Builder.Default
 	@Column(name = "is_active")
-	private Boolean isActive = false;
+	private Boolean isActive = true;
 
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	private User user;
+
+	public void updateIsActive(Boolean isActive) {
+		this.isActive = isActive;
+	}
 }

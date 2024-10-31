@@ -39,7 +39,7 @@ public class ManagementController {
 
 	@PatchMapping("/{userUuid}")
 	public ResponseEntity<?> userRollModify(@PathVariable String userUuid) {
-		return new ResponseEntity<>(ResponseDto.success(ROLL_MODIFIED_OK, null), HttpStatus.OK);
+		return new ResponseEntity<>(ResponseDto.success(ROLE_MODIFIED_OK, null), HttpStatus.OK);
 	}
 
 	@GetMapping("/search")

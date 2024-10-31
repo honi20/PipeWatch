@@ -137,8 +137,8 @@ class ManagementControllerTest {
 
 		actions
 				.andExpect(status().isOk())
-				.andExpect(jsonPath("$.header.httpStatusCode").value(ROLL_MODIFIED_OK.getHttpStatusCode()))
-				.andExpect(jsonPath("$.header.message").value(ROLL_MODIFIED_OK.getMessage()))
+				.andExpect(jsonPath("$.header.httpStatusCode").value(ROLE_MODIFIED_OK.getHttpStatusCode()))
+				.andExpect(jsonPath("$.header.message").value(ROLE_MODIFIED_OK.getMessage()))
 				.andDo(document(
 						"접근 권한 변경 성공",
 						preprocessRequest(prettyPrint()),
