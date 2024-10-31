@@ -31,4 +31,8 @@ public class RedisUtil {
 	public AuthRequest.SignupDto getDataByToken(String token) {
 		return (AuthRequest.SignupDto) redisTemplate.opsForValue().get(token);
 	}
+
+	public String getDataByPwdUuid(String uuid) {
+		return (String) redisTemplate.opsForValue().get(uuid);
+	}
 }
