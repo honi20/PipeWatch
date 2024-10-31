@@ -6,6 +6,7 @@ import com.pipewatch.global.response.ResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,8 +21,8 @@ public class EnterpriseController {
 	private final EnterpriseService enterpriseService;
 
 	@GetMapping
-	public ResponseEntity<?> enterpriseDetail() {
-		EnterpriseResponse.DetailDto responseDto = enterpriseService.getEnterpriseDetail();
+	public ResponseEntity<?> enterpriseDetail(@AuthenticationPrincipal Long userId) {
+		EnterpriseResponse.DetailDto responseDto = enterpriseService.getEnterpriseDetail(userId);
 
 		return new ResponseEntity<>(ResponseDto.success(ENTERPRISE_DETAIL_OK, responseDto), HttpStatus.OK);
 	}

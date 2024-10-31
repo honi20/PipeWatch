@@ -16,9 +16,14 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -35,12 +40,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
+@Transactional
 @AutoConfigureMockMvc
 @AutoConfigureRestDocs
 @ExtendWith(RestDocumentationExtension.class)
 @DisplayName("Enterprise API 명세서")
 @WithMockUser
+@ActiveProfiles("test")
 class EnterpriseControllerTest {
+	private final static String UUID = "1604b772-adc0-4212-8a90-81186c57f598";
+
 	@Autowired
 	private MockMvc mockMvc;
 
@@ -52,14 +61,18 @@ class EnterpriseControllerTest {
 
 	@Test
 	void 기업정보_조회_성공() throws Exception {
+		SecurityContextHolder.getContext().setAuthentication(
+				new UsernamePasswordAuthenticationToken(123L, null, List.of(new SimpleGrantedAuthority("ROLE_USER")))
+		);
+
 		EnterpriseResponse.DetailDto response = EnterpriseResponse.DetailDto.builder()
 				.name("paori")
 				.industry("제조업")
-				.managerEmail("admin@paori.com")
+				.managerEmail("admin@ssafy.com")
 				.managerPhoneNumber("010-1234-5678")
 				.build();
 
-		when(enterpriseService.getEnterpriseDetail()).thenReturn(response);
+		when(enterpriseService.getEnterpriseDetail(123L)).thenReturn(response);
 
 		ResultActions actions = mockMvc.perform(
 				get("/api/enterprises")

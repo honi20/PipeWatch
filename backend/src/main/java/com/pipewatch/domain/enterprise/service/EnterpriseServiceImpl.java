@@ -11,10 +11,9 @@ import com.pipewatch.domain.user.repository.UserRepository;
 import com.pipewatch.global.exception.BaseException;
 import com.pipewatch.global.jwt.service.JwtService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.context.SecurityContextHolder;
+
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.pipewatch.global.statusCode.ErrorCode.*;
@@ -28,8 +27,7 @@ public class EnterpriseServiceImpl implements EnterpriseService {
     private final EmployeeRepository employeeRepository;
 
     @Override
-    public EnterpriseResponse.DetailDto getEnterpriseDetail() {
-        Long userId = jwtService.getUserId(SecurityContextHolder.getContext());
+    public EnterpriseResponse.DetailDto getEnterpriseDetail(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new BaseException(USER_NOT_FOUND));
 
         Enterprise enterprise;
