@@ -732,4 +732,173 @@ class AuthControllerTest {
                                 .build()
                         )));
     }
+
+    @Test
+    void 비밀번호_재설정_전송_성공() throws Exception {
+        AuthRequest.EmailPwdSendDto dto = AuthRequest.EmailPwdSendDto.builder()
+                .email("test@ssafy.com")
+                .build();
+
+        String content = objectMapper.writeValueAsString(dto);
+
+        doNothing().when(authService).sendPasswordResetEmail(any(AuthRequest.EmailPwdSendDto.class));
+
+        ResultActions actions = mockMvc.perform(
+                post("/api/auth/send-pwd-reset")
+                        .content(content)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8")
+                        .with(csrf())
+        );
+
+        actions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.header.httpStatusCode").value(PASSWORD_RESET_EMAIL_SEND.getHttpStatusCode()))
+                .andExpect(jsonPath("$.header.message").value(PASSWORD_RESET_EMAIL_SEND.getMessage()))
+                .andDo(document(
+                        "비밀번호 재설정 링크 전송 성공",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        resource(ResourceSnippetParameters.builder()
+                                .tag("Auth API")
+                                .summary("비밀번호 재설정 링크 전송 API")
+                                .requestFields(
+                                        fieldWithPath("email").type(JsonFieldType.STRING).description("이메일")
+                                )
+                                .responseFields(
+                                        getCommonResponseFields(
+                                                fieldWithPath("body").ignored()
+                                        )
+                                )
+                                .requestSchema(Schema.schema("비밀번호 재설정 링크 전송 Request"))
+                                .build()
+                        )));
+    }
+
+    @Test
+    void 비밀번호_재설정_전송_실패_존재하지_않는_메일() throws Exception {
+        AuthRequest.EmailPwdSendDto dto = AuthRequest.EmailPwdSendDto.builder()
+                .email("nouser@ssafy.com")
+                .build();
+
+        String content = objectMapper.writeValueAsString(dto);
+
+        doThrow(new BaseException(EMAIL_NOT_FOUND)).when(authService).sendPasswordResetEmail(any(AuthRequest.EmailPwdSendDto.class));
+
+        ResultActions actions = mockMvc.perform(
+                post("/api/auth/send-pwd-reset")
+                        .content(content)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8")
+                        .with(csrf())
+        );
+
+        actions
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.header.httpStatusCode").value(EMAIL_NOT_FOUND.getHttpStatusCode()))
+                .andExpect(jsonPath("$.header.message").value(EMAIL_NOT_FOUND.getMessage()))
+                .andDo(document(
+                        "비밀번호 재설정 링크 전송 실패 - 존재하지 않는 이메일",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        resource(ResourceSnippetParameters.builder()
+                                .tag("Auth API")
+                                .responseFields(
+                                        getCommonResponseFields(
+                                                fieldWithPath("body").type(JsonFieldType.OBJECT).description("에러 상세").optional().ignored()
+                                        )
+                                )
+                                .responseSchema(Schema.schema("Error Response"))
+                                .build()
+                        )));
+    }
+
+    @Test
+    void 비밀번호_재설정_성공() throws Exception {
+        AuthRequest.PasswordResetDto dto = AuthRequest.PasswordResetDto.builder()
+                .pwdUuid("pwdUuid")
+                .newPassword("newPassword")
+                .build();
+
+        given(redisUtil.getData(dto.getPwdUuid() + "_pwdUuid")).willReturn("test@ssafy.com");
+
+        String content = objectMapper.writeValueAsString(dto);
+
+        doNothing().when(authService).resetPassword(any(AuthRequest.PasswordResetDto.class));
+
+        ResultActions actions = mockMvc.perform(
+                post("/api/auth/reset-pwd")
+                        .content(content)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8")
+                        .with(csrf())
+        );
+
+        actions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.header.httpStatusCode").value(PASSWORD_RESET_OK.getHttpStatusCode()))
+                .andExpect(jsonPath("$.header.message").value(PASSWORD_RESET_OK.getMessage()))
+                .andDo(document(
+                        "비밀번호 재설정 성공",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        resource(ResourceSnippetParameters.builder()
+                                .tag("Auth API")
+                                .summary("비밀번호 재설정 API")
+                                .requestFields(
+                                        fieldWithPath("pwdUuid").type(JsonFieldType.STRING).description("비밀번호 재설정 경로의 마지막 uuid 값"),
+                                        fieldWithPath("newPassword").type(JsonFieldType.STRING).description("새 비밀번호")
+                                )
+                                .responseFields(
+                                        getCommonResponseFields(
+                                                fieldWithPath("body").ignored()
+                                        )
+                                )
+                                .requestSchema(Schema.schema("비밀번호 재설정 Request"))
+                                .build()
+                        )));
+    }
+
+    @Test
+    void 비밀번호_재설정_실패_존재하지_않는_인증정보() throws Exception {
+        AuthRequest.PasswordResetDto dto = AuthRequest.PasswordResetDto.builder()
+                .pwdUuid("pwdUuid")
+                .newPassword("newPassword")
+                .build();
+
+        String content = objectMapper.writeValueAsString(dto);
+
+        doThrow(new BaseException(VERIFY_NOT_FOUND)).when(authService).resetPassword(any(AuthRequest.PasswordResetDto.class));
+
+        ResultActions actions = mockMvc.perform(
+                post("/api/auth/reset-pwd")
+                        .content(content)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8")
+                        .with(csrf())
+        );
+
+        actions
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.header.httpStatusCode").value(VERIFY_NOT_FOUND.getHttpStatusCode()))
+                .andExpect(jsonPath("$.header.message").value(VERIFY_NOT_FOUND.getMessage()))
+                .andDo(document(
+                        "비밀번호 재설정 실패 - 존재하지 않는 인증정보",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        resource(ResourceSnippetParameters.builder()
+                                .tag("Auth API")
+                                .responseFields(
+                                        getCommonResponseFields(
+                                                fieldWithPath("body").type(JsonFieldType.OBJECT).description("에러 상세").optional().ignored()
+                                        )
+                                )
+                                .responseSchema(Schema.schema("Error Response"))
+                                .build()
+                        )));
+    }
 }
