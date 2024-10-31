@@ -259,12 +259,18 @@ class UserControllerTest {
 
 	@Test
 	void 회원_탈퇴_성공() throws Exception {
+		SecurityContextHolder.getContext().setAuthentication(
+				new UsernamePasswordAuthenticationToken(123L, null, List.of(new SimpleGrantedAuthority("ROLE_USER")))
+		);
+
 		ResultActions actions = mockMvc.perform(
 				delete("/api/users/withdraw")
 						.contentType(MediaType.APPLICATION_JSON)
 						.accept(MediaType.APPLICATION_JSON)
 						.characterEncoding("UTF-8")
 		);
+
+		doNothing().when(userService).deleteUser(anyLong());
 
 		actions
 				.andExpect(status().isNoContent())
