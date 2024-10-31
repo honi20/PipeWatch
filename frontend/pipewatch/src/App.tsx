@@ -30,6 +30,8 @@ import { InputData } from "./components/pipeGenerator/InputData";
 import { Rendering } from "./components/pipeGenerator/Rendering";
 import { Completed } from "./components/pipeGenerator/Completed";
 
+import { CompletedContact } from "@src/pages/Completed";
+
 function App() {
   return (
     <>
@@ -59,7 +61,11 @@ function App() {
               <Route path="/pipe-generator/rendering" element={<Rendering />} />
               <Route path="/pipe-generator/completed" element={<Completed />} />
             </Route>
-            <Route path="/contact" element={<Contact />} />
+
+            <Route path="/contact">
+              <Route index element={<Contact />} />
+              <Route path="/contact/completed" element={<CompletedContact />} />
+            </Route>
 
             <Route path="/enterprise" element={<EmpVerification />}>
               <Route index element={<EmpVerification />} />
@@ -81,6 +87,10 @@ function App() {
               <Route path="/account/auth/login" element={<LoginPage />} />
               <Route path="/account/auth/find-pw" element={<FindPassword />} />
               <Route path="/account/auth/sign-up" element={<SignUpPage />} />
+              <Route
+                path="/account/auth/completed"
+                element={<CompletedContact />}
+              />
             </Route>
           </Route>
         </Routes>
