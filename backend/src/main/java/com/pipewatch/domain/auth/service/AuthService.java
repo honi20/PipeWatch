@@ -17,4 +17,8 @@ public interface AuthService {
     AuthResponse.AccessTokenDto signin(AuthRequest.SigninDto requestDto);
 
     void logout();
+
+	void sendPasswordResetEmail(AuthRequest.EmailPwdSendDto requestDto);
+
+	void resetPassword(AuthRequest.PasswordResetDto requestDto);
 }

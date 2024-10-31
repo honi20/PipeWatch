@@ -96,4 +96,23 @@ public class AuthRequest {
         private String email;
         private String password;
     }
+
+    @Getter
+    @Setter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class EmailPwdSendDto {
+        private String email;
+    }
+
+    @Getter
+    @Setter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class PasswordResetDto {
+        private String pwdUuid;
+        private String newPassword;
+    }
 }
