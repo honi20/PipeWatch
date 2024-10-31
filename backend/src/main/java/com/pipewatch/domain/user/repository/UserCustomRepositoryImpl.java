@@ -5,7 +5,6 @@ import com.pipewatch.domain.user.model.entity.Role;
 import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Expressions;
-import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -46,11 +45,7 @@ public class UserCustomRepositoryImpl implements UserCustomRepository {
 	private Expression<String> getEnterpriseNameExpression(Long userId) {
 		return Expressions.cases()
 				.when(user.role.eq(Role.ROLE_ENTERPRISE))
-				.then(
-						JPAExpressions.select(enterprise.name)
-								.from(enterprise)
-								.where(enterprise.user.id.eq(userId))
-				)
+				.then(user.name)
 				.otherwise(enterprise.name);
 	}
 }
