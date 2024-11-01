@@ -1,0 +1,53 @@
+stages:
+  - build
+  - push
+  - deploy
+
+variables:
+  DOCKER_USERNAME: "churnobyl"
+  BACKEND_IMAGE: "$DOCKER_USERNAME/pipewatch-backend"
+  FRONTEND_IMAGE: "$DOCKER_USERNAME/pipewatch-frontend"
+
+# Backend build and push
+build-backend:
+  stage: build
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event"'
+      when: always
+  only:
+    - develop-BE
+  script:
+    - docker build -t $BACKEND_IMAGE:$CI_COMMIT_REF_NAME -f backend/Dockerfile backend/
+    - echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
+    - docker push $BACKEND_IMAGE:$CI_COMMIT_REF_NAME
+
+# Frontend build and push
+build-frontend:
+  stage: build
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event"'
+      when: always
+  only:
+    - develop-FE
+  script:
+    - docker build -t $FRONTEND_IMAGE:$CI_COMMIT_REF_NAME -f frontend/pipewatch/Dockerfile frontend/pipewatch/
+    - echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
+    - docker push $FRONTEND_IMAGE:$CI_COMMIT_REF_NAME
+
+# Deploy job to update deployment repository
+update-deployment-repo:
+  stage: deploy
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event"'
+      when: always
+  only:
+    - develop-BE
+    - develop-FE
+  script:
+    - git clone https://$GITLAB_USER:$GITLAB_TOKEN@lab.ssafy.com/tjdcjfals3/s11p31a506-deploy.git
+    - cd deployment_repo
+    - sed -i "s|image:.*|image: $BACKEND_IMAGE:$CI_COMMIT_REF_NAME|g" backend-deployment.yaml
+    - sed -i "s|image:.*|image: $FRONTEND_IMAGE:$CI_COMMIT_REF_NAME|g" frontend-deployment.yaml
+    - git add .
+    - git commit -m "Update images to $CI_COMMIT_REF_NAME"
+    - git push origin master
