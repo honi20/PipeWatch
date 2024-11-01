@@ -13,6 +13,6 @@ FROM openjdk:21-ea-34-jdk-slim
 
 WORKDIR /app
 
-COPY --from=builder /app/build/libs/*.jar ./app.jar
+COPY --from=builder /app/build/libs/*-SNAPSHOT.jar ./app.jar
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]
