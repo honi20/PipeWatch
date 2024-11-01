@@ -20,7 +20,6 @@ function Layout() {
   // console.log("isAuth: ", isAuth);
 
   useEffect(() => {
-    // if (theme === "dark") {
     if (
       localStorage.theme === "dark" ||
       (!("theme" in localStorage) &&
