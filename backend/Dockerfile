@@ -8,6 +8,6 @@ CMD ["./gradlew", "clean", "build", "-x", "test"]
 # 실행용 이미지
 FROM openjdk:21-ea-oraclelinux8
 WORKDIR /app
-COPY --from=builder /build/libs/*.jar app.jar
+COPY --from=builder ./build/libs/*.jar app.jar
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]
