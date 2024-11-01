@@ -9,6 +9,7 @@ variables:
   FRONTEND_IMAGE: "$DOCKER_USERNAME/pipewatch-frontend"
   DOCKER_HOST: tcp://docker:2375
   DOCKER_TLS_CERTDIR: ""
+  DOCKER_BUILDKIT: 0
 
 # Backend build and push
 build-backend:
