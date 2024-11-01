@@ -2,6 +2,7 @@ import cadquery as cq
 import trimesh
 import os
 import math
+import subprocess
 
 # 좌표 리스트
 coordinates = [
@@ -15,10 +16,10 @@ output_directory = "C:/Users/SSAFY/Downloads/3d"
 os.makedirs(output_directory, exist_ok=True)
 stl_paths = []
 output_gltf_path = os.path.join(output_directory, "pipeline.gltf")
+compressed_gltf_path = os.path.join(output_directory, "pipeline_compressed.gltf")
 
 # 파이프라인 생성 함수
 def create_pipeline(coords, radius=0.5):
-    pipeline = None
     start_point = coords[0]
     end_point = coords[1]
     
@@ -27,10 +28,10 @@ def create_pipeline(coords, radius=0.5):
         if check_collinear(start_point, end_point, coords[index]):
             end_point = coords[index]
         else: 
-            # 원통 생성 및 STL 저장
+            # 원통 생성
             create_cylinder(start_point, end_point, radius, index - 1)
 
-            # 커넥터 생성 및 STL 저장
+            # 커넥터 생성
             create_connector(end_point, radius, index - 1)
             
             start_point = end_point
@@ -38,8 +39,6 @@ def create_pipeline(coords, radius=0.5):
 
     # 마지막 세그먼트 생성
     create_cylinder(start_point, end_point, radius, "last")
-    
-    return pipeline
 
 # 직선 판단 함수
 def check_collinear(p1, p2, p3):
@@ -75,12 +74,12 @@ def create_connector(center, radius, index):
     stl_paths.append(connector_path)
 
 # 파이프라인 모델 생성
-pipeline = create_pipeline(coordinates)
+create_pipeline(coordinates)
 
 # GLTF Scene 생성
 scene = trimesh.Scene()
 
-# 각 STL 파일을 개별 메쉬로 불러와서 Scene에 추가
+# Scene에 추가
 for index, stl_path in enumerate(stl_paths):
     mesh = trimesh.load(stl_path)
     mesh.metadata['name'] = f"object_{index}"
@@ -89,13 +88,28 @@ for index, stl_path in enumerate(stl_paths):
 # GLTF 파일로 저장
 scene.export(output_gltf_path, file_type='gltf')
 
+# Draco 압축
+def draco_compression(input_path, output_path):
+    node_path = r"C:\Program Files\nodejs\node.exe"
+    gltf_pipeline_path = r"C:\Users\SSAFY\AppData\Roaming\npm\node_modules\gltf-pipeline\bin\gltf-pipeline.js"
+    
+    subprocess.run(
+        [node_path, gltf_pipeline_path, "-i", input_path, "-o", output_path, "-d", "--draco.compressMesh"],
+        check=True,
+        capture_output=True, text=True
+    )
+
+# 압축
+draco_compression(output_gltf_path, compressed_gltf_path)
+
 # 임시 STL 파일 삭제
 for stl_path in stl_paths:
     os.remove(stl_path)
 
-# TODO:
-# - 좌표 넘겨받는 fast api 만들기
-# - 좌표 보정하기
-# - 파일 업로드 후 url 반환하기
-# - 썸네일 만들고 url 반환하기
-# - 서버에서 돌릴 때 의존성이라던가 생각해보기
+# 원본 GLTF 파일 삭제
+os.remove(output_gltf_path)
+
+# .bin 파일 삭제
+for file in os.listdir(output_directory):
+    if file.endswith('.bin'):
+        os.remove(os.path.join(output_directory, file))
