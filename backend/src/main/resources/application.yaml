@@ -1,6 +1,7 @@
 server:
   port: ${APPLICATION_PORT}
 
+
 spring:
   application:
     name: pipewatch
@@ -61,3 +62,7 @@ jwt:
     expiration: 1800 # 30분
   refresh:
     expiration: 1209600 # 2주
+
+logging:
+  level:
+    root: debug
