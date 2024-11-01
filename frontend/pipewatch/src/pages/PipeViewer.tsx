@@ -1,4 +1,7 @@
 // import { useTranslation } from "react-i18next";
+
+import { ModelListView } from "@src/components/pipeViewer/ModelListView";
+
 import NoAccessImage from "@assets/images/status/no_access.png";
 import NoPipeModelImage from "@assets/images/status/no_pipe_model.png";
 
@@ -25,14 +28,14 @@ export const PipeViewer = () => {
   const isAdmin: boolean = tempUserRole === "admin";
 
   return (
-    <div className="mx-6">
+    <div className="">
       {/* <h2 className="font-bold text-[40px]">{t("pipeViewer.title")}</h2> */}
-      <h2 className="font-bold text-[40px]">파이프 모델 조회</h2>
+      <h2 className="font-bold text-[40px] mx-6">파이프 모델 조회</h2>
 
-      <div className="flex items-center justify-center h-[640px] my-10 ">
+      <div className="flex items-center justify-center h-[640px] my-4">
         {isAdmin ? (
           tempModelList.length > 0 ? (
-            <div>Model List Component</div>
+            <ModelListView />
           ) : (
             <div className="flex flex-col items-center gap-[40px]">
               <img src={NoPipeModelImage} width={"350px"} />
