@@ -69,7 +69,7 @@ update-deployment-repo:
     - if: '($CI_COMMIT_REF_NAME == "develop-FE" || $CI_COMMIT_REF_NAME == "develop-BE") && $CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event"'
       when: always
   script:
-    - git clone https://$GITLAB_USER:$GITLAB_TOKEN@lab.ssafy.com/tjdcjfals3/s11p31a506-deploy.git
+    - git clone https://churnobyl:$GITLAB_TOKEN@lab.ssafy.com/tjdcjfals3/s11p31a506-deploy.git
     - cd s11p31a506-deploy
     - 'sed -i "s|tag:.*|tag: \"${CI_COMMIT_SHA:0:8}\"|g" backend/values.yaml'
     - 'sed -i "s|tag:.*|tag: \"${CI_COMMIT_SHA:0:8}\"|g" frontend/values.yaml'
