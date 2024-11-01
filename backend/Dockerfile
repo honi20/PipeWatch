@@ -4,6 +4,7 @@ WORKDIR /app
 
 # 프로젝트 파일 복사 후 빌드 수행
 COPY . .
+RUN chmod +x ./gradlew
 RUN ./gradlew bootJar
 
 # 빌드된 JAR 파일을 가져와 최종 이미지를 만듭니다.
