@@ -22,7 +22,7 @@ const UpdatePasswordCard = () => {
       </div>
 
       <div
-        className="flex justify-center gap-2 whitespace-normal space-normal"
+        className="flex justify-center gap-2 underline whitespace-normal space-normal"
         onClick={() => navigate("/account/manage")}
       >
         {t("manageAccount.goToPreviousCard")}
