@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+
+import { UploadModelAuto } from "@components/pipeGenerator/UploadModelAuto";
 
 import { IconButton } from "@components/common/IconButton";
 
 import DriveFolderUploadIcon from "@mui/icons-material/DriveFolderUpload";
-
 import ReplayIcon from "@mui/icons-material/Replay";
 
 export const UploadModel = () => {
@@ -13,8 +14,8 @@ export const UploadModel = () => {
   const navigate = useNavigate();
 
   const location = useLocation();
-  const query = new URLSearchParams(location.search); // 쿼리 파라미터 가져오기
-  const action = query.get("action"); // 예: action 파라미터 값 가져오기
+  const query = new URLSearchParams(location.search);
+  const action = query.get("action");
 
   const [file, setFile] = useState<File | null>(null);
   const [status, setStatus] = useState<
@@ -80,15 +81,16 @@ export const UploadModel = () => {
 
   console.log("action 탐지중: ", action);
 
-  if (action === "auto") {
-    return <div>auto Upload Component</div>;
-  } else if (action === "manual") {
-    return (
-      <div className="p-[40px]">
-        <div>
-          <div className="text-[24px] font-bold mb-[20px]">
-            {t("pipeGenerator.uploadModel.title")}
-          </div>
+  return (
+    <div className="p-[40px]">
+      <div className="text-[24px] font-bold mb-[20px]">
+        {t("pipeGenerator.uploadModel.title")}
+      </div>
+
+      {action === "auto" && <UploadModelAuto />}
+
+      {action !== "auto" && (
+        <>
           <p className="text-[16px]">
             {t(
               "pipeGenerator.uploadModel.directUpload.instructions.uploadModel"
@@ -98,7 +100,7 @@ export const UploadModel = () => {
             {t(
               "pipeGenerator.uploadModel.directUpload.instructions.recommendedFormat"
             )}
-            : <span className={"font-bold"}>.gltf</span>
+            : <span className="font-bold">.gltf</span>
           </p>
 
           <div className="flex justify-center w-full my-[20px]">
@@ -167,15 +169,15 @@ export const UploadModel = () => {
           </div>
           <div className="flex justify-center w-full">
             <IconButton
-              handleClick={() => console.log("button Clicked")}
+              handleClick={() => window.location.reload()}
               text={t("pipeGenerator.commonButtons.retry")}
               color={"bg-gray-800"}
               hoverColor={"hover:bg-gray-800/80"}
               icon={<ReplayIcon sx={{ fontSize: "20px" }} />}
             />
           </div>
-        </div>
-      </div>
-    );
-  }
+        </>
+      )}
+    </div>
+  );
 };
