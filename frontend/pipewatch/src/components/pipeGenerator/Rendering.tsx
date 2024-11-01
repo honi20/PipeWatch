@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 
 import { IconButton } from "@components/common/IconButton";
 
@@ -13,6 +14,7 @@ export const Rendering = () => {
   const [isPlaying, setIsPlaying] = useState(false);
 
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   const handlePlayPause = () => {
     if (videoRef.current) {
@@ -24,6 +26,14 @@ export const Rendering = () => {
         setIsPlaying(false);
       }
     }
+  };
+
+  // 저장 버튼 Click Action
+  const handleSave = () => {
+    // POST 함수 추가 예정
+
+    // 모델 렌더링 페이지로 이동
+    navigate("/pipe-generator/completed");
   };
 
   return (
@@ -71,7 +81,7 @@ export const Rendering = () => {
 
       <div className="flex justify-center w-full">
         <IconButton
-          handleClick={() => console.log("button Clicked")}
+          handleClick={() => handleSave()}
           text={t("pipeGenerator.commonButtons.save")}
           color={"bg-primary-500"}
           hoverColor={"hover:bg-primary-500/80"}

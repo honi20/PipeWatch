@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import { IconButton } from "@components/common/IconButton";
 import clsx from "clsx";
 
@@ -17,6 +18,7 @@ import { useTranslation } from "react-i18next";
 
 export const InputData = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   const [pipelineName, setPipelineName] = useState("");
   const [groundInfo, setGroundInfo] = useState("G");
@@ -77,6 +79,14 @@ export const InputData = () => {
     !!floorNum &&
     !isFloorNumInvalid &&
     !(query === "" && !selectedLocation);
+
+  // 저장 버튼 Click Action
+  const handleSave = () => {
+    // POST 함수 추가 예정
+
+    // 모델 렌더링 페이지로 이동
+    navigate("/pipe-generator/rendering");
+  };
 
   return (
     <div className="p-[40px]">
@@ -200,7 +210,7 @@ export const InputData = () => {
       {isFormValid && (
         <div className="flex justify-center w-full my-[20px]">
           <IconButton
-            handleClick={() => console.log("button Clicked")}
+            handleClick={() => handleSave()}
             text={t("pipeGenerator.commonButtons.save")}
             color={"bg-primary-500"}
             hoverColor={"hover:bg-primary-500/80"}

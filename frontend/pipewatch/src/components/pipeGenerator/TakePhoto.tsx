@@ -1,4 +1,7 @@
 import { useTranslation } from "react-i18next";
+
+import { useNavigate } from "react-router-dom";
+
 import { IconButton } from "@components/common/IconButton";
 import { StatusBar } from "@components/common/StatusBar";
 
@@ -13,6 +16,7 @@ import SyncIcon from "@mui/icons-material/Sync";
 
 export const TakePhoto = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   return (
     <div className="p-[40px]">
@@ -67,7 +71,9 @@ export const TakePhoto = () => {
         </p>
         <div className="flex justify-center w-full">
           <IconButton
-            handleClick={() => console.log("button Clicked")}
+            handleClick={() =>
+              navigate("/pipe-generator/upload-model?action=auto")
+            }
             text={t(
               "pipeGenerator.takePhoto.takePipePhoto.buttons.startCapture"
             )}
@@ -131,7 +137,9 @@ export const TakePhoto = () => {
         </div>
         <div className="flex justify-center w-full">
           <IconButton
-            handleClick={() => console.log("button Clicked")}
+            handleClick={() =>
+              navigate("/pipe-generator/upload-model?action=manual")
+            }
             text={t("pipeGenerator.takePhoto.caution.buttons.upload")}
             color={"bg-warn"}
             hoverColor={"hover:bg-warn/80"}
