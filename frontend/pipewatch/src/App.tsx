@@ -16,8 +16,9 @@ import { LoginPage } from "./pages/account/LoginPage";
 import { FindPassword } from "./pages/account/FindPassword";
 import { SignUpPage } from "./pages/account/SignUpPage";
 
-import { EmpVerification } from "./pages/EmpVerification";
-import { EmpView } from "./pages/EmpView";
+import { Enterprise } from "./pages/Enterprise";
+import { EmpView } from "@pages/enterprise/EmpView";
+import { EmpVerification } from "@pages/enterprise/EmpVerification";
 
 import { UpdatePassword } from "./pages/ManageAccount/UpdatePassword";
 import { EditInfo } from "./pages/ManageAccount/EditInfo";
@@ -68,9 +69,9 @@ function App() {
               <Route path="/contact/completed" element={<CompletedContact />} />
             </Route>
 
-            <Route path="/enterprise" element={<EmpVerification />}>
-              <Route index element={<EmpVerification />} />
-              <Route path="/enterprise/view" element={<EmpView />} />
+            <Route path="/enterprise" element={<Enterprise />}>
+              <Route path="verification" element={<EmpVerification />} />
+              <Route path="view" element={<EmpView />} />
             </Route>
 
             <Route path="/account/manage" element={<ManageAccount />} />
