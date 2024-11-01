@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { Button, Input } from "@headlessui/react";
 import { useNavigate } from "react-router-dom";
-import { useState, ChangeEvent, FocusEvent } from "react";
+import { useState, ChangeEvent } from "react";
 
 const EditInfoCard = () => {
   const { t } = useTranslation();
