@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
 
@@ -18,6 +19,12 @@ export const PipeGenerator = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
+
+  useEffect(() => {
+    if (location.pathname === "/pipe-generator") {
+      navigate("/pipe-generator/take-photo", { replace: true });
+    }
+  }, [location.pathname, navigate]);
 
   const menus = [
     {

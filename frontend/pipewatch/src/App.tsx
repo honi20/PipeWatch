@@ -53,6 +53,10 @@ function App() {
                 element={<TakePhoto />}
               />
               <Route
+                path="/pipe-generator/upload-model/:action"
+                element={<UploadModel />}
+              />
+              <Route
                 path="/pipe-generator/upload-model"
                 element={<UploadModel />}
               />
