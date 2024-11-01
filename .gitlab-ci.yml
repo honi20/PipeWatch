@@ -12,10 +12,8 @@ variables:
 build-backend:
   stage: build
   rules:
-    - if: '$CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_REF_NAME == "develop-BE" && ($CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event")'
       when: always
-  only:
-    - develop-BE
   script:
     - docker build -t $BACKEND_IMAGE:$CI_COMMIT_REF_NAME -f backend/Dockerfile backend/
     - echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
@@ -25,10 +23,8 @@ build-backend:
 build-frontend:
   stage: build
   rules:
-    - if: '$CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_REF_NAME == "develop-FE" && ($CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event")'
       when: always
-  only:
-    - develop-FE
   script:
     - docker build -t $FRONTEND_IMAGE:$CI_COMMIT_REF_NAME -f frontend/pipewatch/Dockerfile frontend/pipewatch/
     - echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
