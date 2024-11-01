@@ -23,6 +23,7 @@ import { UpdatePassword } from "./pages/ManageAccount/UpdatePassword";
 import { EditInfo } from "./pages/ManageAccount/EditInfo";
 import { Withdrawal } from "./pages/ManageAccount/Withdrawal";
 import { ManageAccount } from "./pages/ManageAccount/ManageAccount";
+import { CompletedManageAccount } from "./pages/ManageAccount/CompletedManageAccount";
 
 import { TakePhoto } from "./components/pipeGenerator/TakePhoto";
 import { UploadModel } from "./components/pipeGenerator/UploadModel";
@@ -79,6 +80,10 @@ function App() {
               element={<UpdatePassword />}
             />
             <Route path="/account/manage/withdrawal" element={<Withdrawal />} />
+            <Route
+              path="/account/manage/:action/completed"
+              element={<CompletedManageAccount />}
+            />
 
             <Route path="/account/auth" element={<Account />}>
               <Route path="/account/auth/login" element={<LoginPage />} />
