@@ -152,7 +152,8 @@
     "description": "관리할 파이프 모델을 생성해보세요.",
     "commonButtons": {
       "retry": "다시 시도",
-      "save": "저장"
+      "save": "저장",
+      "back": "이전"
     },
     "procedure": "모델 생성 절차",
     "menus": {

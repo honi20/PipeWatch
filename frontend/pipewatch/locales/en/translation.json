@@ -149,7 +149,8 @@
     "description": "Create a pipe model to manage.",
     "commonButtons": {
       "retry": "Retry",
-      "save": "Save"
+      "save": "Save",
+      "back": "Back"
     },
     "procedure": "Model Creation Procedure",
     "menus": {

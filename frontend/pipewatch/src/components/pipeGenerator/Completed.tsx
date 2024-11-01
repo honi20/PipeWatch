@@ -1,10 +1,12 @@
 import { useTranslation } from "react-i18next";
 import { IconButton } from "@components/common/IconButton";
+import { useNavigate } from "react-router-dom";
 
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
 export const Completed = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   return (
     <div className="p-[40px] h-full flex flex-col justify-center items-center">
@@ -20,7 +22,7 @@ export const Completed = () => {
       </p>
 
       <IconButton
-        handleClick={() => console.log("button Clicked")}
+        handleClick={() => navigate("/pipe-viewer")}
         text={t("pipeGenerator.completed.buttons.viewModel")}
         color={"bg-button-background"}
         hoverColor={"hover:bg-button-background/80"}
