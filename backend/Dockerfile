@@ -1,6 +1,8 @@
 # 빌드용 이미지
 FROM openjdk:21-ea-34-jdk-slim AS builder
 
+COPY . .
+
 RUN chmod +x ./gradlew
 RUN ./gradlew clean build -x test
 
