@@ -39,7 +39,7 @@
       "title": "Account Management",
       "editInfo": "Edit Personal Information",
       "updatePassword": "Update Password",
-      "withdrawal": "Account Deletion",
+      "withdrawal": "WithDrawal",
       "inquiry": "1:1 Inquiry"
     },
     "goToHomepage": "Go to Homepage",
@@ -66,12 +66,11 @@
       "enterPassword": "Enter Password",
       "confirmWithdrawal": "Confirm Account Deletion",
       "withdrawalNotices": [
-        "Once deleted, {{recoveryNotPossible}}.",
+        "Once deleted, <strong>account recovery is not possible</strong>.",
         "All personal information and usage history will be permanently erased.",
         "Re-registration with the same email may be restricted after deletion.",
         "Some information may be retained for a period of time in accordance with legal obligations, even after account deletion."
       ],
-      "recoveryNotPossible": "account recovery is not possible",
       "complete": "Your account has been successfully deleted."
     }
   },
