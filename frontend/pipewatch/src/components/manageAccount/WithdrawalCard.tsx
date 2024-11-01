@@ -105,7 +105,7 @@ const WithdrawalCard = () => {
                 ? "bg-button-background hover:bg-button-background/80"
                 : "bg-gray-800 cursor-not-allowed"
             }`}
-          onClick={() => {}}
+          onClick={() => navigate("/account/manage/withdrawal/completed")}
           disabled={!isFormValid}
         >
           {t("manageAccount.withdrawal.confirmWithdrawal")}

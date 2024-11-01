@@ -96,7 +96,7 @@ const EditInfoCard = () => {
                 ? "bg-button-background hover:bg-button-background/80"
                 : "bg-gray-800 cursor-not-allowed"
             }`}
-          onClick={() => {}}
+          onClick={() => navigate("/account/manage/edit-info/completed")}
           disabled={!isFormValid}
         >
           {t("manageAccount.editInfo.editPersonalInfo")}

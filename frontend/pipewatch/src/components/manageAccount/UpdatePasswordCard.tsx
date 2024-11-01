@@ -15,7 +15,7 @@ const UpdatePasswordCard = () => {
       <div className="flex flex-col gap-[20px]">
         <Button
           className={`flex items-center h-[56px] w-full px-[30px] text-white rounded-lg bg-button-background`}
-          onClick={() => {}}
+          onClick={() => navigate("/account/manage/update-pw/completed")}
         >
           {t("manageAccount.dashboard.updatePassword")}
         </Button>
