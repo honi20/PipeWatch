@@ -1,11 +1,13 @@
+# 빌드용 이미지
+FROM openjdk:21-ea-oraclelinux8 AS builder
+WORKDIR /app
+COPY . .
+RUN chmod +x ./gradlew
+RUN ./gradlew bootJar -x test
+
+# 실행용 이미지
 FROM openjdk:21-ea-oraclelinux8
-LABEL maintainer="Churnobyl"
-
-VOLUME /tmp
-
-CMD ["./gradlew", "bootJar", "-x", "test"]
-ARG JAR_FILE_PATH=build/libs/*.jar
-COPY ${JAR_FILE_PATH} app.jar
+WORKDIR /app
+COPY --from=builder /app/build/libs/*.jar app.jar
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]
-
