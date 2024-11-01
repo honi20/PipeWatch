@@ -1,0 +1,50 @@
+stages:
+  - build
+  - push
+  - deploy
+
+variables:
+  DOCKER_USERNAME: "churnobyl"
+  BACKEND_IMAGE: "$DOCKER_USERNAME/pipewatch-backend"
+  FRONTEND_IMAGE: "$DOCKER_USERNAME/pipewatch-frontend"
+
+before_script:
+  # 파이프라인 시작 시 UUID 생성
+  - export TAG=$(uuidgen)
+
+# Backend build and push
+build-backend:
+  stage: build
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "develop-BE" && ($CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event")'
+      when: always
+  script:
+    - docker build -t $BACKEND_IMAGE:$TAG -f backend/Dockerfile backend/
+    - echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
+    - docker push $BACKEND_IMAGE:$TAG
+
+# Frontend build and push
+build-frontend:
+  stage: build
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "develop-FE" && ($CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event")'
+      when: always
+  script:
+    - docker build -t $FRONTEND_IMAGE:$TAG -f frontend/pipewatch/Dockerfile frontend/pipewatch/
+    - echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
+    - docker push $FRONTEND_IMAGE:$TAG
+
+# Deploy job to update deployment repository
+update-deployment-repo:
+  stage: deploy
+  rules:
+    - if: '($CI_COMMIT_REF_NAME == "develop-FE" || $CI_COMMIT_REF_NAME == "develop-BE") && $CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event"'
+      when: always
+  script:
+    - git clone https://$GITLAB_USER:$GITLAB_TOKEN@lab.ssafy.com/tjdcjfals3/s11p31a506-deploy.git
+    - cd s11p31a506-deploy
+    - 'sed -i "s|tag:.*|tag: \"$TAG\"|g" backend/values.yaml'
+    - 'sed -i "s|tag:.*|tag: \"$TAG\"|g" frontend/values.yaml'
+    - git add .
+    - git commit -m "Update images to $TAG"
+    - git push origin master
