@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
 export const SideBar = () => {
@@ -6,17 +6,29 @@ export const SideBar = () => {
   const enterpriseName = "개굴전자"; // 기업명 넣을 예정
   const navigate = useNavigate();
   const location = useLocation();
-  console.log(location.pathname);
+
+  useEffect(() => {
+    switch (location.pathname) {
+      case "/enterprise/verification":
+        setActiveSection(0);
+        break;
+      case "/enterprise/view":
+        setActiveSection(1);
+        break;
+      default:
+        setActiveSection(null);
+        break;
+    }
+  }, [location.pathname]);
+
   const handleClick = (index: number): void => {
     // index === 0 인증, index === 1 조회/변경
     switch (index) {
       case 0:
         navigate("/enterprise/verification");
-        setActiveSection(0);
         break;
       case 1:
         navigate("/enterprise/view");
-        setActiveSection(1);
         break;
     }
   };
