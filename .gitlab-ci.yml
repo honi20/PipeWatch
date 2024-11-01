@@ -7,16 +7,18 @@ variables:
   DOCKER_USERNAME: "churnobyl"
   BACKEND_IMAGE: "$DOCKER_USERNAME/pipewatch-backend"
   FRONTEND_IMAGE: "$DOCKER_USERNAME/pipewatch-frontend"
-  DOCKER_HOST: tcp://docker:2376
+  DOCKER_HOST: tcp://docker:2375
   DOCKER_TLS_CERTDIR: ""
-  DOCKER_DRIVER: overlay2
 
 # Backend build and push
 build-backend:
   stage: build
-  image: docker:20.10.16
+  image: docker:24.0.5
   services:
-    - docker:20.10.16-dind
+    - name: docker:24.0.5-dind
+      command: [ "--tls=false" ]
+      variables:
+        HEALTHCHECK_TCP_PORT: "2375"
   before_script:
     - docker --version
     - until docker info; do sleep 1; done
@@ -34,9 +36,12 @@ build-backend:
 # Frontend build and push
 build-frontend:
   stage: build
-  image: docker:20.10.16
+  image: docker:24.0.5
   services:
-    - docker:20.10.16-dind
+    - name: docker:24.0.5-dind
+      command: [ "--tls=false" ]
+      variables:
+        HEALTHCHECK_TCP_PORT: "2375"
   before_script:
     - docker --version
     - until docker info; do sleep 1; done
