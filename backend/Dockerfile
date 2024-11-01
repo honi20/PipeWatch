@@ -1,12 +1,16 @@
+# Gradle 빌드 단계를 추가한 Dockerfile
+FROM openjdk:21-ea-oraclelinux8 AS builder
+WORKDIR /app
+
+# 프로젝트 파일 복사 후 빌드 수행
+COPY . .
+RUN ./gradlew bootJar
+
+# 빌드된 JAR 파일을 가져와 최종 이미지를 만듭니다.
 FROM openjdk:21-ea-oraclelinux8
-LABEL maintainer="Churnobyl"
+WORKDIR /app
+COPY --from=builder /app/build/libs/*.jar app.jar
 
-VOLUME /tmp
-
-CMD ["./gradlew", "bootJar"]
-ARG JAR_FILE_PATH=build/libs/*.jar
-CMD ["ls"]
-COPY ${JAR_FILE_PATH} app.jar
+# 컨테이너 설정
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]
-
