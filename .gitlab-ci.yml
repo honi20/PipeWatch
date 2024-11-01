@@ -7,6 +7,8 @@ variables:
   DOCKER_USERNAME: "churnobyl"
   BACKEND_IMAGE: "$DOCKER_USERNAME/pipewatch-backend"
   FRONTEND_IMAGE: "$DOCKER_USERNAME/pipewatch-frontend"
+  DOCKER_HOST: tcp://localhost:2375
+  DOCKER_TLS_CERTDIR: ""
 
 # Backend build and push
 build-backend:
