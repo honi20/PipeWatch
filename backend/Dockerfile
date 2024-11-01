@@ -3,7 +3,7 @@ FROM openjdk:21-ea-oraclelinux8 AS builder
 WORKDIR /app
 COPY . .
 RUN chmod +x ./gradlew
-RUN ./gradlew bootJar -x test
+CMD ["./gradlew", "clean", "build", "-x", "test"]
 
 # 실행용 이미지
 FROM openjdk:21-ea-oraclelinux8
