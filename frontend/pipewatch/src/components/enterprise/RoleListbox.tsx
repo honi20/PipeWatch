@@ -4,7 +4,7 @@ import {
   ListboxOption,
   ListboxOptions,
 } from "@headlessui/react";
-import { ChevronDownIcon } from "@heroicons/react/20/solid";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import clsx from "clsx";
 import { useState } from "react";
 
@@ -17,20 +17,22 @@ export const RoleListbox = () => {
   const [selected, setSelected] = useState(roles[1]);
 
   return (
-    <div className="w-20">
+    <div className="w-[90px]">
       <Listbox value={selected} onChange={setSelected}>
-        <ListboxButton
-          className={clsx(
-            "relative block w-full rounded-lg bg-white dark:bg-white/5 py-1.5 pr-8 pl-3 text-left text-sm/6 text-black dark:text-white",
-            "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25"
-          )}
-        >
-          {selected && selected.role}
-          <ChevronDownIcon
-            className="group pointer-events-none absolute top-2.5 right-2.5 size-4 dark:fill-white/60"
-            aria-hidden="true"
-          />
-        </ListboxButton>
+        <div className="relative">
+          <ListboxButton
+            className={clsx(
+              "relative block w-full rounded-lg bg-white dark:bg-white/5 py-1.5 px-3 flex justify-between text-left text-sm/6 text-black dark:text-white",
+              "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25"
+            )}
+          >
+            {selected && selected.role}
+            <ExpandMoreIcon
+              sx={{ color: "#5E5E5E" }}
+              className="pl-1 transition-transform duration-200 group size-6"
+            />
+          </ListboxButton>
+        </div>
         <ListboxOptions
           anchor="bottom"
           transition
