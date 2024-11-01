@@ -58,7 +58,7 @@ build-frontend:
     - docker push $FRONTEND_IMAGE:${CI_COMMIT_SHA:0:8}
 
 # Deploy job to update deployment repository
-update-deployment-repo:
+update-deployment-repo-backend:
   stage: deploy
   image: alpine/git
   before_script:
@@ -66,7 +66,7 @@ update-deployment-repo:
   tags:
     - paori
   rules:
-    - if: '($CI_COMMIT_REF_NAME == "develop-FE" || $CI_COMMIT_REF_NAME == "develop-BE") && $CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_REF_NAME == "develop-BE" && ($CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event")'
       when: always
   script:
     - git config --global user.email "tjdcjfals3@naver.com"
@@ -74,6 +74,25 @@ update-deployment-repo:
     - git clone https://churnobyl:$GITLAB_TOKEN@lab.ssafy.com/tjdcjfals3/s11p31a506-deploy.git
     - cd s11p31a506-deploy
     - 'sed -i "s|tag:.*|tag: \"${CI_COMMIT_SHA:0:8}\"|g" backend/values.yaml'
+    - git add .
+    - git commit -m "Update images to ${CI_COMMIT_SHA:0:8}"
+    - git push origin master
+
+update-deployment-repo-frontend:
+  stage: deploy
+  image: alpine/git
+  before_script:
+    - apk add --no-cache bash sed
+  tags:
+    - paori
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "develop-FE" && ($CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event")'
+      when: always
+  script:
+    - git config --global user.email "tjdcjfals3@naver.com"
+    - git config --global user.name "성철민" 
+    - git clone https://churnobyl:$GITLAB_TOKEN@lab.ssafy.com/tjdcjfals3/s11p31a506-deploy.git
+    - cd s11p31a506-deploy
     - 'sed -i "s|tag:.*|tag: \"${CI_COMMIT_SHA:0:8}\"|g" frontend/values.yaml'
     - git add .
     - git commit -m "Update images to ${CI_COMMIT_SHA:0:8}"
