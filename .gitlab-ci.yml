@@ -7,14 +7,14 @@ variables:
   DOCKER_USERNAME: "churnobyl"
   BACKEND_IMAGE: "$DOCKER_USERNAME/pipewatch-backend"
   FRONTEND_IMAGE: "$DOCKER_USERNAME/pipewatch-frontend"
-  DOCKER_HOST: tcp://docker:2375
+  DOCKER_HOST: tcp://docker:2376
   DOCKER_TLS_CERTDIR: ""
   DOCKER_DRIVER: overlay2
 
 # Backend build and push
 build-backend:
   stage: build
-  image: docker:stable
+  image: docker:20.10.16
   services:
     - docker:20.10.16-dind
   before_script:
@@ -34,7 +34,7 @@ build-backend:
 # Frontend build and push
 build-frontend:
   stage: build
-  image: docker:stable
+  image: docker:20.10.16
   services:
     - docker:20.10.16-dind
   before_script:
