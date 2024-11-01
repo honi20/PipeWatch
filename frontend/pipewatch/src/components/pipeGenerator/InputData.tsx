@@ -102,7 +102,7 @@ export const InputData = () => {
       </p>
 
       <div className="flex justify-center w-full mt-[60px]">
-        <div className="relative text-gray-800 py-[30px] px-[50px] w-[500px] flex flex-col gap-[20px] justify-center items-center bg-whiteBox shadow-md rounded-[12px] shadow-gray-500">
+        <div className="relative text-gray-800 py-[60px] px-[50px] w-[500px] flex flex-col gap-[20px] justify-center items-center bg-whiteBox shadow-md rounded-[12px] shadow-gray-500">
           <div className="flex items-center w-full h-full">
             <label className="flex-[2]">
               {t("pipeGenerator.inputData.formData.pipelineName")}
@@ -220,7 +220,7 @@ export const InputData = () => {
             </div>
           </div>
           {isFloorNumInvalid && (
-            <span className="absolute bottom-2 right-[100px] text-warn text-[12px]">
+            <span className="absolute bottom-6 right-[100px] text-warn text-[12px]">
               {t("pipeGenerator.inputData.formData.error")}
             </span>
           )}
