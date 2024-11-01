@@ -1,5 +1,4 @@
 import { NavLink, Link } from "react-router-dom";
-import { ChevronDownIcon } from "@heroicons/react/20/solid";
 
 import {
   Button,
@@ -12,6 +11,7 @@ import { useTranslation } from "react-i18next";
 import LogoHeaderDark from "@assets/images/logo_header_dark.png";
 import LogoHeaderLight from "@assets/images/logo_header_light.png";
 
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import LanguageIcon from "@mui/icons-material/Language";
@@ -75,7 +75,11 @@ export const Header = ({ handleTheme, currentTheme }: Props) => {
               >
                 <PopoverButton className="flex gap-1 items-center bg-white dark:bg-black focus:outline-none data-[active]:text-primary-200  data-[hover]:text-primary-200 data-[focus]:outline-1 data-[focus]:outline-white">
                   {t("header.subMenu.aboutUs")}
-                  <ChevronDownIcon className="size-5 group-data-[open]:rotate-180" />
+                  <ExpandMoreIcon
+                    className={`size-5 transition-transform duration-200 ${
+                      open ? "rotate-180" : ""
+                    }`}
+                  />
                 </PopoverButton>
               </NavLink>
               {open && (
@@ -153,7 +157,11 @@ export const Header = ({ handleTheme, currentTheme }: Props) => {
                 <PopoverButton className="flex gap-2 items-center bg-white dark:bg-black focus:outline-none data-[active]:text-primary-200  data-[hover]:text-primary-200 data-[focus]:outline-1 data-[focus]:outline-white">
                   <LanguageIcon />
                   <div className="">{currentLanguage}</div>
-                  <ChevronDownIcon className="size-5 group-data-[open]:rotate-180" />
+                  <ExpandMoreIcon
+                    className={`size-5 transition-transform duration-200 ${
+                      open ? "rotate-180" : ""
+                    }`}
+                  />
                 </PopoverButton>
               </div>
               {open && (

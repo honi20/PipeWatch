@@ -8,7 +8,9 @@ import {
   ComboboxOption,
   ComboboxOptions,
 } from "@headlessui/react";
-import { CheckIcon, ChevronDownIcon } from "@heroicons/react/20/solid";
+// import { CheckIcon } from "@heroicons/react/20/solid";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import CheckIcon from "@mui/icons-material/Check";
 import {
   ChangeEvent,
   useState,
@@ -170,7 +172,10 @@ const ContactUsCard = () => {
                 onChange={(e) => setQuery(e.target.value)}
               />
               <ComboboxButton className="group absolute inset-y-0 right-0 px-2.5 bg-transparent">
-                <ChevronDownIcon className="size-4 fill-black" />
+                <ExpandMoreIcon
+                  sx={{ color: "#5E5E5E" }}
+                  className="transition-transform duration-200 size-5"
+                />
               </ComboboxButton>
             </div>
 
