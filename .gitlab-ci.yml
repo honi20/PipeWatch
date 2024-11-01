@@ -7,13 +7,17 @@ variables:
   DOCKER_USERNAME: "churnobyl"
   BACKEND_IMAGE: "$DOCKER_USERNAME/pipewatch-backend"
   FRONTEND_IMAGE: "$DOCKER_USERNAME/pipewatch-frontend"
+  TAG: ${CI_COMMIT_SHA:0:8}  # 기본 값으로 커밋 해시의 앞 8자를 사용하거나 UUID 생성
 
-before_script:
-  # 파이프라인 시작 시 UUID 생성
-  - export TAG=$(uuidgen)
+.default:
+  before_script:
+    # 파이프라인 시작 시 UUID 생성
+    - if [ -z "$TAG" ]; then export TAG=$(uuidgen); fi
+    - echo "Using TAG: $TAG"
 
 # Backend build and push
 build-backend:
+  extends: .default
   stage: build
   tags:
     - paori
@@ -27,6 +31,7 @@ build-backend:
 
 # Frontend build and push
 build-frontend:
+  extends: .default
   stage: build
   tags:
     - paori
@@ -40,11 +45,12 @@ build-frontend:
 
 # Deploy job to update deployment repository
 update-deployment-repo:
+  extends: .default
   stage: deploy
   tags:
     - paori
   rules:
-    - if: '($CI_COMMIT_REF_NAME == "develop-FE" || $CI_COMMIT_REF_NAME == "develop-BE") && $CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '($CI_COMMIT_REF_NAME == "develop-FE" || $CI_COMMIT_REF_NAME == "develop-BE") && ($CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event")'
       when: always
   script:
     - git clone https://$GITLAB_USER:$GITLAB_TOKEN@lab.ssafy.com/tjdcjfals3/s11p31a506-deploy.git
