@@ -14,7 +14,7 @@ variables:
 # Backend build and push
 build-backend:
   stage: build
-  image: docker:latest
+  image: docker:stable
   services:
     - docker:dind
   before_script:
@@ -34,7 +34,7 @@ build-backend:
 # Frontend build and push
 build-frontend:
   stage: build
-  image: docker:latest
+  image: docker:stable
   services:
     - docker:dind
   before_script:
