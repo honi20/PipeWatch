@@ -65,13 +65,16 @@ const WithdrawalCard = () => {
 
       <div className="flex gap-2 whitespace-normal space-normal">
         <input
+          id="checkbox"
           type="checkbox"
           className="w-10"
           onClick={() => {
             setIsNoticeChecked(!isNoticeChecked);
           }}
         />
-        {t("manageAccount.withdrawal.withdrawalNoticeConfirmation")}
+        <label htmlFor="checkbox">
+          {t("manageAccount.withdrawal.withdrawalNoticeConfirmation")}
+        </label>
       </div>
 
       {/* password */}
