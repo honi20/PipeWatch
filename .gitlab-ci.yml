@@ -49,6 +49,8 @@ update-deployment-repo:
     - if: '($CI_COMMIT_REF_NAME == "develop-FE" || $CI_COMMIT_REF_NAME == "develop-BE") && $CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event"'
       when: always
   script:
+    - git config --global user.email "tjdcjfals3@naver.com"
+    - git config --global user.name "성철민" 
     - git clone https://$GITLAB_USER:$GITLAB_TOKEN@lab.ssafy.com/tjdcjfals3/s11p31a506-deploy.git
     - cd s11p31a506-deploy
     - 'sed -i "s|tag:.*|tag: \"$TAG\"|g" backend/values.yaml'
