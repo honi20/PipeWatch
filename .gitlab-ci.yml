@@ -16,7 +16,7 @@ build-backend:
   stage: build
   image: docker:stable
   services:
-    - docker:dind
+    - docker:20.10.16-dind
   before_script:
     - docker --version
     - until docker info; do sleep 1; done
@@ -36,7 +36,7 @@ build-frontend:
   stage: build
   image: docker:stable
   services:
-    - docker:dind
+    - docker:20.10.16-dind
   before_script:
     - docker --version
     - until docker info; do sleep 1; done
