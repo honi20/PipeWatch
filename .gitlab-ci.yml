@@ -14,9 +14,9 @@ variables:
 # Backend build and push
 build-backend:
   stage: build
-  image: docker:23.0.2-alpine3.17
+  image: docker:latest
   services:
-    - docker:23.0.2-dind-alpine3.17
+    - docker:dind
   before_script:
     - docker --version
     - until docker info; do sleep 1; done
@@ -34,9 +34,9 @@ build-backend:
 # Frontend build and push
 build-frontend:
   stage: build
-  image: docker:23.0.2-alpine3.17
+  image: docker:latest
   services:
-    - docker:23.0.2-dind-alpine3.17
+    - docker:dind
   before_script:
     - docker --version
     - until docker info; do sleep 1; done
