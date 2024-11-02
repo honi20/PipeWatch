@@ -25,3 +25,11 @@ VALUES (123L, 1243242L, 'IT사업부', '팀장', 123L, 1L),
        ;
 
 
+
+-- building and floor
+INSERT INTO building_and_floor(building_floor_id, enterprise_id, name, floor)
+VALUES (1L, 1L, '역삼 멀티캠퍼스', 14),
+       (2L, 1L, '역삼 멀티캠퍼스', 12),
+       (3L, 1L, '부울경 멀티캠퍼스', 1),
+       (4L, 1L, '부울경 멀티캠퍼스', 3)
+       ;

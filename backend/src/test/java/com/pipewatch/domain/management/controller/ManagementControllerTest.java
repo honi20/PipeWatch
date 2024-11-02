@@ -419,6 +419,20 @@ class ManagementControllerTest {
 
 	@Test
 	void 건물_리스트_조회_성공() throws Exception {
+		SecurityContextHolder.getContext().setAuthentication(
+				new UsernamePasswordAuthenticationToken(123L, null, List.of(new SimpleGrantedAuthority("ROLE_USER")))
+		);
+
+		ManagementResponse.BuildingDto building1 = new ManagementResponse.BuildingDto("역삼 멀티캠퍼스", List.of(12, 14));
+		ManagementResponse.BuildingDto building2 = new ManagementResponse.BuildingDto("부울경 멀티캠퍼스", List.of(1, 3));
+
+		// BuildingListDto 빌드
+		ManagementResponse.BuildingListDto response = ManagementResponse.BuildingListDto.builder()
+				.buildings(List.of(building1, building2))
+				.build();
+
+		when(managementService.getBuildingList(123L)).thenReturn(response);
+
 		ResultActions actions = mockMvc.perform(
 				get("/api/management/buildings")
 						.contentType(MediaType.APPLICATION_JSON)
