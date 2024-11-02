@@ -4,6 +4,9 @@ import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.epages.restdocs.apispec.Schema;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pipewatch.domain.management.model.dto.ManagementRequest;
+import com.pipewatch.domain.management.model.dto.ManagementResponse;
+import com.pipewatch.domain.management.service.ManagementService;
+import com.pipewatch.global.exception.BaseException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,17 +14,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.util.List;
+
 import static com.epages.restdocs.apispec.ResourceDocumentation.parameterWithName;
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
 import static com.pipewatch.domain.util.ResponseFieldUtil.getCommonResponseFields;
+import static com.pipewatch.global.statusCode.ErrorCode.FORBIDDEN_USER_ROLE;
 import static com.pipewatch.global.statusCode.SuccessCode.*;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
@@ -44,8 +56,22 @@ class ManagementControllerTest {
 	@Autowired
 	private ObjectMapper objectMapper;
 
+	@MockBean
+	private ManagementService managementService;
+
 	@Test
 	void 승인대기_리스트_조회_성공() throws Exception {
+		SecurityContextHolder.getContext().setAuthentication(
+				new UsernamePasswordAuthenticationToken(124L, null, List.of(new SimpleGrantedAuthority("ROLE_USER")))
+		);
+
+		ManagementResponse.EmployeeDto employee = new ManagementResponse.EmployeeDto("1604b772-adc0-4212-8a90-81186c57f598", "테스트", "test@ssafy.com", 1243242L, "IT사업부", "팀장", "ROLE_USER");
+		ManagementResponse.EmployeeWaitingListDto response = ManagementResponse.EmployeeWaitingListDto.builder()
+				.employees(List.of(employee))
+				.build();
+
+		when(managementService.getWaitingEmployeeList(124L)).thenReturn(response);
+
 		ResultActions actions = mockMvc.perform(
 				get("/api/management/waiting-list")
 						.contentType(MediaType.APPLICATION_JSON)
@@ -77,6 +103,41 @@ class ManagementControllerTest {
 										)
 								)
 								.responseSchema(Schema.schema("승인대기 직원 리스트 조회 Response"))
+								.build()
+						)));
+	}
+
+	@Test
+	void 승인대기_리스트_조회_실패_권한_없음() throws Exception {
+		SecurityContextHolder.getContext().setAuthentication(
+				new UsernamePasswordAuthenticationToken(123L, null, List.of(new SimpleGrantedAuthority("ROLE_USER")))
+		);
+
+		doThrow(new BaseException(FORBIDDEN_USER_ROLE)).when(managementService).getWaitingEmployeeList(123L);
+
+		ResultActions actions = mockMvc.perform(
+				get("/api/management/waiting-list")
+						.contentType(MediaType.APPLICATION_JSON)
+						.accept(MediaType.APPLICATION_JSON)
+						.characterEncoding("UTF-8")
+		);
+
+		actions
+				.andExpect(status().isForbidden())
+				.andExpect(jsonPath("$.header.httpStatusCode").value(FORBIDDEN_USER_ROLE.getHttpStatusCode()))
+				.andExpect(jsonPath("$.header.message").value(FORBIDDEN_USER_ROLE.getMessage()))
+				.andDo(document(
+						"승인대기 직원 리스트 조회 실패 - 기업 유저만 조회 가능",
+						preprocessRequest(prettyPrint()),
+						preprocessResponse(prettyPrint()),
+						resource(ResourceSnippetParameters.builder()
+								.tag("Management API")
+								.responseFields(
+										getCommonResponseFields(
+												fieldWithPath("body").type(JsonFieldType.OBJECT).description("에러 상세").optional().ignored()
+										)
+								)
+								.responseSchema(Schema.schema("Error Response"))
 								.build()
 						)));
 	}
