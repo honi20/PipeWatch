@@ -22,6 +22,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
@@ -32,8 +33,8 @@ import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
 import static com.pipewatch.domain.util.ResponseFieldUtil.getCommonResponseFields;
 import static com.pipewatch.global.statusCode.ErrorCode.FORBIDDEN_USER_ROLE;
 import static com.pipewatch.global.statusCode.SuccessCode.*;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
@@ -49,6 +50,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(RestDocumentationExtension.class)
 @DisplayName("Management API 명세서")
 @WithMockUser
+@ActiveProfiles("test")
 class ManagementControllerTest {
 	@Autowired
 	private MockMvc mockMvc;
@@ -228,14 +230,21 @@ class ManagementControllerTest {
 
 	@Test
 	void 접근_권한_수정_성공() throws Exception {
+		SecurityContextHolder.getContext().setAuthentication(
+				new UsernamePasswordAuthenticationToken(124L, null, List.of(new SimpleGrantedAuthority("ROLE_USER")))
+		);
+
+		doNothing().when(managementService).modifyUserRoll(anyLong(), any(ManagementRequest.AccessModifyDto.class));
+
 		ManagementRequest.AccessModifyDto dto = ManagementRequest.AccessModifyDto.builder()
-				.newRoll("관리자")
+				.userUuid("1604b772-adc0-4212-8a90-81186c57f600")
+				.newRole("ROLE_ADMIN")
 				.build();
 
 		String content = objectMapper.writeValueAsString(dto);
 
 		ResultActions actions = mockMvc.perform(
-				patch("/api/management/{userUuid}", "ab23cde")
+				patch("/api/management")
 						.content(content)
 						.contentType(MediaType.APPLICATION_JSON)
 						.accept(MediaType.APPLICATION_JSON)
@@ -254,11 +263,9 @@ class ManagementControllerTest {
 						resource(ResourceSnippetParameters.builder()
 								.tag("Management API")
 								.summary("접근 권한 변경 API")
-								.pathParameters(
-										parameterWithName("userUuid").description("유저 UUID")
-								)
 								.requestFields(
-										fieldWithPath("newRoll").type(JsonFieldType.STRING).description("새 역할")
+										fieldWithPath("userUuid").type(JsonFieldType.STRING).description("직원 UUID"),
+										fieldWithPath("newRole").type(JsonFieldType.STRING).description("새 역할")
 								)
 								.responseFields(
 										getCommonResponseFields(
@@ -266,6 +273,94 @@ class ManagementControllerTest {
 										)
 								)
 								.requestSchema(Schema.schema("접근 권한 변경 Request"))
+								.build()
+						)));
+	}
+
+	@Test
+	void 접근_권한_수정_실패_권한_없음() throws Exception {
+		SecurityContextHolder.getContext().setAuthentication(
+				new UsernamePasswordAuthenticationToken(123L, null, List.of(new SimpleGrantedAuthority("ROLE_USER")))
+		);
+
+		doThrow(new BaseException(FORBIDDEN_USER_ROLE)).when(managementService).modifyUserRoll(anyLong(), any(ManagementRequest.AccessModifyDto.class));
+
+		ManagementRequest.AccessModifyDto dto = ManagementRequest.AccessModifyDto.builder()
+				.userUuid("1604b772-adc0-4212-8a90-81186c57f600")
+				.newRole("ROLE_ADMIN")
+				.build();
+
+		String content = objectMapper.writeValueAsString(dto);
+
+		ResultActions actions = mockMvc.perform(
+				patch("/api/management")
+						.content(content)
+						.contentType(MediaType.APPLICATION_JSON)
+						.accept(MediaType.APPLICATION_JSON)
+						.characterEncoding("UTF-8")
+						.with(csrf())
+		);
+
+		actions
+				.andExpect(status().isForbidden())
+				.andExpect(jsonPath("$.header.httpStatusCode").value(FORBIDDEN_USER_ROLE.getHttpStatusCode()))
+				.andExpect(jsonPath("$.header.message").value(FORBIDDEN_USER_ROLE.getMessage()))
+				.andDo(document(
+						"접근 권한 수정 실패 - 기업 유저만 수정 가능",
+						preprocessRequest(prettyPrint()),
+						preprocessResponse(prettyPrint()),
+						resource(ResourceSnippetParameters.builder()
+								.tag("Management API")
+								.responseFields(
+										getCommonResponseFields(
+												fieldWithPath("body").type(JsonFieldType.OBJECT).description("에러 상세").optional().ignored()
+										)
+								)
+								.responseSchema(Schema.schema("Error Response"))
+								.build()
+						)));
+	}
+
+	@Test
+	void 접근_권한_수정_실패_존재하지_않는_역할() throws Exception {
+		SecurityContextHolder.getContext().setAuthentication(
+				new UsernamePasswordAuthenticationToken(124L, null, List.of(new SimpleGrantedAuthority("ROLE_USER")))
+		);
+
+		doThrow(new BaseException(FORBIDDEN_USER_ROLE)).when(managementService).modifyUserRoll(anyLong(), any(ManagementRequest.AccessModifyDto.class));
+
+		ManagementRequest.AccessModifyDto dto = ManagementRequest.AccessModifyDto.builder()
+				.userUuid("1604b772-adc0-4212-8a90-81186c57f600")
+				.newRole("ROLE_NOROLE")
+				.build();
+
+		String content = objectMapper.writeValueAsString(dto);
+
+		ResultActions actions = mockMvc.perform(
+				patch("/api/management")
+						.content(content)
+						.contentType(MediaType.APPLICATION_JSON)
+						.accept(MediaType.APPLICATION_JSON)
+						.characterEncoding("UTF-8")
+						.with(csrf())
+		);
+
+		actions
+				.andExpect(status().isForbidden())
+				.andExpect(jsonPath("$.header.httpStatusCode").value(FORBIDDEN_USER_ROLE.getHttpStatusCode()))
+				.andExpect(jsonPath("$.header.message").value(FORBIDDEN_USER_ROLE.getMessage()))
+				.andDo(document(
+						"접근 권한 수정 실패 - 존재하지 않는 Role",
+						preprocessRequest(prettyPrint()),
+						preprocessResponse(prettyPrint()),
+						resource(ResourceSnippetParameters.builder()
+								.tag("Management API")
+								.responseFields(
+										getCommonResponseFields(
+												fieldWithPath("body").type(JsonFieldType.OBJECT).description("에러 상세").optional().ignored()
+										)
+								)
+								.responseSchema(Schema.schema("Error Response"))
 								.build()
 						)));
 	}
