@@ -62,8 +62,7 @@ public class ManagementServiceImpl implements ManagementService {
 		Long enterpriseId = null;
 		if (user.getRole() == Role.ROLE_ENTERPRISE) {
 			enterpriseId = enterpriseRepository.findByUserId(user.getId()).getId();
-		}
-		else if (user.getRole() == Role.ROLE_EMPLOYEE || user.getRole() == Role.ROLE_ADMIN) {
+		} else if (user.getRole() == Role.ROLE_EMPLOYEE || user.getRole() == Role.ROLE_ADMIN) {
 			enterpriseId = employeeRepository.findByUserId(user.getId()).getEnterprise().getId();
 		}
 
@@ -112,8 +111,7 @@ public class ManagementServiceImpl implements ManagementService {
 		Long enterpriseId = null;
 		if (user.getRole() == Role.ROLE_ENTERPRISE) {
 			enterpriseId = enterpriseRepository.findByUserId(user.getId()).getId();
-		}
-		else if (user.getRole() == Role.ROLE_EMPLOYEE || user.getRole() == Role.ROLE_ADMIN) {
+		} else if (user.getRole() == Role.ROLE_EMPLOYEE || user.getRole() == Role.ROLE_ADMIN) {
 			enterpriseId = employeeRepository.findByUserId(user.getId()).getEnterprise().getId();
 		}
 
@@ -136,8 +134,7 @@ public class ManagementServiceImpl implements ManagementService {
 		Long enterpriseId = null;
 		if (user.getRole() == Role.ROLE_ENTERPRISE) {
 			enterpriseId = enterpriseRepository.findByUserId(user.getId()).getId();
-		}
-		else if (user.getRole() == Role.ROLE_EMPLOYEE || user.getRole() == Role.ROLE_ADMIN) {
+		} else if (user.getRole() == Role.ROLE_EMPLOYEE || user.getRole() == Role.ROLE_ADMIN) {
 			enterpriseId = employeeRepository.findByUserId(user.getId()).getEnterprise().getId();
 		}
 
