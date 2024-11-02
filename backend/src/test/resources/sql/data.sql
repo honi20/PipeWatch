@@ -11,7 +11,7 @@ VALUES (123L, 'test@ssafy.com', '$2a$10$W9WYGcUhi6E2NxqnofecW.DEsMkr42YiOSM8Ou/U
         '1604b772-adc0-4212-8a90-81186c57f599'),
        (125L, 'choi@ssafy.com', '$2a$10$W9WYGcUhi6E2NxqnofecW.DEsMkr42YiOSM8Ou/UEQZsMD3WHL8uy', '최싸피', 'ACTIVE', 'ROLE_EMPLOYEE',
         '1604b772-adc0-4212-8a90-81186c57f600'),
-       (126L, 'kim@ssafy.com', '$2a$10$W9WYGcUhi6E2NxqnofecW.DEsMkr42YiOSM8Ou/UEQZsMD3WHL8uy', '김싸피', 'ACTIVE', 'ROLE_EMPLOYEE',
+       (126L, 'kim@ssafy.com', '$2a$10$W9WYGcUhi6E2NxqnofecW.DEsMkr42YiOSM8Ou/UEQZsMD3WHL8uy', '김싸피', 'ACTIVE', 'ROLE_ADMIN',
         '1604b772-adc0-4212-8a90-81186c57f601')
     ;
 
