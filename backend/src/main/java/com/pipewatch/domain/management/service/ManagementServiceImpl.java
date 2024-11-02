@@ -55,6 +55,10 @@ public class ManagementServiceImpl implements ManagementService {
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new BaseException(USER_NOT_FOUND));
 
+		if (user.getRole() == Role.ROLE_USER) {
+			throw new BaseException(FORBIDDEN_USER_ROLE);
+		}
+
 		Long enterpriseId = null;
 		if (user.getRole() == Role.ROLE_ENTERPRISE) {
 			enterpriseId = enterpriseRepository.findByUserId(user.getId()).getId();
@@ -101,6 +105,10 @@ public class ManagementServiceImpl implements ManagementService {
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new BaseException(USER_NOT_FOUND));
 
+		if (user.getRole() == Role.ROLE_USER) {
+			throw new BaseException(FORBIDDEN_USER_ROLE);
+		}
+
 		Long enterpriseId = null;
 		if (user.getRole() == Role.ROLE_ENTERPRISE) {
 			enterpriseId = enterpriseRepository.findByUserId(user.getId()).getId();
@@ -120,6 +128,10 @@ public class ManagementServiceImpl implements ManagementService {
 	public ManagementResponse.BuildingListDto getBuildingList(Long userId) {
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new BaseException(USER_NOT_FOUND));
+
+		if (user.getRole() == Role.ROLE_USER) {
+			throw new BaseException(FORBIDDEN_USER_ROLE);
+		}
 
 		Long enterpriseId = null;
 		if (user.getRole() == Role.ROLE_ENTERPRISE) {
