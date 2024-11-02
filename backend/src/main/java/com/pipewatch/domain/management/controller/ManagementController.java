@@ -49,12 +49,8 @@ public class ManagementController {
 	}
 
 	@GetMapping("/buildings")
-	public ResponseEntity<?> buildingList() {
-		ManagementResponse.BuildingDto building1 = new ManagementResponse.BuildingDto("역삼 멀티캠퍼스", List.of(12, 14, 15));
-		ManagementResponse.BuildingDto building2 = new ManagementResponse.BuildingDto("부울경 멀티캠퍼스", List.of(1, 2, 3));
-		ManagementResponse.BuildingListDto responseDto = ManagementResponse.BuildingListDto.builder()
-				.buildings(List.of(building1, building2))
-				.build();
+	public ResponseEntity<?> buildingList(@AuthenticationPrincipal Long userId) {
+		ManagementResponse.BuildingListDto responseDto = managementService.getBuildingList(userId);
 
 		return new ResponseEntity<>(ResponseDto.success(BUILDING_LIST_OK, responseDto), HttpStatus.OK);
 	}

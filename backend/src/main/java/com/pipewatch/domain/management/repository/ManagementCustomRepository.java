@@ -1,5 +1,6 @@
 package com.pipewatch.domain.management.repository;
 
+import com.pipewatch.domain.enterprise.model.entity.BuildingAndFloor;
 import com.pipewatch.domain.management.model.dto.ManagementResponse;
 
 import java.util.List;

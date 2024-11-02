@@ -1,12 +1,10 @@
 package com.pipewatch.domain.enterprise.model.entity;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 @Entity
+@Getter
 @Builder
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
