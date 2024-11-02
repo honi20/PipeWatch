@@ -4,4 +4,6 @@ import com.pipewatch.domain.management.model.dto.ManagementResponse;
 
 public interface ManagementService {
 	ManagementResponse.EmployeeWaitingListDto getWaitingEmployeeList(Long userId);
+
+	ManagementResponse.EmployeeListDto getEmployeeList(Long userId);
 }

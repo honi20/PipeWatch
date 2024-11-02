@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface ManagementCustomRepository {
 	List<ManagementResponse.EmployeeDto> findPendingEmployeesOfEnterprise(Long enterpriseId);
+
+	List<ManagementResponse.EmployeeDto> findEmployeesOfEnterprise(Long enterpriseId);
 }

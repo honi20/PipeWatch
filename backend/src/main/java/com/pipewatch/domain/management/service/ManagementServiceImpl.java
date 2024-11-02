@@ -35,11 +35,30 @@ public class ManagementServiceImpl implements ManagementService {
 			throw new BaseException(FORBIDDEN_USER_ROLE);
 		}
 
-		Enterprise enterprise = enterpriseRepository.findByUserId(user.getId());
+		Long enterpriseId = enterpriseRepository.findByUserId(user.getId()).getId();
 
-		List<ManagementResponse.EmployeeDto> employees = managementCustomRepository.findPendingEmployeesOfEnterprise(enterprise.getId());
+		List<ManagementResponse.EmployeeDto> employees = managementCustomRepository.findPendingEmployeesOfEnterprise(enterpriseId);
 
 		return ManagementResponse.EmployeeWaitingListDto.builder()
+				.employees(employees)
+				.build();
+	}
+
+	@Override
+	public ManagementResponse.EmployeeListDto getEmployeeList(Long userId) {
+		User user = userRepository.findById(userId)
+				.orElseThrow(() -> new BaseException(USER_NOT_FOUND));
+
+		// 기업 유저만 조회 가능
+		if (user.getRole() != Role.ROLE_ENTERPRISE) {
+			throw new BaseException(FORBIDDEN_USER_ROLE);
+		}
+
+		Long enterpriseId = enterpriseRepository.findByUserId(user.getId()).getId();
+
+		List<ManagementResponse.EmployeeDto> employees = managementCustomRepository.findEmployeesOfEnterprise(enterpriseId);
+
+		return ManagementResponse.EmployeeListDto.builder()
 				.employees(employees)
 				.build();
 	}

@@ -43,4 +43,27 @@ public class ManagementCustomRepositoryImpl implements ManagementCustomRepositor
 				.where(waiting.role.eq(Role.ROLE_EMPLOYEE))
 				.fetch();
 	}
+
+	@Override
+	public List<ManagementResponse.EmployeeDto> findEmployeesOfEnterprise(Long enterpriseId) {
+		return queryFactory
+				.select(Projections.constructor(
+						ManagementResponse.EmployeeDto.class,
+						user.uuid,
+						user.name,
+						user.email,
+						employeeInfo.empNo,
+						employeeInfo.department,
+						employeeInfo.empClass,
+						Expressions.stringTemplate("CAST({0} AS string)", user.role)
+				))
+				.from(employeeInfo)
+				.join(employeeInfo.user, user)
+				.where(
+						employeeInfo.enterprise.id.eq(enterpriseId),
+						user.state.eq(State.ACTIVE),
+						user.role.ne(Role.ROLE_USER)
+				)
+				.fetch();
+	}
 }

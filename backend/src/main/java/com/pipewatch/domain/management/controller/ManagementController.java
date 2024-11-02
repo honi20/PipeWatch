@@ -27,12 +27,8 @@ public class ManagementController {
 	}
 
 	@GetMapping
-	public ResponseEntity<?> employeeList() {
-		ManagementResponse.EmployeeDto employee1 = new ManagementResponse.EmployeeDto("qkepvmdfljsfj", "이싸피", "lee@ssafy.com", 121212L, "경영지원부", "사원", "사원");
-		ManagementResponse.EmployeeDto employee2 = new ManagementResponse.EmployeeDto("dlkjfwpcjlsdf", "박싸피", "park@ssafy.com", 333333L, "IT개발부", "팀장", "관리자");
-		ManagementResponse.EmployeeListDto responseDto = ManagementResponse.EmployeeListDto.builder()
-				.employees(List.of(employee1, employee2))
-				.build();
+	public ResponseEntity<?> employeeList(@AuthenticationPrincipal Long userId) {
+		ManagementResponse.EmployeeListDto responseDto = managementService.getEmployeeList(userId);
 
 		return new ResponseEntity<>(ResponseDto.success(EMPLOYEE_LIST_OK, responseDto), HttpStatus.OK);
 	}
