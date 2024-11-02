@@ -127,11 +127,14 @@ public class ManagementServiceImpl implements ManagementService {
 
 		List<BuildingAndFloor> buildings = buildingRepository.findByEnterpriseId(enterpriseId);
 
-		// name으로 그룹화하고 floor를 리스트로 수집
+		// name으로 그룹화하고 floor를 오름차순으로 정렬하여 리스트로 수집
 		Map<String, List<Integer>> groupedFloors = buildings.stream()
 				.collect(Collectors.groupingBy(
 						BuildingAndFloor::getName,
-						Collectors.mapping(BuildingAndFloor::getFloor, Collectors.toList())
+						Collectors.collectingAndThen(
+								Collectors.mapping(BuildingAndFloor::getFloor, Collectors.toList()),
+								floors -> floors.stream().sorted().collect(Collectors.toList())
+						)
 				));
 
 		// 그룹화된 데이터를 BuildingDto 리스트로 변환
