@@ -87,4 +87,23 @@ public class ManagementServiceImpl implements ManagementService {
 		employee.updateRole(Role.valueOf(requestDto.getNewRole()));
 		userRepository.save(employee);
 	}
+
+	@Override
+	public ManagementResponse.EmployeeSearchDto searchEmployee(Long userId, String keyword) {
+		User user = userRepository.findById(userId)
+				.orElseThrow(() -> new BaseException(USER_NOT_FOUND));
+
+		// 기업 유저만 조회 가능
+		if (user.getRole() != Role.ROLE_ENTERPRISE) {
+			throw new BaseException(FORBIDDEN_USER_ROLE);
+		}
+
+		Long enterpriseId = enterpriseRepository.findByUserId(user.getId()).getId();
+
+		List<ManagementResponse.EmployeeDto> employees = managementCustomRepository.findEmployeesOfEnterpriseByKeyword(enterpriseId, keyword);
+
+		return ManagementResponse.EmployeeSearchDto.builder()
+				.employees(employees)
+				.build();
+	}
 }

@@ -9,4 +9,6 @@ public interface ManagementService {
 	ManagementResponse.EmployeeListDto getEmployeeList(Long userId);
 
 	void modifyUserRoll(Long userId, ManagementRequest.AccessModifyDto requestDto);
+
+	ManagementResponse.EmployeeSearchDto searchEmployee(Long userId, String keyword);
 }
