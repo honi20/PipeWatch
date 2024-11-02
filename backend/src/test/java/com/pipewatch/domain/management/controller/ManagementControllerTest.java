@@ -194,41 +194,6 @@ class ManagementControllerTest {
 	}
 
 	@Test
-	void 직원_리스트_조회_실패_권한_없음() throws Exception {
-		SecurityContextHolder.getContext().setAuthentication(
-				new UsernamePasswordAuthenticationToken(123L, null, List.of(new SimpleGrantedAuthority("ROLE_USER")))
-		);
-
-		doThrow(new BaseException(FORBIDDEN_USER_ROLE)).when(managementService).getEmployeeList(123L);
-
-		ResultActions actions = mockMvc.perform(
-				get("/api/management")
-						.contentType(MediaType.APPLICATION_JSON)
-						.accept(MediaType.APPLICATION_JSON)
-						.characterEncoding("UTF-8")
-		);
-
-		actions
-				.andExpect(status().isForbidden())
-				.andExpect(jsonPath("$.header.httpStatusCode").value(FORBIDDEN_USER_ROLE.getHttpStatusCode()))
-				.andExpect(jsonPath("$.header.message").value(FORBIDDEN_USER_ROLE.getMessage()))
-				.andDo(document(
-						"직원 리스트 조회 실패 - 기업 유저만 조회 가능",
-						preprocessRequest(prettyPrint()),
-						preprocessResponse(prettyPrint()),
-						resource(ResourceSnippetParameters.builder()
-								.tag("Management API")
-								.responseFields(
-										getCommonResponseFields(
-												fieldWithPath("body").type(JsonFieldType.OBJECT).description("에러 상세").optional().ignored()
-										)
-								)
-								.responseSchema(Schema.schema("Error Response"))
-								.build()
-						)));
-	}
-
-	@Test
 	void 접근_권한_수정_성공() throws Exception {
 		SecurityContextHolder.getContext().setAuthentication(
 				new UsernamePasswordAuthenticationToken(124L, null, List.of(new SimpleGrantedAuthority("ROLE_USER")))

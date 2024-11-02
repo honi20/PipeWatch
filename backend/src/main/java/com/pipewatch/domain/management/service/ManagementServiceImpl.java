@@ -7,6 +7,7 @@ import com.pipewatch.domain.management.model.dto.ManagementRequest;
 import com.pipewatch.domain.management.model.dto.ManagementResponse;
 import com.pipewatch.domain.management.repository.ManagementCustomRepository;
 import com.pipewatch.domain.user.model.entity.Role;
+import com.pipewatch.domain.user.model.entity.State;
 import com.pipewatch.domain.user.model.entity.User;
 import com.pipewatch.domain.user.repository.EmployeeRepository;
 import com.pipewatch.domain.user.repository.UserRepository;
@@ -54,12 +55,13 @@ public class ManagementServiceImpl implements ManagementService {
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new BaseException(USER_NOT_FOUND));
 
-		// 기업 유저만 조회 가능
-		if (user.getRole() != Role.ROLE_ENTERPRISE) {
-			throw new BaseException(FORBIDDEN_USER_ROLE);
+		Long enterpriseId = null;
+		if (user.getRole() == Role.ROLE_ENTERPRISE) {
+			enterpriseId = enterpriseRepository.findByUserId(user.getId()).getId();
 		}
-
-		Long enterpriseId = enterpriseRepository.findByUserId(user.getId()).getId();
+		else if (user.getRole() == Role.ROLE_EMPLOYEE || user.getRole() == Role.ROLE_ADMIN) {
+			enterpriseId = employeeRepository.findByUserId(user.getId()).getEnterprise().getId();
+		}
 
 		List<ManagementResponse.EmployeeDto> employees = managementCustomRepository.findEmployeesOfEnterprise(enterpriseId);
 
@@ -90,6 +92,7 @@ public class ManagementServiceImpl implements ManagementService {
 		}
 
 		employee.updateRole(Role.valueOf(requestDto.getNewRole()));
+		employee.updateState(State.ACTIVE);
 		userRepository.save(employee);
 	}
 
@@ -98,12 +101,13 @@ public class ManagementServiceImpl implements ManagementService {
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new BaseException(USER_NOT_FOUND));
 
-		// 기업 유저만 조회 가능
-		if (user.getRole() != Role.ROLE_ENTERPRISE) {
-			throw new BaseException(FORBIDDEN_USER_ROLE);
+		Long enterpriseId = null;
+		if (user.getRole() == Role.ROLE_ENTERPRISE) {
+			enterpriseId = enterpriseRepository.findByUserId(user.getId()).getId();
 		}
-
-		Long enterpriseId = enterpriseRepository.findByUserId(user.getId()).getId();
+		else if (user.getRole() == Role.ROLE_EMPLOYEE || user.getRole() == Role.ROLE_ADMIN) {
+			enterpriseId = employeeRepository.findByUserId(user.getId()).getEnterprise().getId();
+		}
 
 		List<ManagementResponse.EmployeeDto> employees = managementCustomRepository.findEmployeesOfEnterpriseByKeyword(enterpriseId, keyword);
 
