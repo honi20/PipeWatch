@@ -367,6 +367,18 @@ class ManagementControllerTest {
 
 	@Test
 	void 직원_검색_성공() throws Exception {
+		SecurityContextHolder.getContext().setAuthentication(
+				new UsernamePasswordAuthenticationToken(124L, null, List.of(new SimpleGrantedAuthority("ROLE_USER")))
+		);
+
+		ManagementResponse.EmployeeDto employee1 = new ManagementResponse.EmployeeDto("1604b772-adc0-4212-8a90-81186c57f600", "최싸피", "choi@ssafy.com", 1534534L, "마케팅부", "대리", "ROLE_EMPLOYEE");
+		ManagementResponse.EmployeeDto employee2 = new ManagementResponse.EmployeeDto("1604b772-adc0-4212-8a90-81186c57f601", "김싸피", "kim@ssafy.com", 1423435L, "인사부", "부장", "ROLE_ADMIN");
+		ManagementResponse.EmployeeSearchDto response = ManagementResponse.EmployeeSearchDto.builder()
+				.employees(List.of(employee1, employee2))
+				.build();
+
+		when(managementService.searchEmployee(124L, "싸피")).thenReturn(response);
+
 		ResultActions actions = mockMvc.perform(
 				get("/api/management/search?keyword=싸피")
 						.contentType(MediaType.APPLICATION_JSON)
@@ -403,7 +415,6 @@ class ManagementControllerTest {
 								.responseSchema(Schema.schema("직원 검색 Response"))
 								.build()
 						)));
-
 	}
 
 	@Test
