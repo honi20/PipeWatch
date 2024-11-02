@@ -11,6 +11,7 @@ public class ManagementRequest {
 	@NoArgsConstructor
 	@AllArgsConstructor
 	public static class AccessModifyDto {
-		private String newRoll;
+		private String userUuid;
+		private String newRole;
 	}
 }

@@ -1,5 +1,6 @@
 package com.pipewatch.domain.management.controller;
 
+import com.pipewatch.domain.management.model.dto.ManagementRequest;
 import com.pipewatch.domain.management.model.dto.ManagementResponse;
 import com.pipewatch.domain.management.service.ManagementService;
 import com.pipewatch.global.response.ResponseDto;
@@ -33,8 +34,10 @@ public class ManagementController {
 		return new ResponseEntity<>(ResponseDto.success(EMPLOYEE_LIST_OK, responseDto), HttpStatus.OK);
 	}
 
-	@PatchMapping("/{userUuid}")
-	public ResponseEntity<?> userRollModify(@PathVariable String userUuid) {
+	@PatchMapping
+	public ResponseEntity<?> userRollModify(@AuthenticationPrincipal Long userId, @RequestBody ManagementRequest.AccessModifyDto requestDto) {
+		managementService.modifyUserRoll(userId, requestDto);
+
 		return new ResponseEntity<>(ResponseDto.success(ROLE_MODIFIED_OK, null), HttpStatus.OK);
 	}
 
