@@ -6,7 +6,7 @@
     "lang": "Eng",
     "subMenu": {
       "home": "Home",
-      "aboutus": "About us",
+      "aboutUs": "About us",
       "aboutService": "Our Service",
       "aboutTeam": "Our Team",
       "pipeViewer": "Pipe Viewer",
@@ -14,6 +14,12 @@
       "contact": "Contact"
     },
     "login": "Login"
+  },
+  "footer": {
+    "paoriTeam": "2024 Paori, Team",
+    "termsAndPolicy": "Terms & Policy",
+    "contact": "Contact",
+    "manageCookies": "Manage Cookies"
   },
   "home": {
     "greeting1": "Boost your Efficiency",

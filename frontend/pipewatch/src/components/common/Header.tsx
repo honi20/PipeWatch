@@ -59,7 +59,7 @@ export const Header = ({ handleTheme, currentTheme }: Props) => {
           }
           to="/"
         >
-          Home
+          {t("header.subMenu.home")}
         </NavLink>
 
         <Popover className="p-3 pb-2 group">
@@ -94,14 +94,14 @@ export const Header = ({ handleTheme, currentTheme }: Props) => {
                       to="/about-us/service"
                       onClick={() => close()}
                     >
-                      <p className=""> {t("header.subMenu.aboutService")}</p>
+                      <p className="">{t("header.subMenu.aboutService")}</p>
                     </Link>
                     <Link
                       className="block px-3 py-2 transition rounded-lg hover:bg-white/5 hover:text-primary-200"
                       to="/about-us/team"
                       onClick={() => close()}
                     >
-                      <p className=""> {t("header.subMenu.aboutTeam")}</p>
+                      <p className="">{t("header.subMenu.aboutTeam")}</p>
                     </Link>
                   </div>
                 </PopoverPanel>

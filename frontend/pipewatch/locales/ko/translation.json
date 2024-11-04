@@ -5,15 +5,21 @@
   "header": {
     "lang": "한국어",
     "subMenu": {
-      "home": "Home",
-      "aboutUs": "About us",
+      "home": "홈",
+      "aboutUs": "PipeWatch 소개",
       "aboutService": "서비스 소개",
       "aboutTeam": "팀 소개",
       "pipeViewer": "파이프 조회",
       "pipeGenerator": "파이프 생성",
-      "contact": "Contact"
+      "contact": "문의하기"
     },
     "login": "로그인"
+  },
+  "footer": {
+    "paoriTeam": "2024 팀 파오리",
+    "termsAndPolicy": "이용약관 및 정책",
+    "contact": "문의하기",
+    "manageCookies": "쿠키 관리"
   },
   "home": {
     "greeting1": "PipeWatch로",

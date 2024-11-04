@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 
 import { Header } from "@components/common/Header";
+import { Footer } from "@components/common/Footer";
 
 function Layout() {
   const [theme, setTheme] = useState("light");
@@ -41,6 +42,7 @@ function Layout() {
       <div className="py-[108px] min-h-full">
         <Outlet />
       </div>
+      <Footer currentTheme={localStorage.theme} />
     </div>
   );
 }
