@@ -11,6 +11,8 @@ import { PipeGenerator } from "@pages/PipeGenerator";
 import { PipeViewer } from "@pages/PipeViewer";
 import { Contact } from "@pages/Contact";
 
+import { TermsAndPolicy } from "@pages/TermsAndPolicy";
+
 import { Auth } from "@pages/account/Auth";
 import { LoginPage } from "@pages/account/LoginPage";
 import { FindPassword } from "@pages/account/FindPassword";
@@ -45,6 +47,7 @@ function App() {
             <Route path="/about-us" element={<AboutUs />} />
             <Route path="/about-us/service" element={<AboutService />} />
             <Route path="/about-us/team" element={<AboutTeam />} />
+            <Route path="/terms-and-policy" element={<TermsAndPolicy />} />
 
             <Route path="/pipe-viewer" element={<PipeViewer />} />
             <Route path="/pipe-generator" element={<PipeGenerator />}>

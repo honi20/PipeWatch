@@ -6,7 +6,7 @@
     "lang": "Eng",
     "subMenu": {
       "home": "Home",
-      "aboutus": "About us",
+      "aboutUs": "About us",
       "aboutService": "Our Service",
       "aboutTeam": "Our Team",
       "pipeViewer": "Pipe Viewer",
@@ -14,6 +14,17 @@
       "contact": "Contact"
     },
     "login": "Login"
+  },
+  "footer": {
+    "paoriTeam": "2024 Paori, Team",
+    "termsAndPolicy": "Terms & Policy",
+    "contact": "Contact",
+    "manageCookies": {
+      "title": "Manage Cookies",
+      "description": "We use our own cookies so that we can show you this website and understand how you use them to improve the services we offer.",
+      "buttonDeny": "Deny All",
+      "buttonAccept": "Accept All"
+    }
   },
   "home": {
     "greeting1": "Boost your Efficiency",
