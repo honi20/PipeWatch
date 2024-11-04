@@ -41,13 +41,13 @@ public class S3Service {
 		return bucketUrl + uploadS3(multipartFile, dirName, modelUuid);
 	}
 
-	private String uploadS3(MultipartFile multipartFile, String dirName, String modelUuid) throws IOException {
+	private String uploadS3(MultipartFile multipartFile, String dirName, String fileName) throws IOException {
 		validateImageFileExtention(multipartFile.getOriginalFilename());
 
 		String originalFilename = multipartFile.getOriginalFilename(); //원본 파일 명
 		String extension = originalFilename.substring(originalFilename.lastIndexOf(".")); //확장자 명
 
-		String s3FileName = dirName + "/" + modelUuid + "_Pipeline" + extension;
+		String s3FileName = dirName + "/" + fileName + extension;
 
 		InputStream is = multipartFile.getInputStream();
 

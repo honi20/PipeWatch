@@ -45,7 +45,7 @@ public class PipelineModelServiceImpl implements PipelineModelService{
 				.build();
 
 		if (!file.isEmpty()) {
-			String imgUrl = s3Service.upload(file, "pipeline/model", UUID);
+			String imgUrl = s3Service.upload(file, "pipeline/model", UUID + "_pipeline");
 			pipelineModel.updateModelingUrl(imgUrl);
 		}
 
