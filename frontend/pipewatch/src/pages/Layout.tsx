@@ -27,9 +27,11 @@ function Layout() {
         window.matchMedia("(prefers-color-scheme: dark)").matches)
     ) {
       localStorage.setItem("theme", "dark");
+      setTheme("dark");
       document.documentElement.classList.add("dark");
     } else {
       localStorage.setItem("theme", "light");
+      setTheme("light");
       document.documentElement.classList.remove("dark");
     }
   }, [theme]);
