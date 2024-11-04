@@ -1,4 +1,4 @@
-import { useState } from "react";
+// import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
@@ -13,23 +13,23 @@ export const UploadModelAuto = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const [status, setStatus] = useState<"initial" | "success" | "fail">(
-    "initial"
-  );
+  // const [status, setStatus] = useState<"initial" | "success" | "fail">(
+  //   "initial"
+  // );
 
-  const Result = ({ status }: { status: string }) => {
-    if (status === "success") {
-      return t(
-        "pipeGenerator.uploadModel.captureStarted.statusMessages.success"
-      );
-    } else if (status === "fail") {
-      return t(
-        "pipeGenerator.uploadModel.captureStarted.statusMessages.failed"
-      );
-    } else {
-      return null;
-    }
-  };
+  // const Result = ({ status }: { status: string }) => {
+  //   if (status === "success") {
+  //     return t(
+  //       "pipeGenerator.uploadModel.captureStarted.statusMessages.success"
+  //     );
+  //   } else if (status === "fail") {
+  //     return t(
+  //       "pipeGenerator.uploadModel.captureStarted.statusMessages.failed"
+  //     );
+  //   } else {
+  //     return null;
+  //   }
+  // };
 
   // 저장 버튼 Click Action
   const handleSave = () => {
