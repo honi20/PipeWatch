@@ -11,8 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.pipewatch.global.statusCode.SuccessCode.ENTERPRISE_DETAIL_OK;
-import static com.pipewatch.global.statusCode.SuccessCode.ENTERPRISE_LIST_OK;
+import static com.pipewatch.global.statusCode.SuccessCode.*;
 
 @RestController
 @RequestMapping("${api_prefix}/enterprises")
@@ -32,5 +31,19 @@ public class EnterpriseController {
 		EnterpriseResponse.ListDto responseDto = enterpriseService.getEnterpriseList();
 
 		return new ResponseEntity<>(ResponseDto.success(ENTERPRISE_LIST_OK, responseDto), HttpStatus.OK);
+	}
+
+	@GetMapping("/buildings")
+	public ResponseEntity<?> buildingList(@AuthenticationPrincipal Long userId) {
+		EnterpriseResponse.BuildingListDto responseDto = enterpriseService.getBuildingList(userId);
+
+		return new ResponseEntity<>(ResponseDto.success(BUILDING_LIST_OK, responseDto), HttpStatus.OK);
+	}
+
+	@GetMapping("/floors")
+	public ResponseEntity<?> buildingAndFloorList(@AuthenticationPrincipal Long userId) {
+		EnterpriseResponse.BuildingAndFloorListDto responseDto = enterpriseService.getBuildingAndFloorList(userId);
+
+		return new ResponseEntity<>(ResponseDto.success(BUILDING_AND_FLOOR_LIST_OK, responseDto), HttpStatus.OK);
 	}
 }

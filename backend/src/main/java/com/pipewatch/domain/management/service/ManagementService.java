@@ -11,6 +11,4 @@ public interface ManagementService {
 	void modifyUserRoll(Long userId, ManagementRequest.AccessModifyDto requestDto);
 
 	ManagementResponse.EmployeeSearchDto searchEmployee(Long userId, String keyword);
-
-	ManagementResponse.BuildingListDto getBuildingList(Long userId);
 }
