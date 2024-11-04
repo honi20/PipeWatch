@@ -1,5 +1,9 @@
 package com.pipewatch.domain.pipelineModel.service;
 
+import com.pipewatch.domain.pipeline.model.entity.Pipe;
+import com.pipewatch.domain.pipeline.model.entity.Pipeline;
+import com.pipewatch.domain.pipeline.repository.PipeRepository;
+import com.pipewatch.domain.pipeline.repository.PipelineRepository;
 import com.pipewatch.domain.pipelineModel.model.dto.PipelineModelRequest;
 import com.pipewatch.domain.pipelineModel.model.dto.PipelineModelResponse;
 import com.pipewatch.domain.pipelineModel.model.entity.PipelineModel;
@@ -10,6 +14,7 @@ import com.pipewatch.domain.user.repository.UserRepository;
 import com.pipewatch.global.exception.BaseException;
 import com.pipewatch.global.s3.S3Service;
 import lombok.RequiredArgsConstructor;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -21,15 +26,20 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.pipewatch.global.statusCode.ErrorCode.FORBIDDEN_USER_ROLE;
 import static com.pipewatch.global.statusCode.ErrorCode.USER_NOT_FOUND;
 
 @Service
 @RequiredArgsConstructor
-public class PipelineModelServiceImpl implements PipelineModelService{
+public class PipelineModelServiceImpl implements PipelineModelService {
 	private final UserRepository userRepository;
 	private final PipelineModelRepository pipelineModelRepository;
+	private final PipelineRepository pipelineRepository;
+	private final PipeRepository pipeRepository;
 	private final S3Service s3Service;
 
 	@Value("${S3_URL}")
@@ -67,7 +77,7 @@ public class PipelineModelServiceImpl implements PipelineModelService{
 	}
 
 	@Override
-	public PipelineModelResponse.FileUploadDto createModeling(PipelineModelRequest.ModelingDto requestDto) throws IOException, ParseException {
+	public PipelineModelResponse.CreateModelingDto createModeling(PipelineModelRequest.ModelingDto requestDto) throws IOException, ParseException {
 		User user = userRepository.findByUuid(requestDto.getUserUuid());
 		if (user == null) {
 			throw new BaseException(USER_NOT_FOUND);
@@ -92,12 +102,45 @@ public class PipelineModelServiceImpl implements PipelineModelService{
 
 		// Json 정보 추출
 		JSONObject jsonObject = getJsonObject(requestDto.getModelUrl());
+		JSONArray nodes = (JSONArray) jsonObject.get("nodes");
+		Map<String, Pipeline> pipelineMap = new HashMap<>();
 
+		for (int i = 0; i < nodes.size(); i++) {
+			JSONObject node = (JSONObject) nodes.get(i);
+			String nodeName = (String) node.get("name");
 
-		// TODO: Object 기준으로 데이터 뽑아서 Pipeline, Pipe 테이블에 저장
+			if (nodeName.startsWith("PipeObj_") && !nodeName.contains("Segment")) {
+				String[] parts = nodeName.split("_");
+				String pipelineNumber = parts[1];
 
+				Pipeline pipeline = Pipeline.builder()
+						.name(nodeName)
+						.uuid(nodeName + "_" + UUID)
+						.pipelineModel(pipelineModel)
+						.build();
 
-		return null;
+				pipelineRepository.save(pipeline);
+				pipelineMap.put(pipelineNumber, pipeline);
+			} else if (nodeName.startsWith("PipeObj_") && nodeName.contains("Segment")) {
+				String[] parts = nodeName.split("_");
+				String pipelineNumber = parts[1];
+				Pipeline relatedPipeline = pipelineMap.get(pipelineNumber);
+
+				if (relatedPipeline != null) {
+					Pipe pipe = Pipe.builder()
+							.name(nodeName)
+							.uuid(nodeName + "_" + UUID)
+							.pipeline(relatedPipeline)
+							.build();
+
+					pipeRepository.save(pipe);
+				}
+			}
+		}
+
+		return PipelineModelResponse.CreateModelingDto.builder()
+				.modelId(pipelineModel.getId())
+				.build();
 	}
 
 	private JSONObject getJsonObject(String modelUrl) throws IOException, ParseException {
@@ -105,6 +148,6 @@ public class PipelineModelServiceImpl implements PipelineModelService{
 		InputStream inputStream = s3Service.download(fileName);
 		JSONParser jsonParser = new JSONParser();
 
-		return (JSONObject)jsonParser.parse(new InputStreamReader(inputStream, "UTF-8"));
+		return (JSONObject) jsonParser.parse(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
 	}
 }

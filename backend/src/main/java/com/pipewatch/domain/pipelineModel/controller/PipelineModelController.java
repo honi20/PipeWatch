@@ -25,6 +25,20 @@ import static com.pipewatch.global.statusCode.SuccessCode.*;
 public class PipelineModelController {
 	private final PipelineModelService pipelineModelService;
 
+	@PostMapping(value = "/upload-file", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+	public ResponseEntity<?> fileUpload(@AuthenticationPrincipal Long userId, @RequestPart(value = "file", required = false) MultipartFile file) throws IOException {
+		PipelineModelResponse.FileUploadDto responseDto = pipelineModelService.uploadFile(userId, file);
+
+		return new ResponseEntity<>(ResponseDto.success(FILE_UPLOAD_AND_MODEL_CREATED, responseDto), HttpStatus.CREATED);
+	}
+
+	@PostMapping("/modeling")
+	public ResponseEntity<?> modelingCreate(@RequestBody PipelineModelRequest.ModelingDto requestDto) throws IOException, ParseException {
+		PipelineModelResponse.CreateModelingDto responseDto = pipelineModelService.createModeling(requestDto);
+
+		return new ResponseEntity<>(ResponseDto.success(PIPELINE_MODELING_CREATED, responseDto), HttpStatus.CREATED);
+	}
+
 	@GetMapping
 	public ResponseEntity<?> modelList(@RequestParam(required = false) String building, @RequestParam(required = false) Integer floor) {
 		PipelineModelResponse.PipelineModelDto model1 = new PipelineModelResponse.PipelineModelDto(1L, "model1", "previewUrl1", LocalDateTime.now());
@@ -39,13 +53,6 @@ public class PipelineModelController {
 				.build();
 
 		return new ResponseEntity<>(ResponseDto.success(MODEL_LIST_OK, responseDto), HttpStatus.OK);
-	}
-
-	@PostMapping(value = "/upload-file", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-	public ResponseEntity<?> fileUpload(@AuthenticationPrincipal Long userId, @RequestPart(value = "file", required = false) MultipartFile file) throws IOException {
-		PipelineModelResponse.FileUploadDto responseDto = pipelineModelService.uploadFile(userId, file);
-
-		return new ResponseEntity<>(ResponseDto.success(FILE_UPLOAD_AND_MODEL_CREATED, responseDto), HttpStatus.CREATED);
 	}
 
 	@PatchMapping("/init/{modelId}")
@@ -75,12 +82,5 @@ public class PipelineModelController {
 	@DeleteMapping("/{modelId}")
 	public ResponseEntity<?> modelDelete(@PathVariable Long modelId) {
 		return new ResponseEntity<>(ResponseDto.success(MODEL_DELETED, null), HttpStatus.NO_CONTENT);
-	}
-
-	@PostMapping("/modeling")
-	public ResponseEntity<?> modelingCreate(@RequestBody PipelineModelRequest.ModelingDto requestDto) throws IOException, ParseException {
-		PipelineModelResponse.FileUploadDto responseDto = pipelineModelService.createModeling(requestDto);
-
-		return new ResponseEntity<>(ResponseDto.success(PIPELINE_MODELING_CREATED, responseDto), HttpStatus.CREATED);
 	}
 }
