@@ -19,7 +19,12 @@
     "paoriTeam": "2024 팀 파오리",
     "termsAndPolicy": "이용약관 및 정책",
     "contact": "문의하기",
-    "manageCookies": "쿠키 관리"
+    "manageCookies": {
+      "title": "쿠키 관리",
+      "description": "이 웹사이트를 제공하고 서비스 품질을 개선하기 위해 당사의 쿠키를 사용하여 이용자의 활동을 분석합니다.",
+      "buttonDeny": "모두 거부",
+      "buttonAccept": "모두 허용"
+    }
   },
   "home": {
     "greeting1": "PipeWatch로",

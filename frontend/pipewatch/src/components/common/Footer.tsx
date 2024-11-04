@@ -61,7 +61,7 @@ export const Footer = ({ currentTheme }: Props) => {
           onClick={() => setIsOpen(true)}
           className="p-3 pb-2 bg-transparent hover:text-primary-200"
         >
-          {t("footer.manageCookies")}
+          {t("footer.manageCookies.title")}
         </button>
       </div>
       <div className="flex items-center gap-4">
