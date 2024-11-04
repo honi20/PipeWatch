@@ -121,6 +121,7 @@ public class AuthRequest {
 	@NoArgsConstructor
 	@AllArgsConstructor
 	public static class EmailPwdSendDto {
+		@Schema(description = "비밀번호 재설정 링크를 전송할 이메일", example = "paori@ssafy.com")
 		private String email;
 	}
 
@@ -130,7 +131,9 @@ public class AuthRequest {
 	@NoArgsConstructor
 	@AllArgsConstructor
 	public static class PasswordResetDto {
+		@Schema(description = "재설정 uuid (링크 경로 마지막에 존재하는 값)", example = "fjdkl-djshtqr2-dkjfl")
 		private String pwdUuid;
+		@Schema(description = "새 비밀번호", example = "newPassword")
 		private String newPassword;
 	}
 }
