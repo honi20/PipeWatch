@@ -58,10 +58,12 @@
     },
     "updatePassword": {
       "currentPassword": "기존 비밀번호",
+      "passwordMismatchError": "입력된 비밀번호가 현재 등록된 비밀번호와 일치하지 않습니다.",
       "newPassword": "새 비밀번호",
       "confirmNewPassword": "새 비밀번호 확인",
       "updatePassword": "비밀번호 수정",
-      "complete": "비밀번호 수정이 완료되었습니다."
+      "complete": "비밀번호 수정이 완료되었습니다.",
+      "newPasswordMatchError": "새 비밀번호는 기존 비밀번호와 일치할 수 없습니다."
     },
     "withdrawal": {
       "registrationEmail": "가입 이메일",
