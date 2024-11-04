@@ -39,13 +39,21 @@ public class AuthRequest {
 	@NoArgsConstructor
 	@AllArgsConstructor
 	public static class SignupDto {
+		@Schema(description = "이메일", example = "paori@ssafy.com")
 		private String email;
+		@Schema(description = "비밀번호", example = "ssafy1234")
 		private String password;
+		@Schema(description = "이름", example = "파오리")
 		private String name;
+		@Schema(description = "기업 ID", example = "1")
 		private Long enterpriseId;
+		@Schema(description = "사번", example = "1123456")
 		private Long empNo;
+		@Schema(description = "부서", example = "IT 개발부")
 		private String department;
+		@Schema(description = "직급", example = "대리")
 		private String empClass;
+		@Schema(description = "메일 인증코드", example = "603942")
 		private String verifyCode;
 
 		public User toEntity(String uuid) {
