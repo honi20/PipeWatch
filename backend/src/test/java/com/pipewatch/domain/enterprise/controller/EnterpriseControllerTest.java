@@ -154,6 +154,49 @@ class EnterpriseControllerTest {
 	}
 
 	@Test
+	void 건물_리스트_조회_성공() throws Exception {
+		jwtToken = jwtService.createAccessToken(UUID);
+
+		EnterpriseResponse.BuildingListDto response = EnterpriseResponse.BuildingListDto.builder()
+				.buildings(List.of("역삼 멀티캠퍼스", "부울경 멀티캠퍼스"))
+				.build();
+
+		when(enterpriseService.getBuildingList(anyLong())).thenReturn(response);
+
+		ResultActions actions = mockMvc.perform(
+				get("/api/enterprises/buildings")
+						.header("Authorization", "Bearer " + jwtToken)
+						.contentType(MediaType.APPLICATION_JSON)
+						.accept(MediaType.APPLICATION_JSON)
+						.characterEncoding("UTF-8")
+		);
+
+		actions
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.header.httpStatusCode").value(BUILDING_LIST_OK.getHttpStatusCode()))
+				.andExpect(jsonPath("$.header.message").value(BUILDING_LIST_OK.getMessage()))
+				.andDo(document(
+						"건물 목록 조회 성공",
+						preprocessRequest(prettyPrint()),
+						preprocessResponse(prettyPrint()),
+						resource(ResourceSnippetParameters.builder()
+								.tag("Management API")
+								.summary("건물 목록 조회 API")
+								.requestHeaders(
+										headerWithName("Authorization").description("Access Token")
+								)
+								.responseFields(
+										getCommonResponseFields(
+												fieldWithPath("body.buildings[]").type(JsonFieldType.ARRAY).description("건물 리스트")
+										)
+								)
+								.responseSchema(Schema.schema("건물 목록 조회 Response"))
+								.build()
+						)));
+
+	}
+
+	@Test
 	void 건물_층_리스트_조회_성공() throws Exception {
 		jwtToken = jwtService.createAccessToken(UUID);
 
