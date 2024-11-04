@@ -50,9 +50,8 @@ const UpdatePasswordCard = () => {
 
   const handleNewPasswordBlur = (e: FocusEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    setShowNewPasswordError(
-      !validatePassword(value) || tempCurrentPassword === value
-    );
+    setShowNewPasswordError(!validatePassword(value));
+    setShowPasswordMismatchError(tempCurrentPassword === value);
   };
 
   // check new password - match with new password
@@ -71,9 +70,7 @@ const UpdatePasswordCard = () => {
 
   const handleCheckNewPasswordBlur = (e: FocusEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    setShowNewPasswordError(
-      !validatePassword(value) || tempCurrentPassword === value
-    );
+    setCheckShowNewPasswordError(newPassword !== value);
   };
 
   const isFormValid: boolean =
@@ -155,7 +152,7 @@ const UpdatePasswordCard = () => {
 
       <div className="flex flex-col gap-[20px]">
         <Button
-          className={`flex items-center h-[56px] w-full px-[30px] text-white rounded-[20px]
+          className={`flex items-center h-[56px] w-full px-[30px] justify-center text-white rounded-[20px]
                         ${
                           isFormValid
                             ? "bg-button-background hover:bg-button-background/80"
