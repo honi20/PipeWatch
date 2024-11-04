@@ -6,19 +6,15 @@ import { Header } from "@components/common/Header";
 import { Footer } from "@components/common/Footer";
 
 function Layout() {
-  const [theme, setTheme] = useState("light");
+  const [theme, setTheme] = useState(localStorage.getItem("theme") || "dark");
   const handleTheme = () => {
-    setTheme(
-      localStorage.theme === "dark"
-        ? (localStorage.theme = "light")
-        : (localStorage.theme = "dark")
-    );
+    const newTheme = theme === "dark" ? "light" : "dark";
+    setTheme(newTheme);
+    localStorage.setItem("theme", newTheme);
   };
 
   const location = useLocation();
-  // console.log("first location: ", location);
   const isAuth = location.pathname.includes("/account/auth");
-  // console.log("isAuth: ", isAuth);
 
   useEffect(() => {
     if (
@@ -26,10 +22,10 @@ function Layout() {
       (!("theme" in localStorage) &&
         window.matchMedia("(prefers-color-scheme: dark)").matches)
     ) {
-      localStorage.setItem("theme", "dark");
+      setTheme("dark");
       document.documentElement.classList.add("dark");
     } else {
-      localStorage.setItem("theme", "light");
+      setTheme("light");
       document.documentElement.classList.remove("dark");
     }
   }, [theme]);
