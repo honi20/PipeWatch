@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pipewatch.domain.user.model.dto.UserRequest;
 import com.pipewatch.domain.user.model.dto.UserResponse;
 import com.pipewatch.domain.user.service.UserService;
+import com.pipewatch.global.exception.BaseException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,11 +30,11 @@ import java.util.List;
 
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
 import static com.pipewatch.domain.util.ResponseFieldUtil.getCommonResponseFields;
+import static com.pipewatch.global.statusCode.ErrorCode.INVALID_PASSWORD;
 import static com.pipewatch.global.statusCode.SuccessCode.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
@@ -265,14 +266,21 @@ class UserControllerTest {
 				new UsernamePasswordAuthenticationToken(123L, null, List.of(new SimpleGrantedAuthority("ROLE_USER")))
 		);
 
+		UserRequest.WithdrawDto dto = UserRequest.WithdrawDto.builder()
+				.password("ssafy1234")
+				.build();
+
+		String content = objectMapper.writeValueAsString(dto);
+
+		doNothing().when(userService).deleteUser(anyLong(), any(UserRequest.WithdrawDto.class));
+
 		ResultActions actions = mockMvc.perform(
 				delete("/api/users/withdraw")
+						.content(content)
 						.contentType(MediaType.APPLICATION_JSON)
 						.accept(MediaType.APPLICATION_JSON)
 						.characterEncoding("UTF-8")
 		);
-
-		doNothing().when(userService).deleteUser(anyLong());
 
 		actions
 				.andExpect(status().isNoContent())
@@ -290,6 +298,48 @@ class UserControllerTest {
 												fieldWithPath("body").ignored()
 										)
 								)
+								.build()
+						)));
+	}
+
+	@Test
+	void 회원_탈퇴_실패_잘못된_비밀번호() throws Exception {
+		SecurityContextHolder.getContext().setAuthentication(
+				new UsernamePasswordAuthenticationToken(123L, null, List.of(new SimpleGrantedAuthority("ROLE_USER")))
+		);
+
+		UserRequest.WithdrawDto dto = UserRequest.WithdrawDto.builder()
+				.password("invalide_password")
+				.build();
+
+		String content = objectMapper.writeValueAsString(dto);
+
+		doThrow(new BaseException(INVALID_PASSWORD)).when(userService).deleteUser(anyLong(), any(UserRequest.WithdrawDto.class));
+
+		ResultActions actions = mockMvc.perform(
+				delete("/api/users/withdraw")
+						.content(content)
+						.contentType(MediaType.APPLICATION_JSON)
+						.accept(MediaType.APPLICATION_JSON)
+						.characterEncoding("UTF-8")
+		);
+
+		actions
+				.andExpect(status().isForbidden())
+				.andExpect(jsonPath("$.header.httpStatusCode").value(INVALID_PASSWORD.getHttpStatusCode()))
+				.andExpect(jsonPath("$.header.message").value(INVALID_PASSWORD.getMessage()))
+				.andDo(document(
+						"회원 탈퇴 실패 - 일치하지 않는 비밀번호",
+						preprocessRequest(prettyPrint()),
+						preprocessResponse(prettyPrint()),
+						resource(ResourceSnippetParameters.builder()
+								.tag("User API")
+								.responseFields(
+										getCommonResponseFields(
+												fieldWithPath("body").type(JsonFieldType.OBJECT).description("에러 상세").optional().ignored()
+										)
+								)
+								.responseSchema(Schema.schema("Error Response"))
 								.build()
 						)));
 	}

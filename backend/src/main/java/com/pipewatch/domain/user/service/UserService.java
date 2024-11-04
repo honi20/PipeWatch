@@ -10,5 +10,5 @@ public interface UserService {
 
 	void modifyPassword(Long userId, UserRequest.PasswordModifyDto requestDto);
 
-	void deleteUser(Long userId);
+	void deleteUser(Long userId, UserRequest.WithdrawDto requestDto);
 }

@@ -17,8 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.pipewatch.global.statusCode.ErrorCode.FORBIDDEN_USER_ROLE;
-import static com.pipewatch.global.statusCode.ErrorCode.USER_NOT_FOUND;
+import static com.pipewatch.global.statusCode.ErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
@@ -74,10 +73,15 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	@Transactional
-	public void deleteUser(Long userId) {
+	public void deleteUser(Long userId, UserRequest.WithdrawDto requestDto) {
 		// 유저가 존재하는지 확인
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new BaseException(USER_NOT_FOUND));
+
+		// 비밀번호가 일치하는지 확인
+		if (!passwordEncoder.matches(requestDto.getPassword(), user.getPassword())) {
+			throw new BaseException(INVALID_PASSWORD);
+		}
 
 		user.updateState(State.INACTIVE);
 		userRepository.save(user);
