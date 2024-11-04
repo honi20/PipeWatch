@@ -4,14 +4,15 @@ import { AreaType, ModelType } from "@src/components/pipeViewer/PipeType";
 import { AreaListbox } from "@src/components/pipeViewer/AreaListbox";
 import "./viewer.css";
 import { FloorListbox } from "@src/components/pipeViewer/FloorListbox";
-// import GLTFViewer from "@src/components/pipeViewer/GLTFViewer";
+import GLTFViewer from "@src/components/pipeViewer/GLTFViewer";
+import { PipelineMemo } from "@src/components/pipeViewer/PipelineMemo";
 
 interface ModelListViewProps {
   modelList: ModelType[];
 }
 
 export const ModelListView: React.FC<ModelListViewProps> = ({ modelList }) => {
-  const [selectModelId, setSelectModelId] = useState<number | null>(null);
+  const [selectModel, setSelectModel] = useState<ModelType | null>(null);
   const [selectedArea, setSelectedArea] = useState<AreaType | null>(null);
   const [selectedFloor, setSelectedFloor] = useState<number | null>(null);
   const [floorList, setFloorList] = useState<number[]>([]);
@@ -55,16 +56,16 @@ export const ModelListView: React.FC<ModelListViewProps> = ({ modelList }) => {
         <div className="flex gap-4 flex-nowrap ">
           {filteredModelList.map((model) => (
             <div className="relative w-[100px] h-[100px]" key={model.id}>
-              {selectModelId !== model.id && (
+              {(selectModel === null || selectModel.id !== model.id) && (
                 <div
                   className="absolute inset-0 bg-black opacity-50 rounded-[20px]"
                   onClick={() => {
-                    setSelectModelId(model.id);
+                    setSelectModel(model);
                   }}
                 />
               )}
               <img
-                src={model.image_path}
+                src={model.imagePath}
                 className="h-full bg-gray-400 rounded-[20px] object-cover"
                 style={{ zIndex: -1 }}
               />
@@ -73,14 +74,17 @@ export const ModelListView: React.FC<ModelListViewProps> = ({ modelList }) => {
         </div>
       </div>
       <div className="flex items-center justify-center gap-[20px] w-full h-full bg-gray-400">
-        {selectModelId ? (
+        {selectModel ? (
           // 모델id에 따른 gltf url 넣기
-          <div>
-            <div>{selectModelId}</div>
-            {/* <GLTFViewer gltfUrl="/assets/models/scene.gltf" /> */}
+          <div className="relative w-full h-full border border-warn">
+            <div>{selectModel.id}</div>
+            <GLTFViewer gltfUrl="/assets/models/scene.gltf" />
+            <div className="absolute top-5 right-10">
+              <PipelineMemo pipe={selectModel} />
+            </div>
           </div>
         ) : (
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 ">
             <img src={SelectPipeModelIcon} width={"60px"} />
             <p className="text-[30px] text-gray-800 font-bold">
               파이프 모델을 선택하세요.
