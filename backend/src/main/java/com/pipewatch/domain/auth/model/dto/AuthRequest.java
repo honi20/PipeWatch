@@ -82,9 +82,13 @@ public class AuthRequest {
 	@NoArgsConstructor
 	@AllArgsConstructor
 	public static class EnterpriseRegistDto {
+		@Schema(description = "기업명", example = "paori")
 		private String name;
+		@Schema(description = "산업", example = "제조업")
 		private String industry;
+		@Schema(description = "대표 관리자 이메일", example = "paori_admin@ssafy.com")
 		private String managerEmail;
+		@Schema(description = "대표 관리자 전화번호", example = "010-1234-5678")
 		private String managerPhoneNumber;
 
 		public Enterprise toEntity(User user) {

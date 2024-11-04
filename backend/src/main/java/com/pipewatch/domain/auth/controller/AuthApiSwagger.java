@@ -47,12 +47,12 @@ public interface AuthApiSwagger {
 	ResponseEntity<?> emailCodeVerify(@RequestBody AuthRequest.EmailCodeVerifyDto requestDto);
 
 	@PostMapping
-	@Operation(summary = "회원가입")
+	@Operation(summary = "회원가입", description = "gmail/naver은 ssafy 기업 메일이라고 가정")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "201", description = "회원가입 성공", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-					examples = {@ExampleObject(value = "{\"header\":{\"httpStatusCode\": 200, \"message\": \"인증코드 발송에 성공했습니다.\"},\n\"body\": null}")}
+					examples = {@ExampleObject(value = "{\"header\":{\"httpStatusCode\": 201, \"message\": \"인증코드 발송에 성공했습니다.\"},\n\"body\": null}")}
 			)),
-			@ApiResponse(responseCode = "403", description = "회원가입 실패 - 잘못된 이메일 형식 (기업 도메인과 형식이 같아야 함. gmail/naver은 ssafy 기업 소속으로 가정)", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+			@ApiResponse(responseCode = "403", description = "회원가입 실패 - 잘못된 이메일 형식 (기업 도메인과 형식이 같아야 함)", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
 					examples = {@ExampleObject(value = "{\"header\":{\"httpStatusCode\": 403, \"message\": \"선택하신 기업 도메인의 이메일만 등록 가능합니다. {아이디}@{기업 도메인} 형식의 메일로 등록해야 합니다.\"},\n\"body\": null}")}
 			)),
 			@ApiResponse(responseCode = "404", description = "회원가입 실패 - 존재하지 않는 기업", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -66,6 +66,14 @@ public interface AuthApiSwagger {
 
 	@PostMapping("/enterprise")
 	@Operation(summary = "기업 가입", description = "gmail/naver은 ssafy 기업 메일이라고 가정")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "201", description = "기업 등록 성공", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+					examples = {@ExampleObject(value = "{\"header\":{\"httpStatusCode\": 200, \"message\": \"기업 등록에 성공했습니다.\"},\n\"body\": null}")}
+			)),
+			@ApiResponse(responseCode = "409", description = "기업 등록 실패 - 이미 등록된 기업", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+					examples = {@ExampleObject(value = "{\"header\":{\"httpStatusCode\": 409, \"message\": \"이미 등록된 기업입니다.\"},\n\"body\": null}")}
+			))
+	})
 	ResponseEntity<?> enterpriseAdd(@RequestBody AuthRequest.EnterpriseRegistDto requestDto) throws NoSuchAlgorithmException;
 
 	@PostMapping("/signin")
