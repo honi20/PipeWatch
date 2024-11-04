@@ -1,6 +1,6 @@
 {
   "error": {
-    "access": "Invalid entry."
+    "access": "Unauthorized Access."
   },
   "header": {
     "lang": "Eng",
@@ -64,7 +64,7 @@
       "updatePassword": "Update Password",
       "complete": "Your password has been successfully updated.",
       "newPasswordMatchError": " The new password must be different from the current password.",
-      "newPassworMismatchError": "The entered password does not match."
+      "newPasswordMismatchError": "The entered password does not match."
     },
     "withdrawal": {
       "registrationEmail": "Registered Email",

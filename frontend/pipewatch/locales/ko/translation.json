@@ -64,7 +64,7 @@
       "updatePassword": "비밀번호 수정",
       "complete": "비밀번호 수정이 완료되었습니다.",
       "newPasswordMatchError": "새 비밀번호는 이전 비밀번호와 다르게 설정해주세요.",
-      "newPassworMismatchError": "입력한 비밀번호와 일치하지 않습니다."
+      "newPasswordMismatchError": "입력한 비밀번호와 일치하지 않습니다."
     },
     "withdrawal": {
       "registrationEmail": "가입 이메일",

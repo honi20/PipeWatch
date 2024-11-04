@@ -1,86 +1,60 @@
 import { useTranslation } from "react-i18next";
 import { Button, Input } from "@headlessui/react";
 import { useNavigate } from "react-router-dom";
-import { useState, ChangeEvent, FocusEvent } from "react";
+import { useState } from "react";
 
 const UpdatePasswordCard = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  // check current password
-  const tempCurrentPassword = "paori1234@";
-
-  const [inputPassword, setInputPassword] = useState("");
-  const [showCurrentPasswordError, setCurrentPasswordError] = useState(false);
-
-  const handleInputPasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setInputPassword(value);
-    // 기존 비밀번호와 일치 여부 확인
-    setCurrentPasswordError(tempCurrentPassword !== value);
-  };
-
-  const handleCurrentPasswordBlur = (e: FocusEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setCurrentPasswordError(tempCurrentPassword !== value);
-  };
-
-  // check new password - valid & mismatch
-  const [newPassword, setNewPassword] = useState("");
-  const [showNewPasswordError, setShowNewPasswordError] = useState(false);
-  // 기존 비밀번호와 불일치 여부 확인
-  const [showPasswordMismatchError, setShowPasswordMismatchError] =
-    useState(false);
-
+  const currentPassword = "paori1234@";
   const passwordPattern =
     /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
 
-  // 유효성 검사
-  const validatePassword = (value: string) => passwordPattern.test(value);
+  const [passwordData, setPasswordData] = useState({
+    inputPassword: "",
+    newPassword: "",
+    checkNewPassword: "",
+  });
+  const [passwordErrors, setPasswordErrors] = useState({
+    currentPasswordError: false,
+    newPasswordError: false,
+    passwordMismatchError: false,
+    checkNewPasswordError: false,
+  });
 
-  // 비밀번호 이벤트 핸들러
-  const handleNewPasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setNewPassword(value);
-    // 비밀번호 유효성 확인
-    setShowNewPasswordError(!validatePassword(value));
-    // 기존 비밀번호와 불일치 여부 확인
-    setShowPasswordMismatchError(tempCurrentPassword === value);
+  // 핸들러 함수
+  const handlePasswordChange = (field: string, value: string) => {
+    setPasswordData((prevData) => ({ ...prevData, [field]: value }));
+
+    switch (field) {
+      case "inputPassword":
+        setPasswordErrors((prevErrors) => ({
+          ...prevErrors,
+          currentPasswordError: currentPassword !== value,
+        }));
+        break;
+      case "newPassword":
+        setPasswordErrors((prevErrors) => ({
+          ...prevErrors,
+          newPasswordError: !passwordPattern.test(value),
+          passwordMismatchError: currentPassword === value,
+        }));
+        break;
+      case "checkNewPassword":
+        setPasswordErrors((prevErrors) => ({
+          ...prevErrors,
+          checkNewPasswordError: passwordData.newPassword !== value,
+        }));
+        break;
+      default:
+        break;
+    }
   };
 
-  const handleNewPasswordBlur = (e: FocusEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setShowNewPasswordError(!validatePassword(value));
-    setShowPasswordMismatchError(tempCurrentPassword === value);
-  };
-
-  // check new password - match with new password
-  const [checkNewPassword, setCheckNewPassword] = useState("");
-  // 새로 입력한 비밀번호와 일치 여부 확인
-  const [showCheckNewPasswordError, setCheckShowNewPasswordError] =
-    useState(false);
-
-  // 비밀번호 이벤트 핸들러
-  const handleCheckNewPasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setCheckNewPassword(value);
-    // 기존 비밀번호와 불일치 여부 확인
-    setCheckShowNewPasswordError(newPassword !== value);
-  };
-
-  const handleCheckNewPasswordBlur = (e: FocusEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setCheckShowNewPasswordError(newPassword !== value);
-  };
-
-  const isFormValid: boolean =
-    inputPassword !== "" &&
-    newPassword !== "" &&
-    checkNewPassword !== "" &&
-    !showCurrentPasswordError &&
-    !showNewPasswordError &&
-    !showPasswordMismatchError &&
-    !showCheckNewPasswordError;
+  const isFormValid =
+    Object.values(passwordData).every((val) => val !== "") &&
+    Object.values(passwordErrors).every((error) => !error);
 
   return (
     <div className="w-[500px] flex flex-col bg-block rounded-[30px] p-[50px] gap-[40px] text-white">
@@ -88,64 +62,56 @@ const UpdatePasswordCard = () => {
         {t("manageAccount.dashboard.updatePassword")}
       </div>
 
-      {/* current password */}
       <div className="flex flex-col gap-[20px]">
         <Input
           type="password"
-          value={inputPassword}
-          onChange={handleInputPasswordChange}
-          onBlur={handleCurrentPasswordBlur}
-          // aria-invalid={showNewasswordError}
-          // aria-describedby={showNewasswordError ? "passwordError" : undefined}
+          value={passwordData.inputPassword}
+          onChange={(e) =>
+            handlePasswordChange("inputPassword", e.target.value)
+          }
           className="h-[56px] w-full px-5 text-gray-500 rounded-[5px] peer"
           placeholder={t("manageAccount.updatePassword.currentPassword")}
           required
         />
-        {showCurrentPasswordError && (
+        {passwordErrors.currentPasswordError && (
           <span className="w-full px-2 text-[14px] whitespace-normal text-warn break-keep">
             {t("manageAccount.updatePassword.passwordMismatchError")}
           </span>
         )}
 
-        {/* new password */}
         <Input
           type="password"
-          value={newPassword}
-          onChange={handleNewPasswordChange}
-          onBlur={handleNewPasswordBlur}
-          // aria-invalid={showNewPasswordError}
-          // aria-describedby={showNewPasswordError ? "passwordError" : undefined}
+          value={passwordData.newPassword}
+          onChange={(e) => handlePasswordChange("newPassword", e.target.value)}
           className="h-[56px] w-full px-5 text-gray-500 rounded-[5px] peer"
           placeholder={t("manageAccount.updatePassword.newPassword")}
           required
         />
-        {showNewPasswordError ? (
+        {passwordErrors.newPasswordError ? (
           <span className="w-full px-2 text-[14px] whitespace-normal text-warn break-keep">
             {t("account.passwordError")}
           </span>
         ) : (
-          showPasswordMismatchError && (
+          passwordErrors.passwordMismatchError && (
             <span className="w-full px-2 text-[14px] whitespace-normal text-warn break-keep">
               {t("manageAccount.updatePassword.newPasswordMatchError")}
             </span>
           )
         )}
 
-        {/* new password check */}
         <Input
           type="password"
-          value={checkNewPassword}
-          onChange={handleCheckNewPasswordChange}
-          onBlur={handleCheckNewPasswordBlur}
-          // aria-invalid={showNewPasswordError}
-          // aria-describedby={showNewPasswordError ? "passwordError" : undefined}
+          value={passwordData.checkNewPassword}
+          onChange={(e) =>
+            handlePasswordChange("checkNewPassword", e.target.value)
+          }
           className="h-[56px] w-full px-5 text-gray-500 rounded-[5px] peer"
           placeholder={t("manageAccount.updatePassword.confirmNewPassword")}
           required
         />
-        {showCheckNewPasswordError && (
+        {passwordErrors.checkNewPasswordError && (
           <span className="w-full px-2 text-[14px] whitespace-normal text-warn break-keep">
-            {t("manageAccount.updatePassword.newPassworMismatchError")}
+            {t("manageAccount.updatePassword.newPasswordMismatchError")}
           </span>
         )}
       </div>
@@ -153,12 +119,12 @@ const UpdatePasswordCard = () => {
       <div className="flex flex-col gap-[20px]">
         <Button
           className={`flex items-center h-[56px] w-full px-[30px] justify-center text-white rounded-[20px]
-                        ${
-                          isFormValid
-                            ? "bg-button-background hover:bg-button-background/80"
-                            : "bg-gray-800 cursor-not-allowed"
-                        }
-            `}
+            ${
+              isFormValid
+                ? "bg-button-background hover:bg-button-background/80"
+                : "bg-gray-800 cursor-not-allowed"
+            }
+          `}
           onClick={() => navigate("/account/manage/update-pw/completed")}
           disabled={!isFormValid}
         >
