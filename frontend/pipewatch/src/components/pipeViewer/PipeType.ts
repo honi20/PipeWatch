@@ -1,9 +1,18 @@
+export interface MemoType {
+  memoId: number;
+  content: string;
+  author: string;
+  createdTime: Date;
+}
+
 export interface ModelType {
   id: number;
   area: string;
   floor: number;
   name: string;
-  image_path: string;
+  imagePath: string;
+  pipelineName: string;
+  memolist: MemoType[];
 }
 
 export interface AreaType {
