@@ -5,13 +5,13 @@
 @font-face {
   font-family: "Pretendard";
   font-weight: normal;
-  src: url("assets/fonts/PretendardVariable.ttf") format("truetype");
+  src: url("../src/assets/fonts/PretendardVariable.ttf") format("truetype");
 }
 
 @font-face {
   font-family: "Esamanru";
   font-weight: bold;
-  src: url("assets/fonts/esamanru\nBold.ttf") format("truetype");
+  src: url("../src/assets/fonts/esamanru\ Bold.ttf") format("truetype");
 }
 
 body {
