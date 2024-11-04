@@ -17,7 +17,7 @@ import static com.pipewatch.global.statusCode.SuccessCode.*;
 @RestController
 @RequestMapping("${api_prefix}/auth")
 @RequiredArgsConstructor
-public class AuthController {
+public class AuthController implements AuthApiSwagger {
 	private final AuthService authService;
 
 	@PostMapping("/send-email-code")

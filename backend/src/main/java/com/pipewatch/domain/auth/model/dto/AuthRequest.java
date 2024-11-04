@@ -5,6 +5,7 @@ import com.pipewatch.domain.user.model.entity.Role;
 import com.pipewatch.domain.user.model.entity.State;
 import com.pipewatch.domain.user.model.entity.User;
 import com.pipewatch.global.jwt.entity.JwtToken;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 @Getter
@@ -16,6 +17,7 @@ public class AuthRequest {
 	@NoArgsConstructor
 	@AllArgsConstructor
 	public static class EmailCodeSendDto {
+		@Schema(description = "사용자 이메일", example = "paori@ssafy.com")
 		private String email;
 	}
 
