@@ -1,4 +1,7 @@
 {
+  "error": {
+    "access": "Unauthorized Access."
+  },
   "header": {
     "lang": "Eng",
     "subMenu": {
@@ -55,10 +58,13 @@
     },
     "updatePassword": {
       "currentPassword": "Current Password",
+      "passwordMismatchError": "The entered password does not match your existing password.",
       "newPassword": "New Password",
       "confirmNewPassword": "Confirm New Password",
       "updatePassword": "Update Password",
-      "complete": "Your password has been successfully updated."
+      "complete": "Your password has been successfully updated.",
+      "newPasswordMatchError": " The new password must be different from the current password.",
+      "newPasswordMismatchError": "The entered password does not match."
     },
     "withdrawal": {
       "registrationEmail": "Registered Email",
