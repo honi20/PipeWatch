@@ -84,7 +84,7 @@ swaggerSources {
 openapi3 {
     servers = [
             {'http://localhost:8080'},
-            {'https://k11a506.p.ssafy.io/docs'}
+            {'https://k11a506.p.ssafy.io'}
     ]
     title = 'Pipe Watch API'
     description = 'Pipe Watch API description'
