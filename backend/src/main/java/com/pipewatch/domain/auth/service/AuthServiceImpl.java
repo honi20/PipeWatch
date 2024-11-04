@@ -212,9 +212,11 @@ public class AuthServiceImpl implements AuthService {
 
 	@Override
 	@Transactional
-	public void logout() {
-		Long userId = jwtService.getUserId(SecurityContextHolder.getContext());
-		String userUuid = userRepository.findById(userId).get().getUuid();
+	public void logout(Long userId) {
+		User user = userRepository.findById(userId)
+						.orElseThrow(() -> new BaseException(USER_NOT_FOUND));
+
+		String userUuid = user.getUuid();
 
 		redisUtil.deleteData(userUuid);
 	}

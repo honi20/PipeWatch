@@ -16,7 +16,7 @@ public interface AuthService {
 
 	AuthResponse.AccessTokenDto signin(AuthRequest.SigninDto requestDto);
 
-	void logout();
+	void logout(Long userId);
 
 	void sendPasswordResetEmail(AuthRequest.EmailPwdSendDto requestDto);
 
