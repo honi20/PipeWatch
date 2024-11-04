@@ -21,7 +21,7 @@ import org.springframework.web.filter.GenericFilterBean;
 
 import java.io.IOException;
 
-import static com.pipewatch.global.statusCode.SuccessCode.ACCESSTOKEN_REISSUED;
+import static com.pipewatch.global.statusCode.ErrorCode.ACCESSTOKEN_REISSUED;
 
 @Component
 @RequiredArgsConstructor
@@ -75,9 +75,9 @@ public class JwtBearerAuthenticationFilter extends GenericFilterBean {
 		if (!response.isCommitted()) {
 			response.setContentType("application/json");
 			response.setCharacterEncoding("UTF-8");
-			response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 
-			ResponseDto<?> res = ResponseDto.success(ACCESSTOKEN_REISSUED, jwtService.createAccessToken(uuid));
+			ResponseDto<?> res = ResponseDto.fail(ACCESSTOKEN_REISSUED, jwtService.createAccessToken(uuid));
 			ObjectMapper mapper = new ObjectMapper();
 			response.getWriter().write(mapper.writeValueAsString(res));
 		}
