@@ -1,38 +1,38 @@
 import "./App.css";
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Layout from "./pages/Layout";
+import Layout from "@pages/Layout";
 
-import { Home } from "./pages/Home";
-import { AboutUs } from "./pages/AboutUs";
-import { AboutService } from "./pages/AboutService";
-import { AboutTeam } from "./pages/AboutTeam";
-import { PipeGenerator } from "./pages/PipeGenerator";
-import { PipeViewer } from "./pages/PipeViewer";
-import { Contact } from "./pages/Contact";
+import { Home } from "@pages/Home";
+import { AboutUs } from "@pages/AboutUs";
+import { AboutService } from "@pages/AboutService";
+import { AboutTeam } from "@pages/AboutTeam";
+import { PipeGenerator } from "@pages/PipeGenerator";
+import { PipeViewer } from "@pages/PipeViewer";
+import { Contact } from "@pages/Contact";
 
 import { TermsAndPolicy } from "./pages/TermsAndPolicy";
 
-import { Account } from "./pages/account/Account";
-import { LoginPage } from "./pages/account/LoginPage";
-import { FindPassword } from "./pages/account/FindPassword";
-import { SignUpPage } from "./pages/account/SignUpPage";
+import { Auth } from "@pages/account/Auth";
+import { LoginPage } from "@pages/account/LoginPage";
+import { FindPassword } from "@pages/account/FindPassword";
+import { SignUpPage } from "@pages/account/SignUpPage";
 
-import { Enterprise } from "./pages/Enterprise";
+import { Enterprise } from "@pages/Enterprise";
 import { EmpView } from "@pages/enterprise/EmpView";
 import { EmpVerification } from "@pages/enterprise/EmpVerification";
 
-import { UpdatePassword } from "./pages/ManageAccount/UpdatePassword";
-import { EditInfo } from "./pages/ManageAccount/EditInfo";
-import { Withdrawal } from "./pages/ManageAccount/Withdrawal";
-import { ManageAccount } from "./pages/ManageAccount/ManageAccount";
-import { CompletedManageAccount } from "./pages/ManageAccount/CompletedManageAccount";
+import { UpdatePassword } from "@pages/ManageAccount/UpdatePassword";
+import { EditInfo } from "@pages/ManageAccount/EditInfo";
+import { Withdrawal } from "@pages/ManageAccount/Withdrawal";
+import { ManageAccount } from "@pages/ManageAccount/ManageAccount";
+import { CompletedManageAccount } from "@pages/ManageAccount/CompletedManageAccount";
 
-import { TakePhoto } from "./components/pipeGenerator/TakePhoto";
-import { UploadModel } from "./components/pipeGenerator/UploadModel";
-import { InputData } from "./components/pipeGenerator/InputData";
-import { Rendering } from "./components/pipeGenerator/Rendering";
-import { Completed } from "./components/pipeGenerator/Completed";
+import { TakePhoto } from "@components/pipeGenerator/TakePhoto";
+import { UploadModel } from "@components/pipeGenerator/UploadModel";
+import { InputData } from "@components/pipeGenerator/InputData";
+import { Rendering } from "@components/pipeGenerator/Rendering";
+import { Completed } from "@components/pipeGenerator/Completed";
 
 import { CompletedContact } from "@pages/CompletedContact";
 
@@ -93,7 +93,7 @@ function App() {
               element={<CompletedManageAccount />}
             />
 
-            <Route path="/account/auth" element={<Account />}>
+            <Route path="/account/auth" element={<Auth />}>
               <Route path="/account/auth/login" element={<LoginPage />} />
               <Route path="/account/auth/find-pw" element={<FindPassword />} />
               <Route path="/account/auth/sign-up" element={<SignUpPage />} />

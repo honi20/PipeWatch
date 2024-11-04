@@ -60,6 +60,7 @@ build-frontend:
 # Deploy job to update deployment repository
 update-deployment-repo-backend:
   stage: deploy
+  needs: ["build-backend"]
   image: alpine/git
   before_script:
     - apk add --no-cache bash sed
@@ -80,6 +81,7 @@ update-deployment-repo-backend:
 
 update-deployment-repo-frontend:
   stage: deploy
+  needs: ["build-frontend"]
   image: alpine/git
   before_script:
     - apk add --no-cache bash sed
