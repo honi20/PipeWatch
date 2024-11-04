@@ -5,6 +5,7 @@ import com.epages.restdocs.apispec.Schema;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pipewatch.domain.enterprise.model.dto.EnterpriseResponse;
 import com.pipewatch.domain.enterprise.service.EnterpriseService;
+import com.pipewatch.global.jwt.service.JwtService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,9 +17,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.payload.JsonFieldType;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -27,9 +25,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static com.epages.restdocs.apispec.ResourceDocumentation.headerWithName;
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
 import static com.pipewatch.domain.util.ResponseFieldUtil.getCommonResponseFields;
 import static com.pipewatch.global.statusCode.SuccessCode.*;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
@@ -59,11 +59,14 @@ class EnterpriseControllerTest {
 	@MockBean
 	private EnterpriseService enterpriseService;
 
+	@Autowired
+	private JwtService jwtService;
+
+	private String jwtToken;
+
 	@Test
 	void 기업정보_조회_성공() throws Exception {
-		SecurityContextHolder.getContext().setAuthentication(
-				new UsernamePasswordAuthenticationToken(123L, null, List.of(new SimpleGrantedAuthority("ROLE_USER")))
-		);
+		jwtToken = jwtService.createAccessToken(UUID);
 
 		EnterpriseResponse.DetailDto response = EnterpriseResponse.DetailDto.builder()
 				.name("paori")
@@ -72,10 +75,11 @@ class EnterpriseControllerTest {
 				.managerPhoneNumber("010-1234-5678")
 				.build();
 
-		when(enterpriseService.getEnterpriseDetail(123L)).thenReturn(response);
+		when(enterpriseService.getEnterpriseDetail(anyLong())).thenReturn(response);
 
 		ResultActions actions = mockMvc.perform(
 				get("/api/enterprises")
+						.header("Authorization", "Bearer " + jwtToken)
 						.contentType(MediaType.APPLICATION_JSON)
 						.accept(MediaType.APPLICATION_JSON)
 						.characterEncoding("UTF-8")
@@ -92,6 +96,9 @@ class EnterpriseControllerTest {
 						resource(ResourceSnippetParameters.builder()
 								.tag("Enterprise API")
 								.summary("기업정보 조회 API")
+								.requestHeaders(
+										headerWithName("Authorization").description("Access Token")
+								)
 								.responseFields(
 										getCommonResponseFields(
 												fieldWithPath("body.name").type(JsonFieldType.STRING).description("기업명"),

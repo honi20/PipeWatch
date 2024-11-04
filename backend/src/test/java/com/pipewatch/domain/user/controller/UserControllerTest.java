@@ -7,6 +7,7 @@ import com.pipewatch.domain.user.model.dto.UserRequest;
 import com.pipewatch.domain.user.model.dto.UserResponse;
 import com.pipewatch.domain.user.service.UserService;
 import com.pipewatch.global.exception.BaseException;
+import com.pipewatch.global.jwt.service.JwtService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,16 +19,12 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.payload.JsonFieldType;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-import java.util.List;
-
+import static com.epages.restdocs.apispec.ResourceDocumentation.headerWithName;
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
 import static com.pipewatch.domain.util.ResponseFieldUtil.getCommonResponseFields;
 import static com.pipewatch.global.statusCode.ErrorCode.INVALID_PASSWORD;
@@ -52,6 +49,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WithMockUser
 @ActiveProfiles("test")
 class UserControllerTest {
+	private final String UUID = "1604b772-adc0-4212-8a90-81186c57f598";
+
 	@Autowired
 	private MockMvc mockMvc;
 
@@ -61,11 +60,14 @@ class UserControllerTest {
 	@MockBean
 	private UserService userService;
 
+	@Autowired
+	private JwtService jwtService;
+
+	private String jwtToken;
+
 	@Test
 	void 직원_마이페이지_조회_성공() throws Exception {
-		SecurityContextHolder.getContext().setAuthentication(
-				new UsernamePasswordAuthenticationToken(123L, null, List.of(new SimpleGrantedAuthority("ROLE_USER")))
-		);
+		jwtToken = jwtService.createAccessToken(UUID);
 
 		UserResponse.MyPageDto response = UserResponse.MyPageDto.builder()
 				.name("최싸피")
@@ -76,10 +78,11 @@ class UserControllerTest {
 				.employee(new UserResponse.EmployeeDto(1243242L, "IT사업부","팀장"))
 				.build();
 
-		when(userService.getUserDetail(123L)).thenReturn(response);
+		when(userService.getUserDetail(anyLong())).thenReturn(response);
 
 		ResultActions actions = mockMvc.perform(
 				get("/api/users/mypage")
+						.header("Authorization", "Bearer " + jwtToken)
 						.contentType(MediaType.APPLICATION_JSON)
 						.accept(MediaType.APPLICATION_JSON)
 						.characterEncoding("UTF-8")
@@ -96,6 +99,9 @@ class UserControllerTest {
 						resource(ResourceSnippetParameters.builder()
 								.tag("User API")
 								.summary("마이페이지 조회 API")
+								.requestHeaders(
+										headerWithName("Authorization").description("Access Token")
+								)
 								.responseFields(
 										getCommonResponseFields(
 												fieldWithPath("body.name").type(JsonFieldType.STRING).description("이름"),
@@ -116,9 +122,7 @@ class UserControllerTest {
 
 	@Test
 	void 기업_마이페이지_조회_성공() throws Exception {
-		SecurityContextHolder.getContext().setAuthentication(
-				new UsernamePasswordAuthenticationToken(124L, null, List.of(new SimpleGrantedAuthority("ROLE_USER")))
-		);
+		jwtToken = jwtService.createAccessToken(UUID);
 
 		UserResponse.MyPageDto response = UserResponse.MyPageDto.builder()
 				.name("paori")
@@ -129,10 +133,11 @@ class UserControllerTest {
 				.employee(null)
 				.build();
 
-		when(userService.getUserDetail(124L)).thenReturn(response);
+		when(userService.getUserDetail(anyLong())).thenReturn(response);
 
 		ResultActions actions = mockMvc.perform(
 				get("/api/users/mypage")
+						.header("Authorization", "Bearer " + jwtToken)
 						.contentType(MediaType.APPLICATION_JSON)
 						.accept(MediaType.APPLICATION_JSON)
 						.characterEncoding("UTF-8")
@@ -149,6 +154,9 @@ class UserControllerTest {
 						resource(ResourceSnippetParameters.builder()
 								.tag("User API")
 								.summary("마이페이지 조회 API")
+								.requestHeaders(
+										headerWithName("Authorization").description("Access Token")
+								)
 								.responseFields(
 										getCommonResponseFields(
 												fieldWithPath("body.name").type(JsonFieldType.STRING).description("이름"),
@@ -166,9 +174,7 @@ class UserControllerTest {
 
 	@Test
 	void 개인정보_수정_성공() throws Exception {
-		SecurityContextHolder.getContext().setAuthentication(
-				new UsernamePasswordAuthenticationToken(123L, null, List.of(new SimpleGrantedAuthority("ROLE_USER")))
-		);
+		jwtToken = jwtService.createAccessToken(UUID);
 
 		UserRequest.MyPageModifyDto dto = UserRequest.MyPageModifyDto.builder()
 				.department("마케팅팀")
@@ -182,6 +188,7 @@ class UserControllerTest {
 		ResultActions actions = mockMvc.perform(
 				put("/api/users/mypage")
 						.content(content)
+						.header("Authorization", "Bearer " + jwtToken)
 						.contentType(MediaType.APPLICATION_JSON)
 						.accept(MediaType.APPLICATION_JSON)
 						.characterEncoding("UTF-8")
@@ -199,6 +206,9 @@ class UserControllerTest {
 						resource(ResourceSnippetParameters.builder()
 								.tag("User API")
 								.summary("개인정보 수정 API")
+								.requestHeaders(
+										headerWithName("Authorization").description("Access Token")
+								)
 								.requestFields(
 										fieldWithPath("department").description("변경된 부서명"),
 										fieldWithPath("empClass").description("변경된 직급명")
@@ -215,9 +225,7 @@ class UserControllerTest {
 
 	@Test
 	void 비밀번호_수정_성공() throws Exception {
-		SecurityContextHolder.getContext().setAuthentication(
-				new UsernamePasswordAuthenticationToken(123L, null, List.of(new SimpleGrantedAuthority("ROLE_USER")))
-		);
+		jwtToken = jwtService.createAccessToken(UUID);
 
 		UserRequest.PasswordModifyDto dto = UserRequest.PasswordModifyDto.builder()
 				.newPassword("new1234")
@@ -230,6 +238,7 @@ class UserControllerTest {
 		ResultActions actions = mockMvc.perform(
 				patch("/api/users/modify-pwd")
 						.content(content)
+						.header("Authorization", "Bearer " + jwtToken)
 						.contentType(MediaType.APPLICATION_JSON)
 						.accept(MediaType.APPLICATION_JSON)
 						.characterEncoding("UTF-8")
@@ -247,6 +256,9 @@ class UserControllerTest {
 						resource(ResourceSnippetParameters.builder()
 								.tag("User API")
 								.summary("비밀번호 수정 API")
+								.requestHeaders(
+										headerWithName("Authorization").description("Access Token")
+								)
 								.requestFields(
 										fieldWithPath("newPassword").description("새 비밀번호")
 								)
@@ -262,9 +274,7 @@ class UserControllerTest {
 
 	@Test
 	void 회원_탈퇴_성공() throws Exception {
-		SecurityContextHolder.getContext().setAuthentication(
-				new UsernamePasswordAuthenticationToken(123L, null, List.of(new SimpleGrantedAuthority("ROLE_USER")))
-		);
+		jwtToken = jwtService.createAccessToken(UUID);
 
 		UserRequest.WithdrawDto dto = UserRequest.WithdrawDto.builder()
 				.password("ssafy1234")
@@ -277,6 +287,7 @@ class UserControllerTest {
 		ResultActions actions = mockMvc.perform(
 				delete("/api/users/withdraw")
 						.content(content)
+						.header("Authorization", "Bearer " + jwtToken)
 						.contentType(MediaType.APPLICATION_JSON)
 						.accept(MediaType.APPLICATION_JSON)
 						.characterEncoding("UTF-8")
@@ -293,6 +304,9 @@ class UserControllerTest {
 						resource(ResourceSnippetParameters.builder()
 								.tag("User API")
 								.summary("회원 탈퇴 API")
+								.requestHeaders(
+										headerWithName("Authorization").description("Access Token")
+								)
 								.responseFields(
 										getCommonResponseFields(
 												fieldWithPath("body").ignored()
@@ -304,9 +318,7 @@ class UserControllerTest {
 
 	@Test
 	void 회원_탈퇴_실패_잘못된_비밀번호() throws Exception {
-		SecurityContextHolder.getContext().setAuthentication(
-				new UsernamePasswordAuthenticationToken(123L, null, List.of(new SimpleGrantedAuthority("ROLE_USER")))
-		);
+		jwtToken = jwtService.createAccessToken(UUID);
 
 		UserRequest.WithdrawDto dto = UserRequest.WithdrawDto.builder()
 				.password("invalide_password")
@@ -319,6 +331,7 @@ class UserControllerTest {
 		ResultActions actions = mockMvc.perform(
 				delete("/api/users/withdraw")
 						.content(content)
+						.header("Authorization", "Bearer " + jwtToken)
 						.contentType(MediaType.APPLICATION_JSON)
 						.accept(MediaType.APPLICATION_JSON)
 						.characterEncoding("UTF-8")
@@ -334,6 +347,9 @@ class UserControllerTest {
 						preprocessResponse(prettyPrint()),
 						resource(ResourceSnippetParameters.builder()
 								.tag("User API")
+								.requestHeaders(
+										headerWithName("Authorization").description("Access Token")
+								)
 								.responseFields(
 										getCommonResponseFields(
 												fieldWithPath("body").type(JsonFieldType.OBJECT).description("에러 상세").optional().ignored()

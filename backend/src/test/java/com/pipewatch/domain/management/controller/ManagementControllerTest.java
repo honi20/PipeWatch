@@ -7,6 +7,7 @@ import com.pipewatch.domain.management.model.dto.ManagementRequest;
 import com.pipewatch.domain.management.model.dto.ManagementResponse;
 import com.pipewatch.domain.management.service.ManagementService;
 import com.pipewatch.global.exception.BaseException;
+import com.pipewatch.global.jwt.service.JwtService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,9 +19,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.payload.JsonFieldType;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -28,10 +26,10 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.List;
 
-import static com.epages.restdocs.apispec.ResourceDocumentation.parameterWithName;
-import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
+import static com.epages.restdocs.apispec.ResourceDocumentation.*;
 import static com.pipewatch.domain.util.ResponseFieldUtil.getCommonResponseFields;
 import static com.pipewatch.global.statusCode.ErrorCode.FORBIDDEN_USER_ROLE;
+import static com.pipewatch.global.statusCode.ErrorCode.ROLE_NOT_FOUND;
 import static com.pipewatch.global.statusCode.SuccessCode.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -52,6 +50,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WithMockUser
 @ActiveProfiles("test")
 class ManagementControllerTest {
+	private final String UUID = "1604b772-adc0-4212-8a90-81186c57f598";
+
 	@Autowired
 	private MockMvc mockMvc;
 
@@ -61,21 +61,25 @@ class ManagementControllerTest {
 	@MockBean
 	private ManagementService managementService;
 
+	@Autowired
+	private JwtService jwtService;
+
+	private String jwtToken;
+
 	@Test
 	void 승인대기_리스트_조회_성공() throws Exception {
-		SecurityContextHolder.getContext().setAuthentication(
-				new UsernamePasswordAuthenticationToken(124L, null, List.of(new SimpleGrantedAuthority("ROLE_USER")))
-		);
+		jwtToken = jwtService.createAccessToken(UUID);
 
 		ManagementResponse.EmployeeDto employee = new ManagementResponse.EmployeeDto("1604b772-adc0-4212-8a90-81186c57f598", "테스트", "test@ssafy.com", 1243242L, "IT사업부", "팀장", "ROLE_USER");
 		ManagementResponse.EmployeeWaitingListDto response = ManagementResponse.EmployeeWaitingListDto.builder()
 				.employees(List.of(employee))
 				.build();
 
-		when(managementService.getWaitingEmployeeList(124L)).thenReturn(response);
+		when(managementService.getWaitingEmployeeList(anyLong())).thenReturn(response);
 
 		ResultActions actions = mockMvc.perform(
 				get("/api/management/waiting-list")
+						.header("Authorization", "Bearer " + jwtToken)
 						.contentType(MediaType.APPLICATION_JSON)
 						.accept(MediaType.APPLICATION_JSON)
 						.characterEncoding("UTF-8")
@@ -92,6 +96,9 @@ class ManagementControllerTest {
 						resource(ResourceSnippetParameters.builder()
 								.tag("Management API")
 								.summary("승인대기 직원 리스트 조회 API")
+								.requestHeaders(
+										headerWithName("Authorization").description("Access Token")
+								)
 								.responseFields(
 										getCommonResponseFields(
 												fieldWithPath("body.employees[]").type(JsonFieldType.ARRAY).description("승인대기 중인 직원 리스트"),
@@ -111,14 +118,13 @@ class ManagementControllerTest {
 
 	@Test
 	void 승인대기_리스트_조회_실패_권한_없음() throws Exception {
-		SecurityContextHolder.getContext().setAuthentication(
-				new UsernamePasswordAuthenticationToken(123L, null, List.of(new SimpleGrantedAuthority("ROLE_USER")))
-		);
+		jwtToken = jwtService.createAccessToken(UUID);
 
-		doThrow(new BaseException(FORBIDDEN_USER_ROLE)).when(managementService).getWaitingEmployeeList(123L);
+		doThrow(new BaseException(FORBIDDEN_USER_ROLE)).when(managementService).getWaitingEmployeeList(anyLong());
 
 		ResultActions actions = mockMvc.perform(
 				get("/api/management/waiting-list")
+						.header("Authorization", "Bearer " + jwtToken)
 						.contentType(MediaType.APPLICATION_JSON)
 						.accept(MediaType.APPLICATION_JSON)
 						.characterEncoding("UTF-8")
@@ -134,6 +140,9 @@ class ManagementControllerTest {
 						preprocessResponse(prettyPrint()),
 						resource(ResourceSnippetParameters.builder()
 								.tag("Management API")
+								.requestHeaders(
+										headerWithName("Authorization").description("Access Token")
+								)
 								.responseFields(
 										getCommonResponseFields(
 												fieldWithPath("body").type(JsonFieldType.OBJECT).description("에러 상세").optional().ignored()
@@ -146,9 +155,7 @@ class ManagementControllerTest {
 
 	@Test
 	void 직원_리스트_조회_성공() throws Exception {
-		SecurityContextHolder.getContext().setAuthentication(
-				new UsernamePasswordAuthenticationToken(124L, null, List.of(new SimpleGrantedAuthority("ROLE_USER")))
-		);
+		jwtToken = jwtService.createAccessToken(UUID);
 
 		ManagementResponse.EmployeeDto employee1 = new ManagementResponse.EmployeeDto("1604b772-adc0-4212-8a90-81186c57f600", "최싸피", "choi@ssafy.com", 1534534L, "마케팅부", "대리", "ROLE_EMPLOYEE");
 		ManagementResponse.EmployeeDto employee2 = new ManagementResponse.EmployeeDto("1604b772-adc0-4212-8a90-81186c57f601", "김싸피", "kim@ssafy.com", 1423435L, "인사부", "부장", "ROLE_ADMIN");
@@ -156,10 +163,11 @@ class ManagementControllerTest {
 				.employees(List.of(employee1, employee2))
 				.build();
 
-		when(managementService.getEmployeeList(124L)).thenReturn(response);
+		when(managementService.getEmployeeList(anyLong())).thenReturn(response);
 
 		ResultActions actions = mockMvc.perform(
 				get("/api/management")
+						.header("Authorization", "Bearer " + jwtToken)
 						.contentType(MediaType.APPLICATION_JSON)
 						.accept(MediaType.APPLICATION_JSON)
 						.characterEncoding("UTF-8")
@@ -176,6 +184,9 @@ class ManagementControllerTest {
 						resource(ResourceSnippetParameters.builder()
 								.tag("Management API")
 								.summary("직원 리스트 조회 API")
+								.requestHeaders(
+										headerWithName("Authorization").description("Access Token")
+								)
 								.responseFields(
 										getCommonResponseFields(
 												fieldWithPath("body.employees[]").type(JsonFieldType.ARRAY).description("직원 리스트"),
@@ -195,9 +206,7 @@ class ManagementControllerTest {
 
 	@Test
 	void 접근_권한_수정_성공() throws Exception {
-		SecurityContextHolder.getContext().setAuthentication(
-				new UsernamePasswordAuthenticationToken(124L, null, List.of(new SimpleGrantedAuthority("ROLE_USER")))
-		);
+		jwtToken = jwtService.createAccessToken(UUID);
 
 		doNothing().when(managementService).modifyUserRoll(anyLong(), any(ManagementRequest.AccessModifyDto.class));
 
@@ -211,6 +220,7 @@ class ManagementControllerTest {
 		ResultActions actions = mockMvc.perform(
 				patch("/api/management")
 						.content(content)
+						.header("Authorization", "Bearer " + jwtToken)
 						.contentType(MediaType.APPLICATION_JSON)
 						.accept(MediaType.APPLICATION_JSON)
 						.characterEncoding("UTF-8")
@@ -228,6 +238,9 @@ class ManagementControllerTest {
 						resource(ResourceSnippetParameters.builder()
 								.tag("Management API")
 								.summary("접근 권한 변경 API")
+								.requestHeaders(
+										headerWithName("Authorization").description("Access Token")
+								)
 								.requestFields(
 										fieldWithPath("userUuid").type(JsonFieldType.STRING).description("직원 UUID"),
 										fieldWithPath("newRole").type(JsonFieldType.STRING).description("새 역할")
@@ -244,9 +257,7 @@ class ManagementControllerTest {
 
 	@Test
 	void 접근_권한_수정_실패_권한_없음() throws Exception {
-		SecurityContextHolder.getContext().setAuthentication(
-				new UsernamePasswordAuthenticationToken(123L, null, List.of(new SimpleGrantedAuthority("ROLE_USER")))
-		);
+		jwtToken = jwtService.createAccessToken(UUID);
 
 		doThrow(new BaseException(FORBIDDEN_USER_ROLE)).when(managementService).modifyUserRoll(anyLong(), any(ManagementRequest.AccessModifyDto.class));
 
@@ -260,6 +271,7 @@ class ManagementControllerTest {
 		ResultActions actions = mockMvc.perform(
 				patch("/api/management")
 						.content(content)
+						.header("Authorization", "Bearer " + jwtToken)
 						.contentType(MediaType.APPLICATION_JSON)
 						.accept(MediaType.APPLICATION_JSON)
 						.characterEncoding("UTF-8")
@@ -276,6 +288,9 @@ class ManagementControllerTest {
 						preprocessResponse(prettyPrint()),
 						resource(ResourceSnippetParameters.builder()
 								.tag("Management API")
+								.requestHeaders(
+										headerWithName("Authorization").description("Access Token")
+								)
 								.responseFields(
 										getCommonResponseFields(
 												fieldWithPath("body").type(JsonFieldType.OBJECT).description("에러 상세").optional().ignored()
@@ -288,11 +303,9 @@ class ManagementControllerTest {
 
 	@Test
 	void 접근_권한_수정_실패_존재하지_않는_역할() throws Exception {
-		SecurityContextHolder.getContext().setAuthentication(
-				new UsernamePasswordAuthenticationToken(124L, null, List.of(new SimpleGrantedAuthority("ROLE_USER")))
-		);
+		jwtToken = jwtService.createAccessToken(UUID);
 
-		doThrow(new BaseException(FORBIDDEN_USER_ROLE)).when(managementService).modifyUserRoll(anyLong(), any(ManagementRequest.AccessModifyDto.class));
+		doThrow(new BaseException(ROLE_NOT_FOUND)).when(managementService).modifyUserRoll(anyLong(), any(ManagementRequest.AccessModifyDto.class));
 
 		ManagementRequest.AccessModifyDto dto = ManagementRequest.AccessModifyDto.builder()
 				.userUuid("1604b772-adc0-4212-8a90-81186c57f600")
@@ -304,6 +317,7 @@ class ManagementControllerTest {
 		ResultActions actions = mockMvc.perform(
 				patch("/api/management")
 						.content(content)
+						.header("Authorization", "Bearer " + jwtToken)
 						.contentType(MediaType.APPLICATION_JSON)
 						.accept(MediaType.APPLICATION_JSON)
 						.characterEncoding("UTF-8")
@@ -311,15 +325,18 @@ class ManagementControllerTest {
 		);
 
 		actions
-				.andExpect(status().isForbidden())
-				.andExpect(jsonPath("$.header.httpStatusCode").value(FORBIDDEN_USER_ROLE.getHttpStatusCode()))
-				.andExpect(jsonPath("$.header.message").value(FORBIDDEN_USER_ROLE.getMessage()))
+				.andExpect(status().isNotFound())
+				.andExpect(jsonPath("$.header.httpStatusCode").value(ROLE_NOT_FOUND.getHttpStatusCode()))
+				.andExpect(jsonPath("$.header.message").value(ROLE_NOT_FOUND.getMessage()))
 				.andDo(document(
 						"접근 권한 수정 실패 - 존재하지 않는 Role",
 						preprocessRequest(prettyPrint()),
 						preprocessResponse(prettyPrint()),
 						resource(ResourceSnippetParameters.builder()
 								.tag("Management API")
+								.requestHeaders(
+										headerWithName("Authorization").description("Access Token")
+								)
 								.responseFields(
 										getCommonResponseFields(
 												fieldWithPath("body").type(JsonFieldType.OBJECT).description("에러 상세").optional().ignored()
@@ -332,9 +349,7 @@ class ManagementControllerTest {
 
 	@Test
 	void 직원_검색_성공() throws Exception {
-		SecurityContextHolder.getContext().setAuthentication(
-				new UsernamePasswordAuthenticationToken(124L, null, List.of(new SimpleGrantedAuthority("ROLE_USER")))
-		);
+		jwtToken = jwtService.createAccessToken(UUID);
 
 		ManagementResponse.EmployeeDto employee1 = new ManagementResponse.EmployeeDto("1604b772-adc0-4212-8a90-81186c57f600", "최싸피", "choi@ssafy.com", 1534534L, "마케팅부", "대리", "ROLE_EMPLOYEE");
 		ManagementResponse.EmployeeDto employee2 = new ManagementResponse.EmployeeDto("1604b772-adc0-4212-8a90-81186c57f601", "김싸피", "kim@ssafy.com", 1423435L, "인사부", "부장", "ROLE_ADMIN");
@@ -342,10 +357,11 @@ class ManagementControllerTest {
 				.employees(List.of(employee1, employee2))
 				.build();
 
-		when(managementService.searchEmployee(124L, "싸피")).thenReturn(response);
+		when(managementService.searchEmployee(anyLong(), anyString())).thenReturn(response);
 
 		ResultActions actions = mockMvc.perform(
 				get("/api/management/search?keyword=싸피")
+						.header("Authorization", "Bearer " + jwtToken)
 						.contentType(MediaType.APPLICATION_JSON)
 						.accept(MediaType.APPLICATION_JSON)
 						.characterEncoding("UTF-8")
@@ -364,6 +380,9 @@ class ManagementControllerTest {
 								.summary("직원 검색 API")
 								.queryParameters(
 										parameterWithName("keyword").description("검색어").optional()
+								)
+								.requestHeaders(
+										headerWithName("Authorization").description("Access Token")
 								)
 								.responseFields(
 										getCommonResponseFields(
@@ -384,9 +403,7 @@ class ManagementControllerTest {
 
 	@Test
 	void 건물_리스트_조회_성공() throws Exception {
-		SecurityContextHolder.getContext().setAuthentication(
-				new UsernamePasswordAuthenticationToken(123L, null, List.of(new SimpleGrantedAuthority("ROLE_USER")))
-		);
+		jwtToken = jwtService.createAccessToken(UUID);
 
 		ManagementResponse.BuildingDto building1 = new ManagementResponse.BuildingDto("역삼 멀티캠퍼스", List.of(12, 14));
 		ManagementResponse.BuildingDto building2 = new ManagementResponse.BuildingDto("부울경 멀티캠퍼스", List.of(1, 3));
@@ -396,10 +413,11 @@ class ManagementControllerTest {
 				.buildings(List.of(building1, building2))
 				.build();
 
-		when(managementService.getBuildingList(123L)).thenReturn(response);
+		when(managementService.getBuildingList(anyLong())).thenReturn(response);
 
 		ResultActions actions = mockMvc.perform(
 				get("/api/management/buildings")
+						.header("Authorization", "Bearer " + jwtToken)
 						.contentType(MediaType.APPLICATION_JSON)
 						.accept(MediaType.APPLICATION_JSON)
 						.characterEncoding("UTF-8")
@@ -416,6 +434,9 @@ class ManagementControllerTest {
 						resource(ResourceSnippetParameters.builder()
 								.tag("Management API")
 								.summary("건물 목록 조회 API")
+								.requestHeaders(
+										headerWithName("Authorization").description("Access Token")
+								)
 								.responseFields(
 										getCommonResponseFields(
 												fieldWithPath("body.buildings[]").type(JsonFieldType.ARRAY).description("건물 리스트"),

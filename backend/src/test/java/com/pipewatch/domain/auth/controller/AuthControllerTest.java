@@ -6,12 +6,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pipewatch.domain.auth.model.dto.AuthRequest;
 import com.pipewatch.domain.auth.model.dto.AuthResponse;
 import com.pipewatch.domain.auth.service.AuthService;
-import com.pipewatch.domain.user.model.dto.UserRequest;
 import com.pipewatch.global.exception.BaseException;
 import com.pipewatch.global.jwt.entity.JwtToken;
+import com.pipewatch.global.jwt.service.JwtService;
 import com.pipewatch.global.mail.MailService;
 import com.pipewatch.global.redis.RedisUtil;
-import io.swagger.v3.core.util.Json;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -466,7 +465,7 @@ class AuthControllerTest {
 				.andExpect(jsonPath("$.header.httpStatusCode").value(INVALID_EMAIL_FORMAT.getHttpStatusCode()))
 				.andExpect(jsonPath("$.header.message").value(INVALID_EMAIL_FORMAT.getMessage()))
 				.andDo(document(
-						"회원가입 실패 - 잘못된 이메일 형식 (기업 도메인과 형식이 같아야 함. @ssafy.com은 허용)",
+						"회원가입 실패 - 잘못된 이메일 형식 (기업 도메인과 형식이 같아야 함. gmail/naver 메일은 ssafy 기업에 속한다고 가정)",
 						preprocessRequest(prettyPrint()),
 						preprocessResponse(prettyPrint()),
 						resource(ResourceSnippetParameters.builder()
@@ -509,7 +508,7 @@ class AuthControllerTest {
 				.andExpect(jsonPath("$.header.httpStatusCode").value(ENTERPRISE_CREATED.getHttpStatusCode()))
 				.andExpect(jsonPath("$.header.message").value(ENTERPRISE_CREATED.getMessage()))
 				.andDo(document(
-						"기업 등록 성공",
+						"기업 등록 성공 (gmail/naver 메일은 ssafy 기업이라고 가정)",
 						preprocessRequest(prettyPrint()),
 						preprocessResponse(prettyPrint()),
 						resource(ResourceSnippetParameters.builder()
@@ -724,6 +723,7 @@ class AuthControllerTest {
 						resource(ResourceSnippetParameters.builder()
 								.tag("Auth API")
 								.summary("로그아웃 API")
+
 								.responseFields(
 										getCommonResponseFields(
 												fieldWithPath("body").ignored()
