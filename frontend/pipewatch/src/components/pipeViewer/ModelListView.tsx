@@ -4,6 +4,7 @@ import { AreaType, ModelType } from "@src/components/pipeViewer/PipeType";
 import { AreaListbox } from "@src/components/pipeViewer/AreaListbox";
 import "./viewer.css";
 import { FloorListbox } from "@src/components/pipeViewer/FloorListbox";
+// import GLTFViewer from "@src/components/pipeViewer/GLTFViewer";
 
 interface ModelListViewProps {
   modelList: ModelType[];
@@ -73,7 +74,11 @@ export const ModelListView: React.FC<ModelListViewProps> = ({ modelList }) => {
       </div>
       <div className="flex items-center justify-center gap-[20px] w-full h-full bg-gray-400">
         {selectModelId ? (
-          <div>{selectModelId}</div>
+          // 모델id에 따른 gltf url 넣기
+          <div>
+            <div>{selectModelId}</div>
+            {/* <GLTFViewer gltfUrl="/assets/models/scene.gltf" /> */}
+          </div>
         ) : (
           <div className="flex items-center gap-2">
             <img src={SelectPipeModelIcon} width={"60px"} />
