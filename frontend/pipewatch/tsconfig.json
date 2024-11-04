@@ -1,11 +1,10 @@
 {
   "compilerOptions": {
-    "composite": true,    // 반드시 추가해야 합니다.
+    "composite": true,
     "skipLibCheck": true,
     "resolveJsonModule": true,
-    "esModuleInterop": true,
+    "esModuleInterop": true
   },
-  "files": [],
   "references": [
     { "path": "./tsconfig.app.json" },
     { "path": "./tsconfig.node.json" }

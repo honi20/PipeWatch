@@ -4,7 +4,7 @@ import { SignUpPage } from "@pages/account/SignUpPage";
 import { useLocation } from "react-router-dom";
 import { CompletedContact } from "@pages/CompletedContact";
 
-export const Account = () => {
+export const Auth = () => {
   const location = useLocation();
   const currentPath = location.pathname.split("/").pop();
 

@@ -11,7 +11,7 @@ import { PipeGenerator } from "@pages/PipeGenerator";
 import { PipeViewer } from "@pages/PipeViewer";
 import { Contact } from "@pages/Contact";
 
-import { Account } from "@pages/account/Account";
+import { Auth } from "@pages/account/Auth";
 import { LoginPage } from "@pages/account/LoginPage";
 import { FindPassword } from "@pages/account/FindPassword";
 import { SignUpPage } from "@pages/account/SignUpPage";
@@ -90,7 +90,7 @@ function App() {
               element={<CompletedManageAccount />}
             />
 
-            <Route path="/account/auth" element={<Account />}>
+            <Route path="/account/auth" element={<Auth />}>
               <Route path="/account/auth/login" element={<LoginPage />} />
               <Route path="/account/auth/find-pw" element={<FindPassword />} />
               <Route path="/account/auth/sign-up" element={<SignUpPage />} />
