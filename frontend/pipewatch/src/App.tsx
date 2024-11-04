@@ -11,7 +11,7 @@ import { PipeGenerator } from "@pages/PipeGenerator";
 import { PipeViewer } from "@pages/PipeViewer";
 import { Contact } from "@pages/Contact";
 
-import { TermsAndPolicy } from "./pages/TermsAndPolicy";
+import { TermsAndPolicy } from "@pages/TermsAndPolicy";
 
 import { Auth } from "@pages/account/Auth";
 import { LoginPage } from "@pages/account/LoginPage";
