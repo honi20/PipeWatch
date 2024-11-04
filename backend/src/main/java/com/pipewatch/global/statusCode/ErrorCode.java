@@ -25,6 +25,7 @@ public enum ErrorCode {
 	// token
 	INVALID_TOKEN(HttpStatus.UNAUTHORIZED.value(), "잘못된 토큰입니다."),
 	EXPIRED_TOKEN(HttpStatus.UNAUTHORIZED.value(), "만료된 토큰입니다"),
+	ACCESSTOKEN_REISSUED(HttpStatus.UNAUTHORIZED.value(), "accessToken이 재발급되었습니다."),
 
 	// Management
 	ROLE_NOT_FOUND(HttpStatus.NOT_FOUND.value(), "해당 Role이 존재하지 않습니다."),

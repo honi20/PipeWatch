@@ -40,8 +40,8 @@ public class ManagementCustomRepositoryImpl implements ManagementCustomRepositor
 				.where(employeeInfo.enterprise.id.eq(enterpriseId))
 
 				// 일반회원에서 사원으로 요청 중인 사원만
-				.where(user.role.eq(Role.ROLE_USER).and(user.state.eq(State.PENDING)))
-				.where(waiting.role.eq(Role.ROLE_EMPLOYEE))
+				.where(user.role.eq(Role.USER).and(user.state.eq(State.PENDING)))
+				.where(waiting.role.eq(Role.EMPLOYEE))
 				.fetch();
 	}
 
@@ -63,7 +63,7 @@ public class ManagementCustomRepositoryImpl implements ManagementCustomRepositor
 				.where(
 						employeeInfo.enterprise.id.eq(enterpriseId),
 						user.state.eq(State.ACTIVE),
-						user.role.ne(Role.ROLE_USER)
+						user.role.ne(Role.USER)
 				)
 				.fetch();
 	}
@@ -86,7 +86,7 @@ public class ManagementCustomRepositoryImpl implements ManagementCustomRepositor
 				.where(
 						employeeInfo.enterprise.id.eq(enterpriseId),
 						user.state.eq(State.ACTIVE),
-						user.role.ne(Role.ROLE_USER)
+						user.role.ne(Role.USER)
 								.and(
 										user.name.containsIgnoreCase(keyword)
 												.or(user.email.containsIgnoreCase(keyword))

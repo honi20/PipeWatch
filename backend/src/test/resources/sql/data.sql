@@ -1,19 +1,19 @@
 -- user
 INSERT INTO "user"(user_id, email, password, name, state, role, uuid)
 VALUES (123L, 'test@ssafy.com', '$2a$10$W9WYGcUhi6E2NxqnofecW.DEsMkr42YiOSM8Ou/UEQZsMD3WHL8uy', '테스트', 'PENDING',
-        'ROLE_EMPLOYEE',
+        'EMPLOYEE',
         '1604b772-adc0-4212-8a90-81186c57f598'),
        (124L, 'pipewatch_admin@ssafy.com', '$2a$10$W9WYGcUhi6E2NxqnofecW.DEsMkr42YiOSM8Ou/UEQZsMD3WHL8uy', 'paori',
-        'ACTIVE', 'ROLE_ENTERPRISE',
+        'ACTIVE', 'ENTERPRISE',
         '1604b772-adc0-4212-8a90-81186c57f599'),
        (125L, 'choi@ssafy.com', '$2a$10$W9WYGcUhi6E2NxqnofecW.DEsMkr42YiOSM8Ou/UEQZsMD3WHL8uy', '최싸피', 'ACTIVE',
-        'ROLE_EMPLOYEE',
+        'EMPLOYEE',
         '1604b772-adc0-4212-8a90-81186c57f600'),
        (126L, 'kim@ssafy.com', '$2a$10$W9WYGcUhi6E2NxqnofecW.DEsMkr42YiOSM8Ou/UEQZsMD3WHL8uy', '김싸피', 'ACTIVE',
-        'ROLE_ADMIN',
+        'ADMIN',
         '1604b772-adc0-4212-8a90-81186c57f601'),
        (127L, 'pipewatch_admin@samsung.com', '$2a$10$W9WYGcUhi6E2NxqnofecW.DEsMkr42YiOSM8Ou/UEQZsMD3WHL8uy', 'samsung',
-        'ACTIVE', 'ROLE_ENTERPRISE',
+        'ACTIVE', 'ENTERPRISE',
         '1604b772-adc0-4212-8a90-81186c57f602')
 ;
 
@@ -31,7 +31,7 @@ VALUES (123L, 1243242L, 'IT사업부', '팀장', 123L, 1L),
 
 -- waiting
 INSERT INTO waiting(waiting_id, user_id, role)
-VALUES (1L, 123L, 'ROLE_EMPLOYEE');
+VALUES (1L, 123L, 'EMPLOYEE');
 
 -- building and floor
 INSERT INTO building_and_floor(building_floor_id, enterprise_id, name, floor)

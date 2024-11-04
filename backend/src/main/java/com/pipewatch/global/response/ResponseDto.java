@@ -21,6 +21,10 @@ public class ResponseDto<T> {
 		return new ResponseDto<>(new ResponseHeader(e), null);
 	}
 
+	public static <T> ResponseDto<T> fail(ErrorCode e, T body) {
+		return new ResponseDto<>(new ResponseHeader(e), body);
+	}
+
 	public static <T> ResponseDto<T> fail(String errorMessage) {
 		return new ResponseDto<>(new ResponseHeader(HttpStatus.BAD_REQUEST.value(), errorMessage), null);
 	}

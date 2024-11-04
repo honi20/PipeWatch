@@ -50,7 +50,7 @@ public class AuthRequest {
 					.password(this.password)
 					.name(this.name)
 					.state(State.PENDING)
-					.role(Role.ROLE_USER)
+					.role(Role.USER)
 					.uuid(uuid)
 					.build();
 		}

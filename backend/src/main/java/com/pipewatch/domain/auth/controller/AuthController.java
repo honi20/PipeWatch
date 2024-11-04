@@ -7,6 +7,7 @@ import com.pipewatch.global.response.ResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.NoSuchAlgorithmException;
@@ -55,8 +56,8 @@ public class AuthController {
 	}
 
 	@GetMapping("/logout")
-	public ResponseEntity<?> logout() {
-		authService.logout();
+	public ResponseEntity<?> logout(@AuthenticationPrincipal Long userId) {
+		authService.logout(userId);
 
 		return new ResponseEntity<>(ResponseDto.success(LOGOUT_OK, null), HttpStatus.OK);
 	}

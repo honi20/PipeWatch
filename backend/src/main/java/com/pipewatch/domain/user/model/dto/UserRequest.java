@@ -23,4 +23,13 @@ public class UserRequest {
 	public static class PasswordModifyDto {
 		private String newPassword;
 	}
+
+	@Getter
+	@Setter
+	@Builder
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class WithdrawDto {
+		private String password;
+	}
 }
