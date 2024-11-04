@@ -32,7 +32,7 @@ public class PipelineModelRequest {
 	@NoArgsConstructor
 	@AllArgsConstructor
 	public static class ModelingDto {
-		private Long userId;
+		private String userUuid;
 		private String previewImgUrl;
 		private String modelUrl;
 	}

@@ -1,9 +1,11 @@
 package com.pipewatch.domain.pipelineModel.controller;
 
+import com.pipewatch.domain.pipelineModel.model.dto.PipelineModelRequest;
 import com.pipewatch.domain.pipelineModel.model.dto.PipelineModelResponse;
 import com.pipewatch.domain.pipelineModel.service.PipelineModelService;
 import com.pipewatch.global.response.ResponseDto;
 import lombok.RequiredArgsConstructor;
+import org.json.simple.parser.ParseException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -76,7 +78,9 @@ public class PipelineModelController {
 	}
 
 	@PostMapping("/modeling")
-	public ResponseEntity<?> modelingCreate() {
-		return new ResponseEntity<>(ResponseDto.success(PIPELINE_MODELING_CREATED, null), HttpStatus.CREATED);
+	public ResponseEntity<?> modelingCreate(@RequestBody PipelineModelRequest.ModelingDto requestDto) throws IOException, ParseException {
+		PipelineModelResponse.FileUploadDto responseDto = pipelineModelService.createModeling(requestDto);
+
+		return new ResponseEntity<>(ResponseDto.success(PIPELINE_MODELING_CREATED, responseDto), HttpStatus.CREATED);
 	}
 }
