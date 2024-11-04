@@ -15,12 +15,10 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-import static com.pipewatch.global.format.DateFormatter.convertToDateFormat;
 import static com.pipewatch.global.statusCode.ErrorCode.*;
 
 @Slf4j
@@ -32,24 +30,24 @@ public class S3Service {
 	@Value("${cloud.aws.s3.bucket}")
 	private String bucket;
 
-	@Value("${BUCKET_URL}")
-	private String bucketURl;
+	@Value("${S3_URL}")
+	private String bucketUrl;
 
-	public String upload(MultipartFile multipartFile, String dirName) throws IOException {
+	public String upload(MultipartFile multipartFile, String dirName, String modelUuid) throws IOException {
 		if (multipartFile.isEmpty() || Objects.isNull(multipartFile.getOriginalFilename())) {
 			throw new BaseException(FILE_UPLOAD_FAIL);
 		}
 
-		return uploadS3(multipartFile, dirName);
+		return bucketUrl + uploadS3(multipartFile, dirName, modelUuid);
 	}
 
-	private String uploadS3(MultipartFile multipartFile, String dirName) throws IOException {
+	private String uploadS3(MultipartFile multipartFile, String dirName, String modelUuid) throws IOException {
 		validateImageFileExtention(multipartFile.getOriginalFilename());
 
 		String originalFilename = multipartFile.getOriginalFilename(); //원본 파일 명
 		String extension = originalFilename.substring(originalFilename.lastIndexOf(".")); //확장자 명
 
-		String s3FileName = dirName + "/upload_" + convertToDateFormat() + extension;
+		String s3FileName = dirName + "/" + modelUuid + "_Pipeline" + extension;
 
 		InputStream is = multipartFile.getInputStream();
 

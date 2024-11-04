@@ -1,14 +1,17 @@
 package com.pipewatch.domain.pipelineModel.controller;
 
 import com.pipewatch.domain.pipelineModel.model.dto.PipelineModelResponse;
+import com.pipewatch.domain.pipelineModel.service.PipelineModelService;
 import com.pipewatch.global.response.ResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -18,6 +21,8 @@ import static com.pipewatch.global.statusCode.SuccessCode.*;
 @RequestMapping("${api_prefix}/models")
 @RequiredArgsConstructor
 public class PipelineModelController {
+	private final PipelineModelService pipelineModelService;
+
 	@GetMapping
 	public ResponseEntity<?> modelList(@RequestParam(required = false) String building, @RequestParam(required = false) Integer floor) {
 		PipelineModelResponse.PipelineModelDto model1 = new PipelineModelResponse.PipelineModelDto(1L, "model1", "previewUrl1", LocalDateTime.now());
@@ -35,10 +40,8 @@ public class PipelineModelController {
 	}
 
 	@PostMapping(value = "/upload-file", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-	public ResponseEntity<?> fileUpload(@RequestPart(value = "file", required = false) MultipartFile file) {
-		PipelineModelResponse.FileUploadDto responseDto = PipelineModelResponse.FileUploadDto.builder()
-				.modelId(1L)
-				.build();
+	public ResponseEntity<?> fileUpload(@AuthenticationPrincipal Long userId, @RequestPart(value = "file", required = false) MultipartFile file) throws IOException {
+		PipelineModelResponse.FileUploadDto responseDto = pipelineModelService.uploadFile(userId, file);
 
 		return new ResponseEntity<>(ResponseDto.success(FILE_UPLOAD_AND_MODEL_CREATED, responseDto), HttpStatus.CREATED);
 	}

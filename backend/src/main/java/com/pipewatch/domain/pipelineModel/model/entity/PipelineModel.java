@@ -4,12 +4,12 @@ import com.pipewatch.domain.enterprise.model.entity.BuildingAndFloor;
 import com.pipewatch.domain.user.model.entity.User;
 import com.pipewatch.global.entity.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 @Entity
+@Getter
 @SuperBuilder
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
@@ -19,15 +19,21 @@ public class PipelineModel extends BaseEntity {
 	@Column(name = "pipeline_model_id")
 	private Long id;
 
-	private String name;
+	@NotNull
+	@Builder.Default
+	private String name = "Pipeline Model";
 
 	private String description;
 
-	private String previewImgUri;
+	private String previewImgUrl;
 
-	private String pipelineModelingUrl;
+	private String modelingUrl;
 
-	private Boolean isCompleted;
+	private String uuid;
+
+	@NotNull
+	@Builder.Default
+	private Boolean isCompleted = false;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
@@ -36,4 +42,8 @@ public class PipelineModel extends BaseEntity {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "building_floor_id")
 	private BuildingAndFloor buildingAndFloor;
+
+	public void updateModelingUrl(String modelingUrl) {
+		this.modelingUrl = modelingUrl;
+	}
 }
