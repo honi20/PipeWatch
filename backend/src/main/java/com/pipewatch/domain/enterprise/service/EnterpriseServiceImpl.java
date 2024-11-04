@@ -62,6 +62,29 @@ public class EnterpriseServiceImpl implements EnterpriseService {
 	}
 
 	@Override
+	public EnterpriseResponse.BuildingListDto getBuildingList(Long userId) {
+		User user = userRepository.findById(userId)
+				.orElseThrow(() -> new BaseException(USER_NOT_FOUND));
+
+		if (user.getRole() == Role.USER) {
+			throw new BaseException(FORBIDDEN_USER_ROLE);
+		}
+
+		Long enterpriseId = null;
+		if (user.getRole() == Role.ENTERPRISE) {
+			enterpriseId = enterpriseRepository.findByUserId(user.getId()).getId();
+		} else if (user.getRole() == Role.EMPLOYEE || user.getRole() == Role.ADMIN) {
+			enterpriseId = employeeRepository.findByUserId(user.getId()).getEnterprise().getId();
+		}
+
+		List<String> buildings = buildingRepository.findDistinctNameByEnterpriseId(enterpriseId);
+
+		return EnterpriseResponse.BuildingListDto.builder()
+				.buildings(buildings)
+				.build();
+	}
+
+	@Override
 	public EnterpriseResponse.BuildingAndFloorListDto getBuildingAndFloorList(Long userId) {
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new BaseException(USER_NOT_FOUND));

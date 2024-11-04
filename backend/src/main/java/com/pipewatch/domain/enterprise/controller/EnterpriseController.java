@@ -33,6 +33,13 @@ public class EnterpriseController {
 		return new ResponseEntity<>(ResponseDto.success(ENTERPRISE_LIST_OK, responseDto), HttpStatus.OK);
 	}
 
+	@GetMapping("/buildings")
+	public ResponseEntity<?> buildingList(@AuthenticationPrincipal Long userId) {
+		EnterpriseResponse.BuildingListDto responseDto = enterpriseService.getBuildingList(userId);
+
+		return new ResponseEntity<>(ResponseDto.success(BUILDING_LIST_OK, responseDto), HttpStatus.OK);
+	}
+
 	@GetMapping("/floors")
 	public ResponseEntity<?> buildingAndFloorList(@AuthenticationPrincipal Long userId) {
 		EnterpriseResponse.BuildingAndFloorListDto responseDto = enterpriseService.getBuildingAndFloorList(userId);

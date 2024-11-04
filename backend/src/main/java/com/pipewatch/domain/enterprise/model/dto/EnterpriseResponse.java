@@ -60,6 +60,15 @@ public class EnterpriseResponse {
 	@Builder
 	@NoArgsConstructor
 	@AllArgsConstructor
+	public static class BuildingListDto {
+		private List<String> buildings;
+	}
+
+	@Getter
+	@Setter
+	@Builder
+	@NoArgsConstructor
+	@AllArgsConstructor
 	public static class BuildingAndFloorListDto {
 		private List<BuildingAndFloorDto> buildings;
 	}
