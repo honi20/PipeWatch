@@ -49,7 +49,10 @@ const UpdatePasswordCard = () => {
   };
 
   const handleNewPasswordBlur = (e: FocusEvent<HTMLInputElement>) => {
-    setShowNewPasswordError(!validatePassword(e.target.value));
+    const value = e.target.value;
+    setShowNewPasswordError(
+      !validatePassword(value) || tempCurrentPassword === value
+    );
   };
 
   return (
@@ -89,15 +92,16 @@ const UpdatePasswordCard = () => {
           placeholder={t("manageAccount.updatePassword.newPassword")}
           required
         />
-        {showNewPasswordError && (
+        {showNewPasswordError ? (
           <span className="w-full px-2 whitespace-normal text-warn break-keep">
             {t("account.passwordError")}
           </span>
-        )}
-        {showPasswordMismatchError && (
-          <span className="w-full px-2 whitespace-normal text-warn break-keep">
-            {t("manageAccount.updatePassword.matchError")}
-          </span>
+        ) : (
+          showPasswordMismatchError && (
+            <span className="w-full px-2 whitespace-normal text-warn break-keep">
+              {t("manageAccount.updatePassword.newPasswordMatchError")}
+            </span>
+          )
         )}
 
         {/* new password check */}
