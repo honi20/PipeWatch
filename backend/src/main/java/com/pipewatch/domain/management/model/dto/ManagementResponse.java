@@ -1,5 +1,7 @@
 package com.pipewatch.domain.management.model.dto;
 
+import com.pipewatch.domain.user.model.entity.EmployeeInfo;
+import com.querydsl.core.annotations.QueryProjection;
 import lombok.*;
 
 import java.util.List;
@@ -45,7 +47,6 @@ public class ManagementResponse {
 	}
 
 	@Getter
-	@AllArgsConstructor
 	public static class EmployeeDto {
 		private String uuid;
 		private String name;
@@ -54,6 +55,16 @@ public class ManagementResponse {
 		private String department;
 		private String empClass;
 		private String role;
+
+		public EmployeeDto(String uuid, String name, String email, Long empNo, String department, String empClass, String role) {
+			this.uuid = uuid;
+			this.name = name;
+			this.email = email;
+			this.empNo = empNo;
+			this.department = department;
+			this.empClass = empClass;
+			this.role = role;
+		}
 	}
 
 	@Getter

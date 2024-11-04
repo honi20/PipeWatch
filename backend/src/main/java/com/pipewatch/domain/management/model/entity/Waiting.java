@@ -18,6 +18,7 @@ public class Waiting {
 	@Column(name = "waiting_id")
 	private Long id;
 
+	@Enumerated(EnumType.STRING)
 	private Role role;
 
 	@OneToOne(fetch = FetchType.LAZY)
