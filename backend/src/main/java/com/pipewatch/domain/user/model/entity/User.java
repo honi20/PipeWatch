@@ -38,7 +38,7 @@ public class User extends BaseEntity {
 	@NotNull
 	@Builder.Default
 	@Enumerated(EnumType.STRING)
-	private Role role = Role.ROLE_USER;
+	private Role role = Role.USER;
 
 	@NotNull
 	private String uuid;

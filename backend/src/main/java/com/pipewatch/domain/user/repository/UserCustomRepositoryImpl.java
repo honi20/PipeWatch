@@ -44,7 +44,7 @@ public class UserCustomRepositoryImpl implements UserCustomRepository {
 
 	private Expression<String> getEnterpriseNameExpression(Long userId) {
 		return Expressions.cases()
-				.when(user.role.eq(Role.ROLE_ENTERPRISE))
+				.when(user.role.eq(Role.ENTERPRISE))
 				.then(user.name)
 				.otherwise(enterprise.name);
 	}

@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService {
 				.orElseThrow(() -> new BaseException(USER_NOT_FOUND));
 
 		// 기업 유저는 수정 권한 없음
-		if (user.getRole() == Role.ROLE_ENTERPRISE) {
+		if (user.getRole() == Role.ENTERPRISE) {
 			throw new BaseException(FORBIDDEN_USER_ROLE);
 		}
 
@@ -87,7 +87,7 @@ public class UserServiceImpl implements UserService {
 		userRepository.save(user);
 
 		// 기업의 경우는 해당 기업 상태도 업데이트
-		if (user.getRole() == Role.ROLE_ENTERPRISE) {
+		if (user.getRole() == Role.ENTERPRISE) {
 			Enterprise enterprise = enterpriseRepository.findByUserId(user.getId());
 			enterprise.updateIsActive(false);
 			enterpriseRepository.save(enterprise);

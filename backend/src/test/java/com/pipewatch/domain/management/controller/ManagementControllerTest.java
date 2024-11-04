@@ -70,7 +70,7 @@ class ManagementControllerTest {
 	void 승인대기_리스트_조회_성공() throws Exception {
 		jwtToken = jwtService.createAccessToken(UUID);
 
-		ManagementResponse.EmployeeDto employee = new ManagementResponse.EmployeeDto("1604b772-adc0-4212-8a90-81186c57f598", "테스트", "test@ssafy.com", 1243242L, "IT사업부", "팀장", "ROLE_USER");
+		ManagementResponse.EmployeeDto employee = new ManagementResponse.EmployeeDto("1604b772-adc0-4212-8a90-81186c57f598", "테스트", "test@ssafy.com", 1243242L, "IT사업부", "팀장", "USER");
 		ManagementResponse.EmployeeWaitingListDto response = ManagementResponse.EmployeeWaitingListDto.builder()
 				.employees(List.of(employee))
 				.build();
@@ -157,8 +157,8 @@ class ManagementControllerTest {
 	void 직원_리스트_조회_성공() throws Exception {
 		jwtToken = jwtService.createAccessToken(UUID);
 
-		ManagementResponse.EmployeeDto employee1 = new ManagementResponse.EmployeeDto("1604b772-adc0-4212-8a90-81186c57f600", "최싸피", "choi@ssafy.com", 1534534L, "마케팅부", "대리", "ROLE_EMPLOYEE");
-		ManagementResponse.EmployeeDto employee2 = new ManagementResponse.EmployeeDto("1604b772-adc0-4212-8a90-81186c57f601", "김싸피", "kim@ssafy.com", 1423435L, "인사부", "부장", "ROLE_ADMIN");
+		ManagementResponse.EmployeeDto employee1 = new ManagementResponse.EmployeeDto("1604b772-adc0-4212-8a90-81186c57f600", "최싸피", "choi@ssafy.com", 1534534L, "마케팅부", "대리", "EMPLOYEE");
+		ManagementResponse.EmployeeDto employee2 = new ManagementResponse.EmployeeDto("1604b772-adc0-4212-8a90-81186c57f601", "김싸피", "kim@ssafy.com", 1423435L, "인사부", "부장", "ADMIN");
 		ManagementResponse.EmployeeListDto response = ManagementResponse.EmployeeListDto.builder()
 				.employees(List.of(employee1, employee2))
 				.build();
@@ -212,7 +212,7 @@ class ManagementControllerTest {
 
 		ManagementRequest.AccessModifyDto dto = ManagementRequest.AccessModifyDto.builder()
 				.userUuid("1604b772-adc0-4212-8a90-81186c57f600")
-				.newRole("ROLE_ADMIN")
+				.newRole("ADMIN")
 				.build();
 
 		String content = objectMapper.writeValueAsString(dto);
@@ -263,7 +263,7 @@ class ManagementControllerTest {
 
 		ManagementRequest.AccessModifyDto dto = ManagementRequest.AccessModifyDto.builder()
 				.userUuid("1604b772-adc0-4212-8a90-81186c57f600")
-				.newRole("ROLE_ADMIN")
+				.newRole("ADMIN")
 				.build();
 
 		String content = objectMapper.writeValueAsString(dto);
@@ -309,7 +309,7 @@ class ManagementControllerTest {
 
 		ManagementRequest.AccessModifyDto dto = ManagementRequest.AccessModifyDto.builder()
 				.userUuid("1604b772-adc0-4212-8a90-81186c57f600")
-				.newRole("ROLE_NOROLE")
+				.newRole("NOROLE")
 				.build();
 
 		String content = objectMapper.writeValueAsString(dto);
@@ -351,8 +351,8 @@ class ManagementControllerTest {
 	void 직원_검색_성공() throws Exception {
 		jwtToken = jwtService.createAccessToken(UUID);
 
-		ManagementResponse.EmployeeDto employee1 = new ManagementResponse.EmployeeDto("1604b772-adc0-4212-8a90-81186c57f600", "최싸피", "choi@ssafy.com", 1534534L, "마케팅부", "대리", "ROLE_EMPLOYEE");
-		ManagementResponse.EmployeeDto employee2 = new ManagementResponse.EmployeeDto("1604b772-adc0-4212-8a90-81186c57f601", "김싸피", "kim@ssafy.com", 1423435L, "인사부", "부장", "ROLE_ADMIN");
+		ManagementResponse.EmployeeDto employee1 = new ManagementResponse.EmployeeDto("1604b772-adc0-4212-8a90-81186c57f600", "최싸피", "choi@ssafy.com", 1534534L, "마케팅부", "대리", "EMPLOYEE");
+		ManagementResponse.EmployeeDto employee2 = new ManagementResponse.EmployeeDto("1604b772-adc0-4212-8a90-81186c57f601", "김싸피", "kim@ssafy.com", 1423435L, "인사부", "부장", "ADMIN");
 		ManagementResponse.EmployeeSearchDto response = ManagementResponse.EmployeeSearchDto.builder()
 				.employees(List.of(employee1, employee2))
 				.build();

@@ -133,7 +133,7 @@ public class AuthServiceImpl implements AuthService {
 
 		// 승인대기 저장
 		Waiting waiting = Waiting.builder()
-				.role(Role.ROLE_EMPLOYEE)
+				.role(Role.EMPLOYEE)
 				.user(user)
 				.build();
 
@@ -172,7 +172,7 @@ public class AuthServiceImpl implements AuthService {
 				.password(passwordEncode)
 				.name(requestDto.getName())
 				.state(State.ACTIVE)
-				.role(Role.ROLE_ENTERPRISE)
+				.role(Role.ENTERPRISE)
 				.uuid(uuid)
 				.build();
 

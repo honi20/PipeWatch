@@ -73,7 +73,7 @@ class UserControllerTest {
 				.name("최싸피")
 				.email("test@ssafy.com")
 				.enterpriseName("paori")
-				.role("ROLE_EMPLOYEE")
+				.role("EMPLOYEE")
 				.state("PENDING")
 				.employee(new UserResponse.EmployeeDto(1243242L, "IT사업부","팀장"))
 				.build();
@@ -128,7 +128,7 @@ class UserControllerTest {
 				.name("paori")
 				.email("pipewatch_admin@ssafy.com")
 				.enterpriseName("paori")
-				.role("ROLE_ENTERPRISE")
+				.role("ENTERPRISE")
 				.state("ACTIVE")
 				.employee(null)
 				.build();

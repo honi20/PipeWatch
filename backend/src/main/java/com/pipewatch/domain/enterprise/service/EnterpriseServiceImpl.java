@@ -31,7 +31,7 @@ public class EnterpriseServiceImpl implements EnterpriseService {
 		User user = userRepository.findById(userId).orElseThrow(() -> new BaseException(USER_NOT_FOUND));
 
 		Enterprise enterprise;
-		if (user.getRole() == Role.ROLE_ENTERPRISE) {
+		if (user.getRole() == Role.ENTERPRISE) {
 			enterprise = enterpriseRepository.findByUserId(user.getId());
 		} else {
 			EmployeeInfo employeeInfo = employeeRepository.findByUserId(userId);
