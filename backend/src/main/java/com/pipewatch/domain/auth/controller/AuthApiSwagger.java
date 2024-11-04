@@ -33,6 +33,17 @@ public interface AuthApiSwagger {
 
 	@PostMapping("/verify-email-code")
 	@Operation(summary = "메일 인증번호 확인")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "메일 인증코드 확인 성공", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+					examples = {@ExampleObject(value = "{\"header\":{\"httpStatusCode\": 200, \"message\": \"인증코드 발송에 성공했습니다.\"},\n\"body\": null}")}
+			)),
+			@ApiResponse(responseCode = "403", description = "메일 인증코드 확인 실패 - 잘못된 인증코드", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+					examples = {@ExampleObject(value = "{\"header\":{\"httpStatusCode\": 403, \"message\": \"인증번호가 일치하지 않습니다.\"},\n\"body\": null}")}
+			)),
+			@ApiResponse(responseCode = "404", description = "메일 인증코드 확인 실패 - 인증정보가 존재하지 않는 이메일", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+					examples = {@ExampleObject(value = "{\"header\":{\"httpStatusCode\": 404, \"message\": \"인증정보가 존재하지 않습니다.\"},\n\"body\": null}")}
+			))
+	})
 	ResponseEntity<?> emailCodeVerify(@RequestBody AuthRequest.EmailCodeVerifyDto requestDto);
 
 	@PostMapping

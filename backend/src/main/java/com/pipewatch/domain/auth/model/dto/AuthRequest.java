@@ -17,7 +17,7 @@ public class AuthRequest {
 	@NoArgsConstructor
 	@AllArgsConstructor
 	public static class EmailCodeSendDto {
-		@Schema(description = "사용자 이메일", example = "paori@ssafy.com")
+		@Schema(description = "인증코드 전송할 이메일", example = "paori@ssafy.com")
 		private String email;
 	}
 
@@ -27,7 +27,9 @@ public class AuthRequest {
 	@NoArgsConstructor
 	@AllArgsConstructor
 	public static class EmailCodeVerifyDto {
+		@Schema(description = "인증코드가 전송된 이메일", example = "paori@ssafy.com")
 		private String email;
+		@Schema(description = "인증코드", example = "603942")
 		private String verifyCode;
 	}
 
