@@ -63,7 +63,8 @@
       "confirmNewPassword": "Confirm New Password",
       "updatePassword": "Update Password",
       "complete": "Your password has been successfully updated.",
-      "newPasswordMatchError": " The new password must be different from the current password."
+      "newPasswordMatchError": " The new password must be different from the current password.",
+      "newPassworMismatchError": "The entered password does not match."
     },
     "withdrawal": {
       "registrationEmail": "Registered Email",

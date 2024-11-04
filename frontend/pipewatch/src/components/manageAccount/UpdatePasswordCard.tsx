@@ -25,7 +25,7 @@ const UpdatePasswordCard = () => {
     setCurrentPasswordError(tempCurrentPassword !== value);
   };
 
-  // check new password
+  // check new password - valid & mismatch
   const [newPassword, setNewPassword] = useState("");
   const [showNewPasswordError, setShowNewPasswordError] = useState(false);
   // 기존 비밀번호와 불일치 여부 확인
@@ -49,6 +49,27 @@ const UpdatePasswordCard = () => {
   };
 
   const handleNewPasswordBlur = (e: FocusEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setShowNewPasswordError(
+      !validatePassword(value) || tempCurrentPassword === value
+    );
+  };
+
+  // check new password - match with new password
+  const [checkNewPassword, setCheckNewPassword] = useState("");
+  // 새로 입력한 비밀번호와 일치 여부 확인
+  const [showCheckNewPasswordError, setCheckShowNewPasswordError] =
+    useState(false);
+
+  // 비밀번호 이벤트 핸들러
+  const handleCheckNewPasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setCheckNewPassword(value);
+    // 기존 비밀번호와 불일치 여부 확인
+    setCheckShowNewPasswordError(newPassword !== value);
+  };
+
+  const handleCheckNewPasswordBlur = (e: FocusEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setShowNewPasswordError(
       !validatePassword(value) || tempCurrentPassword === value
@@ -107,15 +128,20 @@ const UpdatePasswordCard = () => {
         {/* new password check */}
         <Input
           type="password"
-          value={newPassword}
-          onChange={handleNewPasswordChange}
-          onBlur={handleNewPasswordBlur}
+          value={checkNewPassword}
+          onChange={handleCheckNewPasswordChange}
+          onBlur={handleCheckNewPasswordBlur}
           // aria-invalid={showNewPasswordError}
           // aria-describedby={showNewPasswordError ? "passwordError" : undefined}
           className="h-[56px] w-full px-5 text-gray-500 rounded-[5px] peer"
           placeholder={t("manageAccount.updatePassword.confirmNewPassword")}
           required
         />
+        {showCheckNewPasswordError && (
+          <span className="w-full px-2 text-[14px] whitespace-normal text-warn break-keep">
+            {t("manageAccount.updatePassword.newPassworMismatchError")}
+          </span>
+        )}
       </div>
 
       <div className="flex flex-col gap-[20px]">
