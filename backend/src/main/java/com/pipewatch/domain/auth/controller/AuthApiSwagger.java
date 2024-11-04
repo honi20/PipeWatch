@@ -68,7 +68,7 @@ public interface AuthApiSwagger {
 	@Operation(summary = "기업 가입", description = "gmail/naver은 ssafy 기업 메일이라고 가정")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "201", description = "기업 등록 성공", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-					examples = {@ExampleObject(value = "{\"header\":{\"httpStatusCode\": 200, \"message\": \"기업 등록에 성공했습니다.\"},\n\"body\": null}")}
+					examples = {@ExampleObject(value = "{\"header\":{\"httpStatusCode\": 201, \"message\": \"기업 등록에 성공했습니다.\"},\n\"body\": null}")}
 			)),
 			@ApiResponse(responseCode = "409", description = "기업 등록 실패 - 이미 등록된 기업", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
 					examples = {@ExampleObject(value = "{\"header\":{\"httpStatusCode\": 409, \"message\": \"이미 등록된 기업입니다.\"},\n\"body\": null}")}
@@ -78,6 +78,17 @@ public interface AuthApiSwagger {
 
 	@PostMapping("/signin")
 	@Operation(summary = "로그인")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "로그인 성공", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+					examples = {@ExampleObject(value = "{\"header\":{\"httpStatusCode\": 200, \"message\": \"로그인에 성공했습니다.\"},\n\"body\": {\"accessToken\": \"sampleAccessToken\"}}")}
+			)),
+			@ApiResponse(responseCode = "403", description = "로그인 실패 - 잘못된 이메일 형식 (기업 도메인과 형식이 같아야 함)", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+					examples = {@ExampleObject(value = "{\"header\":{\"httpStatusCode\": 403, \"message\": \"비밀번호가 일치하지 않습니다.\"},\n\"body\": null}")}
+			)),
+			@ApiResponse(responseCode = "404", description = "로그인 실패 - 존재하지 않는 기업", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+					examples = {@ExampleObject(value = "{\"header\":{\"httpStatusCode\": 404, \"message\": \"해당 이메일로 가입된 회원이 존재하지 않습니다.\"},\n\"body\": null}")}
+			))
+	})
 	ResponseEntity<?> signin(@RequestBody AuthRequest.SigninDto requestDto);
 
 	@GetMapping("/logout")

@@ -109,7 +109,9 @@ public class AuthRequest {
 	@NoArgsConstructor
 	@AllArgsConstructor
 	public static class SigninDto {
+		@Schema(description = "이메일", example = "paori@ssafy.com")
 		private String email;
+		@Schema(description = "비밀번호", example = "ssafy1234")
 		private String password;
 	}
 
