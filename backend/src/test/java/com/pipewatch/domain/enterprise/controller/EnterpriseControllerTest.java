@@ -153,4 +153,53 @@ class EnterpriseControllerTest {
 						)));
 	}
 
+	@Test
+	void 건물_층_리스트_조회_성공() throws Exception {
+		jwtToken = jwtService.createAccessToken(UUID);
+
+		EnterpriseResponse.BuildingAndFloorDto building1 = new EnterpriseResponse.BuildingAndFloorDto("역삼 멀티캠퍼스", List.of(12, 14));
+		EnterpriseResponse.BuildingAndFloorDto building2 = new EnterpriseResponse.BuildingAndFloorDto("부울경 멀티캠퍼스", List.of(1, 3));
+
+		// BuildingListDto 빌드
+		EnterpriseResponse.BuildingAndFloorListDto response = EnterpriseResponse.BuildingAndFloorListDto.builder()
+				.buildings(List.of(building1, building2))
+				.build();
+
+		when(enterpriseService.getBuildingAndFloorList(anyLong())).thenReturn(response);
+
+		ResultActions actions = mockMvc.perform(
+				get("/api/enterprises/floors")
+						.header("Authorization", "Bearer " + jwtToken)
+						.contentType(MediaType.APPLICATION_JSON)
+						.accept(MediaType.APPLICATION_JSON)
+						.characterEncoding("UTF-8")
+		);
+
+		actions
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.header.httpStatusCode").value(BUILDING_AND_FLOOR_LIST_OK.getHttpStatusCode()))
+				.andExpect(jsonPath("$.header.message").value(BUILDING_AND_FLOOR_LIST_OK.getMessage()))
+				.andDo(document(
+						"건물 및 층수 목록 조회 성공",
+						preprocessRequest(prettyPrint()),
+						preprocessResponse(prettyPrint()),
+						resource(ResourceSnippetParameters.builder()
+								.tag("Management API")
+								.summary("건물 및 층수 목록 조회 API")
+								.requestHeaders(
+										headerWithName("Authorization").description("Access Token")
+								)
+								.responseFields(
+										getCommonResponseFields(
+												fieldWithPath("body.buildings[]").type(JsonFieldType.ARRAY).description("건물 리스트"),
+												fieldWithPath("body.buildings[].building").type(JsonFieldType.STRING).description("건물명"),
+												fieldWithPath("body.buildings[].floors[]").type(JsonFieldType.ARRAY).description("층수 리스트")
+										)
+								)
+								.responseSchema(Schema.schema("건물 및 층수 목록 조회 Response"))
+								.build()
+						)));
+
+	}
+
 }

@@ -38,15 +38,6 @@ public class ManagementResponse {
 	}
 
 	@Getter
-	@Setter
-	@Builder
-	@NoArgsConstructor
-	@AllArgsConstructor
-	public static class BuildingListDto {
-		private List<BuildingDto> buildings;
-	}
-
-	@Getter
 	public static class EmployeeDto {
 		private String uuid;
 		private String name;
@@ -65,12 +56,5 @@ public class ManagementResponse {
 			this.empClass = empClass;
 			this.role = role;
 		}
-	}
-
-	@Getter
-	@AllArgsConstructor
-	public static class BuildingDto {
-		private String building;
-		private List<Integer> floors;
 	}
 }

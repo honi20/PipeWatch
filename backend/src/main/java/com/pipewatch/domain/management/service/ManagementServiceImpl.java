@@ -26,7 +26,6 @@ import static com.pipewatch.global.statusCode.ErrorCode.*;
 @RequiredArgsConstructor
 public class ManagementServiceImpl implements ManagementService {
 	private final UserRepository userRepository;
-	private final BuildingRepository buildingRepository;
 	private final EnterpriseRepository enterpriseRepository;
 	private final ManagementCustomRepository managementCustomRepository;
 	private final EmployeeRepository employeeRepository;
@@ -119,44 +118,6 @@ public class ManagementServiceImpl implements ManagementService {
 
 		return ManagementResponse.EmployeeSearchDto.builder()
 				.employees(employees)
-				.build();
-	}
-
-	@Override
-	public ManagementResponse.BuildingListDto getBuildingList(Long userId) {
-		User user = userRepository.findById(userId)
-				.orElseThrow(() -> new BaseException(USER_NOT_FOUND));
-
-		if (user.getRole() == Role.USER) {
-			throw new BaseException(FORBIDDEN_USER_ROLE);
-		}
-
-		Long enterpriseId = null;
-		if (user.getRole() == Role.ENTERPRISE) {
-			enterpriseId = enterpriseRepository.findByUserId(user.getId()).getId();
-		} else if (user.getRole() == Role.EMPLOYEE || user.getRole() == Role.ADMIN) {
-			enterpriseId = employeeRepository.findByUserId(user.getId()).getEnterprise().getId();
-		}
-
-		List<BuildingAndFloor> buildings = buildingRepository.findByEnterpriseId(enterpriseId);
-
-		// name으로 그룹화하고 floor를 오름차순으로 정렬하여 리스트로 수집
-		Map<String, List<Integer>> groupedFloors = buildings.stream()
-				.collect(Collectors.groupingBy(
-						BuildingAndFloor::getName,
-						Collectors.collectingAndThen(
-								Collectors.mapping(BuildingAndFloor::getFloor, Collectors.toList()),
-								floors -> floors.stream().sorted().collect(Collectors.toList())
-						)
-				));
-
-		// 그룹화된 데이터를 BuildingDto 리스트로 변환
-		List<ManagementResponse.BuildingDto> buildingDtos = groupedFloors.entrySet().stream()
-				.map(entry -> new ManagementResponse.BuildingDto(entry.getKey(), entry.getValue()))
-				.collect(Collectors.toList());
-
-		return ManagementResponse.BuildingListDto.builder()
-				.buildings(buildingDtos)
 				.build();
 	}
 }

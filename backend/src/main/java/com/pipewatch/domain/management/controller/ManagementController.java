@@ -48,11 +48,4 @@ public class ManagementController {
 		return new ResponseEntity<>(ResponseDto.success(EMPLOYEE_SEARCH_OK, responseDto), HttpStatus.OK);
 	}
 
-	@GetMapping("/buildings")
-	public ResponseEntity<?> buildingList(@AuthenticationPrincipal Long userId) {
-		ManagementResponse.BuildingListDto responseDto = managementService.getBuildingList(userId);
-
-		return new ResponseEntity<>(ResponseDto.success(BUILDING_LIST_OK, responseDto), HttpStatus.OK);
-	}
-
 }

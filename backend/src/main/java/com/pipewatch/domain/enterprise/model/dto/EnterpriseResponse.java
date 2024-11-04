@@ -54,4 +54,20 @@ public class EnterpriseResponse {
 					.build();
 		}
 	}
+
+	@Getter
+	@Setter
+	@Builder
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class BuildingAndFloorListDto {
+		private List<BuildingAndFloorDto> buildings;
+	}
+
+	@Getter
+	@AllArgsConstructor
+	public static class BuildingAndFloorDto {
+		private String building;
+		private List<Integer> floors;
+	}
 }

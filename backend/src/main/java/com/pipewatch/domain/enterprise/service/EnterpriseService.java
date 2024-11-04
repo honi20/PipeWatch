@@ -6,4 +6,6 @@ public interface EnterpriseService {
 	EnterpriseResponse.DetailDto getEnterpriseDetail(Long userId);
 
 	EnterpriseResponse.ListDto getEnterpriseList();
+
+	EnterpriseResponse.BuildingAndFloorListDto getBuildingAndFloorList(Long userId);
 }
