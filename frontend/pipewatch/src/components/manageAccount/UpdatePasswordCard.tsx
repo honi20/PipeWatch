@@ -76,6 +76,15 @@ const UpdatePasswordCard = () => {
     );
   };
 
+  const isFormValid: boolean =
+    inputPassword !== "" &&
+    newPassword !== "" &&
+    checkNewPassword !== "" &&
+    !showCurrentPasswordError &&
+    !showNewPasswordError &&
+    !showPasswordMismatchError &&
+    !showCheckNewPasswordError;
+
   return (
     <div className="w-[500px] flex flex-col bg-block rounded-[30px] p-[50px] gap-[40px] text-white">
       <div className="flex justify-center font-semibold text-[28px]">
@@ -114,12 +123,12 @@ const UpdatePasswordCard = () => {
           required
         />
         {showNewPasswordError ? (
-          <span className="w-full px-2 whitespace-normal text-warn break-keep">
+          <span className="w-full px-2 text-[14px] whitespace-normal text-warn break-keep">
             {t("account.passwordError")}
           </span>
         ) : (
           showPasswordMismatchError && (
-            <span className="w-full px-2 whitespace-normal text-warn break-keep">
+            <span className="w-full px-2 text-[14px] whitespace-normal text-warn break-keep">
               {t("manageAccount.updatePassword.newPasswordMatchError")}
             </span>
           )
@@ -146,8 +155,15 @@ const UpdatePasswordCard = () => {
 
       <div className="flex flex-col gap-[20px]">
         <Button
-          className={`flex items-center h-[56px] w-full px-[30px] text-white rounded-lg bg-button-background`}
+          className={`flex items-center h-[56px] w-full px-[30px] text-white rounded-[20px]
+                        ${
+                          isFormValid
+                            ? "bg-button-background hover:bg-button-background/80"
+                            : "bg-gray-800 cursor-not-allowed"
+                        }
+            `}
           onClick={() => navigate("/account/manage/update-pw/completed")}
+          disabled={!isFormValid}
         >
           {t("manageAccount.dashboard.updatePassword")}
         </Button>
