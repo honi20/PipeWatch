@@ -1,9 +1,9 @@
 // import { useTranslation } from "react-i18next";
 
 import { ModelListView } from "@src/components/pipeViewer/ModelListView";
-
 import NoAccessImage from "@assets/images/status/no_access.png";
 import NoPipeModelImage from "@assets/images/status/no_pipe_model.png";
+import { ModelType } from "@src/components/pipeViewer/PipeType";
 
 export const PipeViewer = () => {
   // const { t } = useTranslation();
@@ -12,16 +12,82 @@ export const PipeViewer = () => {
   // 모델이 없을 때
   // const tempModelList = [];
   // 모델이 있을 때
-  // 형식 확인 후 수정 예정
-  const tempModelList = [
+
+  const tempModelList: ModelType[] = [
     {
       id: 1,
       name: "model1",
-      image_path: "@assets/images/sample/sample_pipe_model.png",
+      area: "역삼 멀티캠퍼스",
+      floor: 14,
+      image_path: "src/assets/images/sample/sample_pipe_model.png",
+    },
+    {
+      id: 2,
+      name: "model1",
+      area: "경덕이네 집",
+      floor: 1,
+      image_path: "src/assets/images/sample/mallang.png",
+    },
+    {
+      id: 3,
+      name: "model1",
+      area: "역삼 멀티캠퍼스",
+      floor: -1,
+      image_path: "src/assets/images/sample/sample_pipe_model.png",
+    },
+    {
+      id: 4,
+      name: "model1",
+      area: "역삼 멀티캠퍼스",
+      floor: 14,
+      image_path: "src/assets/images/sample/sample_pipe_model.png",
+    },
+    {
+      id: 5,
+      name: "model1",
+      area: "역삼 멀티캠퍼스",
+      floor: 14,
+      image_path: "src/assets/images/sample/sample_pipe_model.png",
+    },
+    {
+      id: 6,
+      name: "model1",
+      area: "역삼 멀티캠퍼스",
+      floor: 14,
+      image_path: "src/assets/images/sample/sample_pipe_model.png",
+    },
+    {
+      id: 7,
+      name: "model1",
+      area: "경덕이네 집",
+      floor: 1,
+      image_path: "src/assets/images/sample/mallang.png",
+    },
+    {
+      id: 8,
+      name: "model1",
+      area: "경덕이네 집",
+      floor: 2,
+      image_path: "src/assets/images/sample/posil.png",
+    },
+    {
+      id: 9,
+      name: "model1",
+      area: "경덕이네 집",
+      floor: 1,
+      image_path: "src/assets/images/sample/mallang.png",
+    },
+    {
+      id: 10,
+      name: "model1",
+      area: "경덕이네 집",
+      floor: 2,
+      image_path: "src/assets/images/sample/posil.png",
     },
   ];
+  // 모델 없을 경우
+  // tempModelList = [];
 
-  // 접근 권한
   // 임시 계정명
   const tempUserRole: string = "admin";
   // const tempUserRole: string = "employee";
@@ -34,42 +100,44 @@ export const PipeViewer = () => {
 
       <div className="flex items-center justify-center h-[640px] my-4">
         {isAdmin ? (
-          tempModelList.length > 0 ? (
-            <ModelListView />
+          tempModelList && tempModelList.length > 0 ? (
+            <ModelListView modelList={tempModelList} />
           ) : (
             <div className="flex flex-col items-center gap-[40px]">
-              <img src={NoPipeModelImage} width={"350px"} />
-
-              <div className="flex flex-col justify-center">
-                <div className="text-center font-bold text-[40px]">
-                  등록된 파이프 모델이 없습니다.
-                </div>
-                <a
-                  href="/pipe-generator"
-                  className="text-center text-[20px] text-gray-500 hover:text-gray-200 underline"
-                >
-                  먼저 파이프 모델을 생성하세요.
-                </a>
-              </div>
+              {tempModelList && Array.isArray(tempModelList) ? (
+                <>
+                  <img src={NoPipeModelImage} width="350px" alt="No Model" />
+                  <div className="flex flex-col justify-center">
+                    <div className="text-center font-bold text-[40px]">
+                      등록된 파이프 모델이 없습니다.
+                    </div>
+                    <a
+                      href="/pipe-generator"
+                      className="text-center text-[20px] text-gray-500 hover:text-gray-200 underline"
+                    >
+                      먼저 파이프 모델을 생성하세요.
+                    </a>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <img src={NoAccessImage} width="350px" alt="No Access" />
+                  <div className="flex flex-col justify-center">
+                    <div className="text-center font-bold text-[40px]">
+                      접근 권한이 없습니다.
+                    </div>
+                    <a
+                      href="/"
+                      className="text-center text-[20px] text-gray-500 hover:text-gray-200 underline"
+                    >
+                      기업 인증 상태를 확인하세요.
+                    </a>
+                  </div>
+                </>
+              )}
             </div>
           )
-        ) : (
-          <div className="flex flex-col items-center gap-[40px]">
-            <img src={NoAccessImage} width={"350px"} />
-
-            <div className="flex flex-col justify-center">
-              <div className="text-center font-bold text-[40px]">
-                접근 권한이 없습니다.
-              </div>
-              <a
-                href="/pipe-generator"
-                className="text-center text-[20px] text-gray-500 hover:text-gray-200 underline"
-              >
-                기업 인증 상태를 확인하세요.
-              </a>
-            </div>
-          </div>
-        )}
+        ) : null}
       </div>
     </div>
   );
