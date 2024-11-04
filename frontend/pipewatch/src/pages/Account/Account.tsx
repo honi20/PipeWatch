@@ -1,9 +1,8 @@
 import { LoginPage } from "@pages/account/LoginPage";
 import { FindPassword } from "@pages/account/FindPassword";
 import { SignUpPage } from "@pages/account/SignUpPage";
-
 import { useLocation } from "react-router-dom";
-import { CompletedContact } from "@src/pages/CompletedContact";
+import { CompletedContact } from "@pages/CompletedContact";
 
 export const Account = () => {
   const location = useLocation();

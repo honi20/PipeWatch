@@ -1,10 +1,6 @@
 import { useState } from "react";
 import SelectPipeModelIcon from "@assets/icons/select_pipe_model.png";
-import {
-  AreaType,
-  ModelType,
-  FloorType,
-} from "@src/components/pipeViewer/PipeType";
+import { AreaType, ModelType } from "@src/components/pipeViewer/PipeType";
 import { AreaListbox } from "@src/components/pipeViewer/AreaListbox";
 import "./viewer.css";
 import { FloorListbox } from "@src/components/pipeViewer/FloorListbox";

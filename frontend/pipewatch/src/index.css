@@ -11,7 +11,7 @@
 @font-face {
   font-family: "Esamanru";
   font-weight: bold;
-  src: url("../src/assets/fonts/esamanru\ Bold.ttf") format("truetype");
+  src: url("../src/assets/fonts/esamanruBold.ttf") format("truetype");
 }
 
 body {
