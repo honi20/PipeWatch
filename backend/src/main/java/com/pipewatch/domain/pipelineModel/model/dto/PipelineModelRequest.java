@@ -38,8 +38,11 @@ public class PipelineModelRequest {
 	@NoArgsConstructor
 	@AllArgsConstructor
 	public static class ModelingDto {
+		@Schema(description = "생성자 UUID", example = "8e7dfbe3-aeca-4392-8d90-c1d3ae4fd35f")
 		private String userUuid;
+		@Schema(description = "썸네일 이미지 URL", example = "s3 thumbnail url")
 		private String previewImgUrl;
+		@Schema(description = "모델링 파일 URL", example = "s3 modeling file url")
 		private String modelUrl;
 	}
 }
