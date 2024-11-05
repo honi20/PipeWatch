@@ -25,4 +25,6 @@ public interface PipelineModelService {
 	PipelineModelResponse.MemoListDto getModelMemoList(Long userId, String modelUuid);
 
 	void createModelMemo(Long userId, String modelUuid, PipelineModelRequest.MemoDto requestDto);
+
+	void deleteModelMemo(Long userId, Long memoId);
 }

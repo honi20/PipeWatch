@@ -85,4 +85,11 @@ public class PipelineModelController implements PipelineModelApiSwagger {
 
 		return new ResponseEntity<>(ResponseDto.success(MODEL_MEMO_CREATED, null), HttpStatus.OK);
 	}
+
+	@DeleteMapping("/memos/{memoId}")
+	public ResponseEntity<?> modelMemoCreate(@AuthenticationPrincipal Long userId, @PathVariable Long memoId) {
+		pipelineModelService.deleteModelMemo(userId, memoId);
+
+		return new ResponseEntity<>(ResponseDto.success(MODEL_MEMO_DELETED, null), HttpStatus.OK);
+	}
 }

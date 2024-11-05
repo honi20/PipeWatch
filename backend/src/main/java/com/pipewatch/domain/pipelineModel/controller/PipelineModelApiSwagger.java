@@ -177,46 +177,26 @@ public interface PipelineModelApiSwagger {
 			@ApiResponse(responseCode = "200", description = "파이프라인 모델 메모 리스트 조회 성공", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
 					examples = {@ExampleObject(value = "{\"header\":{\"httpStatusCode\": 200, \"message\": \"모델 메모 리스트 조회에 성공했습니다.\"}," +
 							"\"body\": {\n" +
-							"    \"name\": \"Pipeline Model\",\n" +
-							"    \"modelingUrl\": \"https://pipewatch-bucket.s3.ap-northeast-2.amazonaws.com/models/PipeLine_8f1928cb-47fe-4994-8869-dfe08f484cd8.gltf\",\n" +
-							"    \"building\": \"역삼 멀티캠퍼스\",\n" +
-							"    \"floor\": 4,\n" +
-							"    \"isCompleted\": true,\n" +
-							"    \"modelUuid\": \"8f1928cb-47fe-4994-8869-dfe08f484cd8\",\n" +
-							"    \"updatedAt\": \"2024-11-05 17:18:33\",\n" +
-							"    \"pipelines\": [\n" +
+							"    \"memoList\": [\n" +
 							"      {\n" +
-							"        \"pipelineUuid\": \"PipeObj_2_8f1928cb-47fe-4994-8869-dfe08f484cd8\",\n" +
-							"        \"pipeUuids\": [\n" +
-							"          \"PipeObj_2_Segment_1_ssafy123_8f1928cb-47fe-4994-8869-dfe08f484cd8\",\n" +
-							"          \"PipeObj_2_Connector_1_ssafy123_8f1928cb-47fe-4994-8869-dfe08f484cd8\",\n" +
-							"          \"PipeObj_2_Segment_2_ssafy123_8f1928cb-47fe-4994-8869-dfe08f484cd8\",\n" +
-							"          \"PipeObj_2_Segment_3_ssafy123_8f1928cb-47fe-4994-8869-dfe08f484cd8\"\n" +
-							"        ]\n" +
+							"        \"memoId\": 1,\n" +
+							"        \"memo\": \"hi\",\n" +
+							"        \"writer\": {\n" +
+							"          \"userUuid\": \"ssafy12\",\n" +
+							"          \"userName\": \"김싸피\"\n" +
+							"        },\n" +
+							"        \"createdAt\": \"2024-11-05 17:32:19\"\n" +
 							"      },\n" +
 							"      {\n" +
-							"        \"pipelineUuid\": \"PipeObj_1_8f1928cb-47fe-4994-8869-dfe08f484cd8\",\n" +
-							"        \"pipeUuids\": [\n" +
-							"          \"PipeObj_1_Segment_1_ssafy123_8f1928cb-47fe-4994-8869-dfe08f484cd8\",\n" +
-							"          \"PipeObj_1_Segment_2_ssafy123_8f1928cb-47fe-4994-8869-dfe08f484cd8\",\n" +
-							"          \"PipeObj_1_Segment_3_ssafy123_8f1928cb-47fe-4994-8869-dfe08f484cd8\",\n" +
-							"          \"PipeObj_1_Segment_4_ssafy123_8f1928cb-47fe-4994-8869-dfe08f484cd8\",\n" +
-							"          \"PipeObj_1_Segment_5_ssafy123_8f1928cb-47fe-4994-8869-dfe08f484cd8\",\n" +
-							"          \"PipeObj_1_Segment_6_ssafy123_8f1928cb-47fe-4994-8869-dfe08f484cd8\"\n" +
-							"        ]\n" +
-							"      },\n" +
-							"      {\n" +
-							"        \"pipelineUuid\": \"PipeObj_3_8f1928cb-47fe-4994-8869-dfe08f484cd8\",\n" +
-							"        \"pipeUuids\": [\n" +
-							"          \"PipeObj_3_Segment_1_ssafy123_8f1928cb-47fe-4994-8869-dfe08f484cd8\",\n" +
-							"          \"PipeObj_3_Segment_2_ssafy123_8f1928cb-47fe-4994-8869-dfe08f484cd8\"\n" +
-							"        ]\n" +
+							"        \"memoId\": 3,\n" +
+							"        \"memo\": \"hihihi\",\n" +
+							"        \"writer\": {\n" +
+							"          \"userUuid\": \"ssafy12\",\n" +
+							"          \"userName\": \"김싸피\"\n" +
+							"        },\n" +
+							"        \"createdAt\": \"2024-11-05 17:52:42\"\n" +
 							"      }\n" +
-							"    ],\n" +
-							"    \"creator\": {\n" +
-							"      \"userUuid\": \"ssafy12\",\n" +
-							"      \"userName\": \"김싸피\"\n" +
-							"    }\n" +
+							"    ]\n" +
 							"  }}")}
 			))
 	})
@@ -230,4 +210,13 @@ public interface PipelineModelApiSwagger {
 			))
 	})
 	ResponseEntity<?> modelMemoCreate(@AuthenticationPrincipal Long userId, @PathVariable String modelUuid, @RequestBody PipelineModelRequest.MemoDto requestDto);
+
+	@DeleteMapping("/memos/{memoId}")
+	@Operation(summary = "파이프라인 모델 메모 삭제")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "201", description = "파이프라인 모델 메모 삭제 성공", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+					examples = {@ExampleObject(value = "{\"header\":{\"httpStatusCode\": 204, \"message\": \"모델 메모 삭제에 성공했습니다.\"},\n\"body\": null}")}
+			))
+	})
+	ResponseEntity<?> modelMemoCreate(@AuthenticationPrincipal Long userId, @PathVariable Long memoId);
 }

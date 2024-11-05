@@ -44,6 +44,7 @@ public enum SuccessCode {
 	MODEL_DELETED(HttpStatus.NO_CONTENT.value(), "모델 삭제에 성공했습니다."),
 	MODEL_MEMO_LIST_OK(HttpStatus.OK.value(), "모델 메모 리스트 조회에 성공했습니다."),
 	MODEL_MEMO_CREATED(HttpStatus.CREATED.value(), "모델 메모 생성에 성공했습니다."),
+	MODEL_MEMO_DELETED(HttpStatus.NO_CONTENT.value(), "모델 메모 삭제에 성공했습니다."),
 
 	// Pipeline
 	PIPELINE_DETAIL_OK(HttpStatus.OK.value(), "단일 파이프라인 조회에 성공했습니다."),

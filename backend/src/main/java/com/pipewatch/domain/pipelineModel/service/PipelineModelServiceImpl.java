@@ -302,6 +302,23 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 		pipelineModelMemoRepository.save(memo);
 	}
 
+	@Override
+	@Transactional
+	public void deleteModelMemo(Long userId, Long memoId) {
+		User user = userRepository.findById(userId)
+				.orElseThrow(() -> new BaseException(USER_NOT_FOUND));
+
+		// 기업이나 관리자 유저만 가능
+		if (user.getRole() == Role.USER || user.getRole() == Role.EMPLOYEE) {
+			throw new BaseException(FORBIDDEN_USER_ROLE);
+		}
+
+		PipelineModelMemo memo = pipelineModelMemoRepository.findById(memoId)
+				.orElseThrow(() -> new BaseException(PIPELINE_MODEL_MEMO_NOT_FOUND));
+
+		pipelineModelMemoRepository.delete(memo);
+	}
+
 	private List<PipelineModelResponse.PipelineDto> getPipelineDto(List<Pipe> pipes) {
 		// pipeline의 uuid를 기준으로 group화한 후 각 PipelineDto로 변환
 		Map<String, List<String>> groupedByPipelineUuid = pipes.stream()
