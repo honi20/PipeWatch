@@ -89,6 +89,8 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 		}
 
 		// TODO: Fast API로 썸네일 이미지 url 요청보내기
+		String previewImgUrl = "sample preview image url";
+		pipelineModel.updatePreviewImgUrl(previewImgUrl);
 
 		pipelineModelRepository.save(pipelineModel);
 

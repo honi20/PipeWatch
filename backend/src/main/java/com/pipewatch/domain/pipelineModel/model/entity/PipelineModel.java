@@ -60,6 +60,10 @@ public class PipelineModel extends BaseEntity {
 		this.name = name;
 	}
 
+	public void updatePreviewImgUrl(String previewImgUrl) {
+		this.previewImgUrl = previewImgUrl;
+	}
+
 	public void updateBuilding(BuildingAndFloor buildingAndFloor) {
 		this.buildingAndFloor = buildingAndFloor;
 	}
