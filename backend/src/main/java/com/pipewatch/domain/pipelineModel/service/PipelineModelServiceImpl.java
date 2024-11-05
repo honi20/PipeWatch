@@ -165,7 +165,6 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 				buildingRepository.save(buildingAndFloor);
 			}
 		}
-		System.out.println(buildingAndFloor.getId() + "***");
 
 		// 파이프라인 모델명 설정
 		pipelineModel.updateName(requestDto.getName());
