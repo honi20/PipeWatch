@@ -4,6 +4,9 @@ import { Button } from "@headlessui/react";
 import { motion } from "framer-motion";
 
 import HomePipe from "@assets/images/home_pipe.png";
+import Upload1 from "@assets/images/home/upload_1.png";
+import Upload2 from "@assets/images/home/upload_2.png";
+import Upload3 from "@assets/images/home/upload_3.png";
 
 export const Home = () => {
   const { t } = useTranslation();
@@ -17,6 +20,11 @@ export const Home = () => {
       opacity: 1,
       y: 0,
     },
+  };
+
+  const item = {
+    hidden: { opacity: 0, y: 50 },
+    whileInView: { opacity: 1, y: 0 },
   };
 
   return (
@@ -49,9 +57,61 @@ export const Home = () => {
         <img src={HomePipe} width={"1000px"} />
       </motion.div>
 
-      <img src={HomePipe} width={"1000px"} />
-      <img src={HomePipe} width={"1000px"} />
-      <img src={HomePipe} width={"1000px"} />
+      <div className="flex my-[100px] w-full justify-center gap-[100px] ">
+        <div className="text-left">
+          <div className="font-bold text-[50px]">가장 편리한 데이터 업로드</div>
+          <div className="text-[24px]">파이프 데이터를 업로드하고</div>
+          <div className="text-[24px]">자동화된 세그멘테이션 기술을</div>
+          <div className="text-[24px]">경험해보세요.</div>
+        </div>
+
+        <div className="wrap">
+          <motion.div
+            variants={item}
+            initial="hidden"
+            whileInView="whileInView"
+          >
+            <img src={Upload1} width={"400px"} className="my-[10px]" />
+          </motion.div>
+          <motion.div
+            variants={item}
+            initial="hidden"
+            whileInView="whileInView"
+            transition={{
+              duration: 0.8,
+              delay: 0.5,
+              ease: [0, 0.71, 0.2, 1.01],
+            }}
+          >
+            <img src={Upload2} width={"400px"} className="my-[10px]" />
+          </motion.div>
+          <motion.div
+            variants={item}
+            initial="hidden"
+            whileInView="whileInView"
+            transition={{
+              duration: 0.8,
+              delay: 0.5,
+              ease: [0, 0.71, 0.2, 1.01],
+            }}
+          >
+            <img src={Upload3} width={"400px"} className="my-[10px]" />
+          </motion.div>
+        </div>
+      </div>
+
+      <div className="flex my-[100px]">
+        <div className="text-left">
+          <div className="font-bold text-[50px]">건물별 파이프 통합 관리</div>
+          <div className="text-[24px]">
+            각 건물, 층, 구간 별 파이프를 한 곳에서 관리하세요.
+          </div>
+          <div className="text-[24px]">
+            파이프의 속성을 실시간으로 수정하고, 메모를 남길 수도 있습니다.
+          </div>
+        </div>
+        <img src={HomePipe} width={"500px"} />
+      </div>
     </div>
   );
 };
