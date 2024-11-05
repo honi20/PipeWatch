@@ -100,12 +100,14 @@ public class PipelineModelResponse {
 	@Builder
 	@AllArgsConstructor
 	public static class MemoDto {
+		private Long memoId;
 		private String memo;
 		private Creator writer;
 		private String createdAt;
 
 		public static MemoDto toDto(PipelineModelMemo memo) {
 			return MemoDto.builder()
+					.memoId(memo.getId())
 					.memo(memo.getMemo())
 					.writer(new Creator(memo.getUser().getUuid(), memo.getUser().getName()))
 					.createdAt(convertToDateFormat(memo.getCreated_at()))

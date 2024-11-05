@@ -134,6 +134,7 @@ public interface PipelineModelApiSwagger {
 							"    ],\n" +
 							"    \"memos\": [\n" +
 							"      {\n" +
+							"        \"memoId\": 2,\n" +
 							"        \"memo\": \"hihihi\",\n" +
 							"        \"writer\": {\n" +
 							"          \"userUuid\": \"8e7dfbe3-aeca-4392-8d90-c1d3ae4fd35f\",\n" +
@@ -142,6 +143,7 @@ public interface PipelineModelApiSwagger {
 							"        \"createdAt\": \"2024-11-03 14:52:57\"\n" +
 							"      },\n" +
 							"      {\n" +
+							"        \"memoId\": 1,\n" +
 							"        \"memo\": \"hi\",\n" +
 							"        \"writer\": {\n" +
 							"          \"userUuid\": \"8e7dfbe3-aeca-4392-8d90-c1d3ae4fd35f\",\n" +
