@@ -66,6 +66,11 @@ public class UserServiceImpl implements UserService {
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new BaseException(USER_NOT_FOUND));
 
+		// 비밀번호가 일치하는지 확인
+		if (!passwordEncoder.matches(requestDto.getPassword(), user.getPassword())) {
+			throw new BaseException(INVALID_PASSWORD);
+		}
+
 		String password = passwordEncoder.encode(requestDto.getNewPassword());
 		user.updatePassword(password);
 		userRepository.save(user);
