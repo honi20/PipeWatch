@@ -1,6 +1,7 @@
 package com.pipewatch.domain.pipelineModel.model.dto;
 
 import com.pipewatch.domain.pipelineModel.model.entity.PipelineModel;
+import com.pipewatch.domain.pipelineModel.model.entity.PipelineModelMemo;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -68,17 +69,54 @@ public class PipelineModelResponse {
 	@AllArgsConstructor
 	public static class DetailDto {
 		private String name;
-		private String description;
 		private String modelingUrl;
 		private Boolean isCompleted;
-		private LocalDateTime updatedAt;
+		private String updatedAt;
+		private List<PipelineDto> pipelines;
+		private List<MemoDto> memos;
 		private Creator creator;
+
+		public static DetailDto toDto(PipelineModel model, List<MemoDto> modelMemoList, List<PipelineDto> pipelines) {
+			return DetailDto.builder()
+					.name(model.getName())
+					.modelingUrl(model.getModelingUrl())
+					.isCompleted(model.getIsCompleted())
+					.updatedAt(convertToDateFormat(model.getUpdated_at()))
+					.pipelines(pipelines)
+					.memos(modelMemoList)
+					.creator(new Creator(model.getUser().getUuid(), model.getUser().getName()))
+					.build();
+		}
+	}
+
+	@Getter
+	@AllArgsConstructor
+	public static class PipelineDto {
+		private String pipelineUuid;
+		private List<String> pipeUuids;
+	}
+
+	@Getter
+	@Builder
+	@AllArgsConstructor
+	public static class MemoDto {
+		private String memo;
+		private Creator writer;
+		private String createdAt;
+
+		public static MemoDto toDto(PipelineModelMemo memo) {
+			return MemoDto.builder()
+					.memo(memo.getMemo())
+					.writer(new Creator(memo.getUser().getUuid(), memo.getUser().getName()))
+					.createdAt(convertToDateFormat(memo.getCreated_at()))
+					.build();
+		}
 	}
 
 	@Getter
 	@AllArgsConstructor
 	public static class Creator {
-		private Long userId;
+		private String userUuid;
 		private String userName;
 	}
 }

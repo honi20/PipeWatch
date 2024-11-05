@@ -11,7 +11,9 @@ import com.pipewatch.domain.pipeline.repository.PipelineRepository;
 import com.pipewatch.domain.pipelineModel.model.dto.PipelineModelRequest;
 import com.pipewatch.domain.pipelineModel.model.dto.PipelineModelResponse;
 import com.pipewatch.domain.pipelineModel.model.entity.PipelineModel;
+import com.pipewatch.domain.pipelineModel.model.entity.PipelineModelMemo;
 import com.pipewatch.domain.pipelineModel.repository.PipelineModelCustomRepository;
+import com.pipewatch.domain.pipelineModel.repository.PipelineModelMemoRepository;
 import com.pipewatch.domain.pipelineModel.repository.PipelineModelRepository;
 import com.pipewatch.domain.user.model.entity.Role;
 import com.pipewatch.domain.user.model.entity.User;
@@ -46,6 +48,7 @@ import static com.pipewatch.global.statusCode.ErrorCode.*;
 public class PipelineModelServiceImpl implements PipelineModelService {
 	private final UserRepository userRepository;
 	private final PipelineModelRepository pipelineModelRepository;
+	private final PipelineModelMemoRepository pipelineModelMemoRepository;
 	private final PipelineRepository pipelineRepository;
 	private final PipeRepository pipeRepository;
 	private final S3Service s3Service;
@@ -190,6 +193,49 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 		return PipelineModelResponse.ListDto.builder()
 				.models(modelDtos)
 				.build();
+	}
+
+	@Override
+	public PipelineModelResponse.DetailDto getModelDetail(Long userId, Long modelId) {
+		User user = userRepository.findById(userId)
+				.orElseThrow(() -> new BaseException(USER_NOT_FOUND));
+
+		if (user.getRole() == Role.USER) {
+			throw new BaseException(FORBIDDEN_USER_ROLE);
+		}
+
+		// Model
+		PipelineModel model = pipelineModelRepository.findById(modelId)
+				.orElseThrow(() -> new BaseException(PIPELINE_MODEL_NOT_FOUND));
+
+		// Model memo
+		List<PipelineModelMemo> memos = pipelineModelMemoRepository.findByPipelineModelIdOrder(modelId);
+		List<PipelineModelResponse.MemoDto> modelMemoList = memos.stream()
+				.map(PipelineModelResponse.MemoDto::toDto)
+				.collect(Collectors.toList());
+
+		// Pipelines Uuid
+		List<Pipe> pipes = pipelineModelCustomRepository.findPipelineUuidByModel(modelId);
+		List<PipelineModelResponse.PipelineDto> pipelines = getPipelineDto(pipes);
+
+		return PipelineModelResponse.DetailDto.toDto(model, modelMemoList, pipelines);
+	}
+
+	private List<PipelineModelResponse.PipelineDto> getPipelineDto(List<Pipe> pipes) {
+		// pipeline의 uuid를 기준으로 group화한 후 각 PipelineDto로 변환
+		Map<String, List<String>> groupedByPipelineUuid = pipes.stream()
+				.collect(Collectors.groupingBy(
+						pipe -> pipe.getPipeline().getUuid(), // Pipeline의 UUID로 그룹화
+						Collectors.mapping(
+								Pipe::getUuid,
+								Collectors.toList()
+						)
+				));
+
+		// 그룹화된 데이터를 PipelineDto 리스트로 변환
+		return groupedByPipelineUuid.entrySet().stream()
+				.map(entry -> new PipelineModelResponse.PipelineDto(entry.getKey(), entry.getValue()))
+				.collect(Collectors.toList());
 	}
 
 	private void savePipelineObject(String modelUrl, String UUID, PipelineModel pipelineModel) throws IOException, ParseException {

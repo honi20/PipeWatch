@@ -1,7 +1,11 @@
 package com.pipewatch.domain.pipelineModel.repository;
 
 import com.pipewatch.domain.enterprise.model.entity.Enterprise;
+import com.pipewatch.domain.pipeline.model.entity.Pipe;
+import com.pipewatch.domain.pipeline.model.entity.PipelineDefect;
+import com.pipewatch.domain.pipelineModel.model.dto.PipelineModelResponse;
 import com.pipewatch.domain.pipelineModel.model.entity.PipelineModel;
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +14,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 import static com.pipewatch.domain.enterprise.model.entity.QBuildingAndFloor.buildingAndFloor;
+import static com.pipewatch.domain.pipeline.model.entity.QPipe.pipe;
+import static com.pipewatch.domain.pipeline.model.entity.QPipeline.pipeline;
 import static com.pipewatch.domain.pipelineModel.model.entity.QPipelineModel.pipelineModel;
 
 @Repository
@@ -31,5 +37,13 @@ public class PipelineModelCustomRepositoryImpl implements PipelineModelCustomRep
 		 }
 
 		 return query.fetch();
+	}
+
+	@Override
+	public List<Pipe> findPipelineUuidByModel(Long modelId) {
+		return queryFactory.selectFrom(pipe)
+				.leftJoin(pipeline).on(pipeline.eq(pipe.pipeline))
+				.where(pipeline.pipelineModel.id.eq(modelId))
+				.fetch();
 	}
 }

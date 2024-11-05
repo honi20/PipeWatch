@@ -15,4 +15,6 @@ public interface PipelineModelService {
 	void modifyModel(Long userId, Long modelId, PipelineModelRequest.InitDto requestDto);
 
 	PipelineModelResponse.ListDto getModelList(Long userId, String building, Integer floor);
+
+	PipelineModelResponse.DetailDto getModelDetail(Long userId, Long modelId);
 }

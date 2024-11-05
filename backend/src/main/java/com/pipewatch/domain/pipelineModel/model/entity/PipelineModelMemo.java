@@ -1,6 +1,7 @@
 package com.pipewatch.domain.pipelineModel.model.entity;
 
 import com.pipewatch.domain.user.model.entity.User;
+import com.pipewatch.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -13,7 +14,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class PipelineModelMemo {
+public class PipelineModelMemo extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "pipeline_model_memo_id")

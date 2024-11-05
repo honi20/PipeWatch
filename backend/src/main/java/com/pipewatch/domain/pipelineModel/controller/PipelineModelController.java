@@ -53,23 +53,16 @@ public class PipelineModelController implements PipelineModelApiSwagger {
 		return new ResponseEntity<>(ResponseDto.success(MODEL_LIST_OK, responseDto), HttpStatus.OK);
 	}
 
+	@GetMapping("/{modelId}")
+	public ResponseEntity<?> modelDetail(@AuthenticationPrincipal Long userId, @PathVariable Long modelId) {
+		PipelineModelResponse.DetailDto responseDto = pipelineModelService.getModelDetail(userId, modelId);
+
+		return new ResponseEntity<>(ResponseDto.success(MODEL_DETAIL_OK, responseDto), HttpStatus.OK);
+	}
+
 	@PatchMapping("/{modelId}")
 	public ResponseEntity<?> modelModify(@PathVariable Long modelId) {
 		return new ResponseEntity<>(ResponseDto.success(MODEL_MODIFIED_OK, null), HttpStatus.OK);
-	}
-
-	@GetMapping("/{modelId}")
-	public ResponseEntity<?> modelDetail(@PathVariable Long modelId) {
-		PipelineModelResponse.DetailDto responseDto = PipelineModelResponse.DetailDto.builder()
-				.name("파이프라인 모델")
-				.description("주기적인 점검 필요")
-				.modelingUrl("s3 url")
-				.isCompleted(true)
-				.updatedAt(LocalDateTime.now())
-				.creator(new PipelineModelResponse.Creator(1L, "김싸피"))
-				.build();
-
-		return new ResponseEntity<>(ResponseDto.success(MODEL_DETAIL_OK, responseDto), HttpStatus.OK);
 	}
 
 	@DeleteMapping("/{modelId}")

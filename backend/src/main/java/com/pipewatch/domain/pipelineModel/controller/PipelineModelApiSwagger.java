@@ -100,21 +100,66 @@ public interface PipelineModelApiSwagger {
 			@ApiResponse(responseCode = "200", description = "파이프라인 모델 상세조회 성공", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
 					examples = {@ExampleObject(value = "{\"header\":{\"httpStatusCode\": 200, \"message\": \"모델 상세 조회에 성공했습니다.\"}," +
 							"\"body\": {\n" +
-							"    \"name\": \"파이프라인 모델\",\n" +
-							"    \"description\": \"주기적인 점검 필요\",\n" +
-							"    \"modelingUrl\": \"s3 url\",\n" +
+							"    \"name\": \"Pipeline Model\",\n" +
+							"    \"modelingUrl\": \"https://pipewatch-bucket.s3.ap-northeast-2.amazonaws.com/pipeline/model/pipeline_8b6ab7d3-aa36-4638-898f-36b25024ac24.gltf\",\n" +
 							"    \"isCompleted\": true,\n" +
-							"    \"updatedAt\": \"2024-11-03T00:14:34.461461\",\n" +
+							"    \"updatedAt\": \"2024-11-05 11:35:38\",\n" +
+							"    \"pipelines\": [\n" +
+							"      {\n" +
+							"        \"pipelineUuid\": \"PipeObj_2_d4562232-7715-45f6-bddb-588f4ca7a253\",\n" +
+							"        \"pipeUuids\": [\n" +
+							"          \"PipeObj_2_Segment_1_d4562232-7715-45f6-bddb-588f4ca7a253\",\n" +
+							"          \"PipeObj_2_Segment_2_d4562232-7715-45f6-bddb-588f4ca7a253\",\n" +
+							"          \"PipeObj_2_Segment_3_d4562232-7715-45f6-bddb-588f4ca7a253\"\n" +
+							"        ]\n" +
+							"      },\n" +
+							"      {\n" +
+							"        \"pipelineUuid\": \"PipeObj_1_d4562232-7715-45f6-bddb-588f4ca7a253\",\n" +
+							"        \"pipeUuids\": [\n" +
+							"          \"PipeObj_1_Segment_1_d4562232-7715-45f6-bddb-588f4ca7a253\",\n" +
+							"          \"PipeObj_1_Segment_2_d4562232-7715-45f6-bddb-588f4ca7a253\",\n" +
+							"          \"PipeObj_1_Segment_3_d4562232-7715-45f6-bddb-588f4ca7a253\",\n" +
+							"          \"PipeObj_1_Segment_4_d4562232-7715-45f6-bddb-588f4ca7a253\",\n" +
+							"          \"PipeObj_1_Segment_5_d4562232-7715-45f6-bddb-588f4ca7a253\",\n" +
+							"          \"PipeObj_1_Segment_6_d4562232-7715-45f6-bddb-588f4ca7a253\"\n" +
+							"        ]\n" +
+							"      },\n" +
+							"      {\n" +
+							"        \"pipelineUuid\": \"PipeObj_3_d4562232-7715-45f6-bddb-588f4ca7a253\",\n" +
+							"        \"pipeUuids\": [\n" +
+							"          \"PipeObj_3_Segment_1_d4562232-7715-45f6-bddb-588f4ca7a253\",\n" +
+							"          \"PipeObj_3_Segment_2_d4562232-7715-45f6-bddb-588f4ca7a253\"\n" +
+							"        ]\n" +
+							"      }\n" +
+							"    ],\n" +
+							"    \"memos\": [\n" +
+							"      {\n" +
+							"        \"memo\": \"hihihi\",\n" +
+							"        \"writer\": {\n" +
+							"          \"userUuid\": \"8e7dfbe3-aeca-4392-8d90-c1d3ae4fd35f\",\n" +
+							"          \"userName\": \"파오리\"\n" +
+							"        },\n" +
+							"        \"createdAt\": \"2024-11-03 14:52:57\"\n" +
+							"      },\n" +
+							"      {\n" +
+							"        \"memo\": \"hi\",\n" +
+							"        \"writer\": {\n" +
+							"          \"userUuid\": \"8e7dfbe3-aeca-4392-8d90-c1d3ae4fd35f\",\n" +
+							"          \"userName\": \"파오리\"\n" +
+							"        },\n" +
+							"        \"createdAt\": \"2024-11-05 14:52:55\"\n" +
+							"      }\n" +
+							"    ],\n" +
 							"    \"creator\": {\n" +
-							"      \"userId\": 1,\n" +
-							"      \"userName\": \"김싸피\"\n" +
+							"      \"userUuid\": \"8e7dfbe3-aeca-4392-8d90-c1d3ae4fd35f\",\n" +
+							"      \"userName\": \"파오리\"\n" +
 							"    }\n" +
 							"  }}")}
 			))
 	})
-	ResponseEntity<?> modelDetail(
-			@Schema(description = "Model ID", example = "1")
-			@PathVariable Long modelId);
+	ResponseEntity<?> modelDetail(@AuthenticationPrincipal Long userId,
+								  @Schema(description = "Model ID", example = "1")
+								  @PathVariable Long modelId);
 
 	@PatchMapping("/{modelId}")
 	@Operation(summary = "파이프라인 모델 정보 수정")
