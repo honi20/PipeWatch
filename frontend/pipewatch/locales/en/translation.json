@@ -309,5 +309,36 @@
       "instructions": "For any inquiries regarding pre-contact and registration,<br/>please reach out to our sales team.",
       "connectEmail": "Go to connect via email"
     }
+  },
+  "enterprise": {
+    "enterprise": "Enterprise Account",
+    "manage": "Employee Management",
+    "table": {
+      "name": "Name",
+      "email": "Email",
+      "employeeId": "Employee ID",
+      "department": "Department",
+      "position": "Position",
+      "requestManagement": "Request Management"
+    },
+    "verification": {
+      "sidebarTitle": "Verification",
+      "title": "Employee Verification",
+      "instruction": "You can approve or reject employee verification requests.",
+      "buttons": {
+        "approve": "Approve",
+        "reject": "Reject"
+      }
+    },
+    "view": {
+      "sidebarTitle": "View/Update",
+      "title": "View/Update Employee Information",
+      "instruction": "Manage and set administrative rights for employees.",
+      "buttons": {
+        "staff": "Employee",
+        "admin": "Administrator",
+        "update": "Update"
+      }
+    }
   }
 }

@@ -1,6 +1,9 @@
 import { VerificationTable } from "@src/components/enterprise/VerificationTable";
+import { useTranslation } from "react-i18next";
 
 export const EmpVerification = () => {
+  const { t } = useTranslation();
+
   const verificationData = [
     {
       id: 1,
@@ -30,8 +33,10 @@ export const EmpVerification = () => {
   return (
     <div className="flex flex-col gap-10">
       <div>
-        <h2 className="font-bold text-[32px]">사원 인증</h2>
-        <div className="">사원 인증 신청을 승인하거나 거부할 수 있습니다.</div>
+        <h2 className="font-bold text-[32px]">
+          {t("enterprise.verification.title")}
+        </h2>
+        <div className="">{t("enterprise.verification.instruction")}</div>
       </div>
       <VerificationTable data={verificationData} />
     </div>

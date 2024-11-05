@@ -309,5 +309,36 @@
       "instructions": "사전 컨택 및 가입 관련 사항은 영업팀에 문의하세요.",
       "connectEmail": "이메일로 연결"
     }
+  },
+  "enterprise": {
+    "enterprise": "기업 계정",
+    "manage": "사원 관리",
+    "table": {
+      "name": "이름",
+      "email": "이메일",
+      "employeeId": "사번",
+      "department": "부서",
+      "position": "직급",
+      "requestManagement": "요청 관리"
+    },
+    "verification": {
+      "sidebarTitle": "인증",
+      "title": "사원 인증",
+      "instruction": "사원 인증 신청을 승인하거나 거부할 수 있습니다.",
+      "buttons": {
+        "approve": "승인",
+        "reject": "거부"
+      }
+    },
+    "view": {
+      "sidebarTitle": "조회/변경",
+      "title": "사원 정보 조회/변경",
+      "instruction": "사원의 관리자 권한을 설정하고 관리할 수 있습니다.",
+      "buttons": {
+        "staff": "사원",
+        "admin": "관리자",
+        "update": "변경"
+      }
+    }
   }
 }

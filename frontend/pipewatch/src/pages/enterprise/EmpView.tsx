@@ -1,5 +1,9 @@
 import { EmployInfoTable } from "@src/components/enterprise/EmployInfoTable";
+import { useTranslation } from "react-i18next";
+
 export const EmpView = () => {
+  const { t } = useTranslation();
+
   const employData = [
     {
       id: 1,
@@ -125,10 +129,8 @@ export const EmpView = () => {
   return (
     <div className="flex flex-col gap-10">
       <div>
-        <h2 className="font-bold text-[32px]">사원 정보 조회/변경</h2>
-        <div className="">
-          사원의 관리자 권한을 설정하고 관리할 수 있습니다.
-        </div>
+        <h2 className="font-bold text-[32px]">{t("enterprise.view.title")}</h2>
+        <div className="">{t("enterprise.view.instruction")}</div>
       </div>
       <EmployInfoTable data={employData} />
     </div>

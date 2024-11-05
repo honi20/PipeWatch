@@ -148,6 +148,19 @@ export const Header = ({ handleTheme, currentTheme }: Props) => {
         >
           {t("header.subMenu.contact")}
         </NavLink>
+
+        <NavLink
+          className={({ isActive }) =>
+            `p-3 pb-2 hover:text-primary-200 ${
+              isActive
+                ? "text-primary-200 border-solid border-b-2 border-b-primary-200"
+                : ""
+            }`
+          }
+          to="/enterprise"
+        >
+          임시 Enterprise
+        </NavLink>
       </div>
       <div className="flex items-center gap-4">
         <Popover className="group">

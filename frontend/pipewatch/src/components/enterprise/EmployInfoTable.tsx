@@ -1,6 +1,7 @@
 import React from "react";
 import { EnterpriseButton } from "@components/enterprise/EnterpriseButton";
 import { RoleListbox } from "@src/components/enterprise/RoleListbox";
+import { useTranslation } from "react-i18next";
 
 interface EmployeeData {
   id: number;
@@ -16,18 +17,30 @@ interface TableProps {
 }
 
 export const EmployInfoTable: React.FC<TableProps> = ({ data }) => {
+  const { t } = useTranslation();
+
   return (
     <div className="border border-block rounded-xl overflow-hidden max-w-[1080px] w-full">
       <table className="w-full border-collapse">
         <thead className="font-normal text-white bg-block">
           <tr>
-            <th className="py-3 font-normal borde-b text-[15px]">Name</th>
-            <th className="font-normal border-b text-[15px]">Email</th>
-            <th className="font-normal border-b text-[15px]">Employee ID</th>
-            <th className="font-normal border-b text-[15px]">Department</th>
-            <th className="font-normal border-b text-[15px]">Position</th>
+            <th className="py-3 font-normal borde-b text-[15px]">
+              {t("enterprise.table.name")}
+            </th>
+            <th className="font-normal border-b text-[15px]">
+              {t("enterprise.table.email")}
+            </th>
+            <th className="font-normal border-b text-[15px]">
+              {t("enterprise.table.employeeId")}
+            </th>
+            <th className="font-normal border-b text-[15px]">
+              {t("enterprise.table.department")}
+            </th>
+            <th className="font-normal border-b text-[15px]">
+              {t("enterprise.table.position")}
+            </th>
             <th className="px-5 font-normal border-b text-[15px]">
-              Request Management
+              {t("enterprise.table.requestManagement")}
             </th>
           </tr>
         </thead>
@@ -46,7 +59,7 @@ export const EmployInfoTable: React.FC<TableProps> = ({ data }) => {
                   <RoleListbox />
                   <EnterpriseButton
                     handleClick={() => console.log("button Clicked")}
-                    text="변경"
+                    text={t("enterprise.view.buttons.update")}
                     color={"dark:bg-block bg-gray-500"}
                     hoverColor={"hover:dark:bg-block/80 hover:bg-gray-500/80"}
                   />

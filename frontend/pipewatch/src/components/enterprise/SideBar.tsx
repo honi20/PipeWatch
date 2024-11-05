@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 export const SideBar = () => {
   const [activeSection, setActiveSection] = useState<number | null>(null);
   const enterpriseName = "개굴전자"; // 기업명 넣을 예정
   const navigate = useNavigate();
   const location = useLocation();
+  const { t } = useTranslation();
 
   useEffect(() => {
     switch (location.pathname) {
@@ -37,13 +39,13 @@ export const SideBar = () => {
       {/* header */}
       <div>
         <div className="font-bold px-[10px]">{enterpriseName}</div>
-        <div className="px-[10px]">Enterprise</div>
+        <div className="px-[10px]">{t("enterprise.enterprise")}</div>
       </div>
       {/* line */}
       <div className="border-b border-white " />
       {/* navbar */}
       <div className="flex flex-col px-[10px] gap-2">
-        <div className="font-bold ">사원 관리</div>
+        <div className="font-bold ">{t("enterprise.manage")}</div>
         <div
           className="flex items-center gap-2 cursor-pointer"
           onClick={() => handleClick(0)}
@@ -53,7 +55,7 @@ export const SideBar = () => {
               activeSection === 0 ? "bg-primary-200" : "bg-transparent"
             }`}
           />
-          <div>인증</div>
+          <div>{t("enterprise.verification.sidebarTitle")}</div>
         </div>
         <div
           className="flex items-center gap-2 cursor-pointer"
@@ -64,7 +66,7 @@ export const SideBar = () => {
               activeSection === 1 ? "bg-primary-200" : "bg-transparent"
             }`}
           />
-          조회/변경
+          {t("enterprise.view.sidebarTitle")}
         </div>
       </div>
     </div>

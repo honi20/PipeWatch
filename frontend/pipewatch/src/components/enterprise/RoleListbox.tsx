@@ -7,13 +7,14 @@ import {
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import clsx from "clsx";
 import { useState } from "react";
-
-const roles = [
-  { id: 1, role: "Admin" },
-  { id: 2, role: "Staff" },
-];
+import { useTranslation } from "react-i18next";
 
 export const RoleListbox = () => {
+  const { t } = useTranslation();
+  const roles = [
+    { id: 1, role: `${t("enterprise.view.buttons.admin")}` },
+    { id: 2, role: `${t("enterprise.view.buttons.staff")}` },
+  ];
   const [selected, setSelected] = useState(roles[1]);
 
   return (
