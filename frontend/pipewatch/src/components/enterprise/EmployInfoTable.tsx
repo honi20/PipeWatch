@@ -1,7 +1,7 @@
 import React from "react";
-import { EnterpriseButton } from "@components/enterprise/EnterpriseButton";
 import { RoleListbox } from "@src/components/enterprise/RoleListbox";
 import { useTranslation } from "react-i18next";
+import { useState } from "react";
 
 interface EmployeeData {
   id: number;
@@ -10,6 +10,7 @@ interface EmployeeData {
   employeeId: string;
   department: string;
   position: string;
+  role: string;
 }
 
 interface TableProps {
@@ -56,13 +57,7 @@ export const EmployInfoTable: React.FC<TableProps> = ({ data }) => {
               <td className="px-5 border-t text-[15px]">{item.position}</td>
               <td className="px-5 border-t text-[15px]">
                 <div className="flex items-center justify-center h-full gap-2">
-                  <RoleListbox />
-                  <EnterpriseButton
-                    handleClick={() => console.log("button Clicked")}
-                    text={t("enterprise.view.buttons.update")}
-                    color={"dark:bg-block bg-gray-500"}
-                    hoverColor={"hover:dark:bg-block/80 hover:bg-gray-500/80"}
-                  />
+                  <RoleListbox currentRole={item.role} />
                 </div>
               </td>
             </tr>
