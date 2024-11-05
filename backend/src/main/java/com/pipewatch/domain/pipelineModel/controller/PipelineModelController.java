@@ -22,7 +22,7 @@ import static com.pipewatch.global.statusCode.SuccessCode.*;
 @RestController
 @RequestMapping("${api_prefix}/models")
 @RequiredArgsConstructor
-public class PipelineModelController {
+public class PipelineModelController implements PipelineModelApiSwagger {
 	private final PipelineModelService pipelineModelService;
 
 	@PostMapping(value = "/upload-file", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})

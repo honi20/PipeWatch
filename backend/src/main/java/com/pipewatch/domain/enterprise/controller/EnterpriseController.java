@@ -16,7 +16,7 @@ import static com.pipewatch.global.statusCode.SuccessCode.*;
 @RestController
 @RequestMapping("${api_prefix}/enterprises")
 @RequiredArgsConstructor
-public class EnterpriseController {
+public class EnterpriseController implements EnterpriseApiSwagger {
 	private final EnterpriseService enterpriseService;
 
 	@GetMapping

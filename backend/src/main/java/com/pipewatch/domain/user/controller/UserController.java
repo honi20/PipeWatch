@@ -15,7 +15,7 @@ import static com.pipewatch.global.statusCode.SuccessCode.*;
 @RestController
 @RequestMapping("${api_prefix}/users")
 @RequiredArgsConstructor
-public class UserController {
+public class UserController implements UserApiSwagger {
 	private final UserService userService;
 
 	@GetMapping("/mypage")
