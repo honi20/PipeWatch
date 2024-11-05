@@ -26,7 +26,7 @@ public interface PipelineModelApiSwagger {
 					examples = {@ExampleObject(value = "{\"header\":{\"httpStatusCode\": 201, \"message\": \"GLTF 파일 업로드에 성공했습니다. 파이프라인 모델이 생성되었습니다.\"},\n\"body\": {\"modelId\": 1}}")}
 			))
 	})
-	ResponseEntity<?> fileUpload(@AuthenticationPrincipal Long userId, @RequestPart(value = "file", required = false) MultipartFile file) throws IOException;
+	ResponseEntity<?> fileUpload(@AuthenticationPrincipal Long userId, @RequestPart(value = "file", required = false) MultipartFile file) throws IOException, ParseException;
 
 	@PostMapping("/modeling")
 	@Operation(summary = "파이프라인 모델링 생성", description = "Fast API로부터 완성된 glft 모델링 파일 받는 API")

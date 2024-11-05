@@ -47,7 +47,7 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 
 	@Override
 	@Transactional
-	public PipelineModelResponse.FileUploadDto uploadFile(Long userId, MultipartFile file) throws IOException {
+	public PipelineModelResponse.FileUploadDto uploadFile(Long userId, MultipartFile file) throws IOException, ParseException {
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new BaseException(USER_NOT_FOUND));
 
@@ -64,12 +64,17 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 				.uuid(UUID)
 				.build();
 
+		String imgUrl = null;
 		if (!file.isEmpty()) {
-			String imgUrl = s3Service.upload(file, "pipeline/model", "pipeline_" + UUID);
+			imgUrl = s3Service.upload(file, "pipeline/model", "pipeline_" + UUID);
 			pipelineModel.updateModelingUrl(imgUrl);
 		}
 
 		pipelineModelRepository.save(pipelineModel);
+
+		if (imgUrl != null) {
+			savePipelineObject(imgUrl, UUID, pipelineModel);
+		}
 
 		return PipelineModelResponse.FileUploadDto.builder()
 				.modelId(pipelineModel.getId())
@@ -100,8 +105,16 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 
 		pipelineModelRepository.save(pipelineModel);
 
+		savePipelineObject(requestDto.getModelUrl(), UUID, pipelineModel);
+
+		return PipelineModelResponse.CreateModelingDto.builder()
+				.modelId(pipelineModel.getId())
+				.build();
+	}
+
+	private void savePipelineObject(String modelUrl, String UUID, PipelineModel pipelineModel) throws IOException, ParseException {
 		// Json 정보 추출
-		JSONObject jsonObject = getJsonObject(requestDto.getModelUrl());
+		JSONObject jsonObject = getJsonObject(modelUrl);
 		JSONArray nodes = (JSONArray) jsonObject.get("nodes");
 		Map<String, Pipeline> pipelineMap = new HashMap<>();
 
@@ -137,10 +150,6 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 				}
 			}
 		}
-
-		return PipelineModelResponse.CreateModelingDto.builder()
-				.modelId(pipelineModel.getId())
-				.build();
 	}
 
 	private JSONObject getJsonObject(String modelUrl) throws IOException, ParseException {
