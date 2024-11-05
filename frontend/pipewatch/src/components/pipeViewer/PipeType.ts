@@ -1,8 +1,10 @@
 export interface MemoType {
-  memoId: number;
-  content: string;
-  author: string;
-  createdTime: Date;
+  memo: string;
+  writer: {
+    userUuid: string;
+    userName: string;
+  };
+  createdAt: string;
 }
 
 export interface ModelType {
@@ -13,6 +15,7 @@ export interface ModelType {
   imagePath: string;
   pipelineName: string;
   memolist: MemoType[];
+  modifiedDate: Date;
 }
 
 export interface AreaType {

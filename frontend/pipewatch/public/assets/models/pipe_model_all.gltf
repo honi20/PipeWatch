@@ -28,48 +28,48 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"PipeCurveObj_1"
+			"name":"PipeObj_1"
 		},
 		{
-			"name":"PipeCurveObj_1_Segment_1"
+			"name":"PipeObj_1_Segment_1"
 		},
 		{
-			"name":"PipeCurveObj_1_Segment_2"
+			"name":"PipeObj_1_Segment_2"
 		},
 		{
-			"name":"PipeCurveObj_1_Segment_3"
+			"name":"PipeObj_1_Segment_3"
 		},
 		{
-			"name":"PipeCurveObj_1_Segment_4"
+			"name":"PipeObj_1_Segment_4"
 		},
 		{
-			"name":"PipeCurveObj_1_Segment_5"
+			"name":"PipeObj_1_Segment_5"
 		},
 		{
-			"name":"PipeCurveObj_1_Segment_6"
+			"name":"PipeObj_1_Segment_6"
 		},
 		{
 			"mesh":1,
-			"name":"PipeCurveObj_2"
+			"name":"PipeObj_2"
 		},
 		{
-			"name":"PipeCurveObj_2_Segment_1"
+			"name":"PipeObj_2_Segment_1"
 		},
 		{
-			"name":"PipeCurveObj_2_Segment_2"
+			"name":"PipeObj_2_Segment_2"
 		},
 		{
-			"name":"PipeCurveObj_2_Segment_3"
+			"name":"PipeObj_2_Segment_3"
 		},
 		{
 			"mesh":2,
-			"name":"PipeCurveObj_3"
+			"name":"PipeObj_3"
 		},
 		{
-			"name":"PipeCurveObj_3_Segment_1"
+			"name":"PipeObj_3_Segment_1"
 		},
 		{
-			"name":"PipeCurveObj_3_Segment_2"
+			"name":"PipeObj_3_Segment_2"
 		}
 	],
 	"meshes":[
