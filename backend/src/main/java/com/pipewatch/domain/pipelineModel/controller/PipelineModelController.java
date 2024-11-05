@@ -39,6 +39,13 @@ public class PipelineModelController implements PipelineModelApiSwagger {
 		return new ResponseEntity<>(ResponseDto.success(PIPELINE_MODELING_CREATED, responseDto), HttpStatus.CREATED);
 	}
 
+	@PatchMapping("/init/{modelId}")
+	public ResponseEntity<?> modelInit(@AuthenticationPrincipal Long userId, @PathVariable Long modelId, @RequestBody PipelineModelRequest.InitDto requestDto) throws IOException, ParseException {
+		pipelineModelService.modifyModel(userId, modelId, requestDto);
+
+		return new ResponseEntity<>(ResponseDto.success(MODEL_INIT_OK, null), HttpStatus.OK);
+	}
+
 	@GetMapping
 	public ResponseEntity<?> modelList(@RequestParam(required = false) String building, @RequestParam(required = false) Integer floor) {
 		PipelineModelResponse.PipelineModelDto model1 = new PipelineModelResponse.PipelineModelDto(1L, "model1", "previewUrl1", LocalDateTime.now());
@@ -53,11 +60,6 @@ public class PipelineModelController implements PipelineModelApiSwagger {
 				.build();
 
 		return new ResponseEntity<>(ResponseDto.success(MODEL_LIST_OK, responseDto), HttpStatus.OK);
-	}
-
-	@PatchMapping("/init/{modelId}")
-	public ResponseEntity<?> modelInit(@PathVariable Long modelId) {
-		return new ResponseEntity<>(ResponseDto.success(MODEL_INIT_OK, null), HttpStatus.OK);
 	}
 
 	@PatchMapping("/{modelId}")

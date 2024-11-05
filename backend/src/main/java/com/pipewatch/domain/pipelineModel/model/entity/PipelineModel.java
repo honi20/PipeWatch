@@ -46,4 +46,12 @@ public class PipelineModel extends BaseEntity {
 	public void updateModelingUrl(String modelingUrl) {
 		this.modelingUrl = modelingUrl;
 	}
+
+	public void updateName(String name) {
+		this.name = name;
+	}
+
+	public void updateBuilding(BuildingAndFloor buildingAndFloor) {
+		this.buildingAndFloor = buildingAndFloor;
+	}
 }

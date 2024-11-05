@@ -1,5 +1,9 @@
 package com.pipewatch.domain.pipelineModel.service;
 
+import com.pipewatch.domain.enterprise.model.entity.BuildingAndFloor;
+import com.pipewatch.domain.enterprise.model.entity.Enterprise;
+import com.pipewatch.domain.enterprise.repository.BuildingRepository;
+import com.pipewatch.domain.enterprise.repository.EnterpriseRepository;
 import com.pipewatch.domain.pipeline.model.entity.Pipe;
 import com.pipewatch.domain.pipeline.model.entity.Pipeline;
 import com.pipewatch.domain.pipeline.repository.PipeRepository;
@@ -10,6 +14,7 @@ import com.pipewatch.domain.pipelineModel.model.entity.PipelineModel;
 import com.pipewatch.domain.pipelineModel.repository.PipelineModelRepository;
 import com.pipewatch.domain.user.model.entity.Role;
 import com.pipewatch.domain.user.model.entity.User;
+import com.pipewatch.domain.user.repository.EmployeeRepository;
 import com.pipewatch.domain.user.repository.UserRepository;
 import com.pipewatch.global.exception.BaseException;
 import com.pipewatch.global.s3.S3Service;
@@ -21,6 +26,7 @@ import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -30,8 +36,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.pipewatch.global.statusCode.ErrorCode.FORBIDDEN_USER_ROLE;
-import static com.pipewatch.global.statusCode.ErrorCode.USER_NOT_FOUND;
+import static com.pipewatch.global.statusCode.ErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
@@ -41,6 +46,9 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 	private final PipelineRepository pipelineRepository;
 	private final PipeRepository pipeRepository;
 	private final S3Service s3Service;
+	private final BuildingRepository buildingRepository;
+	private final EnterpriseRepository enterpriseRepository;
+	private final EmployeeRepository employeeRepository;
 
 	@Value("${S3_URL}")
 	private String S3_URL;
@@ -82,6 +90,7 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 	}
 
 	@Override
+	@Transactional
 	public PipelineModelResponse.CreateModelingDto createModeling(PipelineModelRequest.ModelingDto requestDto) throws IOException, ParseException {
 		User user = userRepository.findByUuid(requestDto.getUserUuid());
 		if (user == null) {
@@ -110,6 +119,47 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 		return PipelineModelResponse.CreateModelingDto.builder()
 				.modelId(pipelineModel.getId())
 				.build();
+	}
+
+	@Override
+	@Transactional
+	public void modifyModel(Long userId, Long modelId, PipelineModelRequest.InitDto requestDto) {
+		User user = userRepository.findById(userId)
+				.orElseThrow(() -> new BaseException(USER_NOT_FOUND));
+
+		PipelineModel pipelineModel = pipelineModelRepository.findById(modelId)
+				.orElseThrow(() -> new BaseException(PIPELINE_MODEL_NOT_FOUND));
+
+		// 기업이나 관리자 유저만 가능
+		if (user.getRole() == Role.USER || user.getRole() == Role.EMPLOYEE) {
+			throw new BaseException(FORBIDDEN_USER_ROLE);
+		}
+
+		// 건물명이 없는 경우, 건물 테이블에 추가
+		BuildingAndFloor buildingAndFloor = buildingRepository.findByNameAndFloor(requestDto.getBuilding(), requestDto.getFloor());
+		if (buildingAndFloor == null) {
+			Enterprise enterprise = null;
+			if (user.getRole() == Role.ENTERPRISE) {
+				enterprise = enterpriseRepository.findByUserId(user.getId());
+			} else if (user.getRole() == Role.EMPLOYEE || user.getRole() == Role.ADMIN) {
+				enterprise = employeeRepository.findByUserId(user.getId()).getEnterprise();
+			}
+
+			if (enterprise != null) {
+				buildingAndFloor = BuildingAndFloor.builder()
+						.name(requestDto.getBuilding())
+						.floor(requestDto.getFloor())
+						.enterprise(enterprise)
+						.build();
+
+				buildingRepository.save(buildingAndFloor);
+			}
+		}
+
+		// 파이프라인 모델명 설정
+		pipelineModel.updateName(requestDto.getName());
+		pipelineModel.updateBuilding(buildingAndFloor);
+		pipelineModelRepository.save(pipelineModel);
 	}
 
 	private void savePipelineObject(String modelUrl, String UUID, PipelineModel pipelineModel) throws IOException, ParseException {

@@ -44,10 +44,9 @@ public interface PipelineModelApiSwagger {
 					examples = {@ExampleObject(value = "{\"header\":{\"httpStatusCode\": 200, \"message\": \"모델 초기 정보 설정에 성공했습니다.\"},\n\"body\": null}")}
 			))
 	})
-	ResponseEntity<?> modelInit(
-			@Schema(description = "Model ID", example = "1")
-			@PathVariable Long modelId
-	);
+	ResponseEntity<?> modelInit(@AuthenticationPrincipal Long userId,
+								@Schema(description = "Model ID", example = "1")
+								@PathVariable Long modelId, @RequestBody PipelineModelRequest.InitDto requestDto) throws IOException, ParseException;
 
 	@GetMapping("/{modelId}")
 	@Operation(summary = "파이프라인 모델 상세조회")
