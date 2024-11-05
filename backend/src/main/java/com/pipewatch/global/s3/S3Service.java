@@ -79,8 +79,8 @@ public class S3Service {
 		return s3Object.getObjectContent();
 	}
 
-	public void fileDelete(String fileUrl) throws BaseException {
-		String originalFilename = fileUrl.substring(fileUrl.indexOf("pipeline/"));
+	public void fileDelete(String fileUrl, String dirName) throws BaseException {
+		String originalFilename = fileUrl.substring(fileUrl.indexOf(dirName));
 
 		try {
 			try {

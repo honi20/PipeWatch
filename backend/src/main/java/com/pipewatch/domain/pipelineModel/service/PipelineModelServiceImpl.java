@@ -84,7 +84,7 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 
 		String imgUrl = null;
 		if (!file.isEmpty()) {
-			imgUrl = s3Service.upload(file, "pipeline/model", "pipeline_" + UUID);
+			imgUrl = s3Service.upload(file, "models", "PipeLine_" + UUID);
 			pipelineModel.updateModelingUrl(imgUrl);
 		}
 
@@ -257,7 +257,7 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 		List<Pipeline> pipelines = pipelineRepository.findByPipelineModelId(modelId);
 		pipelineRepository.deleteAll(pipelines);
 		// s3 데이터 삭제
-		s3Service.fileDelete(pipelineModel.getModelingUrl());
+		s3Service.fileDelete(pipelineModel.getModelingUrl(), "models/");
 		// Model 삭제
 		pipelineModelRepository.delete(pipelineModel);
 	}
@@ -289,7 +289,7 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 			JSONObject node = (JSONObject) nodes.get(i);
 			String nodeName = (String) node.get("name");
 
-			if (nodeName.startsWith("PipeObj_") && nodeName.contains("Segment")) {
+			if (nodeName.startsWith("PipeObj_") && (nodeName.contains("Segment") || nodeName.contains("Connector_"))) {
 				String[] parts = nodeName.split("_");
 				String pipelineNumber = parts[1];
 				Pipeline relatedPipeline = pipelineMap.get(pipelineNumber);
