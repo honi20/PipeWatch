@@ -20,7 +20,9 @@ type Props = {
 };
 
 export const RoleListbox = ({ currentRole }: Props) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const isKorean = i18n.language === "ko";
+
   const roles = [
     { id: 1, role: "admin" },
     { id: 2, role: "staff" },
@@ -40,7 +42,7 @@ export const RoleListbox = ({ currentRole }: Props) => {
 
   return (
     <div className="flex items-center justify-center gap-2">
-      <div className="w-[90px]">
+      <div className={isKorean ? "w-[90px]" : "w-[120px]"}>
         <Listbox value={selected} onChange={handleChange}>
           {/* <Listbox value={selected} onChange={setSelected}> */}
           <div className="relative">
@@ -73,7 +75,7 @@ export const RoleListbox = ({ currentRole }: Props) => {
                 value={role}
                 className="group flex cursor-default items-center gap-2 rounded-lg py-1.5 px-3 select-none data-[focus]:bg-white/10"
               >
-                <div className="dark:text-white text-sm/6">
+                <div className=" dark:text-white text-sm/6">
                   {role.role === "admin"
                     ? t("enterprise.view.buttons.admin")
                     : t("enterprise.view.buttons.staff")}
