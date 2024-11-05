@@ -46,8 +46,8 @@ public class UserServiceImpl implements UserService {
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new BaseException(USER_NOT_FOUND));
 
-		// 기업 유저는 수정 권한 없음
-		if (user.getRole() == Role.ENTERPRISE) {
+		// 기업 유저나 일반 유저는 수정 권한 없음
+		if (user.getRole() == Role.ENTERPRISE || user.getRole() == Role.USER) {
 			throw new BaseException(FORBIDDEN_USER_ROLE);
 		}
 

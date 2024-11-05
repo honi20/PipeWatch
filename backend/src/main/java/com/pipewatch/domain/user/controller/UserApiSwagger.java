@@ -62,7 +62,7 @@ public interface UserApiSwagger {
 			@ApiResponse(responseCode = "200", description = "개인정보 수정 성공", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
 					examples = {@ExampleObject(value = "{\"header\":{\"httpStatusCode\": 200, \"message\": \"개인정보 수정에 성공했습니다.\"},\n\"body\": null}")}
 			)),
-			@ApiResponse(responseCode = "403", description = "개인정보 수정 실패 - 기업 유저는 수정 불가능", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+			@ApiResponse(responseCode = "403", description = "개인정보 수정 실패 - 일반 및 기업 유저는 수정 불가능", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
 					examples = {@ExampleObject(value = "{\"header\":{\"httpStatusCode\": 403, \"message\": \"접근 권한이 없는 유저입니다.\"},\n\"body\": null}")}
 			))
 	})
