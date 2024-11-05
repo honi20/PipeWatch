@@ -1,7 +1,6 @@
 import React from "react";
 import { RoleListbox } from "@src/components/enterprise/RoleListbox";
 import { useTranslation } from "react-i18next";
-import { useState } from "react";
 
 interface EmployeeData {
   id: number;

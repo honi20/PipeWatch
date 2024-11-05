@@ -58,8 +58,10 @@ export const VerificationTable: React.FC<TableProps> = ({ data }) => {
                   <EnterpriseButton
                     handleClick={() => console.log("button Clicked")}
                     text={t("enterprise.verification.buttons.approve")}
-                    color={"bg-primary-200"}
-                    hoverColor={"hover:bg-primary-200/80"}
+                    color={"bg-primary-200 dark:bg-primary-500"}
+                    hoverColor={
+                      "hover:bg-primary-200/80 hover:dark:bg-primary-500/80"
+                    }
                   />
                   <EnterpriseButton
                     handleClick={() => console.log("button Clicked")}
