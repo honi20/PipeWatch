@@ -171,8 +171,9 @@ public interface PipelineModelApiSwagger {
 			))
 	})
 	ResponseEntity<?> modelModify(
+			@AuthenticationPrincipal Long userId,
 			@Schema(description = "Model ID", example = "1")
-			@PathVariable Long modelId);
+			@PathVariable Long modelId, @RequestBody PipelineModelRequest.ModifyDto requestDto);
 
 	@DeleteMapping("/{modelId}")
 	@Operation(summary = "파이프라인 모델 삭제")

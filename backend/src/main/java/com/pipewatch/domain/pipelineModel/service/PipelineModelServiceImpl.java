@@ -138,7 +138,7 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 
 	@Override
 	@Transactional
-	public void modifyModel(Long userId, Long modelId, PipelineModelRequest.InitDto requestDto) {
+	public void initModel(Long userId, Long modelId, PipelineModelRequest.InitDto requestDto) {
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new BaseException(USER_NOT_FOUND));
 
@@ -219,6 +219,24 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 		List<PipelineModelResponse.PipelineDto> pipelines = getPipelineDto(pipes);
 
 		return PipelineModelResponse.DetailDto.toDto(model, modelMemoList, pipelines);
+	}
+
+	@Override
+	@Transactional
+	public void modifyModel(Long userId, Long modelId, PipelineModelRequest.ModifyDto requestDto) {
+		User user = userRepository.findById(userId)
+				.orElseThrow(() -> new BaseException(USER_NOT_FOUND));
+
+		PipelineModel pipelineModel = pipelineModelRepository.findById(modelId)
+				.orElseThrow(() -> new BaseException(PIPELINE_MODEL_NOT_FOUND));
+
+		// 기업이나 관리자 유저만 가능
+		if (user.getRole() == Role.USER || user.getRole() == Role.EMPLOYEE) {
+			throw new BaseException(FORBIDDEN_USER_ROLE);
+		}
+
+		pipelineModel.updateName(requestDto.getName());
+		pipelineModelRepository.save(pipelineModel);
 	}
 
 	private List<PipelineModelResponse.PipelineDto> getPipelineDto(List<Pipe> pipes) {

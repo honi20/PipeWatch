@@ -12,9 +12,11 @@ public interface PipelineModelService {
 
 	PipelineModelResponse.CreateModelingDto createModeling(PipelineModelRequest.ModelingDto requestDto) throws IOException, ParseException;
 
-	void modifyModel(Long userId, Long modelId, PipelineModelRequest.InitDto requestDto);
+	void initModel(Long userId, Long modelId, PipelineModelRequest.InitDto requestDto);
 
 	PipelineModelResponse.ListDto getModelList(Long userId, String building, Integer floor);
 
 	PipelineModelResponse.DetailDto getModelDetail(Long userId, Long modelId);
+
+	void modifyModel(Long userId, Long modelId, PipelineModelRequest.ModifyDto requestDto);
 }

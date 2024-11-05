@@ -28,8 +28,6 @@ public class PipelineModelRequest {
 	public static class ModifyDto {
 		@Schema(description = "변경된 파이프라인 모델명", example = "New Pipeline Model")
 		private String name;
-		@Schema(description = "파이프라인 모델 설명", example = "New Description")
-		private String description;
 	}
 
 	@Getter

@@ -41,7 +41,7 @@ public class PipelineModelController implements PipelineModelApiSwagger {
 
 	@PatchMapping("/init/{modelId}")
 	public ResponseEntity<?> modelInit(@AuthenticationPrincipal Long userId, @PathVariable Long modelId, @RequestBody PipelineModelRequest.InitDto requestDto) throws IOException, ParseException {
-		pipelineModelService.modifyModel(userId, modelId, requestDto);
+		pipelineModelService.initModel(userId, modelId, requestDto);
 
 		return new ResponseEntity<>(ResponseDto.success(MODEL_INIT_OK, null), HttpStatus.OK);
 	}
@@ -61,7 +61,9 @@ public class PipelineModelController implements PipelineModelApiSwagger {
 	}
 
 	@PatchMapping("/{modelId}")
-	public ResponseEntity<?> modelModify(@PathVariable Long modelId) {
+	public ResponseEntity<?> modelModify(@AuthenticationPrincipal Long userId, @PathVariable Long modelId, @RequestBody PipelineModelRequest.ModifyDto requestDto) {
+		pipelineModelService.modifyModel(userId, modelId, requestDto);
+
 		return new ResponseEntity<>(ResponseDto.success(MODEL_MODIFIED_OK, null), HttpStatus.OK);
 	}
 
