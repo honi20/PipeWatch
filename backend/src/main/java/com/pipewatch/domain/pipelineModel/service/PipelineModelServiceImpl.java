@@ -172,32 +172,31 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 			JSONObject node = (JSONObject) nodes.get(i);
 			String nodeName = (String) node.get("name");
 
-			if (nodeName.startsWith("PipeObj_") && !nodeName.contains("Segment")) {
-				String[] parts = nodeName.split("_");
-				String pipelineNumber = parts[1];
-
-				Pipeline pipeline = Pipeline.builder()
-						.name(nodeName)
-						.uuid(nodeName + "_" + UUID)
-						.pipelineModel(pipelineModel)
-						.build();
-
-				pipelineRepository.save(pipeline);
-				pipelineMap.put(pipelineNumber, pipeline);
-			} else if (nodeName.startsWith("PipeObj_") && nodeName.contains("Segment")) {
+			if (nodeName.startsWith("PipeObj_") && nodeName.contains("Segment")) {
 				String[] parts = nodeName.split("_");
 				String pipelineNumber = parts[1];
 				Pipeline relatedPipeline = pipelineMap.get(pipelineNumber);
 
-				if (relatedPipeline != null) {
-					Pipe pipe = Pipe.builder()
-							.name(nodeName)
-							.uuid(nodeName + "_" + UUID)
-							.pipeline(relatedPipeline)
+				// 파이프 라인 저장
+				if (relatedPipeline == null) {
+					relatedPipeline = Pipeline.builder()
+							.name("PipeObj_" + pipelineNumber)
+							.uuid("PipeObj_" + pipelineNumber + "_" + UUID)
+							.pipelineModel(pipelineModel)
 							.build();
 
-					pipeRepository.save(pipe);
+					pipelineRepository.save(relatedPipeline);
+					pipelineMap.put(pipelineNumber, relatedPipeline);
 				}
+
+				// 파이프 저장
+				Pipe pipe = Pipe.builder()
+						.name(nodeName)
+						.uuid(nodeName + "_" + UUID)
+						.pipeline(relatedPipeline)
+						.build();
+
+				pipeRepository.save(pipe);
 			}
 		}
 	}
