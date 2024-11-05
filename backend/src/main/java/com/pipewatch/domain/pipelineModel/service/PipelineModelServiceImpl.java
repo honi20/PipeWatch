@@ -78,6 +78,8 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 			pipelineModel.updateModelingUrl(imgUrl);
 		}
 
+		// TODO: Fast API로 썸네일 이미지 url 요청보내기
+
 		pipelineModelRepository.save(pipelineModel);
 
 		if (imgUrl != null) {

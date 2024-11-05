@@ -23,8 +23,6 @@ public class PipelineModel extends BaseEntity {
 	@Builder.Default
 	private String name = "Pipeline Model";
 
-	private String description;
-
 	private String previewImgUrl;
 
 	private String modelingUrl;
