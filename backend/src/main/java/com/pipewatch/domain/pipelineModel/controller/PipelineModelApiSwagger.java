@@ -221,4 +221,13 @@ public interface PipelineModelApiSwagger {
 			))
 	})
 	ResponseEntity<?> modelMemoList(@AuthenticationPrincipal Long userId, @PathVariable String modelUuid);
+
+	@PostMapping("/memos/{modelUuid}")
+	@Operation(summary = "파이프라인 모델 메모 생성")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "201", description = "파이프라인 모델 메모 생성 성공", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+					examples = {@ExampleObject(value = "{\"header\":{\"httpStatusCode\": 201, \"message\": \"모델 메모 생성에 성공했습니다.\"},\n\"body\": null}")}
+			))
+	})
+	ResponseEntity<?> modelMemoCreate(@AuthenticationPrincipal Long userId, @PathVariable String modelUuid, @RequestBody PipelineModelRequest.MemoDto requestDto);
 }
