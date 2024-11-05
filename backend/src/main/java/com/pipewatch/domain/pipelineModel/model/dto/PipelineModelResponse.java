@@ -70,20 +70,22 @@ public class PipelineModelResponse {
 	public static class DetailDto {
 		private String name;
 		private String modelingUrl;
+		private String building;
+		private Integer floor;
 		private Boolean isCompleted;
 		private String updatedAt;
 		private List<PipelineDto> pipelines;
-		private List<MemoDto> memos;
 		private Creator creator;
 
-		public static DetailDto toDto(PipelineModel model, List<MemoDto> modelMemoList, List<PipelineDto> pipelines) {
+		public static DetailDto toDto(PipelineModel model, List<PipelineDto> pipelines) {
 			return DetailDto.builder()
 					.name(model.getName())
 					.modelingUrl(model.getModelingUrl())
+					.building(model.getBuildingAndFloor().getName())
+					.floor(model.getBuildingAndFloor().getFloor())
 					.isCompleted(model.getIsCompleted())
 					.updatedAt(convertToDateFormat(model.getUpdated_at()))
 					.pipelines(pipelines)
-					.memos(modelMemoList)
 					.creator(new Creator(model.getUser().getUuid(), model.getUser().getName()))
 					.build();
 		}

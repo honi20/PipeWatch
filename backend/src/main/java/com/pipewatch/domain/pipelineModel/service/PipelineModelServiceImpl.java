@@ -165,6 +165,7 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 				buildingRepository.save(buildingAndFloor);
 			}
 		}
+		System.out.println(buildingAndFloor.getId() + "***");
 
 		// 파이프라인 모델명 설정
 		pipelineModel.updateName(requestDto.getName());
@@ -208,17 +209,11 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 		PipelineModel model = pipelineModelRepository.findById(modelId)
 				.orElseThrow(() -> new BaseException(PIPELINE_MODEL_NOT_FOUND));
 
-		// Model memo
-		List<PipelineModelMemo> memos = pipelineModelMemoRepository.findByPipelineModelIdOrder(modelId);
-		List<PipelineModelResponse.MemoDto> modelMemoList = memos.stream()
-				.map(PipelineModelResponse.MemoDto::toDto)
-				.collect(Collectors.toList());
-
 		// Pipelines Uuid
 		List<Pipe> pipes = pipelineModelCustomRepository.findPipeByModel(modelId);
 		List<PipelineModelResponse.PipelineDto> pipelines = getPipelineDto(pipes);
 
-		return PipelineModelResponse.DetailDto.toDto(model, modelMemoList, pipelines);
+		return PipelineModelResponse.DetailDto.toDto(model, pipelines);
 	}
 
 	@Override
