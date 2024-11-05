@@ -101,60 +101,44 @@ public interface PipelineModelApiSwagger {
 					examples = {@ExampleObject(value = "{\"header\":{\"httpStatusCode\": 200, \"message\": \"모델 상세 조회에 성공했습니다.\"}," +
 							"\"body\": {\n" +
 							"    \"name\": \"Pipeline Model\",\n" +
-							"    \"modelingUrl\": \"https://pipewatch-bucket.s3.ap-northeast-2.amazonaws.com/pipeline/model/pipeline_8b6ab7d3-aa36-4638-898f-36b25024ac24.gltf\",\n" +
+							"    \"modelingUrl\": \"https://pipewatch-bucket.s3.ap-northeast-2.amazonaws.com/models/PipeLine_8f1928cb-47fe-4994-8869-dfe08f484cd8.gltf\",\n" +
+							"    \"building\": \"역삼 멀티캠퍼스\",\n" +
+							"    \"floor\": 4,\n" +
 							"    \"isCompleted\": true,\n" +
-							"    \"updatedAt\": \"2024-11-05 11:35:38\",\n" +
+							"    \"modelUuid\": \"8f1928cb-47fe-4994-8869-dfe08f484cd8\",\n" +
+							"    \"updatedAt\": \"2024-11-05 17:18:33\",\n" +
 							"    \"pipelines\": [\n" +
 							"      {\n" +
-							"        \"pipelineUuid\": \"PipeObj_2_d4562232-7715-45f6-bddb-588f4ca7a253\",\n" +
+							"        \"pipelineUuid\": \"PipeObj_2_8f1928cb-47fe-4994-8869-dfe08f484cd8\",\n" +
 							"        \"pipeUuids\": [\n" +
-							"          \"PipeObj_2_Segment_1_d4562232-7715-45f6-bddb-588f4ca7a253\",\n" +
-							"          \"PipeObj_2_Segment_2_d4562232-7715-45f6-bddb-588f4ca7a253\",\n" +
-							"          \"PipeObj_2_Segment_3_d4562232-7715-45f6-bddb-588f4ca7a253\"\n" +
+							"          \"PipeObj_2_Segment_1_ssafy123_8f1928cb-47fe-4994-8869-dfe08f484cd8\",\n" +
+							"          \"PipeObj_2_Connector_1_ssafy123_8f1928cb-47fe-4994-8869-dfe08f484cd8\",\n" +
+							"          \"PipeObj_2_Segment_2_ssafy123_8f1928cb-47fe-4994-8869-dfe08f484cd8\",\n" +
+							"          \"PipeObj_2_Segment_3_ssafy123_8f1928cb-47fe-4994-8869-dfe08f484cd8\"\n" +
 							"        ]\n" +
 							"      },\n" +
 							"      {\n" +
-							"        \"pipelineUuid\": \"PipeObj_1_d4562232-7715-45f6-bddb-588f4ca7a253\",\n" +
+							"        \"pipelineUuid\": \"PipeObj_1_8f1928cb-47fe-4994-8869-dfe08f484cd8\",\n" +
 							"        \"pipeUuids\": [\n" +
-							"          \"PipeObj_1_Segment_1_d4562232-7715-45f6-bddb-588f4ca7a253\",\n" +
-							"          \"PipeObj_1_Segment_2_d4562232-7715-45f6-bddb-588f4ca7a253\",\n" +
-							"          \"PipeObj_1_Segment_3_d4562232-7715-45f6-bddb-588f4ca7a253\",\n" +
-							"          \"PipeObj_1_Segment_4_d4562232-7715-45f6-bddb-588f4ca7a253\",\n" +
-							"          \"PipeObj_1_Segment_5_d4562232-7715-45f6-bddb-588f4ca7a253\",\n" +
-							"          \"PipeObj_1_Segment_6_d4562232-7715-45f6-bddb-588f4ca7a253\"\n" +
+							"          \"PipeObj_1_Segment_1_ssafy123_8f1928cb-47fe-4994-8869-dfe08f484cd8\",\n" +
+							"          \"PipeObj_1_Segment_2_ssafy123_8f1928cb-47fe-4994-8869-dfe08f484cd8\",\n" +
+							"          \"PipeObj_1_Segment_3_ssafy123_8f1928cb-47fe-4994-8869-dfe08f484cd8\",\n" +
+							"          \"PipeObj_1_Segment_4_ssafy123_8f1928cb-47fe-4994-8869-dfe08f484cd8\",\n" +
+							"          \"PipeObj_1_Segment_5_ssafy123_8f1928cb-47fe-4994-8869-dfe08f484cd8\",\n" +
+							"          \"PipeObj_1_Segment_6_ssafy123_8f1928cb-47fe-4994-8869-dfe08f484cd8\"\n" +
 							"        ]\n" +
 							"      },\n" +
 							"      {\n" +
-							"        \"pipelineUuid\": \"PipeObj_3_d4562232-7715-45f6-bddb-588f4ca7a253\",\n" +
+							"        \"pipelineUuid\": \"PipeObj_3_8f1928cb-47fe-4994-8869-dfe08f484cd8\",\n" +
 							"        \"pipeUuids\": [\n" +
-							"          \"PipeObj_3_Segment_1_d4562232-7715-45f6-bddb-588f4ca7a253\",\n" +
-							"          \"PipeObj_3_Segment_2_d4562232-7715-45f6-bddb-588f4ca7a253\"\n" +
+							"          \"PipeObj_3_Segment_1_ssafy123_8f1928cb-47fe-4994-8869-dfe08f484cd8\",\n" +
+							"          \"PipeObj_3_Segment_2_ssafy123_8f1928cb-47fe-4994-8869-dfe08f484cd8\"\n" +
 							"        ]\n" +
-							"      }\n" +
-							"    ],\n" +
-							"    \"memos\": [\n" +
-							"      {\n" +
-							"        \"memoId\": 2,\n" +
-							"        \"memo\": \"hihihi\",\n" +
-							"        \"writer\": {\n" +
-							"          \"userUuid\": \"8e7dfbe3-aeca-4392-8d90-c1d3ae4fd35f\",\n" +
-							"          \"userName\": \"파오리\"\n" +
-							"        },\n" +
-							"        \"createdAt\": \"2024-11-03 14:52:57\"\n" +
-							"      },\n" +
-							"      {\n" +
-							"        \"memoId\": 1,\n" +
-							"        \"memo\": \"hi\",\n" +
-							"        \"writer\": {\n" +
-							"          \"userUuid\": \"8e7dfbe3-aeca-4392-8d90-c1d3ae4fd35f\",\n" +
-							"          \"userName\": \"파오리\"\n" +
-							"        },\n" +
-							"        \"createdAt\": \"2024-11-05 14:52:55\"\n" +
 							"      }\n" +
 							"    ],\n" +
 							"    \"creator\": {\n" +
-							"      \"userUuid\": \"8e7dfbe3-aeca-4392-8d90-c1d3ae4fd35f\",\n" +
-							"      \"userName\": \"파오리\"\n" +
+							"      \"userUuid\": \"ssafy12\",\n" +
+							"      \"userName\": \"김싸피\"\n" +
 							"    }\n" +
 							"  }}")}
 			))
@@ -185,4 +169,56 @@ public interface PipelineModelApiSwagger {
 	ResponseEntity<?> modelDelete(@AuthenticationPrincipal Long userId,
 								  @Schema(description = "Model ID", example = "1")
 								  @PathVariable Long modelId);
+
+
+	@GetMapping("/memos/{modelUuid}")
+	@Operation(summary = "파이프라인 모델 메모 리스트")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "파이프라인 모델 메모 리스트 조회 성공", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+					examples = {@ExampleObject(value = "{\"header\":{\"httpStatusCode\": 200, \"message\": \"모델 메모 리스트 조회에 성공했습니다.\"}," +
+							"\"body\": {\n" +
+							"    \"name\": \"Pipeline Model\",\n" +
+							"    \"modelingUrl\": \"https://pipewatch-bucket.s3.ap-northeast-2.amazonaws.com/models/PipeLine_8f1928cb-47fe-4994-8869-dfe08f484cd8.gltf\",\n" +
+							"    \"building\": \"역삼 멀티캠퍼스\",\n" +
+							"    \"floor\": 4,\n" +
+							"    \"isCompleted\": true,\n" +
+							"    \"modelUuid\": \"8f1928cb-47fe-4994-8869-dfe08f484cd8\",\n" +
+							"    \"updatedAt\": \"2024-11-05 17:18:33\",\n" +
+							"    \"pipelines\": [\n" +
+							"      {\n" +
+							"        \"pipelineUuid\": \"PipeObj_2_8f1928cb-47fe-4994-8869-dfe08f484cd8\",\n" +
+							"        \"pipeUuids\": [\n" +
+							"          \"PipeObj_2_Segment_1_ssafy123_8f1928cb-47fe-4994-8869-dfe08f484cd8\",\n" +
+							"          \"PipeObj_2_Connector_1_ssafy123_8f1928cb-47fe-4994-8869-dfe08f484cd8\",\n" +
+							"          \"PipeObj_2_Segment_2_ssafy123_8f1928cb-47fe-4994-8869-dfe08f484cd8\",\n" +
+							"          \"PipeObj_2_Segment_3_ssafy123_8f1928cb-47fe-4994-8869-dfe08f484cd8\"\n" +
+							"        ]\n" +
+							"      },\n" +
+							"      {\n" +
+							"        \"pipelineUuid\": \"PipeObj_1_8f1928cb-47fe-4994-8869-dfe08f484cd8\",\n" +
+							"        \"pipeUuids\": [\n" +
+							"          \"PipeObj_1_Segment_1_ssafy123_8f1928cb-47fe-4994-8869-dfe08f484cd8\",\n" +
+							"          \"PipeObj_1_Segment_2_ssafy123_8f1928cb-47fe-4994-8869-dfe08f484cd8\",\n" +
+							"          \"PipeObj_1_Segment_3_ssafy123_8f1928cb-47fe-4994-8869-dfe08f484cd8\",\n" +
+							"          \"PipeObj_1_Segment_4_ssafy123_8f1928cb-47fe-4994-8869-dfe08f484cd8\",\n" +
+							"          \"PipeObj_1_Segment_5_ssafy123_8f1928cb-47fe-4994-8869-dfe08f484cd8\",\n" +
+							"          \"PipeObj_1_Segment_6_ssafy123_8f1928cb-47fe-4994-8869-dfe08f484cd8\"\n" +
+							"        ]\n" +
+							"      },\n" +
+							"      {\n" +
+							"        \"pipelineUuid\": \"PipeObj_3_8f1928cb-47fe-4994-8869-dfe08f484cd8\",\n" +
+							"        \"pipeUuids\": [\n" +
+							"          \"PipeObj_3_Segment_1_ssafy123_8f1928cb-47fe-4994-8869-dfe08f484cd8\",\n" +
+							"          \"PipeObj_3_Segment_2_ssafy123_8f1928cb-47fe-4994-8869-dfe08f484cd8\"\n" +
+							"        ]\n" +
+							"      }\n" +
+							"    ],\n" +
+							"    \"creator\": {\n" +
+							"      \"userUuid\": \"ssafy12\",\n" +
+							"      \"userName\": \"김싸피\"\n" +
+							"    }\n" +
+							"  }}")}
+			))
+	})
+	ResponseEntity<?> modelMemoList(@AuthenticationPrincipal Long userId, @PathVariable String modelUuid);
 }

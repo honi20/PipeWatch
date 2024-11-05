@@ -256,6 +256,31 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 		pipelineModelRepository.delete(pipelineModel);
 	}
 
+	@Override
+	public PipelineModelResponse.MemoListDto getModelMemoList(Long userId, String modelUuid) {
+		User user = userRepository.findById(userId)
+				.orElseThrow(() -> new BaseException(USER_NOT_FOUND));
+
+		if (user.getRole() == Role.USER) {
+			throw new BaseException(FORBIDDEN_USER_ROLE);
+		}
+
+		PipelineModel pipelineModel = pipelineModelRepository.findByUuid(modelUuid);
+
+		if (pipelineModel == null) {
+			throw new BaseException(PIPELINE_MODEL_NOT_FOUND);
+		}
+
+		List<PipelineModelMemo> memos = pipelineModelMemoRepository.findByPipelineModelIdOrder(pipelineModel.getId());
+		List<PipelineModelResponse.MemoDto> modelMemoList = memos.stream()
+				.map(PipelineModelResponse.MemoDto::toDto)
+				.toList();
+
+		return PipelineModelResponse.MemoListDto.builder()
+				.memoList(modelMemoList)
+				.build();
+	}
+
 	private List<PipelineModelResponse.PipelineDto> getPipelineDto(List<Pipe> pipes) {
 		// pipeline의 uuid를 기준으로 group화한 후 각 PipelineDto로 변환
 		Map<String, List<String>> groupedByPipelineUuid = pipes.stream()

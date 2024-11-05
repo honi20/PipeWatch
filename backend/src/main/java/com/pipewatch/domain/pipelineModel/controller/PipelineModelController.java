@@ -71,4 +71,11 @@ public class PipelineModelController implements PipelineModelApiSwagger {
 
 		return new ResponseEntity<>(ResponseDto.success(MODEL_DELETED, null), HttpStatus.NO_CONTENT);
 	}
+
+	@GetMapping("/memos/{modelUuid}")
+	public ResponseEntity<?> modelMemoList(@AuthenticationPrincipal Long userId, @PathVariable String modelUuid) {
+		PipelineModelResponse.MemoListDto responseDto = pipelineModelService.getModelMemoList(userId, modelUuid);
+
+		return new ResponseEntity<>(ResponseDto.success(MODEL_MEMO_LIST_OK, responseDto), HttpStatus.OK);
+	}
 }

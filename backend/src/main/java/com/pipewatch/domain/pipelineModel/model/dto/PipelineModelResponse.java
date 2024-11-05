@@ -101,6 +101,15 @@ public class PipelineModelResponse {
 	}
 
 	@Getter
+	@Setter
+	@Builder
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class MemoListDto {
+		private List<MemoDto> memoList;
+	}
+
+	@Getter
 	@Builder
 	@AllArgsConstructor
 	public static class MemoDto {
