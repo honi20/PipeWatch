@@ -54,6 +54,15 @@ public class PipelineModelResponse {
 	@Builder
 	@NoArgsConstructor
 	@AllArgsConstructor
+	public static class CreateModelingDto {
+		private Long modelId;
+	}
+
+	@Getter
+	@Setter
+	@Builder
+	@NoArgsConstructor
+	@AllArgsConstructor
 	public static class DetailDto {
 		private String name;
 		private String description;

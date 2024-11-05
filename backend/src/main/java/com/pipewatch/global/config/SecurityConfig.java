@@ -40,7 +40,7 @@ public class SecurityConfig {
 								"/api/auth/enterprise", "/api/auth", "/api/auth/signin",
 								"/api/auth/send-email-code", "/api/auth/verify-email-code",
 								"/api/auth/send-pwd-reset", "/api/auth/reset-pwd",
-								"/api/enterprises/list",
+								"/api/enterprises/list", "/api/models/modeling",
 								"/swagger-ui/**", "/v3/api-docs/**").permitAll()
 						.anyRequest().authenticated()
 				)

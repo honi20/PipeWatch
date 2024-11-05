@@ -22,8 +22,6 @@ public class Pipeline extends BaseEntity {
 
 	private String uuid;
 
-	private String pipelineUrl;
-
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "pipeline_model_id")
 	private PipelineModel pipelineModel;
