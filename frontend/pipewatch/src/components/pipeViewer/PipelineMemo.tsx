@@ -40,8 +40,8 @@ export const PipelineMemo: React.FC<PipelineMemoProps> = ({ pipe }) => {
     setMemoList((prev) => [newMemoObject, ...prev]);
   };
 
-  // format Date
-  const formatDate = (date: Date) => {
+  // format Memo Date
+  const formatMemoDate = (date: Date) => {
     const year = String(date.getFullYear()).slice(-2); // 연도 마지막 두 자리
     const month = String(date.getMonth() + 1).padStart(2, "0"); // 월
     const day = String(date.getDate()).padStart(2, "0"); // 일
@@ -51,6 +51,13 @@ export const PipelineMemo: React.FC<PipelineMemoProps> = ({ pipe }) => {
     return `${year}/${month}/${day} ${hours}:${minutes}`; // 포맷된 문자열 반환
   };
 
+  // format Modified Date
+  const formatModifiedDate = (date: Date) => {
+    const year = String(date.getFullYear());
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}.${month}.${day}`;
+  };
   return (
     <div className="w-[400px] h-[600px] flex flex-col bg-block rounded-[30px] p-[50px]  text-white justify-between items-center gap-5">
       <div className="flex flex-col w-full h-full gap-10">
@@ -67,7 +74,7 @@ export const PipelineMemo: React.FC<PipelineMemoProps> = ({ pipe }) => {
             onChange={(e) => setMemo(e.target.value)}
             onKeyDown={handleKeyDown}
             className={clsx(
-              "mt-3 block w-full rounded-lg border-none bg-black/40 py-1.5 px-3 text-sm/6 text-white",
+              "mt-3 block w-full rounded-lg border-none bg-black/60 py-1.5 px-3 text-sm/6 text-white",
               "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25"
             )}
           />
@@ -83,7 +90,7 @@ export const PipelineMemo: React.FC<PipelineMemoProps> = ({ pipe }) => {
                   <div className="flex gap-2 text-[15px]">
                     <p>{item.author}</p>
                     <p className="text-gray-500">
-                      {formatDate(item.createdTime)}
+                      {formatMemoDate(item.createdTime)}
                     </p>
                   </div>
                 </div>
@@ -97,6 +104,10 @@ export const PipelineMemo: React.FC<PipelineMemoProps> = ({ pipe }) => {
         </div>
       </div>
       {/* modified date */}
+      <div className="flex items-center justify-between w-full">
+        <div className="text-[20px]">수정일</div>
+        <div className="px-16 py-1 rounded-2xl bg-black/60">{formatModifiedDate(pipe.modifiedDate)}</div>
+      </div>
     </div>
   );
 };

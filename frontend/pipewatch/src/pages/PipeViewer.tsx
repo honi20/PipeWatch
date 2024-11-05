@@ -4,7 +4,6 @@ import { ModelListView } from "@src/components/pipeViewer/ModelListView";
 import NoAccessImage from "@assets/images/status/no_access.png";
 import NoPipeModelImage from "@assets/images/status/no_pipe_model.png";
 import { ModelType } from "@src/components/pipeViewer/PipeType";
-import { time } from "console";
 
 export const PipeViewer = () => {
   // const { t } = useTranslation();
@@ -48,6 +47,7 @@ export const PipeViewer = () => {
           createdTime: new Date(),
         },
       ],
+      modifiedDate: new Date(),
     },
     {
       id: 2,
@@ -57,6 +57,7 @@ export const PipeViewer = () => {
       imagePath: "@assets/images/sample/mallang.png",
       pipelineName: "pipeline",
       memolist: [],
+      modifiedDate: new Date(),
     },
     {
       id: 3,
@@ -66,6 +67,7 @@ export const PipeViewer = () => {
       imagePath: "src/assets/images/sample/sample_pipe_model.png",
       pipelineName: "pipeline",
       memolist: [],
+      modifiedDate: new Date(),
     },
     {
       id: 4,
@@ -75,6 +77,7 @@ export const PipeViewer = () => {
       imagePath: "src/assets/images/sample/sample_pipe_model.png",
       pipelineName: "pipeline",
       memolist: [],
+      modifiedDate: new Date(),
     },
     {
       id: 5,
@@ -84,6 +87,7 @@ export const PipeViewer = () => {
       imagePath: "src/assets/images/sample/sample_pipe_model.png",
       pipelineName: "pipeline",
       memolist: [],
+      modifiedDate: new Date(),
     },
     {
       id: 6,
@@ -93,6 +97,7 @@ export const PipeViewer = () => {
       imagePath: "src/assets/images/sample/sample_pipe_model.png",
       pipelineName: "pipeline",
       memolist: [],
+      modifiedDate: new Date(),
     },
     {
       id: 7,
@@ -102,6 +107,7 @@ export const PipeViewer = () => {
       imagePath: "src/assets/images/sample/mallang.png",
       pipelineName: "말랑파이프",
       memolist: [],
+      modifiedDate: new Date(),
     },
     {
       id: 8,
@@ -136,6 +142,7 @@ export const PipeViewer = () => {
           createdTime: new Date(),
         },
       ],
+      modifiedDate: new Date(),
     },
     {
       id: 9,
@@ -170,6 +177,7 @@ export const PipeViewer = () => {
           createdTime: new Date(),
         },
       ],
+      modifiedDate: new Date(),
     },
     {
       id: 10,
@@ -179,6 +187,7 @@ export const PipeViewer = () => {
       imagePath: "src/assets/images/sample/posil.png",
       pipelineName: "포실파이프",
       memolist: [],
+      modifiedDate: new Date(),
     },
   ];
   // 모델 없을 경우

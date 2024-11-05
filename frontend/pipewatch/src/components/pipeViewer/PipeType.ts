@@ -13,6 +13,7 @@ export interface ModelType {
   imagePath: string;
   pipelineName: string;
   memolist: MemoType[];
+  modifiedDate: Date;
 }
 
 export interface AreaType {
