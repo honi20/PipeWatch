@@ -1,11 +1,23 @@
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { Button } from "@headlessui/react";
+import { motion } from "framer-motion";
 
 import HomePipe from "@assets/images/home_pipe.png";
 
 export const Home = () => {
   const { t } = useTranslation();
+
+  const animation_variants_image1 = {
+    first: {
+      opacity: 0,
+      y: 50,
+    },
+    whileInView: {
+      opacity: 1,
+      y: 0,
+    },
+  };
 
   return (
     <div className="flex flex-col items-center justify-center">
@@ -23,6 +35,22 @@ export const Home = () => {
           </Button>
         </Link>
       </div>
+
+      <motion.div
+        variants={animation_variants_image1}
+        initial="first"
+        whileInView="whileInView"
+        viewport={{ once: false }}
+        transition={{
+          ease: "easeIn",
+          duration: 0.7,
+        }}
+      >
+        <img src={HomePipe} width={"1000px"} />
+      </motion.div>
+
+      <img src={HomePipe} width={"1000px"} />
+      <img src={HomePipe} width={"1000px"} />
       <img src={HomePipe} width={"1000px"} />
     </div>
   );
