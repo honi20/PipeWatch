@@ -1,15 +1,27 @@
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
+
 import { Button } from "@headlessui/react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 import HomePipe from "@assets/images/home_pipe.png";
 import Upload1 from "@assets/images/home/upload_1.png";
 import Upload2 from "@assets/images/home/upload_2.png";
 import Upload3 from "@assets/images/home/upload_3.png";
+import Manage1 from "@assets/images/home/manage_1.png";
+import Manage2 from "@assets/images/home/manage_2.png";
+import Manage3 from "@assets/images/home/manage_3.png";
+
+const tabs = [
+  { icon: "🍅", label: "전체 파이프 모델", url: Manage1 },
+  { icon: "🥬", label: "개별 파이프 선택", url: Manage2 },
+  { icon: "🧀", label: "메모 작성", url: Manage3 },
+];
 
 export const Home = () => {
   const { t } = useTranslation();
+  const [selectedTab, setSelectedTab] = useState(tabs[0]);
 
   const animation_variants_image1 = {
     first: {
@@ -100,7 +112,7 @@ export const Home = () => {
         </div>
       </div>
 
-      <div className="flex my-[100px]">
+      <div className="flex flex-col my-[100px]">
         <div className="text-left">
           <div className="font-bold text-[50px]">건물별 파이프 통합 관리</div>
           <div className="text-[24px]">
@@ -110,7 +122,39 @@ export const Home = () => {
             파이프의 속성을 실시간으로 수정하고, 메모를 남길 수도 있습니다.
           </div>
         </div>
-        <img src={HomePipe} width={"500px"} />
+        <div className="flex flex-col items-center">
+          <nav>
+            <ul className="flex">
+              {tabs.map((item) => (
+                <li
+                  key={item.label}
+                  className={item === selectedTab ? "selected" : ""}
+                  onClick={() => setSelectedTab(item)}
+                >
+                  {`${item.icon} ${item.label}`}
+                  {/* {item === selectedTab ? <motion.div /> : null} */}
+                </li>
+              ))}
+            </ul>
+          </nav>
+          <main>
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={selectedTab ? selectedTab.label : "empty"}
+                initial={{ y: 10, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                exit={{ y: -10, opacity: 0 }}
+                transition={{ duration: 0.2 }}
+              >
+                {selectedTab ? (
+                  <img src={selectedTab.url} width={"300px"} />
+                ) : (
+                  "😋"
+                )}
+              </motion.div>
+            </AnimatePresence>
+          </main>
+        </div>
       </div>
     </div>
   );
