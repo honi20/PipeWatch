@@ -6,6 +6,7 @@ import "./viewer.css";
 import { FloorListbox } from "@src/components/pipeViewer/FloorListbox";
 import GLTFViewer from "@src/components/pipeViewer/GLTFViewer";
 import { PipelineMemo } from "@src/components/pipeViewer/PipelineMemo";
+import { PipeProperty } from "@src/components/pipeViewer/PipeProperty";
 
 interface ModelListViewProps {
   modelList: ModelType[];
@@ -16,7 +17,8 @@ export const ModelListView: React.FC<ModelListViewProps> = ({ modelList }) => {
   const [selectedArea, setSelectedArea] = useState<AreaType | null>(null);
   const [selectedFloor, setSelectedFloor] = useState<number | null>(null);
   const [floorList, setFloorList] = useState<number[]>([]);
-
+  // const [selectPipelineView, setSelectPipelineView] = useState<boolean>(true);
+  const selectPipelineView = true;
   // api 받기
   const floorDict: { [key: string]: number[] } = {
     "역삼 멀티캠퍼스": [-1, 14],
@@ -43,6 +45,7 @@ export const ModelListView: React.FC<ModelListViewProps> = ({ modelList }) => {
 
   return (
     <div className="w-full h-full">
+      {/* 장소 및 층 선택 */}
       <div className="flex gap-5 mx-6">
         <AreaListbox onAreaChange={handleAreaChange} />
         <FloorListbox
@@ -52,6 +55,7 @@ export const ModelListView: React.FC<ModelListViewProps> = ({ modelList }) => {
         />
       </div>
 
+      {/* pipe list view */}
       <div className="flex justify-center w-full py-[20px] bg-block overflow-x-auto scrollable">
         <div className="flex gap-4 flex-nowrap ">
           {filteredModelList.map((model) => (
@@ -73,17 +77,27 @@ export const ModelListView: React.FC<ModelListViewProps> = ({ modelList }) => {
           ))}
         </div>
       </div>
+
+      {/* 모델 렌더링 뷰 */}
       <div className="flex items-center justify-center gap-[20px] w-full h-full bg-gray-400">
         {selectModel ? (
           // 모델id에 따른 gltf url 넣기
           <div className="relative w-full h-full border border-warn">
             <div>{selectModel.id}</div>
-            <GLTFViewer gltfUrl="/assets/models/scene.gltf" />
+            <GLTFViewer gltfUrl="/assets/models/test.gltf" />
             <div className="absolute top-5 right-10">
-              <PipelineMemo pipe={selectModel} />
+              {
+                //pipieline 선택 or pipe 선택
+                selectPipelineView ? (
+                  <PipelineMemo pipe={selectModel} />
+                ) : (
+                  <PipeProperty pipe={selectModel} />
+                )
+              }
             </div>
           </div>
         ) : (
+          // 선택된 모델이 없는 경우
           <div className="flex items-center gap-2 ">
             <img src={SelectPipeModelIcon} width={"60px"} />
             <p className="text-[30px] text-gray-800 font-bold">

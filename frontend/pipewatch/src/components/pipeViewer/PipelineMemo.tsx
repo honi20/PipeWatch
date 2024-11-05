@@ -14,7 +14,6 @@ export const PipelineMemo: React.FC<PipelineMemoProps> = ({ pipe }) => {
 
   useEffect(() => {
     if (pipe) {
-      console.log("memo fetch", pipe.memolist);
       setMemoList(pipe.memolist);
     }
   }, [pipe]);
@@ -66,6 +65,7 @@ export const PipelineMemo: React.FC<PipelineMemoProps> = ({ pipe }) => {
           <h2 className="text-[30px] font-bold">{pipe.pipelineName}</h2>
           <p className="text-[20px]">{pipe.area}</p>
         </div>
+        
         {/* 메모 input */}
         <div className="flex flex-col w-full">
           <h3 className="text-[20px] font-bold self-start px-1">메모</h3>
@@ -78,6 +78,7 @@ export const PipelineMemo: React.FC<PipelineMemoProps> = ({ pipe }) => {
               "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25"
             )}
           />
+          
           {/* 메모 조회창 */}
           <ul className="max-h-[200px] mt-4 space-y-4 overflow-auto">
             {memoList.map((item) => (
@@ -103,10 +104,13 @@ export const PipelineMemo: React.FC<PipelineMemoProps> = ({ pipe }) => {
           </ul>
         </div>
       </div>
+      
       {/* modified date */}
       <div className="flex items-center justify-between w-full">
         <div className="text-[20px]">수정일</div>
-        <div className="px-16 py-1 rounded-2xl bg-black/60">{formatModifiedDate(pipe.modifiedDate)}</div>
+        <div className="px-16 py-1 rounded-2xl bg-black/60">
+          {formatModifiedDate(pipe.modifiedDate)}
+        </div>
       </div>
     </div>
   );
