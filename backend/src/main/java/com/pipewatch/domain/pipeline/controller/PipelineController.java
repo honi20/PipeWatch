@@ -15,7 +15,7 @@ import static com.pipewatch.global.statusCode.SuccessCode.*;
 @RestController
 @RequestMapping("${api_prefix}/pipelines")
 @RequiredArgsConstructor
-public class PipelineController {
+public class PipelineController implements PipelineApiSwagger {
 	@GetMapping("/{pipelineUuid}")
 	public ResponseEntity<?> pipelineDetail(@PathVariable String pipelineUuid) {
 		PipelineResponse.PropertyDto property = new PipelineResponse.PropertyDto("Aluminum", 150.0, 10.3, "Water", 1.0);

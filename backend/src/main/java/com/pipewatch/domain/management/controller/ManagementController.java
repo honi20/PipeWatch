@@ -17,7 +17,7 @@ import static com.pipewatch.global.statusCode.SuccessCode.*;
 @RestController
 @RequestMapping("${api_prefix}/management")
 @RequiredArgsConstructor
-public class ManagementController {
+public class ManagementController implements ManagementApiSwagger {
 	private final ManagementService managementService;
 
 	@GetMapping("/waiting-list")

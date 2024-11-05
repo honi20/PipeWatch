@@ -17,7 +17,7 @@ import static com.pipewatch.global.statusCode.SuccessCode.*;
 @RestController
 @RequestMapping("${api_prefix}/models")
 @RequiredArgsConstructor
-public class PipelineModelController {
+public class PipelineModelController implements PipelineModelApiSwagger {
 	@GetMapping
 	public ResponseEntity<?> modelList(@RequestParam(required = false) String building, @RequestParam(required = false) Integer floor) {
 		PipelineModelResponse.PipelineModelDto model1 = new PipelineModelResponse.PipelineModelDto(1L, "model1", "previewUrl1", LocalDateTime.now());
