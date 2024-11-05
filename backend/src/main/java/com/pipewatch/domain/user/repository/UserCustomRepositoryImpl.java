@@ -46,6 +46,8 @@ public class UserCustomRepositoryImpl implements UserCustomRepository {
 		return Expressions.cases()
 				.when(user.role.eq(Role.ENTERPRISE))
 				.then(user.name)
-				.otherwise(enterprise.name);
+				.when(user.role.eq(Role.EMPLOYEE))
+				.then(enterprise.name)
+				.otherwise((String) null);
 	}
 }

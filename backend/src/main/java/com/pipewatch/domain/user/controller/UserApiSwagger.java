@@ -41,6 +41,15 @@ public interface UserApiSwagger {
 											"    \"state\": \"ACTIVE\",\n" +
 											"    \"enterpriseName\": \"paori\",\n" +
 											"    \"employee\": null\n" +
+											"  }}"),
+									@ExampleObject(name = "일반유저 마이페이지 조회", value = "{\"header\":{\"httpStatusCode\": 200, \"message\": \"개인정보 조회에 성공했습니다.\"}," +
+											"\"body\": {\n" +
+											"    \"name\": \"파오리\",\n" +
+											"    \"email\": \"1594cyh@gmail.com\",\n" +
+											"    \"role\": \"USER\",\n" +
+											"    \"state\": \"PENDING\",\n" +
+											"    \"enterpriseName\": null,\n" +
+											"    \"employee\": null\n" +
 											"  }}")
 							})
 			})
