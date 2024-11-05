@@ -1,9 +1,12 @@
 package com.pipewatch.domain.pipelineModel.model.dto;
 
+import com.pipewatch.domain.pipelineModel.model.entity.PipelineModel;
 import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
+import static com.pipewatch.global.format.DateFormatter.convertToDateFormat;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -14,30 +17,30 @@ public class PipelineModelResponse {
 	@NoArgsConstructor
 	@AllArgsConstructor
 	public static class ListDto {
-		private List<BuildingListDto> buildings;
-	}
-
-	@Getter
-	@AllArgsConstructor
-	public static class BuildingListDto {
-		private String building;
-		private List<FloorListDto> floors;
-	}
-
-	@Getter
-	@AllArgsConstructor
-	public static class FloorListDto {
-		private Integer floor;
 		private List<PipelineModelDto> models;
 	}
 
 	@Getter
+	@Builder
 	@AllArgsConstructor
 	public static class PipelineModelDto {
 		private Long modelId;
 		private String name;
 		private String previewUrl;
-		private LocalDateTime updatedAt;
+		private String building;
+		private Integer floor;
+		private String updatedAt;
+
+		public static PipelineModelDto toDto(PipelineModel model) {
+			return PipelineModelDto.builder()
+					.modelId(model.getId())
+					.name(model.getName())
+					.previewUrl(model.getPreviewImgUrl())
+					.building(model.getBuildingAndFloor().getName())
+					.floor(model.getBuildingAndFloor().getFloor())
+					.updatedAt(convertToDateFormat(model.getUpdated_at()))
+					.build();
+		}
 	}
 
 	@Getter

@@ -47,17 +47,8 @@ public class PipelineModelController implements PipelineModelApiSwagger {
 	}
 
 	@GetMapping
-	public ResponseEntity<?> modelList(@RequestParam(required = false) String building, @RequestParam(required = false) Integer floor) {
-		PipelineModelResponse.PipelineModelDto model1 = new PipelineModelResponse.PipelineModelDto(1L, "model1", "previewUrl1", LocalDateTime.now());
-		PipelineModelResponse.PipelineModelDto model2 = new PipelineModelResponse.PipelineModelDto(2L, "model2", "previewUrl2", LocalDateTime.now());
-		PipelineModelResponse.PipelineModelDto model3 = new PipelineModelResponse.PipelineModelDto(3L, "model3", "previewUrl3", LocalDateTime.now());
-		PipelineModelResponse.FloorListDto floorList1 = new PipelineModelResponse.FloorListDto(1, List.of(model1, model2));
-		PipelineModelResponse.FloorListDto floorList2 = new PipelineModelResponse.FloorListDto(2, List.of(model3));
-		PipelineModelResponse.BuildingListDto buildingList = new PipelineModelResponse.BuildingListDto("역삼 멀티캠퍼스", List.of(floorList1, floorList2));
-
-		PipelineModelResponse.ListDto responseDto = PipelineModelResponse.ListDto.builder()
-				.buildings(List.of(buildingList))
-				.build();
+	public ResponseEntity<?> modelList(@AuthenticationPrincipal Long userId, @RequestParam(required = false) String building, @RequestParam(required = false) Integer floor) {
+		PipelineModelResponse.ListDto responseDto = pipelineModelService.getModelList(userId, building, floor);
 
 		return new ResponseEntity<>(ResponseDto.success(MODEL_LIST_OK, responseDto), HttpStatus.OK);
 	}

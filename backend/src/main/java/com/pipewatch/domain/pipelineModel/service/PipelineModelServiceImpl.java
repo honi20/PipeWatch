@@ -11,6 +11,7 @@ import com.pipewatch.domain.pipeline.repository.PipelineRepository;
 import com.pipewatch.domain.pipelineModel.model.dto.PipelineModelRequest;
 import com.pipewatch.domain.pipelineModel.model.dto.PipelineModelResponse;
 import com.pipewatch.domain.pipelineModel.model.entity.PipelineModel;
+import com.pipewatch.domain.pipelineModel.repository.PipelineModelCustomRepository;
 import com.pipewatch.domain.pipelineModel.repository.PipelineModelRepository;
 import com.pipewatch.domain.user.model.entity.Role;
 import com.pipewatch.domain.user.model.entity.User;
@@ -34,7 +35,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.pipewatch.global.statusCode.ErrorCode.*;
 
@@ -49,6 +52,7 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 	private final BuildingRepository buildingRepository;
 	private final EnterpriseRepository enterpriseRepository;
 	private final EmployeeRepository employeeRepository;
+	private final PipelineModelCustomRepository pipelineModelCustomRepository;
 
 	@Value("${S3_URL}")
 	private String S3_URL;
@@ -64,10 +68,13 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 			throw new BaseException(FORBIDDEN_USER_ROLE);
 		}
 
+		Enterprise enterprise = getEnterprise(user);
+
 		String UUID = java.util.UUID.randomUUID().toString();
 
 		PipelineModel pipelineModel = PipelineModel.builder()
 				.user(user)
+				.enterprise(enterprise)
 				.isCompleted(true)
 				.uuid(UUID)
 				.build();
@@ -104,10 +111,13 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 			throw new BaseException(FORBIDDEN_USER_ROLE);
 		}
 
+		Enterprise enterprise = getEnterprise(user);
+
 		String UUID = java.util.UUID.randomUUID().toString();
 
 		PipelineModel pipelineModel = PipelineModel.builder()
 				.user(user)
+				.enterprise(enterprise)
 				.modelingUrl(requestDto.getModelUrl())
 				.previewImgUrl(requestDto.getPreviewImgUrl())
 				.isCompleted(true)
@@ -140,12 +150,7 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 		// 건물명이 없는 경우, 건물 테이블에 추가
 		BuildingAndFloor buildingAndFloor = buildingRepository.findByNameAndFloor(requestDto.getBuilding(), requestDto.getFloor());
 		if (buildingAndFloor == null) {
-			Enterprise enterprise = null;
-			if (user.getRole() == Role.ENTERPRISE) {
-				enterprise = enterpriseRepository.findByUserId(user.getId());
-			} else if (user.getRole() == Role.EMPLOYEE || user.getRole() == Role.ADMIN) {
-				enterprise = employeeRepository.findByUserId(user.getId()).getEnterprise();
-			}
+			Enterprise enterprise = getEnterprise(user);
 
 			if (enterprise != null) {
 				buildingAndFloor = BuildingAndFloor.builder()
@@ -162,6 +167,29 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 		pipelineModel.updateName(requestDto.getName());
 		pipelineModel.updateBuilding(buildingAndFloor);
 		pipelineModelRepository.save(pipelineModel);
+	}
+
+	@Override
+	public PipelineModelResponse.ListDto getModelList(Long userId, String building, Integer floor) {
+		User user = userRepository.findById(userId)
+				.orElseThrow(() -> new BaseException(USER_NOT_FOUND));
+
+		if (user.getRole() == Role.USER) {
+			throw new BaseException(FORBIDDEN_USER_ROLE);
+		}
+
+		// 기업 정보 가져오기
+		Enterprise enterprise = getEnterprise(user);
+
+		List<PipelineModel> modelList = pipelineModelCustomRepository.findAllByBuildingAndFloor(enterprise, building, floor);
+
+		List<PipelineModelResponse.PipelineModelDto> modelDtos = modelList.stream()
+				.map(PipelineModelResponse.PipelineModelDto::toDto)
+				.collect(Collectors.toList());
+
+		return PipelineModelResponse.ListDto.builder()
+				.models(modelDtos)
+				.build();
 	}
 
 	private void savePipelineObject(String modelUrl, String UUID, PipelineModel pipelineModel) throws IOException, ParseException {
@@ -201,6 +229,16 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 				pipeRepository.save(pipe);
 			}
 		}
+	}
+
+	private Enterprise getEnterprise(User user) {
+		if (user.getRole() == Role.ENTERPRISE) {
+			return enterpriseRepository.findByUserId(user.getId());
+		} else if (user.getRole() == Role.EMPLOYEE || user.getRole() == Role.ADMIN) {
+			return employeeRepository.findByUserId(user.getId()).getEnterprise();
+		}
+
+		return null;
 	}
 
 	private JSONObject getJsonObject(String modelUrl) throws IOException, ParseException {

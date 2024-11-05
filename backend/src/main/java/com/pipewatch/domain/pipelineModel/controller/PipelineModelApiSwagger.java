@@ -48,6 +48,52 @@ public interface PipelineModelApiSwagger {
 								@Schema(description = "Model ID", example = "1")
 								@PathVariable Long modelId, @RequestBody PipelineModelRequest.InitDto requestDto) throws IOException, ParseException;
 
+	@GetMapping
+	@Operation(summary = "파이프라인 모델 리스트 조회")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "파이프라인 모델 리스트 조회 성공", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+					examples = {@ExampleObject(value = "{\"header\":{\"httpStatusCode\": 200, \"message\": \"모델 리스트 조회에 성공했습니다.\"}," +
+							"\"body\": {\n" +
+							"    \"buildings\": [\n" +
+							"      {\n" +
+							"        \"building\": \"역삼 멀티캠퍼스\",\n" +
+							"        \"floors\": [\n" +
+							"          {\n" +
+							"            \"floor\": 1,\n" +
+							"            \"models\": [\n" +
+							"              {\n" +
+							"                \"modelId\": 1,\n" +
+							"                \"name\": \"model1\",\n" +
+							"                \"previewUrl\": \"previewUrl1\",\n" +
+							"                \"updatedAt\": \"2024-11-03 00:14:34\"\n" +
+							"              },\n" +
+							"              {\n" +
+							"                \"modelId\": 2,\n" +
+							"                \"name\": \"model2\",\n" +
+							"                \"previewUrl\": \"previewUrl2\",\n" +
+							"                \"updatedAt\": \"2024-11-03 00:14:34\"\n" +
+							"              }\n" +
+							"            ]\n" +
+							"          },\n" +
+							"          {\n" +
+							"            \"floor\": 2,\n" +
+							"            \"models\": [\n" +
+							"              {\n" +
+							"                \"modelId\": 3,\n" +
+							"                \"name\": \"model3\",\n" +
+							"                \"previewUrl\": \"previewUrl3\",\n" +
+							"                \"updatedAt\": \"2024-11-03 00:14:34\"\n" +
+							"              }\n" +
+							"            ]\n" +
+							"          }\n" +
+							"        ]\n" +
+							"      }\n" +
+							"    ]\n" +
+							"  }}")}
+			))
+	})
+	ResponseEntity<?> modelList(@AuthenticationPrincipal Long userId, @RequestParam(required = false) String building, @RequestParam(required = false) Integer floor);
+
 	@GetMapping("/{modelId}")
 	@Operation(summary = "파이프라인 모델 상세조회")
 	@ApiResponses(value = {
@@ -80,52 +126,6 @@ public interface PipelineModelApiSwagger {
 	ResponseEntity<?> modelModify(
 			@Schema(description = "Model ID", example = "1")
 			@PathVariable Long modelId);
-
-	@GetMapping
-	@Operation(summary = "파이프라인 모델 리스트 조회")
-	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = "파이프라인 모델 리스트 조회 성공", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-					examples = {@ExampleObject(value = "{\"header\":{\"httpStatusCode\": 200, \"message\": \"모델 리스트 조회에 성공했습니다.\"}," +
-							"\"body\": {\n" +
-							"    \"buildings\": [\n" +
-							"      {\n" +
-							"        \"building\": \"역삼 멀티캠퍼스\",\n" +
-							"        \"floors\": [\n" +
-							"          {\n" +
-							"            \"floor\": 1,\n" +
-							"            \"models\": [\n" +
-							"              {\n" +
-							"                \"modelId\": 1,\n" +
-							"                \"name\": \"model1\",\n" +
-							"                \"previewUrl\": \"previewUrl1\",\n" +
-							"                \"updatedAt\": \"2024-11-03T00:14:34.315565\"\n" +
-							"              },\n" +
-							"              {\n" +
-							"                \"modelId\": 2,\n" +
-							"                \"name\": \"model2\",\n" +
-							"                \"previewUrl\": \"previewUrl2\",\n" +
-							"                \"updatedAt\": \"2024-11-03T00:14:34.315587\"\n" +
-							"              }\n" +
-							"            ]\n" +
-							"          },\n" +
-							"          {\n" +
-							"            \"floor\": 2,\n" +
-							"            \"models\": [\n" +
-							"              {\n" +
-							"                \"modelId\": 3,\n" +
-							"                \"name\": \"model3\",\n" +
-							"                \"previewUrl\": \"previewUrl3\",\n" +
-							"                \"updatedAt\": \"2024-11-03T00:14:34.315594\"\n" +
-							"              }\n" +
-							"            ]\n" +
-							"          }\n" +
-							"        ]\n" +
-							"      }\n" +
-							"    ]\n" +
-							"  }}")}
-			))
-	})
-	ResponseEntity<?> modelList(@RequestParam(required = false) String building, @RequestParam(required = false) Integer floor);
 
 	@DeleteMapping("/{modelId}")
 	@Operation(summary = "파이프라인 모델 삭제")
