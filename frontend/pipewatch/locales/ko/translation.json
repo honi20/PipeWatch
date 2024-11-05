@@ -46,7 +46,11 @@
     "employeeDepartment": "부서",
     "employeePosition": "직급",
     "employeeInformation": "사원 정보",
-    "termsAndPrivacyConsent": "회원가입 시, 귀하는 당사의 <1>서비스 약관</1>과 <3>개인정보 처리방침</3>에 동의하는 것으로 간주됩니다."
+    "termsAndPrivacyConsent": "회원가입 시, 귀하는 당사의 <1>서비스 약관</1>과 <3>개인정보 처리방침</3>에 동의하는 것으로 간주됩니다.",
+    "passwordReset": "가입하신 이메일 주소로<br />새로운 비밀번호 설정을 위한 안내 메일이 발송됩니다.",
+    "sendPasswordResetEmail": "비밀번호 변경 메일 보내기",
+    "goBackToLogin": "로그인 페이지로 돌아가기",
+    "enterYourName": "성명을 입력해주세요."
   },
   "manageAccount": {
     "dashboard": {

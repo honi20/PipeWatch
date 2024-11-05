@@ -44,7 +44,6 @@ export const RoleListbox = ({ currentRole }: Props) => {
     <div className="flex items-center justify-center gap-2">
       <div className={isKorean ? "w-[90px]" : "w-[120px]"}>
         <Listbox value={selected} onChange={handleChange}>
-          {/* <Listbox value={selected} onChange={setSelected}> */}
           <div className="relative">
             <ListboxButton
               className={clsx(
