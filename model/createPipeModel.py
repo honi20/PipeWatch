@@ -2,6 +2,9 @@ from fastapi import FastAPI
 from dotenv import load_dotenv
 from pydantic import BaseModel
 from typing import List, Tuple
+from PIL import Image
+import pyrender
+import numpy as np
 import os
 import subprocess
 import cadquery as cq
@@ -20,6 +23,17 @@ AWS_ACCESS_KEY_ID = os.getenv("S3_PUBLIC_ACCESS_KEY")
 AWS_SECRET_ACCESS_KEY = os.getenv("S3_PRIVATE_ACCESS_KEY")
 S3_BUCKET_NAME = os.getenv("S3_BUCKET_NAME")
 
+# S3 클라이언트 생성
+S3_client = boto3.client(
+    "s3",
+    aws_access_key_id=AWS_ACCESS_KEY_ID,
+    aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
+    region_name=AWS_REGION
+ )
+
+# HACK: 작업 경로 수정 및 환경변수화
+BASE_WORK_DIR = "C:/Users/SSAFY/Downloads/3d"
+
 app = FastAPI()
 
 class PipelineModels(BaseModel):
@@ -30,46 +44,58 @@ class PipelineModels(BaseModel):
 # FastAPI 엔드포인트 설정
 @app.post("/pipelineModel")
 def create_pipeline_model(data: PipelineModels):
-    # HACK: 경로 수정
-    work_dir = os.path.join("C:/Users/SSAFY/Downloads/3d", data.id)
+    work_dir = os.path.join(BASE_WORK_DIR, data.id)
     os.makedirs(work_dir, exist_ok=True)
 
+    # 파일 생성
+    stl_paths = create_stl_files(data.pipelines, data.radius, work_dir, data.id)
+    gltf_path = os.path.join(work_dir, f"origin_Pipeline_{data.id}.gltf")
+    compressed_gltf_path = create_gltf(stl_paths, data.id, work_dir, gltf_path)
+
+    # gltf S3 업로드
+    model_key = f"models/PipeLine_{data.id}.gltf"
+    pipeModel_URL = upload_S3(compressed_gltf_path, model_key)
+
+    # 썸네일 생성
+    thumbnail_path = os.path.join(work_dir, f"Thumbnail_{data.id}.png")
+    create_thumbnail(gltf_path, thumbnail_path)
+
+    # 썸네일 업로드
+    thumbnail_key = f"thumbnails/Thumbnail_{data.id}.png"
+    thumbnail_URL = upload_S3(thumbnail_path, thumbnail_key)
+
+    # 작업 폴더 삭제
+    shutil.rmtree(work_dir)
+
+    return {"pipeModel_URL": pipeModel_URL, "thumbnail_URL": thumbnail_URL}
+
+def create_stl_files(pipelines, radius, work_dir, id):
     stl_paths = []
 
-    for i, pipeline_coords in enumerate(data.pipelines):
+    for i, pipeline_coords in enumerate(pipelines):
         pipeline_name = f"PipeObj_{i + 1}"
-        stl_paths.extend(create_pipeline(pipeline_coords, data.radius, pipeline_name, work_dir))
+        stl_paths.extend(create_pipeline(pipeline_coords, radius, pipeline_name, work_dir, id))
 
-    compressed_gltf_path = create_gltf(stl_paths, data.id, work_dir)
-
-    # S3에 업로드
-    pipeModel_url = upload_s3(compressed_gltf_path, f"PipeLine_{data.id}.gltf")
-    
-    # 작업 폴더 삭제
-    # shutil.rmtree(work_dir)
-
-    return {"url": pipeModel_url}
+    return stl_paths
 
 # 파이프라인 생성 함수
-def create_pipeline(coords, radius, pipeline_name, work_dir):
+def create_pipeline(coords, radius, pipeline_name, work_dir, id):
     stl_paths = []
     start_point = coords[0]
     end_point = coords[1]    
     segment_index = 1
-    connector_index = 1
 
     for index in range(2, len(coords)):
         if check_collinear(start_point, end_point, coords[index]):
             end_point = coords[index]
         else:
-            create_cylinder(start_point, end_point, radius, f"{pipeline_name}_Segment_{segment_index}", work_dir, stl_paths)
-            create_connector(end_point, radius, f"{pipeline_name}_Connector_{connector_index}", work_dir, stl_paths)
+            create_cylinder(start_point, end_point, radius, f"{pipeline_name}_Segment_{segment_index}", work_dir, stl_paths, id)
+            create_connector(end_point, radius, f"{pipeline_name}_Connector_{segment_index}", work_dir, stl_paths, id)
             start_point = end_point
             end_point = coords[index]
             segment_index += 1
-            connector_index += 1
 
-    create_cylinder(start_point, end_point, radius, f"{pipeline_name}_Segment_{segment_index}", work_dir, stl_paths)
+    create_cylinder(start_point, end_point, radius, f"{pipeline_name}_Segment_{segment_index}", work_dir, stl_paths, id)
 
     return stl_paths
 
@@ -79,12 +105,17 @@ def check_collinear(p1, p2, p3):
 
     vec1 = (p2[0] - p1[0], p2[1] - p1[1])
     vec2 = (p3[0] - p2[0], p3[1] - p2[1])
-    angle = abs(math.degrees(math.atan2(vec2[1], vec2[0]) - math.atan2(vec1[1], vec1[0])))
+
+    # 벡터 내적
+    dot_product = vec1[0] * vec2[0] + vec1[1] * vec2[1]
+    mag1 = math.sqrt(vec1[0] ** 2 + vec1[1] ** 2)
+    mag2 = math.sqrt(vec2[0] ** 2 + vec2[1] ** 2)
+    angle = math.degrees(math.acos(dot_product / (mag1 * mag2)))
 
     return angle <= ANGLE_TOLERANCE
 
 # 파이프 생성 함수
-def create_cylinder(p1, p2, radius, name, work_dir, stl_paths):
+def create_cylinder(p1, p2, radius, name, work_dir, stl_paths, id):
     distance = math.sqrt((p2[0] - p1[0]) ** 2 + (p2[1] - p1[1]) ** 2)
     angle = math.degrees(math.atan2(p2[1] - p1[1], p2[0] - p1[0]))
 
@@ -98,57 +129,96 @@ def create_cylinder(p1, p2, radius, name, work_dir, stl_paths):
         .translate((p1[0], p1[1], 0))
     )
 
-    cylinder_path = os.path.join(work_dir, f"{name}.stl")
+    cylinder_path = os.path.join(work_dir, f"{name}_{id}.stl")
     cylinder.val().exportStl(cylinder_path)
     stl_paths.append(cylinder_path)
 
 # 커넥터 생성 함수
-def create_connector(center, radius, name, work_dir, stl_paths):
+def create_connector(center, radius, name, work_dir, stl_paths, id):
     connector = cq.Workplane("XY").sphere(radius).translate((center[0], center[1], 0))
 
-    connector_path = os.path.join(work_dir, f"{name}.stl")
+    connector_path = os.path.join(work_dir, f"{name}_{id}.stl")
     connector.val().exportStl(connector_path)
     stl_paths.append(connector_path)
 
-# GLTF 및 압축 함수
-def create_gltf(stl_paths, id, work_dir):
+# GLTF 생성 함수
+def create_gltf(stl_paths, id, work_dir, gltf_path):
     scene = trimesh.Scene()
-    output_gltf_path = os.path.join(work_dir, "pipeline.gltf")
-    compressed_gltf_path = os.path.join(work_dir, f"PipeLine_{id}.gltf")
 
+    # 각 STL 파일을 GLTF에 추가
     for stl_path in stl_paths:
         mesh = trimesh.load(stl_path)
         mesh.metadata['name'] = os.path.splitext(os.path.basename(stl_path))[0]
         scene.add_geometry(mesh)
 
-    scene.export(output_gltf_path, file_type='gltf')
+    # GLTF 파일 생성
+    scene.export(gltf_path, file_type='gltf')
 
-    # HACK: 경로 수정
+    # 압축 GLTF 파일 생성
+    compressed_gltf_path = os.path.join(work_dir, f"PipeLine_{id}.gltf")
+    compress_gltf(gltf_path, compressed_gltf_path)
+    
+    return compressed_gltf_path
+
+# draco 압축 함수
+def compress_gltf(input_path, output_path):
+    # HACK: 경로 수정 및 환경변수화
     node_path = r"C:\Program Files\nodejs\node.exe"
     gltf_pipeline_path = r"C:\Users\SSAFY\AppData\Roaming\npm\node_modules\gltf-pipeline\bin\gltf-pipeline.js"
 
-    # 압축
-    subprocess.run(
-        [node_path, gltf_pipeline_path, "-i", output_gltf_path, "-o", compressed_gltf_path, "-d", "--draco.compressMesh"],
-        check=True,
-        capture_output=True, text=True
-    )
-
-    return compressed_gltf_path
-
-def upload_s3(file_path, s3_key):
-    s3_client = boto3.client(
-        "s3",
-        aws_access_key_id=AWS_ACCESS_KEY_ID,
-        aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
-        region_name=AWS_REGION
-    )
-
-    s3_client.upload_file(file_path, S3_BUCKET_NAME, s3_key)
-    s3_url = f"https://{S3_BUCKET_NAME}.s3.{AWS_REGION}.amazonaws.com/{s3_key}"
+    subprocess.run([node_path, gltf_pipeline_path, "-i", input_path, "-o", output_path, "-d", "--draco.compressMesh"],
+                   check=True, capture_output=True, text=True)
     
-    return s3_url
+# 썸네일 생성 함수
+def create_thumbnail(gltf_path, thumbnail_path):
+    # gltf 디렉토리 설정
+    scene = trimesh.load(gltf_path, resolver=trimesh.resolvers.FilePathResolver(os.path.dirname(gltf_path)))
+    
+    # Trimesh 씬을 Pyrender 씬으로 변환
+    pyrender_scene = pyrender.Scene()
+    for geometry in scene.geometry.values():
+        mesh = pyrender.Mesh.from_trimesh(geometry)
+        pyrender_scene.add(mesh)
+    
+    # 범위 계산
+    bounds = scene.bounds
+    min_bound, max_bound = bounds[0], bounds[1]
+    center = (min_bound + max_bound) / 2
+    size = np.linalg.norm(max_bound - min_bound)
+
+    # 카메라 위치 설정
+    camera_distance = size
+    camera_pose = np.array([
+        [1.0, 0.0, 0.0, center[0]],
+        [0.0, 1.0, 0.0, center[1]],
+        [0.0, 0.0, 1.0, center[2] + camera_distance],
+        [0.0, 0.0, 0.0, 1.0],
+    ])
+    
+    # 카메라 설정
+    camera = pyrender.PerspectiveCamera(yfov=np.pi / 3.0)
+    pyrender_scene.add(camera, pose=camera_pose)
+    
+    # 조명 설정
+    light = pyrender.DirectionalLight(color=np.ones(3), intensity=2.0)
+    pyrender_scene.add(light, pose=camera_pose)
+
+    # 씬 렌더링
+    r = pyrender.OffscreenRenderer(640, 480)
+    color, _ = r.render(pyrender_scene)
+    
+    # 이미지 저장
+    image = Image.fromarray(color)
+    image.save(thumbnail_path)
+
+# S3 업로드 함수
+def upload_S3(file_path, S3_key):
+    S3_client.upload_file(file_path, S3_BUCKET_NAME, S3_key)
+    S3_URL = f"https://{S3_BUCKET_NAME}.s3.{AWS_REGION}.amazonaws.com/{S3_key}"
+    
+    return S3_URL
 
 if __name__ == "__main__":
-    # HACK: 호스트 및 포트 수정
+    # HACK: 호스트 및 포트 수정 후 환경변수화
     uvicorn.run(app, host="127.0.0.1", port=8000)
+
