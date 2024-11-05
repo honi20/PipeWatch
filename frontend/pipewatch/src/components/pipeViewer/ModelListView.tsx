@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import SelectPipeModelIcon from "@assets/icons/select_pipe_model.png";
 import { AreaType, ModelType } from "@src/components/pipeViewer/PipeType";
-import { AreaListbox } from "@src/components/pipeViewer/AreaListbox";
+import { AreaListbox } from "./listbox/AreaListbox";
 import "./viewer.css";
-import { FloorListbox } from "@src/components/pipeViewer/FloorListbox";
+import { FloorListbox } from "./listbox/FloorListbox";
 import GLTFViewer from "@src/components/pipeViewer/GLTFViewer";
-import { PipelineMemo } from "@src/components/pipeViewer/PipelineMemo";
+import { PipeMemo } from "@src/components/pipeViewer/PipeMemo";
 import { PipeProperty } from "@src/components/pipeViewer/PipeProperty";
 
 interface ModelListViewProps {
@@ -17,14 +17,31 @@ export const ModelListView: React.FC<ModelListViewProps> = ({ modelList }) => {
   const [selectedArea, setSelectedArea] = useState<AreaType | null>(null);
   const [selectedFloor, setSelectedFloor] = useState<number | null>(null);
   const [floorList, setFloorList] = useState<number[]>([]);
-  // const [selectPipelineView, setSelectPipelineView] = useState<boolean>(true);
-  const selectPipelineView = true;
+  const [selectView, setSelectView] = useState<"MEMO" | "PROPERTY">("PROPERTY");
+  const [cardFlipClass, setCardFlipClass] = useState("");
+
+  useEffect(() => {
+    setCardFlipClass(
+      selectView === "MEMO" ? "rotateY(180deg)" : "rotateY(0deg)"
+    );
+  }, [selectView]);
+
   // api 받기
   const floorDict: { [key: string]: number[] } = {
     "역삼 멀티캠퍼스": [-1, 14],
     "경덕이네 집": [1, 2],
   };
-
+  // 임의로 pipe 만듦
+  const pipe = {
+    pipeName: "파이프 이름이다",
+    pipeArea: "파이프 장소",
+    pipeFloor: -10,
+    pipeMaterial: "aluminum",
+    outerDiameter: 10,
+    innerDiameter: 10,
+    fluidMaterial: "water",
+    flowRate: 10
+  }
   // 장소 및 장소에 따른 floorList 변경
   const handleAreaChange = (selectedArea: AreaType) => {
     setSelectedArea(selectedArea);
@@ -82,18 +99,24 @@ export const ModelListView: React.FC<ModelListViewProps> = ({ modelList }) => {
       <div className="flex items-center justify-center gap-[20px] w-full h-full bg-gray-400">
         {selectModel ? (
           // 모델id에 따른 gltf url 넣기
-          <div className="relative w-full h-full border border-warn">
+          <div className="relative w-full h-full">
             <div>{selectModel.id}</div>
             <GLTFViewer gltfUrl="/assets/models/test.gltf" />
-            <div className="absolute top-5 right-10">
-              {
-                //pipieline 선택 or pipe 선택
-                selectPipelineView ? (
-                  <PipelineMemo pipe={selectModel} />
-                ) : (
-                  <PipeProperty pipe={selectModel} />
-                )
-              }
+            <div className="absolute card-container top-5 right-10">
+              <div className="card" style={{ transform: cardFlipClass }}>
+                <div className="card-front">
+                  <PipeProperty
+                    pipe={pipe}
+                    onViewChange={() => setSelectView("MEMO")}
+                  />
+                </div>
+                <div className="card-back">
+                  <PipeMemo
+                    pipeId={selectModel.id}
+                    onViewChange={() => setSelectView("PROPERTY")}
+                  />
+                </div>
+              </div>
             </div>
           </div>
         ) : (

@@ -21,32 +21,7 @@ export const PipeViewer = () => {
       floor: 14,
       imagePath: "src/assets/images/sample/sample_pipe_model.png",
       pipelineName: "pipeline1",
-      memolist: [
-        {
-          memoId: 1,
-          content: "메모1",
-          author: "user1",
-          createdTime: new Date(),
-        },
-        {
-          memoId: 2,
-          content: "메모2",
-          author: "user1",
-          createdTime: new Date(),
-        },
-        {
-          memoId: 3,
-          content: "메모3",
-          author: "user1",
-          createdTime: new Date(),
-        },
-        {
-          memoId: 4,
-          content: "메모4",
-          author: "user1",
-          createdTime: new Date(),
-        },
-      ],
+      memolist: [],
       modifiedDate: new Date(),
     },
     {
@@ -116,32 +91,7 @@ export const PipeViewer = () => {
       floor: 2,
       imagePath: "src/assets/images/sample/posil.png",
       pipelineName: "포실파이프",
-      memolist: [
-        {
-          memoId: 1,
-          content: "나는 포실핑",
-          author: "user1",
-          createdTime: new Date(),
-        },
-        {
-          memoId: 2,
-          content: "포실~",
-          author: "user1",
-          createdTime: new Date(),
-        },
-        {
-          memoId: 3,
-          content: "마시멜로 맛잇따 포실",
-          author: "user1",
-          createdTime: new Date(),
-        },
-        {
-          memoId: 4,
-          content: "포실포실~",
-          author: "user1",
-          createdTime: new Date(),
-        },
-      ],
+      memolist: [],
       modifiedDate: new Date(),
     },
     {
@@ -151,32 +101,7 @@ export const PipeViewer = () => {
       floor: 1,
       imagePath: "src/assets/images/sample/mallang.png",
       pipelineName: "말랑파이프",
-      memolist: [
-        {
-          memoId: 1,
-          content: "나는 말랑핑",
-          author: "user1",
-          createdTime: new Date(),
-        },
-        {
-          memoId: 2,
-          content: "말랑~",
-          author: "user1",
-          createdTime: new Date(),
-        },
-        {
-          memoId: 3,
-          content: "뭘 봐 말랑",
-          author: "user1",
-          createdTime: new Date(),
-        },
-        {
-          memoId: 4,
-          content: "말랑~",
-          author: "user1",
-          createdTime: new Date(),
-        },
-      ],
+      memolist: [],
       modifiedDate: new Date(),
     },
     {
@@ -203,7 +128,7 @@ export const PipeViewer = () => {
       {/* <h2 className="font-bold text-[40px]">{t("pipeViewer.title")}</h2> */}
       <h2 className="font-bold text-[40px] mx-6">파이프 모델 조회</h2>
 
-      <div className="flex items-center justify-center h-[640px] my-4">
+      <div className="flex items-center justify-center my-4 h-fit">
         {isAdmin ? (
           tempModelList && tempModelList.length > 0 ? (
             <ModelListView modelList={tempModelList} />

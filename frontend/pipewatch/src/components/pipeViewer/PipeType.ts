@@ -1,8 +1,10 @@
 export interface MemoType {
-  memoId: number;
-  content: string;
-  author: string;
-  createdTime: Date;
+  memo: string;
+  writer: {
+    userUuid: string;
+    userName: string;
+  };
+  createdAt: string;
 }
 
 export interface ModelType {

@@ -19,7 +19,7 @@ const Model: React.FC<{
     (loader as GLTFLoader).setDRACOLoader(dracoLoader);
   });
 
-  const [hovered, setHovered] = useState<THREE.Mesh | null>(null);
+  // const [hovered, setHovered] = useState<THREE.Mesh | null>(null);
 
   gltf.scene.traverse((child) => {
     if ((child as THREE.Mesh).isMesh) {
@@ -36,13 +36,13 @@ const Model: React.FC<{
       onPointerOver={(e: ThreeEvent<PointerEvent>) => {
         e.stopPropagation();
         const mesh = e.object as THREE.Mesh;
-        setHovered(mesh);
-        (mesh.material as THREE.MeshStandardMaterial).color.set("red"); // Hover 시 빨간색으로 변경
+        // setHovered(mesh);
+        (mesh.material as THREE.MeshStandardMaterial).color.set("blue"); // Hover 시 파란색으로 변경
       }}
       onPointerOut={(e: ThreeEvent<PointerEvent>) => {
         e.stopPropagation();
         const mesh = e.object as THREE.Mesh;
-        setHovered(null);
+        // setHovered(null);
         (mesh.material as THREE.MeshStandardMaterial).color.set("white"); // Hover 해제 시 원래 색상으로 변경
       }}
       onPointerDown={(e: ThreeEvent<PointerEvent>) => {
@@ -59,7 +59,7 @@ const GLTFViewer: React.FC<GLTFViewerProps> = ({ gltfUrl }) => {
 
   const handleMeshClick = (mesh: THREE.Mesh) => {
     setSelectedMesh(mesh); // 클릭된 mesh 상태에 저장
-    console.log("Clicked mesh:", mesh.uuid); // 클릭된 객체 콘솔 출력
+    console.log("Clicked mesh:", mesh.name); // 클릭된 객체 콘솔 출력
   };
 
   return (
