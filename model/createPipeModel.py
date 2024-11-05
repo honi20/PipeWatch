@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from dotenv import load_dotenv
 from pydantic import BaseModel
 from typing import List, Tuple
 import os
@@ -7,6 +8,9 @@ import cadquery as cq
 import trimesh
 import math
 import boto3
+import uvicorn
+
+load_dotenv()
 
 app = FastAPI()
 
@@ -145,8 +149,5 @@ def upload_s3(file_path, s3_key):
     
     return s3_url
 
-# TODO:
-# -경로 설정하기 -> 철민햄 예정
-# -s3 업로드 로직 구현 (썸네일)
-# -api 호출해서 보내주기
-# -좌표 보정하기
+if __name__ == "__main__":
+    uvicorn.run(app, host="127.0.0.1", port=8000)
