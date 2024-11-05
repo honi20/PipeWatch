@@ -2,8 +2,6 @@ package com.pipewatch.domain.pipelineModel.repository;
 
 import com.pipewatch.domain.enterprise.model.entity.Enterprise;
 import com.pipewatch.domain.pipeline.model.entity.Pipe;
-import com.pipewatch.domain.pipeline.model.entity.PipelineDefect;
-import com.pipewatch.domain.pipelineModel.model.dto.PipelineModelResponse;
 import com.pipewatch.domain.pipelineModel.model.entity.PipelineModel;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -40,7 +38,7 @@ public class PipelineModelCustomRepositoryImpl implements PipelineModelCustomRep
 	}
 
 	@Override
-	public List<Pipe> findPipelineUuidByModel(Long modelId) {
+	public List<Pipe> findPipeByModel(Long modelId) {
 		return queryFactory.selectFrom(pipe)
 				.leftJoin(pipeline).on(pipeline.eq(pipe.pipeline))
 				.where(pipeline.pipelineModel.id.eq(modelId))

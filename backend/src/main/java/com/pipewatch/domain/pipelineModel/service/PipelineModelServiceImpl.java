@@ -215,7 +215,7 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 				.collect(Collectors.toList());
 
 		// Pipelines Uuid
-		List<Pipe> pipes = pipelineModelCustomRepository.findPipelineUuidByModel(modelId);
+		List<Pipe> pipes = pipelineModelCustomRepository.findPipeByModel(modelId);
 		List<PipelineModelResponse.PipelineDto> pipelines = getPipelineDto(pipes);
 
 		return PipelineModelResponse.DetailDto.toDto(model, modelMemoList, pipelines);
@@ -237,6 +237,29 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 
 		pipelineModel.updateName(requestDto.getName());
 		pipelineModelRepository.save(pipelineModel);
+	}
+
+	@Override
+	@Transactional
+	public void deleteModel(Long userId, Long modelId) {
+		User user = userRepository.findById(userId)
+				.orElseThrow(() -> new BaseException(USER_NOT_FOUND));
+
+		PipelineModel pipelineModel = pipelineModelRepository.findById(modelId)
+				.orElseThrow(() -> new BaseException(PIPELINE_MODEL_NOT_FOUND));
+
+		// 기업이나 관리자 유저만 가능
+		if (user.getRole() == Role.USER || user.getRole() == Role.EMPLOYEE) {
+			throw new BaseException(FORBIDDEN_USER_ROLE);
+		}
+
+		// pipeline 삭제
+		List<Pipeline> pipelines = pipelineRepository.findByPipelineModelId(modelId);
+		pipelineRepository.deleteAll(pipelines);
+		// s3 데이터 삭제
+		s3Service.fileDelete(pipelineModel.getModelingUrl());
+		// Model 삭제
+		pipelineModelRepository.delete(pipelineModel);
 	}
 
 	private List<PipelineModelResponse.PipelineDto> getPipelineDto(List<Pipe> pipes) {

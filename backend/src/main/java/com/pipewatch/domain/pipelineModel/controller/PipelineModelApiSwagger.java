@@ -182,7 +182,7 @@ public interface PipelineModelApiSwagger {
 					examples = {@ExampleObject(value = "{\"header\":{\"httpStatusCode\": 204, \"message\": \"모델 삭제에 성공했습니다.\"},\n\"body\": null}")}
 			))
 	})
-	ResponseEntity<?> modelDelete(
-			@Schema(description = "Model ID", example = "1")
-			@PathVariable Long modelId);
+	ResponseEntity<?> modelDelete(@AuthenticationPrincipal Long userId,
+								  @Schema(description = "Model ID", example = "1")
+								  @PathVariable Long modelId);
 }

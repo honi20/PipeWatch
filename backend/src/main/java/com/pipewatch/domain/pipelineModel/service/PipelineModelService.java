@@ -19,4 +19,6 @@ public interface PipelineModelService {
 	PipelineModelResponse.DetailDto getModelDetail(Long userId, Long modelId);
 
 	void modifyModel(Long userId, Long modelId, PipelineModelRequest.ModifyDto requestDto);
+
+	void deleteModel(Long userId, Long modelId);
 }

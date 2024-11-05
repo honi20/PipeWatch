@@ -20,6 +20,8 @@ public class PipeMemo extends BaseEntity {
 
 	private String meme;
 
+	private Boolean isDefect;
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	private User user;

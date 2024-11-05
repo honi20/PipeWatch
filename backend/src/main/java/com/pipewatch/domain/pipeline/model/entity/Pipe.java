@@ -3,6 +3,9 @@ package com.pipewatch.domain.pipeline.model.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @Builder
@@ -21,4 +24,7 @@ public class Pipe {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "pipeline_id")
 	private Pipeline pipeline;
+
+	@OneToMany(mappedBy = "pipe", cascade = CascadeType.REMOVE)
+	private List<PipeMemo> pipeMemoList = new ArrayList<>();
 }

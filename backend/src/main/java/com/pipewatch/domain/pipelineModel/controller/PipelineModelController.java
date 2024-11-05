@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.util.List;
 
 import static com.pipewatch.global.statusCode.SuccessCode.*;
 
@@ -68,7 +66,9 @@ public class PipelineModelController implements PipelineModelApiSwagger {
 	}
 
 	@DeleteMapping("/{modelId}")
-	public ResponseEntity<?> modelDelete(@PathVariable Long modelId) {
+	public ResponseEntity<?> modelDelete(@AuthenticationPrincipal Long userId, @PathVariable Long modelId) {
+		pipelineModelService.deleteModel(userId, modelId);
+
 		return new ResponseEntity<>(ResponseDto.success(MODEL_DELETED, null), HttpStatus.NO_CONTENT);
 	}
 }

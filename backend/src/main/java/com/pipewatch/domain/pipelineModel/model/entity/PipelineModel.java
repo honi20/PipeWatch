@@ -9,6 +9,9 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @SuperBuilder
@@ -45,6 +48,9 @@ public class PipelineModel extends BaseEntity {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "building_floor_id")
 	private BuildingAndFloor buildingAndFloor;
+
+	@OneToMany(mappedBy = "pipelineModelMemo", cascade = CascadeType.REMOVE)
+	private List<PipelineModelMemo> memoList = new ArrayList<>();
 
 	public void updateModelingUrl(String modelingUrl) {
 		this.modelingUrl = modelingUrl;
