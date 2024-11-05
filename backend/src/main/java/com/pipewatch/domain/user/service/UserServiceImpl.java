@@ -46,8 +46,8 @@ public class UserServiceImpl implements UserService {
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new BaseException(USER_NOT_FOUND));
 
-		// 기업 유저는 수정 권한 없음
-		if (user.getRole() == Role.ENTERPRISE) {
+		// 기업 유저나 일반 유저는 수정 권한 없음
+		if (user.getRole() == Role.ENTERPRISE || user.getRole() == Role.USER) {
 			throw new BaseException(FORBIDDEN_USER_ROLE);
 		}
 
@@ -65,6 +65,11 @@ public class UserServiceImpl implements UserService {
 		// 유저가 존재하는지 확인
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new BaseException(USER_NOT_FOUND));
+
+		// 비밀번호가 일치하는지 확인
+		if (!passwordEncoder.matches(requestDto.getPassword(), user.getPassword())) {
+			throw new BaseException(INVALID_PASSWORD);
+		}
 
 		String password = passwordEncoder.encode(requestDto.getNewPassword());
 		user.updatePassword(password);

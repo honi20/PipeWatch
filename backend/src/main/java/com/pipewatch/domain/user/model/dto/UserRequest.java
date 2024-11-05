@@ -24,6 +24,8 @@ public class UserRequest {
 	@NoArgsConstructor
 	@AllArgsConstructor
 	public static class PasswordModifyDto {
+		@Schema(description = "기존 비밀번호", example = "password")
+		private String password;
 		@Schema(description = "새 비밀번호", example = "newPassword")
 		private String newPassword;
 	}
