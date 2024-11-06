@@ -101,7 +101,7 @@ export const ModelListView: React.FC<ModelListViewProps> = ({ modelList }) => {
           // 모델id에 따른 gltf url 넣기
           <div className="relative w-full h-full">
             <div>{selectModel.id}</div>
-            <GLTFViewer gltfUrl="/assets/models/test.gltf" />
+            <GLTFViewer gltfUrl="/assets/models/PipeLine.gltf" />
             <div className="absolute card-container top-5 right-10">
               <div className="card" style={{ transform: cardFlipClass }}>
                 <div className="card-front">

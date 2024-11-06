@@ -1,58 +1,12 @@
 import React, { useState } from "react";
-import { Canvas, ThreeEvent, useLoader } from "@react-three/fiber";
-import { OrbitControls } from "@react-three/drei";
+import { Canvas } from "@react-three/fiber";
 import * as THREE from "three";
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
-import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader";
+import { PipeModel } from "@src/components/pipeViewer/renderer/PipeModel";
+import { OrbitControls } from "@react-three/drei";
 
 interface GLTFViewerProps {
   gltfUrl: string;
 }
-
-const Model: React.FC<{
-  gltfUrl: string;
-  onClick: (mesh: THREE.Mesh) => void;
-}> = ({ gltfUrl, onClick }) => {
-  const gltf = useLoader(GLTFLoader, gltfUrl, (loader) => {
-    const dracoLoader = new DRACOLoader();
-    dracoLoader.setDecoderPath("https://www.gstatic.com/draco/v1/decoders/");
-    (loader as GLTFLoader).setDRACOLoader(dracoLoader);
-  });
-
-  // const [hovered, setHovered] = useState<THREE.Mesh | null>(null);
-
-  gltf.scene.traverse((child) => {
-    if ((child as THREE.Mesh).isMesh) {
-      const mesh = child as THREE.Mesh;
-      mesh.receiveShadow = true;
-      mesh.castShadow = true;
-      mesh.material = (mesh.material as THREE.Material).clone(); // 개별 색상 제어를 위해 material 복제
-    }
-  });
-
-  return (
-    <primitive
-      object={gltf.scene}
-      onPointerOver={(e: ThreeEvent<PointerEvent>) => {
-        e.stopPropagation();
-        const mesh = e.object as THREE.Mesh;
-        // setHovered(mesh);
-        (mesh.material as THREE.MeshStandardMaterial).color.set("blue"); // Hover 시 파란색으로 변경
-      }}
-      onPointerOut={(e: ThreeEvent<PointerEvent>) => {
-        e.stopPropagation();
-        const mesh = e.object as THREE.Mesh;
-        // setHovered(null);
-        (mesh.material as THREE.MeshStandardMaterial).color.set("white"); // Hover 해제 시 원래 색상으로 변경
-      }}
-      onPointerDown={(e: ThreeEvent<PointerEvent>) => {
-        e.stopPropagation();
-        const mesh = e.object as THREE.Mesh;
-        onClick(mesh); // 클릭된 mesh 객체 전달
-      }}
-    />
-  );
-};
 
 const GLTFViewer: React.FC<GLTFViewerProps> = ({ gltfUrl }) => {
   const [selectedMesh, setSelectedMesh] = useState<THREE.Mesh | null>(null);
@@ -63,11 +17,21 @@ const GLTFViewer: React.FC<GLTFViewerProps> = ({ gltfUrl }) => {
   };
 
   return (
-    <Canvas style={{ height: "100vh" }} shadows>
+    <Canvas
+      style={{ height: "100vh" }}
+      camera={{
+        near: 1,
+        far: 100,
+        fov: 75,
+        position: [0, 0, 10],
+      }}
+    >
       <ambientLight intensity={0.5} />
       <directionalLight position={[5, 10, 7.5]} intensity={1} castShadow />
-      <Model gltfUrl={gltfUrl} onClick={handleMeshClick} />
-      <OrbitControls enableDamping />
+      <PipeModel gltfUrl={gltfUrl} onClick={handleMeshClick} />
+      <OrbitControls />
+      <axesHelper args={[10]} />
+      <gridHelper />
     </Canvas>
   );
 };
