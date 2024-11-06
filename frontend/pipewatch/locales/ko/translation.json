@@ -45,6 +45,7 @@
     "password": "비밀번호",
     "confirmPassword": "비밀번호 확인",
     "passwordError": "비밀번호는 최소 8자 이상이어야 하며, 최소 하나의 영문자, 숫자, 특수 문자(예: !@#$%^&*)를 포함해야 합니다.",
+    "passwordMismatchError": "입력한 비밀번호와 일치하지 않습니다.",
     "name": "성명",
     "companyName": "기업명",
     "employeeId": "사번",

@@ -18,6 +18,7 @@ const SignUpCard = () => {
   const [showEmailError, setEmailError] = useState(false);
   const [showPasswordError, setPasswordError] = useState(false);
   const [showConfirmPasswordError, setConfirmPasswordError] = useState(false);
+  const [passwordMatchError, setPasswordMatchError] = useState(false);
 
   const { t } = useTranslation();
 
@@ -57,9 +58,8 @@ const SignUpCard = () => {
       setPasswordError(value !== "" && !validatePassword(value));
     }
     if (name === "confirmPassword") {
-      setConfirmPasswordError(
-        value !== "" && !validatePassword(value) && value !== formState.password
-      );
+      setConfirmPasswordError(value !== "" && !validatePassword(value));
+      setPasswordMatchError(value !== "" && value !== formState.password);
     }
   };
 
@@ -159,9 +159,9 @@ const SignUpCard = () => {
           placeholder={t("account.password")}
           onChange={handleInputChange}
         />
-        {showEmailError && (
+        {showPasswordError && (
           <span className="w-full px-2 whitespace-normal text-warn break-keep">
-            {t("account.emailError")}
+            {t("account.passwordError")}
           </span>
         )}
         {/* confirm password */}
@@ -172,6 +172,17 @@ const SignUpCard = () => {
           placeholder={t("account.confirmPassword")}
           onChange={handleInputChange}
         />
+        {showConfirmPasswordError ? (
+          <span className="w-full px-2 whitespace-normal text-warn break-keep">
+            {t("account.passwordError")}
+          </span>
+        ) : (
+          passwordMatchError && (
+            <span className="w-full px-2 whitespace-normal text-warn break-keep">
+              {t("account.passwordMismatchError")}
+            </span>
+          )
+        )}
 
         {/* name */}
         <Input
