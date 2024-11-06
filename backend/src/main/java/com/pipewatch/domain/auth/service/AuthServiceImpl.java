@@ -94,7 +94,7 @@ public class AuthServiceImpl implements AuthService {
 
 		// 서비스 시연을 위해 gmail/naver 등의 메일 형식은 ssafy 기업이라고 가정
 		String domain = getEmailDomain(requestDto.getEmail());
-		domain = isEnterpriseDomain(domain) ? domain : "ssafy.com";
+		domain = isEnterpriseDomain(domain) ? domain : "paori.com";
 		if (!getEmailDomain(enterprise.getUser().getEmail()).equals(domain)) {
 			throw new BaseException(INVALID_EMAIL_FORMAT);
 		}
@@ -154,7 +154,7 @@ public class AuthServiceImpl implements AuthService {
 		String domain = getEmailDomain(requestDto.getManagerEmail());
 
 		// 서비스 시연을 위해 gmail/naver 등의 메일 형식은 ssafy 기업이라고 가정
-		domain = isEnterpriseDomain(domain) ? domain : "ssafy.com";
+		domain = isEnterpriseDomain(domain) ? domain : "paori.com";
 		String email = "pipewatch_admin@" + domain;
 
 		String password = "pipewatch" + generateRandomNumber();

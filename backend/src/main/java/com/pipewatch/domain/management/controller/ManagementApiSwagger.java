@@ -28,7 +28,7 @@ public interface ManagementApiSwagger {
 							"      {" +
 							"        \"uuid\": \"1604b772-adc0-4212-8a90-81186c57f598\"," +
 							"        \"name\": \"테스트\"," +
-							"        \"email\": \"test@ssafy.com\"," +
+							"        \"email\": \"test@paori.com\"," +
 							"        \"empNo\": 1243242," +
 							"        \"department\": \"IT사업부\"," +
 							"        \"empClass\": \"팀장\"," +
@@ -53,7 +53,7 @@ public interface ManagementApiSwagger {
 							"      {" +
 							"        \"uuid\": \"1604b772-adc0-4212-8a90-81186c57f600\"," +
 							"        \"name\": \"최싸피\"," +
-							"        \"email\": \"choi@ssafy.com\"," +
+							"        \"email\": \"choi@paori.com\"," +
 							"        \"empNo\": 1534534," +
 							"        \"department\": \"마케팅부\"," +
 							"        \"empClass\": \"대리\"," +
@@ -62,7 +62,7 @@ public interface ManagementApiSwagger {
 							"      {" +
 							"        \"uuid\": \"1604b772-adc0-4212-8a90-81186c57f601\"," +
 							"        \"name\": \"김싸피\"," +
-							"        \"email\": \"kim@ssafy.com\"," +
+							"        \"email\": \"kim@paori.com\"," +
 							"        \"empNo\": 1423435," +
 							"        \"department\": \"인사부\"," +
 							"        \"empClass\": \"부장\"," +
@@ -100,7 +100,7 @@ public interface ManagementApiSwagger {
 							"      {" +
 							"        \"uuid\": \"1604b772-adc0-4212-8a90-81186c57f600\"," +
 							"        \"name\": \"최싸피\"," +
-							"        \"email\": \"choi@ssafy.com\"," +
+							"        \"email\": \"choi@paori.com\"," +
 							"        \"empNo\": 1534534," +
 							"        \"department\": \"마케팅부\"," +
 							"        \"empClass\": \"대리\"," +
@@ -109,7 +109,7 @@ public interface ManagementApiSwagger {
 							"      {" +
 							"        \"uuid\": \"1604b772-adc0-4212-8a90-81186c57f601\"," +
 							"        \"name\": \"김싸피\"," +
-							"        \"email\": \"kim@ssafy.com\"," +
+							"        \"email\": \"kim@paori.com\"," +
 							"        \"empNo\": 1423435," +
 							"        \"department\": \"인사부\"," +
 							"        \"empClass\": \"부장\"," +
