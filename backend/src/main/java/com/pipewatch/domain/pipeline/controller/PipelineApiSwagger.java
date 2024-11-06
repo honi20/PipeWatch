@@ -9,49 +9,32 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Pipeline API", description = "Pipeline API Document")
 public interface PipelineApiSwagger {
-	@GetMapping("/{pipelineUuid}")
+	@GetMapping("/{pipelineId}")
 	@Operation(summary = "파이프라인 상세조회")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "파이프라인 상세조회 성공", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
 					examples = {@ExampleObject(value = "{\"header\":{\"httpStatusCode\": 200, \"message\": \"단일 파이프라인 조회에 성공했습니다.\"}," +
 							"\"body\": {\n" +
-							"    \"name\": \"Pipeline1\",\n" +
-							"    \"updatedAt\": \"2024-11-03T00:14:34.022156\",\n" +
+							"    \"name\": \"PipeLine_1\",\n" +
 							"    \"property\": {\n" +
-							"      \"pipeMaterial\": \"Aluminum\",\n" +
+							"      \"pipeMaterial\": \"알루미늄\",\n" +
 							"      \"outerDiameter\": 150,\n" +
-							"      \"innerDiameter\": 10.3,\n" +
-							"      \"fluidMaterial\": \"Water\",\n" +
+							"      \"innerDiameter\": 10,\n" +
+							"      \"fluidMaterial\": \"물\",\n" +
 							"      \"velocity\": 1\n" +
 							"    },\n" +
-							"    \"defects\": [\n" +
-							"      {\n" +
-							"        \"position\": {\n" +
-							"          \"x\": 10.12,\n" +
-							"          \"y\": 22.11,\n" +
-							"          \"z\": 31.49\n" +
-							"        },\n" +
-							"        \"type\": \"CRACK\"\n" +
-							"      },\n" +
-							"      {\n" +
-							"        \"position\": {\n" +
-							"          \"x\": 230.12,\n" +
-							"          \"y\": 122.11,\n" +
-							"          \"z\": 341.49\n" +
-							"        },\n" +
-							"        \"type\": \"CORROSION\"\n" +
-							"      }\n" +
-							"    ]\n" +
+							"    \"updatedAt\": \"2024-11-06 13:57:07\"\n" +
 							"  }}")}
 			))
 	})
-	ResponseEntity<?> pipelineDetail(
-			@Schema(description = "파이프라인 Uuid", example = "PipeObj_1_fjkelsfncjs")
-			@PathVariable String pipelineUuid);
+	ResponseEntity<?> pipelineDetail(@AuthenticationPrincipal Long userId,
+									 @Schema(description = "파이프라인 Id", example = "1")
+									 @PathVariable Long pipelineId);
 
 	@PutMapping("/{pipelineUuid}")
 	@Operation(summary = "파이프라인 기본 정보 수정")

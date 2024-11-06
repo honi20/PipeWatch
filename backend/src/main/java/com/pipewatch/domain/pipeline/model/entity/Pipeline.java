@@ -29,7 +29,7 @@ public class Pipeline extends BaseEntity {
 	@JoinColumn(name = "pipeline_model_id")
 	private PipelineModel pipelineModel;
 
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+	@OneToOne(cascade = CascadeType.REMOVE)
 	@JoinColumn(name = "pipeline_property")
 	private PipelineProperty property;
 
