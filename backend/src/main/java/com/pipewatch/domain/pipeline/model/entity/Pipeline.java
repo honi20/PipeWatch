@@ -35,4 +35,8 @@ public class Pipeline extends BaseEntity {
 
 	@OneToMany(mappedBy = "pipeline", cascade = CascadeType.REMOVE)
 	private List<Pipe> pipeList = new ArrayList<>();
+
+	public void updateName(String name) {
+		this.name = name;
+	}
 }

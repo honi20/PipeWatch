@@ -1,5 +1,6 @@
 package com.pipewatch.domain.pipeline.controller;
 
+import com.pipewatch.domain.pipeline.model.dto.PipelineRequest;
 import com.pipewatch.domain.pipeline.model.dto.PipelineResponse;
 import com.pipewatch.domain.pipeline.service.PipelineService;
 import com.pipewatch.global.response.ResponseDto;
@@ -27,8 +28,10 @@ public class PipelineController implements PipelineApiSwagger {
 		return new ResponseEntity<>(ResponseDto.success(PIPELINE_DETAIL_OK, responseDto), HttpStatus.OK);
 	}
 
-	@PutMapping("/{pipelineUuid}")
-	public ResponseEntity<?> pipelineModify(@PathVariable String pipelineUuid) {
+	@PutMapping("/{pipelineId}")
+	public ResponseEntity<?> pipelineModify(@AuthenticationPrincipal Long userId, @PathVariable Long pipelineId, PipelineRequest.ModifyDto requestDto) {
+		pipelineService.modifyPipeline(userId, pipelineId, requestDto);
+
 		return new ResponseEntity<>(ResponseDto.success(PIPELINE_MODIFIED_OK, null), HttpStatus.OK);
 	}
 

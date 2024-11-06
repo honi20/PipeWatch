@@ -1,5 +1,6 @@
 package com.pipewatch.domain.pipeline.controller;
 
+import com.pipewatch.domain.pipeline.model.dto.PipelineRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -36,16 +37,16 @@ public interface PipelineApiSwagger {
 									 @Schema(description = "파이프라인 Id", example = "1")
 									 @PathVariable Long pipelineId);
 
-	@PutMapping("/{pipelineUuid}")
+	@PutMapping("/{pipelineId}")
 	@Operation(summary = "파이프라인 기본 정보 수정")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "파이프라인 기본 정보 수정 성공", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
 					examples = {@ExampleObject(value = "{\"header\":{\"httpStatusCode\": 200, \"message\": \"단일 파이프라인 기본 정보 수정에 성공했습니다.\"},\n\"body\": null}")}
 			))
 	})
-	ResponseEntity<?> pipelineModify(
-			@Schema(description = "파이프라인 Uuid", example = "PipeObj_1_fjkelsfncjs")
-			@PathVariable String pipelineUuid);
+	ResponseEntity<?> pipelineModify(@AuthenticationPrincipal Long userId,
+									 @Schema(description = "파이프라인 Id", example = "1")
+									 @PathVariable Long pipelineId, @RequestBody PipelineRequest.ModifyDto requestDto);
 
 	@PutMapping("/{pipelineUuid}/properties")
 	@Operation(summary = "파이프라인 속성 정보 수정")

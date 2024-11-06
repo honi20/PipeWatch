@@ -1,5 +1,6 @@
 package com.pipewatch.domain.pipeline.model.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 @Getter
@@ -11,6 +12,7 @@ public class PipelineRequest {
 	@NoArgsConstructor
 	@AllArgsConstructor
 	public static class ModifyDto {
+		@Schema(description = "변경할 파이프라인 이름", example = "New Pipeline Name")
 		private String name;
 	}
 

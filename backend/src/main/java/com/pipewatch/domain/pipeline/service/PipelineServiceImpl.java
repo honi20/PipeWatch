@@ -1,5 +1,6 @@
 package com.pipewatch.domain.pipeline.service;
 
+import com.pipewatch.domain.pipeline.model.dto.PipelineRequest;
 import com.pipewatch.domain.pipeline.model.dto.PipelineResponse;
 import com.pipewatch.domain.pipeline.model.entity.Pipeline;
 import com.pipewatch.domain.pipeline.repository.PipelineRepository;
@@ -9,6 +10,7 @@ import com.pipewatch.domain.user.repository.UserRepository;
 import com.pipewatch.global.exception.BaseException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import static com.pipewatch.global.statusCode.ErrorCode.*;
 
@@ -32,5 +34,23 @@ public class PipelineServiceImpl implements PipelineService {
 				.orElseThrow(() -> new BaseException(PIPELINE_NOT_FOUND));
 
 		return PipelineResponse.DetailDto.toDto(pipeline);
+	}
+
+	@Override
+	@Transactional
+	public void modifyPipeline(Long userId, Long pipelineId, PipelineRequest.ModifyDto requestDto) {
+		User user = userRepository.findById(userId)
+				.orElseThrow(() -> new BaseException(USER_NOT_FOUND));
+
+		// 관리자만 조회 가능
+		if (user.getRole() == Role.USER || user.getRole() == Role.EMPLOYEE) {
+			throw new BaseException(FORBIDDEN_USER_ROLE);
+		}
+
+		Pipeline pipeline = pipelineRepository.findById(pipelineId)
+				.orElseThrow(() -> new BaseException(PIPELINE_NOT_FOUND));
+
+		pipeline.updateName(requestDto.getName());
+		pipelineRepository.save(pipeline);
 	}
 }
