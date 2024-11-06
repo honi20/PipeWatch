@@ -1,5 +1,6 @@
 package com.pipewatch.domain.pipeline.model.dto;
 
+import com.pipewatch.domain.pipeline.model.entity.PipeMemo;
 import com.pipewatch.domain.pipeline.model.entity.Pipeline;
 import com.pipewatch.domain.pipeline.model.entity.PipelineProperty;
 import lombok.*;
@@ -37,7 +38,7 @@ public class PipelineResponse {
 	@NoArgsConstructor
 	@AllArgsConstructor
 	public static class MemoListDto {
-		List<MemoDto> memos;
+		List<MemoDto> memoList;
 	}
 
 	@Getter
@@ -77,18 +78,28 @@ public class PipelineResponse {
 	}
 
 	@Getter
+	@Builder
 	@AllArgsConstructor
 	public static class MemoDto {
 		private Long memoId;
 		private String memo;
 		private Creator creator;
-		private LocalDateTime createdAt;
+		private String createdAt;
+
+		public static MemoDto toDto(PipeMemo memo) {
+			return MemoDto.builder()
+					.memoId(memo.getId())
+					.memo(memo.getMemo())
+					.creator(new Creator(memo.getUser().getUuid(), memo.getUser().getName()))
+					.createdAt(convertToDateFormat(memo.getCreated_at()))
+					.build();
+		}
 	}
 
 	@Getter
 	@AllArgsConstructor
 	public static class Creator {
-		private Long userId;
+		private String userUuid;
 		private String userName;
 	}
 }
