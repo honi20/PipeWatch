@@ -1,7 +1,9 @@
+import { useLocation } from "react-router-dom";
+
 import { LoginPage } from "@pages/account/LoginPage";
 import { FindPassword } from "@pages/account/FindPassword";
 import { SignUpPage } from "@pages/account/SignUpPage";
-import { useLocation } from "react-router-dom";
+import { ResetPasswordPage } from "@pages/account/ResetPasswordPage";
 import { CompletedContact } from "@pages/CompletedContact";
 
 export const Auth = () => {
@@ -16,6 +18,8 @@ export const Auth = () => {
         return <FindPassword />;
       case "sign-up":
         return <SignUpPage />;
+      case "reset-pw":
+        return <ResetPasswordPage />;
       case "completed":
         return <CompletedContact />;
     }
