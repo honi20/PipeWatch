@@ -17,7 +17,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import static com.pipewatch.global.statusCode.ErrorCode.*;
 
@@ -107,6 +111,39 @@ public class PipelineServiceImpl implements PipelineService {
 	}
 
 	@Override
+	public PipelineResponse.PipelineMemoListDto getPipelineMemoList(Long userId, Long pipelineId) {
+		User user = userRepository.findById(userId)
+				.orElseThrow(() -> new BaseException(USER_NOT_FOUND));
+
+		if (user.getRole() == Role.USER) {
+			throw new BaseException(FORBIDDEN_USER_ROLE);
+		}
+
+		List<Long> pipeIds = pipeRepository.findIdByPipelineId(pipelineId);
+
+		List<PipeMemo> memos = pipeMemoRepository.findByAllPipeId(pipeIds);
+
+		Map<Pipe, List<PipelineResponse.MemoDto>> groupedMemo = memos.stream()
+				.collect(Collectors.groupingBy(
+						PipeMemo::getPipe,
+						Collectors.mapping(PipelineResponse.MemoDto::toDto, Collectors.toList()))
+				);
+
+		List<PipelineResponse.MemoListDto> memoList = groupedMemo.entrySet().stream()
+				.sorted(Comparator.comparing(entry -> entry.getKey().getId()))
+				.map(entry -> PipelineResponse.MemoListDto.builder()
+						.pipeId(entry.getKey().getId())
+						.pipeName(entry.getKey().getName())
+						.memoList(entry.getValue())
+						.build())
+				.toList();
+
+		return PipelineResponse.PipelineMemoListDto.builder()
+				.totalMemoList(memoList)
+				.build();
+	}
+
+	@Override
 	public PipelineResponse.MemoListDto getPipeMemoList(Long userId, Long pipeId) {
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new BaseException(USER_NOT_FOUND));
@@ -115,12 +152,17 @@ public class PipelineServiceImpl implements PipelineService {
 			throw new BaseException(FORBIDDEN_USER_ROLE);
 		}
 
+		Pipe pipe = pipeRepository.findById(pipeId)
+				.orElseThrow(() -> new BaseException(PIPE_NOT_FOUND));
+
 		List<PipeMemo> memos = pipeMemoRepository.findByPipeId(pipeId);
 
 		List<PipelineResponse.MemoDto> memoList = memos.stream()
 				.map(PipelineResponse.MemoDto::toDto).toList();
 
 		return PipelineResponse.MemoListDto.builder()
+				.pipeId(pipe.getId())
+				.pipeName(pipe.getName())
 				.memoList(memoList)
 				.build();
 	}

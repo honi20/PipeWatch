@@ -12,5 +12,7 @@ public interface PipelineService {
 
 	void createPipeMemo(Long userId, Long pipeId, PipelineRequest.CreateMemoDto requestDto);
 
+	PipelineResponse.PipelineMemoListDto getPipelineMemoList(Long userId, Long pipelineId);
+
 	PipelineResponse.MemoListDto getPipeMemoList(Long userId, Long pipeId);
 }

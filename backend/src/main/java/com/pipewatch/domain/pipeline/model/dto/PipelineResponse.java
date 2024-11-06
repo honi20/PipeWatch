@@ -37,8 +37,19 @@ public class PipelineResponse {
 	@Builder
 	@NoArgsConstructor
 	@AllArgsConstructor
+	public static class PipelineMemoListDto {
+		List<MemoListDto> totalMemoList;
+	}
+
+	@Getter
+	@Setter
+	@Builder
+	@NoArgsConstructor
+	@AllArgsConstructor
 	public static class MemoListDto {
-		List<MemoDto> memoList;
+		private Long pipeId;
+		private String pipeName;
+		private List<MemoDto> memoList;
 	}
 
 	@Getter
@@ -60,21 +71,6 @@ public class PipelineResponse {
 					.velocity(property.getVelocity())
 					.build();
 		}
-	}
-
-	@Getter
-	@AllArgsConstructor
-	public static class DefectDto {
-		private PositionDto position;
-		private String type;
-	}
-
-	@Getter
-	@AllArgsConstructor
-	public static class PositionDto {
-		private Double x;
-		private Double y;
-		private Double z;
 	}
 
 	@Getter

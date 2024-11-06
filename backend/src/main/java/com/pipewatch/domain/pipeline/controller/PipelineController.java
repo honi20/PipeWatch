@@ -49,6 +49,13 @@ public class PipelineController implements PipelineApiSwagger {
 		return new ResponseEntity<>(ResponseDto.success(PIPE_MEMO_CREATED, null), HttpStatus.CREATED);
 	}
 
+	@GetMapping("/{pipelineId}/memo")
+	public ResponseEntity<?> pipelineMemoList(@AuthenticationPrincipal Long userId, @PathVariable Long pipelineId) {
+		PipelineResponse.PipelineMemoListDto responseDto = pipelineService.getPipelineMemoList(userId, pipelineId);
+
+		return new ResponseEntity<>(ResponseDto.success(PIPE_MEMO_LIST_OK, responseDto), HttpStatus.OK);
+	}
+
 	@GetMapping("/pipes/{pipeId}")
 	public ResponseEntity<?> pipeMemoList(@AuthenticationPrincipal Long userId, @PathVariable Long pipeId) {
 		PipelineResponse.MemoListDto responseDto = pipelineService.getPipeMemoList(userId, pipeId);
