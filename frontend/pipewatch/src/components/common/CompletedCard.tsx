@@ -34,7 +34,8 @@ export const CompletedCard = () => {
       </div>
     );
   } else if (pathname === "/account/auth/completed") {
-    const variable = "paori"; // 추후 사용자ID 넣을 예정
+    const variable = location.state.email;
+    // const variable = "paori"; // 추후 사용자ID 넣을 예정
     const messages = t("verification.personal", {
       variable,
       returnObjects: true,
@@ -44,7 +45,7 @@ export const CompletedCard = () => {
       <div>
         {messageArray.map((message, index) => {
           const parts = message.split(variable); // 메시지를 variable로 분리
-          console.log(parts);
+          // console.log(parts);
           return (
             <p className="text-center" key={index}>
               {parts.map((part, partIndex) => (

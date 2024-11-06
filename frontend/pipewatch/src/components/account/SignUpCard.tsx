@@ -240,7 +240,12 @@ const SignUpCard = () => {
           isFormValid ? "bg-button-background" : "bg-gray-800"
         }`}
         disabled={!isFormValid}
-        onClick={() => navigate("/account/auth/completed")}
+        onClick={() =>
+          navigate("/account/auth/completed", {
+            state: { email: formState.email },
+          })
+        }
+        //  () => navigate(`/products/${id}`, { state: {product} })
       >
         {t("account.signUp")}
       </Button>
