@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Pipeline API", description = "Pipeline API Document")
 public interface PipelineApiSwagger {
 	@GetMapping("/{pipelineId}")
-	@Operation(summary = "파이프라인 상세조회")
+	@Operation(summary = "단일 파이프라인 상세조회")
 	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = "파이프라인 상세조회 성공", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+			@ApiResponse(responseCode = "200", description = "단일 파이프라인 상세조회 성공", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
 					examples = {@ExampleObject(value = "{\"header\":{\"httpStatusCode\": 200, \"message\": \"단일 파이프라인 조회에 성공했습니다.\"}," +
 							"\"body\": {\n" +
 							"    \"name\": \"PipeLine_1\",\n" +
@@ -38,9 +38,9 @@ public interface PipelineApiSwagger {
 									 @PathVariable Long pipelineId);
 
 	@PutMapping("/{pipelineId}")
-	@Operation(summary = "파이프라인 기본 정보 수정")
+	@Operation(summary = "단일 파이프라인 기본 정보 수정")
 	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = "파이프라인 기본 정보 수정 성공", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+			@ApiResponse(responseCode = "200", description = "단일 파이프라인 기본 정보 수정 성공", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
 					examples = {@ExampleObject(value = "{\"header\":{\"httpStatusCode\": 200, \"message\": \"단일 파이프라인 기본 정보 수정에 성공했습니다.\"},\n\"body\": null}")}
 			))
 	})
@@ -49,9 +49,9 @@ public interface PipelineApiSwagger {
 									 @PathVariable Long pipelineId, @RequestBody PipelineRequest.ModifyDto requestDto);
 
 	@PutMapping("/{pipelineId}/property")
-	@Operation(summary = "파이프라인 속성 정보 수정")
+	@Operation(summary = "단일 파이프라인 속성 정보 수정")
 	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = "파이프라인 속성 정보 수정 성공", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+			@ApiResponse(responseCode = "200", description = "단일 파이프라인 속성 정보 수정 성공", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
 					examples = {@ExampleObject(value = "{\"header\":{\"httpStatusCode\": 200, \"message\": \"단일 파이프라인 속성 정보 수정에 성공했습니다.\"},\n\"body\": null}")}
 			))
 	})
@@ -59,58 +59,130 @@ public interface PipelineApiSwagger {
 											 @Schema(description = "파이프라인 Id", example = "1")
 											 @PathVariable Long pipelineId, @RequestBody PipelineRequest.ModifyPropertyDto requestDto);
 
-	@GetMapping("/pipes/{pipeUuid}")
-	@Operation(summary = "파이프 메모 리스트 조회")
+	@PostMapping("/pipes/{pipeId}")
+	@Operation(summary = "객체 파이프 메모 생성")
 	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = "파이프 메모 리스트 조회 성공", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+			@ApiResponse(responseCode = "201", description = "객체 파이프 메모 생성 성공", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+					examples = {@ExampleObject(value = "{\"header\":{\"httpStatusCode\": 201, \"message\": \"파이프 메모가 생성되었습니다.\"},\n\"body\": null}")}
+			))
+	})
+	ResponseEntity<?> pipeMemoCreate(@AuthenticationPrincipal Long userId,
+									 @Schema(description = "파이프 ID", example = "1")
+									 @PathVariable Long pipeId, @RequestBody PipelineRequest.CreateMemoDto requestDto);
+
+	@GetMapping("/{pipelineId}")
+	@Operation(summary = "단일 파이프라인 메모 리스트 조회")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "단일 파이프 메모 리스트 조회 성공", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
 					examples = {@ExampleObject(value = "{\"header\":{\"httpStatusCode\": 200, \"message\": \"파이프 메모 리스트 조회에 성공했습니다.\"}," +
 							"\"body\": {\n" +
-							"    \"memos\": [\n" +
+							"    \"totalMemoList\": [\n" +
 							"      {\n" +
-							"        \"memoId\": 1,\n" +
-							"        \"memo\": \"부식 위험 있음\",\n" +
-							"        \"creator\": {\n" +
-							"          \"userId\": 1,\n" +
-							"          \"userName\": \"김싸피\"\n" +
-							"        },\n" +
-							"        \"createdAt\": \"2024-11-03T00:14:34.157712\"\n" +
+							"        \"pipeId\": 13,\n" +
+							"        \"pipeName\": \"Pipe_1\",\n" +
+							"        \"memoList\": [\n" +
+							"          {\n" +
+							"            \"memoId\": 1,\n" +
+							"            \"memo\": \"파이프에 결함 존재\",\n" +
+							"            \"creator\": {\n" +
+							"              \"userUuid\": \"ssafy12\",\n" +
+							"              \"userName\": \"김싸피\"\n" +
+							"            },\n" +
+							"            \"createdAt\": \"2024-11-06 15:50:23\"\n" +
+							"          },\n" +
+							"          {\n" +
+							"            \"memoId\": 4,\n" +
+							"            \"memo\": \"파이프1 확인 완료\",\n" +
+							"            \"creator\": {\n" +
+							"              \"userUuid\": \"ssafy12\",\n" +
+							"              \"userName\": \"김싸피\"\n" +
+							"            },\n" +
+							"            \"createdAt\": \"2024-11-06 16:07:02\"\n" +
+							"          }\n" +
+							"        ]\n" +
 							"      },\n" +
 							"      {\n" +
-							"        \"memoId\": 2,\n" +
-							"        \"memo\": \"다음주에 점검함\",\n" +
-							"        \"creator\": {\n" +
-							"          \"userId\": 2,\n" +
-							"          \"userName\": \"최싸피\"\n" +
-							"        },\n" +
-							"        \"createdAt\": \"2024-11-03T00:14:34.157751\"\n" +
+							"        \"pipeId\": 14,\n" +
+							"        \"pipeName\": \"Pipe_2\",\n" +
+							"        \"memoList\": [\n" +
+							"          {\n" +
+							"            \"memoId\": 2,\n" +
+							"            \"memo\": \"파이프2에 결함 존재\",\n" +
+							"            \"creator\": {\n" +
+							"              \"userUuid\": \"ssafy12\",\n" +
+							"              \"userName\": \"김싸피\"\n" +
+							"            },\n" +
+							"            \"createdAt\": \"2024-11-06 15:50:33\"\n" +
+							"          }\n" +
+							"        ]\n" +
+							"      },\n" +
+							"      {\n" +
+							"        \"pipeId\": 16,\n" +
+							"        \"pipeName\": \"Pipe_4\",\n" +
+							"        \"memoList\": [\n" +
+							"          {\n" +
+							"            \"memoId\": 3,\n" +
+							"            \"memo\": \"파이프4 확인 완료\",\n" +
+							"            \"creator\": {\n" +
+							"              \"userUuid\": \"ssafy12\",\n" +
+							"              \"userName\": \"김싸피\"\n" +
+							"            },\n" +
+							"            \"createdAt\": \"2024-11-06 15:50:51\"\n" +
+							"          }\n" +
+							"        ]\n" +
 							"      }\n" +
 							"    ]\n" +
 							"  }}")}
 			))
 	})
-	ResponseEntity<?> pipeDetail(
-			@Schema(description = "파이프 Uuid", example = "PipeObj_1_Segment_1_fjkelsfncjs")
-			@PathVariable String pipeUuid);
+	ResponseEntity<?> pipelineMemoList(@AuthenticationPrincipal Long userId,
+									   @Schema(description = "파이프라인 Id", example = "1")
+									   @PathVariable Long pipelineId);
 
-	@PostMapping("/pipes/{pipeUuid}")
-	@Operation(summary = "파이프 메모 생성")
+
+	@GetMapping("/pipes/{pipeId}")
+	@Operation(summary = "객체 파이프 메모 리스트 조회")
 	@ApiResponses(value = {
-			@ApiResponse(responseCode = "201", description = "파이프 메모 생성 성공", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-					examples = {@ExampleObject(value = "{\"header\":{\"httpStatusCode\": 201, \"message\": \"파이프 메모가 생성되었습니다.\"},\n\"body\": null}")}
+			@ApiResponse(responseCode = "200", description = "객체 파이프 메모 리스트 조회 성공", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+					examples = {@ExampleObject(value = "{\"header\":{\"httpStatusCode\": 200, \"message\": \"파이프 메모 리스트 조회에 성공했습니다.\"}," +
+							"\"body\": {\n" +
+							"    \"pipeId\": 13,\n" +
+							"    \"pipeName\": \"Pipe_1\",\n" +
+							"    \"memoList\": [\n" +
+							"      {\n" +
+							"        \"memoId\": 1,\n" +
+							"        \"memo\": \"파이프에 결함 존재\",\n" +
+							"        \"creator\": {\n" +
+							"          \"userUuid\": \"ssafy12\",\n" +
+							"          \"userName\": \"김싸피\"\n" +
+							"        },\n" +
+							"        \"createdAt\": \"2024-11-06 15:50:23\"\n" +
+							"      },\n" +
+							"      {\n" +
+							"        \"memoId\": 4,\n" +
+							"        \"memo\": \"파이프1 확인 완료\",\n" +
+							"        \"creator\": {\n" +
+							"          \"userUuid\": \"ssafy12\",\n" +
+							"          \"userName\": \"김싸피\"\n" +
+							"        },\n" +
+							"        \"createdAt\": \"2024-11-06 16:07:02\"\n" +
+							"      }\n" +
+							"    ]\n" +
+							"  }}")}
 			))
 	})
-	ResponseEntity<?> pipeMemoCreate(
-			@Schema(description = "파이프 Uuid", example = "PipeObj_1_Segment_1_fjkelsfncjs")
-			@PathVariable String pipeUuid);
+	ResponseEntity<?> pipeMemoList(@AuthenticationPrincipal Long userId,
+								   @Schema(description = "파이프 Id", example = "1")
+								   @PathVariable Long pipeId);
 
 	@DeleteMapping("/pipes/{memoId}")
-	@Operation(summary = "파이프 메모 삭제")
+	@Operation(summary = "객체 파이프 메모 삭제")
 	@ApiResponses(value = {
-			@ApiResponse(responseCode = "204", description = "파이프 메모 삭제 성공", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+			@ApiResponse(responseCode = "204", description = "객체 파이프 메모 삭제 성공", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
 					examples = {@ExampleObject(value = "{\"header\":{\"httpStatusCode\": 204, \"message\": \"메모 삭제에 성공했습니다.\"},\n\"body\": null}")}
 			))
 	})
-	ResponseEntity<?> pipeMemoCreate(
-			@Schema(description = "메모 ID", example = "1")
-			@PathVariable Long memoId);
+	ResponseEntity<?> pipeMemoDelete(@AuthenticationPrincipal Long userId,
+									 @Schema(description = "메모 ID", example = "1")
+									 @PathVariable Long memoId);
 }

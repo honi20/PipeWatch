@@ -1,6 +1,9 @@
 package com.pipewatch.domain.pipeline.model.dto;
 
+import com.pipewatch.domain.pipeline.model.entity.Pipe;
+import com.pipewatch.domain.pipeline.model.entity.PipeMemo;
 import com.pipewatch.domain.pipeline.model.entity.PipelineProperty;
+import com.pipewatch.domain.user.model.entity.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
@@ -42,5 +45,15 @@ public class PipelineRequest {
 	@AllArgsConstructor
 	public static class CreateMemoDto {
 		private String memo;
+		private Boolean hasDefect;
+
+		public PipeMemo toEntity(User user, Pipe pipe) {
+			return PipeMemo.builder()
+					.memo(this.memo)
+					.hasDefect(this.hasDefect)
+					.user(user)
+					.pipe(pipe)
+					.build();
+		}
 	}
 }

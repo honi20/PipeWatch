@@ -157,7 +157,7 @@ public class AuthServiceImpl implements AuthService {
 		domain = isEnterpriseDomain(domain) ? domain : "paori.com";
 		String email = "pipewatch_admin@" + domain;
 
-		String password = "pipewatch" + generateRandomNumber();
+		String password = "pipewatch" + generateRandomNumber() + "!";
 		String passwordEncode = passwordEncoder.encode(password);
 		String uuid = UUID.randomUUID().toString();
 

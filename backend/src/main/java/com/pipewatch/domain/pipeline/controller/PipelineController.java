@@ -42,25 +42,31 @@ public class PipelineController implements PipelineApiSwagger {
 		return new ResponseEntity<>(ResponseDto.success(PIPELINE_PROPERTY_MODIFIED_OK, null), HttpStatus.OK);
 	}
 
-	@GetMapping("/pipes/{pipeUuid}")
-	public ResponseEntity<?> pipeDetail(@PathVariable String pipeUuid) {
-		PipelineResponse.MemoDto memo1 = new PipelineResponse.MemoDto(1L, "부식 위험 있음", new PipelineResponse.Creator(1L, "김싸피"), LocalDateTime.now());
-		PipelineResponse.MemoDto memo2 = new PipelineResponse.MemoDto(2L, "다음주에 점검함", new PipelineResponse.Creator(2L, "최싸피"), LocalDateTime.now());
+	@PostMapping("/pipes/{pipeId}")
+	public ResponseEntity<?> pipeMemoCreate(@AuthenticationPrincipal Long userId, @PathVariable Long pipeId, PipelineRequest.CreateMemoDto requestDto) {
+		pipelineService.createPipeMemo(userId, pipeId, requestDto);
 
-		PipelineResponse.MemoListDto responseDto = PipelineResponse.MemoListDto.builder()
-				.memos(List.of(memo1, memo2))
-				.build();
+		return new ResponseEntity<>(ResponseDto.success(PIPE_MEMO_CREATED, null), HttpStatus.CREATED);
+	}
+
+	@GetMapping("/{pipelineId}/memo")
+	public ResponseEntity<?> pipelineMemoList(@AuthenticationPrincipal Long userId, @PathVariable Long pipelineId) {
+		PipelineResponse.PipelineMemoListDto responseDto = pipelineService.getPipelineMemoList(userId, pipelineId);
 
 		return new ResponseEntity<>(ResponseDto.success(PIPE_MEMO_LIST_OK, responseDto), HttpStatus.OK);
 	}
 
-	@PostMapping("/pipes/{pipeUuid}")
-	public ResponseEntity<?> pipeMemoCreate(@PathVariable String pipeUuid) {
-		return new ResponseEntity<>(ResponseDto.success(PIPE_MEMO_CREATED, null), HttpStatus.CREATED);
+	@GetMapping("/pipes/{pipeId}")
+	public ResponseEntity<?> pipeMemoList(@AuthenticationPrincipal Long userId, @PathVariable Long pipeId) {
+		PipelineResponse.MemoListDto responseDto = pipelineService.getPipeMemoList(userId, pipeId);
+
+		return new ResponseEntity<>(ResponseDto.success(PIPE_MEMO_LIST_OK, responseDto), HttpStatus.OK);
 	}
 
 	@DeleteMapping("/pipes/{memoId}")
-	public ResponseEntity<?> pipeMemoCreate(@PathVariable Long memoId) {
+	public ResponseEntity<?> pipeMemoDelete(@AuthenticationPrincipal Long userId, @PathVariable Long memoId) {
+		pipelineService.deletePipeMemo(userId, memoId);
+
 		return new ResponseEntity<>(ResponseDto.success(PIPE_MEMO_DELETED, null), HttpStatus.NO_CONTENT);
 	}
 

@@ -34,7 +34,7 @@ public class PipelineModelResponse {
 		private Integer floor;
 		private String updatedAt;
 
-		public static PipelineModelDto toDto(PipelineModel model) {
+		public static PipelineModelDto fromEntity(PipelineModel model) {
 			return PipelineModelDto.builder()
 					.modelId(model.getId())
 					.name(model.getName())
@@ -79,7 +79,7 @@ public class PipelineModelResponse {
 		private List<PipelineDto> pipelines;
 		private Creator creator;
 
-		public static DetailDto toDto(PipelineModel model, List<PipelineDto> pipelines) {
+		public static DetailDto fromEntity(PipelineModel model, List<PipelineDto> pipelines) {
 			return DetailDto.builder()
 					.name(model.getName())
 					.modelingUrl(model.getModelingUrl())
@@ -107,7 +107,7 @@ public class PipelineModelResponse {
 		private Long pipeId;
 		private String pipeUuid;
 
-		public static PipeDto toDto(Pipe pipe) {
+		public static PipeDto fromEntity(Pipe pipe) {
 			return PipeDto.builder()
 					.pipeId(pipe.getId())
 					.pipeUuid(pipe.getUuid())
@@ -133,7 +133,7 @@ public class PipelineModelResponse {
 		private Creator writer;
 		private String createdAt;
 
-		public static MemoDto toDto(PipelineModelMemo memo) {
+		public static MemoDto fromEntity(PipelineModelMemo memo) {
 			return MemoDto.builder()
 					.memoId(memo.getId())
 					.memo(memo.getMemo())

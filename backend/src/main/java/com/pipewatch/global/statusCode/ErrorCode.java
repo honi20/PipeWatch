@@ -43,6 +43,7 @@ public enum ErrorCode {
 
 	// Pipe
 	PIPE_NOT_FOUND(HttpStatus.NOT_FOUND.value(), "해당 파이프가 존재하지 않습니다."),
+	PIPE_MEMO_NOT_FOUND(HttpStatus.NOT_FOUND.value(), "해당 파이프 메모가 존재하지 않습니다."),
 
 	// Global
 	FORBIDDEN_USER_ROLE(HttpStatus.FORBIDDEN.value(), "접근 권한이 없는 유저입니다."),

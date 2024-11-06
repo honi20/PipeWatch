@@ -1,5 +1,6 @@
 package com.pipewatch.domain.pipeline.model.dto;
 
+import com.pipewatch.domain.pipeline.model.entity.PipeMemo;
 import com.pipewatch.domain.pipeline.model.entity.Pipeline;
 import com.pipewatch.domain.pipeline.model.entity.PipelineProperty;
 import lombok.*;
@@ -22,10 +23,10 @@ public class PipelineResponse {
 		private PropertyDto property;
 		private String updatedAt;
 
-		public static DetailDto toDto(Pipeline pipeline) {
+		public static DetailDto fromEntity(Pipeline pipeline) {
 			return DetailDto.builder()
 					.name(pipeline.getName())
-					.property(PropertyDto.toDto(pipeline.getProperty()))
+					.property(PropertyDto.fromEntity(pipeline.getProperty()))
 					.updatedAt(convertToDateFormat(pipeline.getUpdated_at()))
 					.build();
 		}
@@ -36,8 +37,19 @@ public class PipelineResponse {
 	@Builder
 	@NoArgsConstructor
 	@AllArgsConstructor
+	public static class PipelineMemoListDto {
+		List<MemoListDto> totalMemoList;
+	}
+
+	@Getter
+	@Setter
+	@Builder
+	@NoArgsConstructor
+	@AllArgsConstructor
 	public static class MemoListDto {
-		List<MemoDto> memos;
+		private Long pipeId;
+		private String pipeName;
+		private List<MemoDto> memoList;
 	}
 
 	@Getter
@@ -50,7 +62,7 @@ public class PipelineResponse {
 		private String fluidMaterial;
 		private Double velocity;
 
-		public static PropertyDto toDto(PipelineProperty property) {
+		public static PropertyDto fromEntity(PipelineProperty property) {
 			return PropertyDto.builder()
 					.pipeMaterial(property.getPipeMaterial())
 					.outerDiameter(property.getOuterDiameter())
@@ -62,33 +74,28 @@ public class PipelineResponse {
 	}
 
 	@Getter
-	@AllArgsConstructor
-	public static class DefectDto {
-		private PositionDto position;
-		private String type;
-	}
-
-	@Getter
-	@AllArgsConstructor
-	public static class PositionDto {
-		private Double x;
-		private Double y;
-		private Double z;
-	}
-
-	@Getter
+	@Builder
 	@AllArgsConstructor
 	public static class MemoDto {
 		private Long memoId;
 		private String memo;
 		private Creator creator;
-		private LocalDateTime createdAt;
+		private String createdAt;
+
+		public static MemoDto fromEntity(PipeMemo memo) {
+			return MemoDto.builder()
+					.memoId(memo.getId())
+					.memo(memo.getMemo())
+					.creator(new Creator(memo.getUser().getUuid(), memo.getUser().getName()))
+					.createdAt(convertToDateFormat(memo.getCreated_at()))
+					.build();
+		}
 	}
 
 	@Getter
 	@AllArgsConstructor
 	public static class Creator {
-		private Long userId;
+		private String userUuid;
 		private String userName;
 	}
 }
