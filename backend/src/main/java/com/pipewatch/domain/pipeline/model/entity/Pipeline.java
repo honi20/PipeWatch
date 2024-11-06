@@ -1,6 +1,5 @@
 package com.pipewatch.domain.pipeline.model.entity;
 
-import com.pipewatch.domain.pipeline.model.entity.property.PipelineProperty;
 import com.pipewatch.domain.pipelineModel.model.entity.PipelineModel;
 import com.pipewatch.global.entity.BaseEntity;
 import jakarta.persistence.*;

@@ -1,4 +1,4 @@
-package com.pipewatch.domain.pipeline.model.entity.property;
+package com.pipewatch.domain.pipeline.model.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -10,21 +10,19 @@ import lombok.RequiredArgsConstructor;
 @Builder
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class Fluid {
+public class PipelineProperty {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "fluid_id")
+	@Column(name = "pipeline_prop_id")
 	private Long id;
 
-	private String name;
+	private String pipe_material;
 
-	private Double density;
+	private Integer outerDiameter;
 
-	private Double viscosity;
+	private Integer innerDiameter;
 
-	private Double specificHeatCapacity;
+	private String fluid_material;
 
-	private Double thermalConductivity;
-
-	private Double pressure;
+	private Double velocity;
 }
