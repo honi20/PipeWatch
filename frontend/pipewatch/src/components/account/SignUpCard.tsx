@@ -1,9 +1,20 @@
+import { useState, ChangeEvent, FocusEvent } from "react";
 import { useTranslation, Trans } from "react-i18next";
-import { Input, Button } from "@headlessui/react";
 import { Link } from "react-router-dom";
+
+import { Input, Button } from "@headlessui/react";
+
+import CheckIcon from "@mui/icons-material/Check";
+import CloseIcon from "@mui/icons-material/Close";
 
 const SignUpCard = () => {
   const { t } = useTranslation();
+
+  const tempEmailVeriCode = "123456";
+  const [emailVeriCode, setEmailVeriCode] = useState("");
+  const [isEmailVerified, setIsEmailVerified] = useState(false);
+  const [EmailVeriError, setEmailVeriError] = useState(false);
+
   return (
     <div className="w-[500px] flex flex-col bg-block rounded-[30px] p-[50px] gap-[40px] text-white">
       {/* header */}
@@ -14,12 +25,63 @@ const SignUpCard = () => {
       {/* content */}
       <div className="flex flex-col gap-[20px]">
         {/* email */}
-        <Input
-          type="email"
-          className="h-[56px] w-full px-5 text-gray-500 rounded-[5px]"
-          placeholder={t("account.email")}
-          required
-        />
+        <div className="flex justify-between">
+          <Input
+            type="email"
+            className="h-[56px] px-5 text-gray-500 rounded-[5px]"
+            placeholder={t("account.email")}
+            required
+          />
+          <Button
+            className={`h-[56px] w-[120px] px-6 py-2 flex items-center justify-center text-white rounded-[20px] bg-primary-500 hover:bg-primary-500/80`}
+          >
+            {/* {t("account.signUp")} */}
+            인증 요청
+          </Button>
+        </div>
+        <div className="flex items-center justify-between">
+          <Input
+            type="email"
+            value={emailVeriCode}
+            className={`h-[56px] px-5 text-gray-500 rounded-[5px] ${
+              isEmailVerified ? "bg-gray-800" : "bg-white"
+            }`}
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              setEmailVeriCode(e.target.value)
+            }
+            placeholder="인증 코드"
+            required
+            disabled={isEmailVerified}
+          />
+          {isEmailVerified ? (
+            <div className="text-success flex gap-[4px] px-[20px] ">
+              <CheckIcon sx={{ fontSize: "20px" }} />
+              인증 완료
+            </div>
+          ) : (
+            <Button
+              className={`h-[56px] w-[120px] px-6 py-2 flex items-center justify-center text-white rounded-[20px] bg-black hover:bg-black/80`}
+              onClick={() => {
+                if (emailVeriCode === tempEmailVeriCode) {
+                  setIsEmailVerified(true);
+                  setEmailVeriError(false);
+                } else {
+                  setIsEmailVerified(false);
+                  setEmailVeriError(true);
+                }
+              }}
+            >
+              {/* {t("account.signUp")} */}
+              확인
+            </Button>
+          )}
+        </div>
+        {EmailVeriError && (
+          <div className="flex justify-center items-center text-warn gap-[4px]">
+            <CloseIcon sx={{ fontSize: "20px" }} />
+            이메일 인증에 실패했습니다. 다시 시도해주세요.
+          </div>
+        )}
         {/* password */}
         <Input
           type="password"
