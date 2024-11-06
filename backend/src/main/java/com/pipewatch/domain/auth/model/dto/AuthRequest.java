@@ -121,6 +121,8 @@ public class AuthRequest {
 	@NoArgsConstructor
 	@AllArgsConstructor
 	public static class EmailPwdSendDto {
+		@Schema(description = "유저 이름", example = "김싸피")
+		private String name;
 		@Schema(description = "비밀번호 재설정 링크를 전송할 이메일", example = "paori@ssafy.com")
 		private String email;
 	}

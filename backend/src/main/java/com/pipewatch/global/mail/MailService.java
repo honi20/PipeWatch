@@ -76,7 +76,7 @@ public class MailService {
 			body += "<p><strong>PW :</strong> " + password + "</p>";
 			body += "</div>";
 			body += "<div style='text-align: center; margin-top: 20px;'>";
-			body += "<a href='http://localhost:5173' style='display: inline-block; padding: 10px 20px; background-color: #f0f0f0; color: black; text-decoration: none; border-radius: 5px;'>PAORI 사이트로 이동</a>";
+			body += "<a href='https://pipewatch.co.kr/account/auth/login' style='display: inline-block; padding: 10px 20px; background-color: #f0f0f0; color: black; text-decoration: none; border-radius: 5px;'>PAORI 사이트로 이동</a>";
 			body += "</div>";
 			body += "</div>";
 
@@ -101,7 +101,7 @@ public class MailService {
 			mimeMessage.setRecipients(MimeMessage.RecipientType.TO, email);
 			mimeMessage.setSubject("PipeWatch 비밀번호 재설정");
 
-			String verificationLink = "http://localhost:5173/reset-password/" + pwdUuid;
+			String verificationLink = "https://pipewatch.co.kr/account/auth/reset-password/" + pwdUuid;
 			String body = "";
 			body += "<div style='border: 2px solid black; padding: 20px; max-width: 600px; margin: auto;'>";
 			body += "<h2 style='text-align: center;'>비밀번호 재설정 메일</h2>";

@@ -106,8 +106,8 @@ public interface AuthApiSwagger {
 			@ApiResponse(responseCode = "200", description = "비밀번호 재설정 메일 전송 성공", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
 					examples = {@ExampleObject(value = "{\"header\":{\"httpStatusCode\": 200, \"message\": \"비밀번호 재설정 링크를 이메일로 발송했습니다.\"},\n\"body\": null}")}
 			)),
-			@ApiResponse(responseCode = "404", description = "비밀번호 재설정 메일 전송 실패 - 존재하지 않는 이메일", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-					examples = {@ExampleObject(value = "{\"header\":{\"httpStatusCode\": 404, \"message\": \"해당 이메일로 가입된 회원이 존재하지 않습니다.\"},\n\"body\": null}")}
+			@ApiResponse(responseCode = "404", description = "비밀번호 재설정 메일 전송 실패 - 존재하지 않는 유저", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+					examples = {@ExampleObject(value = "{\"header\":{\"httpStatusCode\": 404, \"message\": \"해당 유저가 존재하지 않습니다.\"},\n\"body\": null}")}
 			))
 	})
 	ResponseEntity<?> passwordResetEmailSend(@RequestBody AuthRequest.EmailPwdSendDto requestDto);
