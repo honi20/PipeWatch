@@ -56,11 +56,10 @@ const ResetPasswordCard = () => {
   return (
     <div className="w-[500px] flex flex-col bg-block rounded-[30px] p-[50px] gap-[40px] text-white">
       <div className="flex justify-center font-semibold text-[28px]">
-        {/* {t("manageAccount.dashboard.updatePassword")} */}
-        비밀번호 재설정
+        {t("account.resetPassword.title")}
       </div>
       <div className="text-center whitespace-normal cursor-pointer space-normal">
-        새롭게 사용할 비밀번호를 입력해주세요.
+        {t("account.resetPassword.instruction")}
       </div>
 
       <div className="flex flex-col gap-[20px]">
@@ -121,8 +120,7 @@ const ResetPasswordCard = () => {
           onClick={() => navigate("/account/auth/reset-pw/completed")}
           disabled={!isFormValid}
         >
-          {/* {t("manageAccount.dashboard.updatePassword")} */}
-          비밀번호 재설정
+          {t("account.resetPassword.title")}
         </Button>
       </div>
     </div>
