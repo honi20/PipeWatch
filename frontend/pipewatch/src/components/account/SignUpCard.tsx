@@ -35,8 +35,7 @@ const SignUpCard = () => {
           <Button
             className={`h-[56px] w-[120px] px-6 py-2 flex items-center justify-center text-white rounded-[20px] bg-primary-500 hover:bg-primary-500/80`}
           >
-            {/* {t("account.signUp")} */}
-            인증 요청
+            {t("account.requestVerification")}
           </Button>
         </div>
         <div className="flex items-center justify-between">
@@ -49,14 +48,14 @@ const SignUpCard = () => {
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
               setEmailVeriCode(e.target.value)
             }
-            placeholder="인증 코드"
+            placeholder={t("account.verificationCode")}
             required
             disabled={isEmailVerified}
           />
           {isEmailVerified ? (
             <div className="text-success flex gap-[4px] px-[20px] ">
               <CheckIcon sx={{ fontSize: "20px" }} />
-              인증 완료
+              {t("account.verificationComplete")}
             </div>
           ) : (
             <Button
@@ -71,15 +70,14 @@ const SignUpCard = () => {
                 }
               }}
             >
-              {/* {t("account.signUp")} */}
-              확인
+              {t("account.confirm")}
             </Button>
           )}
         </div>
         {EmailVeriError && (
           <div className="flex justify-center items-center text-warn gap-[4px]">
             <CloseIcon sx={{ fontSize: "20px" }} />
-            이메일 인증에 실패했습니다. 다시 시도해주세요.
+            {t("account.verificationFailed")}
           </div>
         )}
         {/* password */}
