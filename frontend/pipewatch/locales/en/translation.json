@@ -50,7 +50,13 @@
     "passwordReset": "An email will be sent to your registered address.<br />Follow the instructions to set a new password.",
     "sendPasswordResetEmail": "Send password reset email",
     "goBackToLogin": "Return to login page",
-    "enterYourName": "Please enter your name."
+    "enterYourName": "Please enter your name.",
+    "resetPassword": {
+      "title": "Reset Your Password",
+      "instruction": "Please enter your new password.",
+      "complete": "Your password has been successfully reset.",
+      "goToLoginPage": "Go To Login Page"
+    }
   },
   "manageAccount": {
     "dashboard": {

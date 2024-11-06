@@ -50,7 +50,13 @@
     "passwordReset": "가입하신 이메일 주소로<br />새로운 비밀번호 설정을 위한 안내 메일이 발송됩니다.",
     "sendPasswordResetEmail": "비밀번호 변경 메일 보내기",
     "goBackToLogin": "로그인 페이지로 돌아가기",
-    "enterYourName": "성명을 입력해주세요."
+    "enterYourName": "성명을 입력해주세요.",
+    "resetPassword": {
+      "title": " 비밀번호 재설정",
+      "instruction": "새롭게 사용할 비밀번호를 입력해주세요.",
+      "complete": "비밀번호 재설정이 완료되었습니다.",
+      "goToLoginPage": "로그인 페이지로 이동"
+    }
   },
   "manageAccount": {
     "dashboard": {
