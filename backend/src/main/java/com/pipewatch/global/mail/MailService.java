@@ -101,7 +101,7 @@ public class MailService {
 			mimeMessage.setRecipients(MimeMessage.RecipientType.TO, email);
 			mimeMessage.setSubject("PipeWatch 비밀번호 재설정");
 
-			String verificationLink = "https://pipewatch.co.kr/account/auth/reset-password/" + pwdUuid;
+			String verificationLink = "https://pipewatch.co.kr/account/auth/reset-pw/" + pwdUuid;
 			String body = "";
 			body += "<div style='border: 2px solid black; padding: 20px; max-width: 600px; margin: auto;'>";
 			body += "<h2 style='text-align: center;'>비밀번호 재설정 메일</h2>";
