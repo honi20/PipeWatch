@@ -5,8 +5,12 @@ botocore==1.35.54
 cadquery==2.4.0
 cadquery-ocp==7.7.2
 casadi==3.6.7
+certifi==2024.8.30
+charset-normalizer==3.4.0
 click==8.1.7
 colorama==0.4.6
+dataclasses-json==0.6.7
+Deprecated==1.2.14
 exceptiongroup==1.2.2
 ezdxf==1.1.4
 fastapi==0.115.4
@@ -41,6 +45,7 @@ PyScreeze==1.0.1
 python-dateutil==2.9.0.post0
 python-dotenv==1.0.1
 pytweening==1.2.0
+requests==2.32.3
 s3transfer==0.10.3
 scipy==1.10.1
 six==1.16.0
