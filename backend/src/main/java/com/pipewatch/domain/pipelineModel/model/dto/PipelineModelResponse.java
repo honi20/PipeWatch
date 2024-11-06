@@ -105,12 +105,12 @@ public class PipelineModelResponse {
 	@AllArgsConstructor
 	public static class PipeDto {
 		private Long pipeId;
-		private String pipeName;
+		private String pipeUuid;
 
 		public static PipeDto toDto(Pipe pipe) {
 			return PipeDto.builder()
 					.pipeId(pipe.getId())
-					.pipeName(pipe.getName())
+					.pipeUuid(pipe.getUuid())
 					.build();
 		}
 	}

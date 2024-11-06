@@ -327,7 +327,7 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 		// pipeline의 name를 기준으로 group화한 후 각 PipelineDto로 변환
 		Map<Long, List<PipelineModelResponse.PipeDto>> groupedByPipelineUuid = pipes.stream()
 				.collect(Collectors.groupingBy(
-						pipe -> pipe.getPipeline().getId(), // Pipeline의 UUID로 그룹화
+						pipe -> pipe.getPipeline().getId(), // Pipeline의 ID로 그룹화
 						Collectors.mapping(
 								PipelineModelResponse.PipeDto::toDto,
 								Collectors.toList()
@@ -358,7 +358,7 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 				// 파이프 라인 저장
 				if (relatedPipeline == null) {
 					relatedPipeline = Pipeline.builder()
-							.name("PipeObj_" + pipelineNumber)
+							.name("PipeLine_" + pipelineNumber)
 							.pipelineModel(pipelineModel)
 							.build();
 
@@ -367,8 +367,10 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 				}
 
 				// 파이프 저장
+				String name = (parts[2].equals("Segment") ? "Pipe" : parts[2]);
 				Pipe pipe = Pipe.builder()
-						.name(nodeName)
+						.name(name + "_" + parts[3])
+						.uuid(nodeName)
 						.pipeline(relatedPipeline)
 						.build();
 
