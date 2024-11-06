@@ -13,18 +13,51 @@ import CloseIcon from "@mui/icons-material/Close";
 const SignUpCard = () => {
   const { t } = useTranslation();
 
-  const [selectedCompany, setSelectedCompany] = useState<CompanyType | null>(
-    null
-  );
-  const handleCompanyChange = (selectedArea: CompanyType) => {
-    setSelectedCompany(selectedArea);
+  const initialFormState = {
+    email: "",
+    password: "",
+    name: "",
+    companyName: "",
+    employeeId: "",
+    department: "",
+    position: "",
   };
-  console.log(selectedCompany?.company); // 빌드용
+
+  const [formState, setFormState] = useState(initialFormState);
+
+  const handleCompanyChange = (selectedCompany: CompanyType) => {
+    setFormState((prevFormState) => ({
+      ...prevFormState,
+      companyName: selectedCompany.company,
+    }));
+  };
+
+  // console.log(formState.employeeId); // 빌드용
+  console.log(formState);
+
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormState((prevFormState) => ({
+      ...prevFormState,
+      [name]: value,
+    }));
+  };
 
   const tempEmailVeriCode = "123456";
   const [emailVeriCode, setEmailVeriCode] = useState("");
   const [isEmailVerified, setIsEmailVerified] = useState(false);
   const [EmailVeriError, setEmailVeriError] = useState(false);
+  const [emailError, setEmailError] = useState(false);
+  const [passwordError, setPasswordError] = useState(false);
+  const [passwordCheckError, setPasswordCheckError] = useState(false);
+
+  const isFormValid =
+    emailVeriCode !== "" &&
+    !emailError &&
+    !passwordError &&
+    !passwordCheckError &&
+    isEmailVerified &&
+    formState;
 
   return (
     <div className="w-[500px] flex flex-col bg-block rounded-[30px] p-[50px] gap-[40px] text-white">
@@ -39,9 +72,11 @@ const SignUpCard = () => {
         <div className="flex justify-between">
           <Input
             type="email"
+            name="email"
             className="h-[56px] px-5 text-gray-500 rounded-[5px]"
             placeholder={t("account.email")}
             required
+            onChange={handleInputChange}
           />
           <Button
             className={`h-[56px] w-[120px] px-6 py-2 flex items-center justify-center text-white rounded-[20px] bg-primary-500 hover:bg-primary-500/80`}
@@ -94,8 +129,10 @@ const SignUpCard = () => {
         {/* password */}
         <Input
           type="password"
+          name="password"
           className="h-[56px] w-full px-5 text-gray-500 rounded-[5px]"
           placeholder={t("account.password")}
+          onChange={handleInputChange}
         />
         {/* confirm password */}
         <Input
@@ -107,13 +144,15 @@ const SignUpCard = () => {
         {/* name */}
         <Input
           type="text"
+          name="name"
           className="h-[56px] w-full px-5 text-gray-500 rounded-[5px]"
           placeholder={t("account.name")}
+          onChange={handleInputChange}
         />
 
         {/* company name */}
         <div className="flex items-center justify-between w-full h-[56px]">
-          <p className="">회사명</p>
+          <p className=""> {t("account.companyName")}</p>
           <div className="flex flex-col w-2/3 h-full gap-5">
             <CompanyListBox onCompanyChange={handleCompanyChange} />
           </div>
@@ -125,18 +164,24 @@ const SignUpCard = () => {
           <div className="flex flex-col w-2/3 gap-5">
             <Input
               type="text"
+              name="employeeId"
               className="h-[56px] w-full px-5 text-gray-500 rounded-[5px]"
               placeholder={t("account.employeeId")}
+              onChange={handleInputChange}
             />
             <Input
               type="text"
+              name="department"
               className="h-[56px] w-full px-5 text-gray-500 rounded-[5px]"
               placeholder={t("account.employeeDepartment")}
+              onChange={handleInputChange}
             />
             <Input
               type="text"
+              name="position"
               className="h-[56px] w-full px-5 text-gray-500 rounded-[5px]"
               placeholder={t("account.employeePosition")}
+              onChange={handleInputChange}
             />
           </div>
         </div>
@@ -144,7 +189,10 @@ const SignUpCard = () => {
 
       {/* button */}
       <Button
-        className={`h-[56px] w-full text-white rounded-lg bg-button-background`}
+        className={`h-[56px] w-full text-white rounded-lg ${
+          isFormValid ? "bg-button-background" : "bg-gray-800"
+        }`}
+        disabled={!isFormValid}
       >
         {t("account.signUp")}
       </Button>
