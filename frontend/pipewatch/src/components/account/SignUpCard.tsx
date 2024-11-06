@@ -1,6 +1,6 @@
 import { useState, ChangeEvent } from "react";
 import { useTranslation, Trans } from "react-i18next";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { Input, Button } from "@headlessui/react";
 
@@ -21,11 +21,12 @@ const SignUpCard = () => {
   const [passwordMatchError, setPasswordMatchError] = useState(false);
 
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   const initialFormState = {
     email: "",
     password: "",
-    passwordConfirm: "",
+    confirmPassword: "",
     name: "",
     companyName: "",
     employeeId: "",
@@ -75,8 +76,11 @@ const SignUpCard = () => {
     !showEmailError &&
     !showPasswordError &&
     !showConfirmPasswordError &&
+    !passwordMatchError &&
     isEmailVerified &&
     Object.values(formState).every((value) => value !== "");
+
+  console.log(formState);
 
   return (
     <div className="w-[500px] flex flex-col bg-block rounded-[30px] p-[50px] gap-[40px] text-white">
@@ -236,6 +240,7 @@ const SignUpCard = () => {
           isFormValid ? "bg-button-background" : "bg-gray-800"
         }`}
         disabled={!isFormValid}
+        onClick={() => navigate("/account/auth/completed")}
       >
         {t("account.signUp")}
       </Button>

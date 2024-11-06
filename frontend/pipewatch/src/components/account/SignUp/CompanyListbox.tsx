@@ -22,9 +22,12 @@ export const CompanyListBox = ({ onCompanyChange }: CompanyListboxProps) => {
 
   const handleChange = (company: CompanyType) => {
     setSelected(company);
+    setSelectedCompany(company.company);
     onCompanyChange(company);
   };
   const [selected, setSelected] = useState<CompanyType>(companyList[0]);
+  const [selectedCompany, setSelectedCompany] = useState<string>("");
+
   return (
     <div className="w-full h-full">
       <Listbox value={selected} onChange={handleChange}>
@@ -35,7 +38,7 @@ export const CompanyListBox = ({ onCompanyChange }: CompanyListboxProps) => {
               "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25"
             )}
           >
-            {selected.company}
+            {selectedCompany === "" ? "선택" : selected.company}
             <ExpandMoreIcon
               sx={{ color: "#5E5E5E" }}
               className="pl-1 transition-transform duration-200 group size-6"
