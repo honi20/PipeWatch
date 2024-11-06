@@ -1,5 +1,5 @@
-from fastapi import FastAPI
 from dotenv import load_dotenv
+from fastapi import FastAPI
 from pydantic import BaseModel
 from typing import List, Tuple
 from PIL import Image
@@ -12,6 +12,7 @@ import trimesh
 import math
 import boto3
 import uvicorn
+import requests
 import shutil
 
 # 환경 변수 주입
@@ -31,24 +32,30 @@ S3_client = boto3.client(
     region_name=AWS_REGION
  )
 
-# HACK: 작업 경로 수정 및 환경변수화
-BASE_WORK_DIR = "C:/Users/SSAFY/Downloads/3d"
+# 경로 설정
+NODE_PATH = os.getenv("NODE_PATH")
+GLTF_PIPELINE_PATH = os.getenv("GLTF_PIPELINE_PATH")
+BASE_WORK_DIR = os.getenv("BASE_WORK_DIR")
 
 app = FastAPI()
 
-class PipelineModels(BaseModel):
+class CreatePipelineModelRequest(BaseModel):
     id: str
     pipelines: List[List[Tuple[float, float]]]
     radius: float = 1
 
-# FastAPI 엔드포인트 설정
+class CreateThumbnailRequest(BaseModel):
+    id: str
+    draco_gltf_url: str    
+
+# 파이프라인 모델 생성 api
 @app.post("/pipelineModel")
-def create_pipeline_model(data: PipelineModels):
+def create_pipeline_model(data: CreatePipelineModelRequest):
     work_dir = os.path.join(BASE_WORK_DIR, data.id)
     os.makedirs(work_dir, exist_ok=True)
 
     # 파일 생성
-    stl_paths = create_stl_files(data.pipelines, data.radius, work_dir, data.id)
+    stl_paths = create_stl_files(data.pipelines, data.radius, work_dir)
     gltf_path = os.path.join(work_dir, f"origin_Pipeline_{data.id}.gltf")
     compressed_gltf_path = create_gltf(stl_paths, data.id, work_dir, gltf_path)
 
@@ -60,26 +67,27 @@ def create_pipeline_model(data: PipelineModels):
     thumbnail_path = os.path.join(work_dir, f"Thumbnail_{data.id}.png")
     create_thumbnail(gltf_path, thumbnail_path)
 
-    # 썸네일 업로드
+    # 썸네일 S3 업로드
     thumbnail_key = f"thumbnails/Thumbnail_{data.id}.png"
     thumbnail_URL = upload_S3(thumbnail_path, thumbnail_key)
 
     # 작업 폴더 삭제
     shutil.rmtree(work_dir)
 
-    return {"pipeModel_URL": pipeModel_URL, "thumbnail_URL": thumbnail_URL}
+    # 결과 전송
+    send_data(data.id, pipeModel_URL, thumbnail_URL)
 
-def create_stl_files(pipelines, radius, work_dir, id):
+def create_stl_files(pipelines, radius, work_dir):
     stl_paths = []
 
     for i, pipeline_coords in enumerate(pipelines):
         pipeline_name = f"PipeObj_{i + 1}"
-        stl_paths.extend(create_pipeline(pipeline_coords, radius, pipeline_name, work_dir, id))
+        stl_paths.extend(create_pipeline(pipeline_coords, radius, pipeline_name, work_dir))
 
     return stl_paths
 
 # 파이프라인 생성 함수
-def create_pipeline(coords, radius, pipeline_name, work_dir, id):
+def create_pipeline(coords, radius, pipeline_name, work_dir):
     stl_paths = []
     start_point = coords[0]
     end_point = coords[1]    
@@ -89,13 +97,13 @@ def create_pipeline(coords, radius, pipeline_name, work_dir, id):
         if check_collinear(start_point, end_point, coords[index]):
             end_point = coords[index]
         else:
-            create_cylinder(start_point, end_point, radius, f"{pipeline_name}_Segment_{segment_index}", work_dir, stl_paths, id)
-            create_connector(end_point, radius, f"{pipeline_name}_Connector_{segment_index}", work_dir, stl_paths, id)
+            create_cylinder(start_point, end_point, radius, f"{pipeline_name}_Segment_{segment_index}", work_dir, stl_paths)
+            create_connector(end_point, radius, f"{pipeline_name}_Connector_{segment_index}", work_dir, stl_paths)
             start_point = end_point
             end_point = coords[index]
             segment_index += 1
 
-    create_cylinder(start_point, end_point, radius, f"{pipeline_name}_Segment_{segment_index}", work_dir, stl_paths, id)
+    create_cylinder(start_point, end_point, radius, f"{pipeline_name}_Segment_{segment_index}", work_dir, stl_paths)
 
     return stl_paths
 
@@ -115,7 +123,7 @@ def check_collinear(p1, p2, p3):
     return angle <= ANGLE_TOLERANCE
 
 # 파이프 생성 함수
-def create_cylinder(p1, p2, radius, name, work_dir, stl_paths, id):
+def create_cylinder(p1, p2, radius, name, work_dir, stl_paths):
     distance = math.sqrt((p2[0] - p1[0]) ** 2 + (p2[1] - p1[1]) ** 2)
     angle = math.degrees(math.atan2(p2[1] - p1[1], p2[0] - p1[0]))
 
@@ -129,15 +137,15 @@ def create_cylinder(p1, p2, radius, name, work_dir, stl_paths, id):
         .translate((p1[0], p1[1], 0))
     )
 
-    cylinder_path = os.path.join(work_dir, f"{name}_{id}.stl")
+    cylinder_path = os.path.join(work_dir, f"{name}.stl")
     cylinder.val().exportStl(cylinder_path)
     stl_paths.append(cylinder_path)
 
 # 커넥터 생성 함수
-def create_connector(center, radius, name, work_dir, stl_paths, id):
+def create_connector(center, radius, name, work_dir, stl_paths):
     connector = cq.Workplane("XY").sphere(radius).translate((center[0], center[1], 0))
 
-    connector_path = os.path.join(work_dir, f"{name}_{id}.stl")
+    connector_path = os.path.join(work_dir, f"{name}.stl")
     connector.val().exportStl(connector_path)
     stl_paths.append(connector_path)
 
@@ -162,12 +170,10 @@ def create_gltf(stl_paths, id, work_dir, gltf_path):
 
 # draco 압축 함수
 def compress_gltf(input_path, output_path):
-    # HACK: 경로 수정 및 환경변수화
-    node_path = r"C:\Program Files\nodejs\node.exe"
-    gltf_pipeline_path = r"C:\Users\SSAFY\AppData\Roaming\npm\node_modules\gltf-pipeline\bin\gltf-pipeline.js"
-
-    subprocess.run([node_path, gltf_pipeline_path, "-i", input_path, "-o", output_path, "-d", "--draco.compressMesh"],
-                   check=True, capture_output=True, text=True)
+    subprocess.run(
+        [NODE_PATH, GLTF_PIPELINE_PATH, "-i", input_path, "-o", output_path, "-d", "--draco.compressMesh"],
+        check=True, capture_output=True, text=True
+    )
     
 # 썸네일 생성 함수
 def create_thumbnail(gltf_path, thumbnail_path):
@@ -218,7 +224,42 @@ def upload_S3(file_path, S3_key):
     
     return S3_URL
 
-if __name__ == "__main__":
-    # HACK: 호스트 및 포트 수정 후 환경변수화
-    uvicorn.run(app, host="127.0.0.1", port=8000)
+# 결과 전송 함수
+def send_data(user_uuid: str, model_url: str, preview_img_url: str) -> dict:
+    target_url = "https://api.pipewatch.co.kr/api/models/modeling"
+    
+    payload = {
+        "userUuid": user_uuid,
+        "modelUrl": model_url,
+        "previewImgUrl": preview_img_url
+    }
 
+    response = requests.post(target_url, json=payload)
+
+    if response.status_code == 201:
+        return {
+            "status": "성공",
+            "message": "결과 전송 완료",
+            "pipeModel_URL": model_url,
+            "thumbnail_URL": preview_img_url
+        }
+    else:
+        return {
+            "status": "실패",
+            "message": "결과 전송 실패",
+            "error": response.text
+        }
+
+if __name__ == "__main__":
+    host=os.getenv("LOCAL_HOST")
+    port=os.getenv("LOCAL_PORT")
+
+    uvicorn.run(app, host=host, port=int(port))
+
+# TODO:
+# 썸네일 용 api 만들기
+
+# 포트 오류: Stop-Process -Name python -Force
+
+# 경로 설정하기 -> 철민햄
+# 좌표 보정하기
