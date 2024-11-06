@@ -1,5 +1,7 @@
 package com.pipewatch.domain.pipelineModel.model.dto;
 
+import com.pipewatch.domain.pipeline.model.entity.Pipe;
+import com.pipewatch.domain.pipeline.model.entity.Pipeline;
 import com.pipewatch.domain.pipelineModel.model.entity.PipelineModel;
 import com.pipewatch.domain.pipelineModel.model.entity.PipelineModelMemo;
 import lombok.*;
@@ -73,7 +75,6 @@ public class PipelineModelResponse {
 		private String building;
 		private Integer floor;
 		private Boolean isCompleted;
-		private String modelUuid;
 		private String updatedAt;
 		private List<PipelineDto> pipelines;
 		private Creator creator;
@@ -85,7 +86,6 @@ public class PipelineModelResponse {
 					.building(model.getBuildingAndFloor().getName())
 					.floor(model.getBuildingAndFloor().getFloor())
 					.isCompleted(model.getIsCompleted())
-					.modelUuid(model.getUuid())
 					.updatedAt(convertToDateFormat(model.getUpdated_at()))
 					.pipelines(pipelines)
 					.creator(new Creator(model.getUser().getUuid(), model.getUser().getName()))
@@ -96,8 +96,23 @@ public class PipelineModelResponse {
 	@Getter
 	@AllArgsConstructor
 	public static class PipelineDto {
-		private String pipelineUuid;
-		private List<String> pipeUuids;
+		private Long pipelineId;
+		private List<PipeDto> pipes;
+	}
+
+	@Getter
+	@Builder
+	@AllArgsConstructor
+	public static class PipeDto {
+		private Long pipeId;
+		private String pipeName;
+
+		public static PipeDto toDto(Pipe pipe) {
+			return PipeDto.builder()
+					.pipeId(pipe.getId())
+					.pipeName(pipe.getName())
+					.build();
+		}
 	}
 
 	@Getter
