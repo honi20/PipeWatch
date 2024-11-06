@@ -96,7 +96,9 @@ const SignUpCard = () => {
           <Input
             type="email"
             name="email"
-            className="h-[56px] px-5 text-gray-500 rounded-[5px]"
+            className={`h-[56px] px-5 text-gray-500 rounded-[5px] ${
+              showEmailError && "border-solid border-2 border-warn"
+            }`}
             placeholder={t("account.email")}
             required
             onChange={handleInputChange}
@@ -115,11 +117,11 @@ const SignUpCard = () => {
         )}
         <div className="flex items-center justify-between">
           <Input
-            type="email"
+            type="text"
             value={emailVeriCode}
             className={`h-[56px] px-5 text-gray-500 rounded-[5px] ${
               isEmailVerified ? "bg-gray-800" : "bg-white"
-            }`}
+            } ${EmailVeriError && "border-solid border-2 border-warn"}`}
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
               setEmailVeriCode(e.target.value)
             }
@@ -159,7 +161,9 @@ const SignUpCard = () => {
         <Input
           type="password"
           name="password"
-          className="h-[56px] w-full px-5 text-gray-500 rounded-[5px]"
+          className={`h-[56px]  w-full  px-5 text-gray-500 rounded-[5px] ${
+            showPasswordError && "border-solid border-2 border-warn"
+          }`}
           placeholder={t("account.password")}
           onChange={handleInputChange}
         />
@@ -172,7 +176,9 @@ const SignUpCard = () => {
         <Input
           type="password"
           name="confirmPassword"
-          className="h-[56px] w-full px-5 text-gray-500 rounded-[5px]"
+          className={`h-[56px]  w-full  px-5 text-gray-500 rounded-[5px] ${
+            showConfirmPasswordError && "border-solid border-2 border-warn"
+          }`}
           placeholder={t("account.confirmPassword")}
           onChange={handleInputChange}
         />
