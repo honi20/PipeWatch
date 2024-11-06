@@ -20,49 +20,33 @@ const ResetPasswordCard = () => {
     newPasswordMismatchError: false,
   });
 
-  // 핸들러 함수
-  const handlePasswordChange = (field: string, value: string) => {
+  // 공통 핸들러 함수
+  const updatePasswordData = (field: string, value: string) => {
     setPasswordData((prevData) => ({ ...prevData, [field]: value }));
 
-    switch (field) {
-      case "newPassword":
-        setPasswordErrors((prevErrors) => ({
-          ...prevErrors,
-          newPasswordError: !passwordPattern.test(value),
-        }));
-        break;
-      case "checkNewPassword":
-        setPasswordErrors((prevErrors) => ({
-          ...prevErrors,
-          checkNewPasswordError: !passwordPattern.test(value),
-          newPasswordMismatchError: value !== passwordData.newPassword,
-        }));
-        break;
-      default:
-        break;
-    }
+    setPasswordErrors((prevErrors) => ({
+      ...prevErrors,
+      newPasswordError:
+        field === "newPassword"
+          ? !passwordPattern.test(value)
+          : prevErrors.newPasswordError,
+      checkNewPasswordError:
+        field === "checkNewPassword"
+          ? !passwordPattern.test(value)
+          : prevErrors.checkNewPasswordError,
+      newPasswordMismatchError:
+        field === "checkNewPassword"
+          ? value !== passwordData.newPassword
+          : prevErrors.newPasswordMismatchError,
+    }));
+  };
+
+  const handlePasswordChange = (field: string, value: string) => {
+    updatePasswordData(field, value);
   };
 
   const handlePasswordBlur = (field: string, value: string) => {
-    setPasswordData((prevData) => ({ ...prevData, [field]: value }));
-
-    switch (field) {
-      case "newPassword":
-        setPasswordErrors((prevErrors) => ({
-          ...prevErrors,
-          newPasswordError: !passwordPattern.test(value),
-        }));
-        break;
-      case "checkNewPassword":
-        setPasswordErrors((prevErrors) => ({
-          ...prevErrors,
-          checkNewPasswordError: !passwordPattern.test(value),
-          newPasswordMismatchError: value !== passwordData.newPassword,
-        }));
-        break;
-      default:
-        break;
-    }
+    updatePasswordData(field, value);
   };
 
   const isFormValid =
