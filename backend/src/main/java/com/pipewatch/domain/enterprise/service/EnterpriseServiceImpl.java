@@ -45,7 +45,7 @@ public class EnterpriseServiceImpl implements EnterpriseService {
 			throw new BaseException(ENTERPRISE_NOT_FOUND);
 		}
 
-		return EnterpriseResponse.DetailDto.toDto(enterprise);
+		return EnterpriseResponse.DetailDto.fromEntity(enterprise);
 	}
 
 	@Override
@@ -53,7 +53,7 @@ public class EnterpriseServiceImpl implements EnterpriseService {
 		List<Enterprise> enterprises = enterpriseRepository.findAll();
 
 		List<EnterpriseResponse.EnterpriseDto> enterpriseDtos
-				= enterprises.stream().map(EnterpriseResponse.EnterpriseDto::toDto).toList();
+				= enterprises.stream().map(EnterpriseResponse.EnterpriseDto::fromEntity).toList();
 
 		return EnterpriseResponse.ListDto.builder()
 				.enterprises(enterpriseDtos)

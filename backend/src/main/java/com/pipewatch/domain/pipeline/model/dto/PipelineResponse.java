@@ -23,10 +23,10 @@ public class PipelineResponse {
 		private PropertyDto property;
 		private String updatedAt;
 
-		public static DetailDto toDto(Pipeline pipeline) {
+		public static DetailDto fromEntity(Pipeline pipeline) {
 			return DetailDto.builder()
 					.name(pipeline.getName())
-					.property(PropertyDto.toDto(pipeline.getProperty()))
+					.property(PropertyDto.fromEntity(pipeline.getProperty()))
 					.updatedAt(convertToDateFormat(pipeline.getUpdated_at()))
 					.build();
 		}
@@ -62,7 +62,7 @@ public class PipelineResponse {
 		private String fluidMaterial;
 		private Double velocity;
 
-		public static PropertyDto toDto(PipelineProperty property) {
+		public static PropertyDto fromEntity(PipelineProperty property) {
 			return PropertyDto.builder()
 					.pipeMaterial(property.getPipeMaterial())
 					.outerDiameter(property.getOuterDiameter())
@@ -82,7 +82,7 @@ public class PipelineResponse {
 		private Creator creator;
 		private String createdAt;
 
-		public static MemoDto toDto(PipeMemo memo) {
+		public static MemoDto fromEntity(PipeMemo memo) {
 			return MemoDto.builder()
 					.memoId(memo.getId())
 					.memo(memo.getMemo())

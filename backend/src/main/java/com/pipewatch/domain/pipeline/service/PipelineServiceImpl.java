@@ -46,7 +46,7 @@ public class PipelineServiceImpl implements PipelineService {
 		Pipeline pipeline = pipelineRepository.findById(pipelineId)
 				.orElseThrow(() -> new BaseException(PIPELINE_NOT_FOUND));
 
-		return PipelineResponse.DetailDto.toDto(pipeline);
+		return PipelineResponse.DetailDto.fromEntity(pipeline);
 	}
 
 	@Override
@@ -126,7 +126,7 @@ public class PipelineServiceImpl implements PipelineService {
 		Map<Pipe, List<PipelineResponse.MemoDto>> groupedMemo = memos.stream()
 				.collect(Collectors.groupingBy(
 						PipeMemo::getPipe,
-						Collectors.mapping(PipelineResponse.MemoDto::toDto, Collectors.toList()))
+						Collectors.mapping(PipelineResponse.MemoDto::fromEntity, Collectors.toList()))
 				);
 
 		List<PipelineResponse.MemoListDto> memoList = groupedMemo.entrySet().stream()
@@ -158,7 +158,7 @@ public class PipelineServiceImpl implements PipelineService {
 		List<PipeMemo> memos = pipeMemoRepository.findByPipeId(pipeId);
 
 		List<PipelineResponse.MemoDto> memoList = memos.stream()
-				.map(PipelineResponse.MemoDto::toDto).toList();
+				.map(PipelineResponse.MemoDto::fromEntity).toList();
 
 		return PipelineResponse.MemoListDto.builder()
 				.pipeId(pipe.getId())

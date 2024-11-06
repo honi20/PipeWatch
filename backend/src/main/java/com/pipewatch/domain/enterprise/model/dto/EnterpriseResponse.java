@@ -19,7 +19,7 @@ public class EnterpriseResponse {
 		private String managerEmail;
 		private String managerPhoneNumber;
 
-		public static DetailDto toDto(Enterprise enterprise) {
+		public static DetailDto fromEntity(Enterprise enterprise) {
 			return DetailDto.builder()
 					.name(enterprise.getName())
 					.industry(enterprise.getIndustry())
@@ -46,7 +46,7 @@ public class EnterpriseResponse {
 		private String name;
 		private String industry;
 
-		public static EnterpriseDto toDto(Enterprise enterprise) {
+		public static EnterpriseDto fromEntity(Enterprise enterprise) {
 			return EnterpriseDto.builder()
 					.enterpriseId(enterprise.getId())
 					.name(enterprise.getName())

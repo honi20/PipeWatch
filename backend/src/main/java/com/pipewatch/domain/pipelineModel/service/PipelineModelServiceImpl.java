@@ -193,7 +193,7 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 		List<PipelineModel> modelList = pipelineModelCustomRepository.findAllByBuildingAndFloor(enterprise, building, floor);
 
 		List<PipelineModelResponse.PipelineModelDto> modelDtos = modelList.stream()
-				.map(PipelineModelResponse.PipelineModelDto::toDto)
+				.map(PipelineModelResponse.PipelineModelDto::fromEntity)
 				.collect(Collectors.toList());
 
 		return PipelineModelResponse.ListDto.builder()
@@ -218,7 +218,7 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 		List<Pipe> pipes = pipelineModelCustomRepository.findPipeByModel(modelId);
 		List<PipelineModelResponse.PipelineDto> pipelines = getPipelineDto(pipes);
 
-		return PipelineModelResponse.DetailDto.toDto(model, pipelines);
+		return PipelineModelResponse.DetailDto.fromEntity(model, pipelines);
 	}
 
 	@Override
@@ -280,7 +280,7 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 
 		List<PipelineModelMemo> memos = pipelineModelMemoRepository.findByPipelineModelIdOrder(pipelineModel.getId());
 		List<PipelineModelResponse.MemoDto> modelMemoList = memos.stream()
-				.map(PipelineModelResponse.MemoDto::toDto)
+				.map(PipelineModelResponse.MemoDto::fromEntity)
 				.toList();
 
 		return PipelineModelResponse.MemoListDto.builder()
@@ -333,7 +333,7 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 				.collect(Collectors.groupingBy(
 						pipe -> pipe.getPipeline().getId(), // Pipeline의 ID로 그룹화
 						Collectors.mapping(
-								PipelineModelResponse.PipeDto::toDto,
+								PipelineModelResponse.PipeDto::fromEntity,
 								Collectors.toList()
 						)
 				));
