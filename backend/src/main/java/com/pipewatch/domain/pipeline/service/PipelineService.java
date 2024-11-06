@@ -7,4 +7,6 @@ public interface PipelineService {
 	PipelineResponse.DetailDto getPipelineDetail(Long userId, Long pipelineId);
 
 	void modifyPipeline(Long userId, Long pipelineId, PipelineRequest.ModifyDto requestDto);
+
+	void modifyPipelinePropery(Long userId, Long pipelineId, PipelineRequest.ModifyPropertyDto requestDto);
 }

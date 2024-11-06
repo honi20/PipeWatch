@@ -34,4 +34,24 @@ public class PipelineProperty {
 	@NotNull
 	@Builder.Default
 	private Double velocity = 1.0;
+
+	public void updatePipeMaterial(String pipeMaterial) {
+		this.pipeMaterial = pipeMaterial;
+	}
+
+	public void updateOuterDiameter(Double outerDiameter) {
+		this.outerDiameter = outerDiameter;
+	}
+
+	public void updateInnerDiameter(Double innerDiameter) {
+		this.innerDiameter = innerDiameter;
+	}
+
+	public void updateFluidMaterial(String fluidMaterial) {
+		this.fluidMaterial = fluidMaterial;
+	}
+
+	public void updateVelocity(Double velocity) {
+		this.velocity = velocity;
+	}
 }

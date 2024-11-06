@@ -35,8 +35,10 @@ public class PipelineController implements PipelineApiSwagger {
 		return new ResponseEntity<>(ResponseDto.success(PIPELINE_MODIFIED_OK, null), HttpStatus.OK);
 	}
 
-	@PutMapping("/{pipelineUuid}/properties")
-	public ResponseEntity<?> pipelinePropertyModify(@PathVariable String pipelineUuid) {
+	@PutMapping("/{pipelineId}/property")
+	public ResponseEntity<?> pipelinePropertyModify(@AuthenticationPrincipal Long userId, @PathVariable Long pipelineId, PipelineRequest.ModifyPropertyDto requestDto) {
+		pipelineService.modifyPipelinePropery(userId, pipelineId, requestDto);
+
 		return new ResponseEntity<>(ResponseDto.success(PIPELINE_PROPERTY_MODIFIED_OK, null), HttpStatus.OK);
 	}
 

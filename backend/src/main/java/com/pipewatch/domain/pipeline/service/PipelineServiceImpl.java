@@ -3,6 +3,7 @@ package com.pipewatch.domain.pipeline.service;
 import com.pipewatch.domain.pipeline.model.dto.PipelineRequest;
 import com.pipewatch.domain.pipeline.model.dto.PipelineResponse;
 import com.pipewatch.domain.pipeline.model.entity.Pipeline;
+import com.pipewatch.domain.pipeline.model.entity.PipelineProperty;
 import com.pipewatch.domain.pipeline.repository.PipelineRepository;
 import com.pipewatch.domain.user.model.entity.Role;
 import com.pipewatch.domain.user.model.entity.User;
@@ -42,7 +43,7 @@ public class PipelineServiceImpl implements PipelineService {
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new BaseException(USER_NOT_FOUND));
 
-		// 관리자만 조회 가능
+		// 관리자만 수정 가능
 		if (user.getRole() == Role.USER || user.getRole() == Role.EMPLOYEE) {
 			throw new BaseException(FORBIDDEN_USER_ROLE);
 		}
@@ -51,6 +52,30 @@ public class PipelineServiceImpl implements PipelineService {
 				.orElseThrow(() -> new BaseException(PIPELINE_NOT_FOUND));
 
 		pipeline.updateName(requestDto.getName());
+		pipelineRepository.save(pipeline);
+	}
+
+	@Override
+	@Transactional
+	public void modifyPipelinePropery(Long userId, Long pipelineId, PipelineRequest.ModifyPropertyDto requestDto) {
+		User user = userRepository.findById(userId)
+				.orElseThrow(() -> new BaseException(USER_NOT_FOUND));
+
+		// 관리자만 수정 가능
+		if (user.getRole() == Role.USER || user.getRole() == Role.EMPLOYEE) {
+			throw new BaseException(FORBIDDEN_USER_ROLE);
+		}
+
+		Pipeline pipeline = pipelineRepository.findById(pipelineId)
+				.orElseThrow(() -> new BaseException(PIPELINE_NOT_FOUND));
+
+		PipelineProperty property = pipeline.getProperty();
+		property.updatePipeMaterial(requestDto.getPipeMaterial());
+		property.updateOuterDiameter(requestDto.getOuterDiameter());
+		property.updateInnerDiameter(requestDto.getInnerDiameter());
+		property.updateFluidMaterial(requestDto.getFluidMaterial());
+		property.updateVelocity(requestDto.getVelocity());
+
 		pipelineRepository.save(pipeline);
 	}
 }
