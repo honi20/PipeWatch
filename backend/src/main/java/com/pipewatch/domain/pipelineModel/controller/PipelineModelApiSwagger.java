@@ -101,38 +101,74 @@ public interface PipelineModelApiSwagger {
 					examples = {@ExampleObject(value = "{\"header\":{\"httpStatusCode\": 200, \"message\": \"모델 상세 조회에 성공했습니다.\"}," +
 							"\"body\": {\n" +
 							"    \"name\": \"Pipeline Model\",\n" +
-							"    \"modelingUrl\": \"https://pipewatch-bucket.s3.ap-northeast-2.amazonaws.com/models/PipeLine_8f1928cb-47fe-4994-8869-dfe08f484cd8.gltf\",\n" +
+							"    \"modelingUrl\": \"https://pipewatch-bucket.s3.ap-northeast-2.amazonaws.com/models/PipeLine_7d521f29-814d-4077-b3a6-04a425bd64bf.gltf\",\n" +
 							"    \"building\": \"역삼 멀티캠퍼스\",\n" +
-							"    \"floor\": 4,\n" +
+							"    \"floor\": 14,\n" +
 							"    \"isCompleted\": true,\n" +
-							"    \"modelUuid\": \"8f1928cb-47fe-4994-8869-dfe08f484cd8\",\n" +
-							"    \"updatedAt\": \"2024-11-05 17:18:33\",\n" +
+							"    \"modelUuid\": \"7d521f29-814d-4077-b3a6-04a425bd64bf\",\n" +
+							"    \"updatedAt\": \"2024-11-06 11:41:26\",\n" +
 							"    \"pipelines\": [\n" +
 							"      {\n" +
-							"        \"pipelineUuid\": \"PipeObj_2_8f1928cb-47fe-4994-8869-dfe08f484cd8\",\n" +
-							"        \"pipeUuids\": [\n" +
-							"          \"PipeObj_2_Segment_1_ssafy123_8f1928cb-47fe-4994-8869-dfe08f484cd8\",\n" +
-							"          \"PipeObj_2_Connector_1_ssafy123_8f1928cb-47fe-4994-8869-dfe08f484cd8\",\n" +
-							"          \"PipeObj_2_Segment_2_ssafy123_8f1928cb-47fe-4994-8869-dfe08f484cd8\",\n" +
-							"          \"PipeObj_2_Segment_3_ssafy123_8f1928cb-47fe-4994-8869-dfe08f484cd8\"\n" +
+							"        \"pipelineId\": 16,\n" +
+							"        \"pipes\": [\n" +
+							"          {\n" +
+							"            \"pipeId\": 60,\n" +
+							"            \"pipeName\": \"PipeObj_1_Segment_1\"\n" +
+							"          },\n" +
+							"          {\n" +
+							"            \"pipeId\": 61,\n" +
+							"            \"pipeName\": \"PipeObj_1_Segment_2\"\n" +
+							"          },\n" +
+							"          {\n" +
+							"            \"pipeId\": 62,\n" +
+							"            \"pipeName\": \"PipeObj_1_Segment_3\"\n" +
+							"          },\n" +
+							"          {\n" +
+							"            \"pipeId\": 63,\n" +
+							"            \"pipeName\": \"PipeObj_1_Segment_4\"\n" +
+							"          },\n" +
+							"          {\n" +
+							"            \"pipeId\": 64,\n" +
+							"            \"pipeName\": \"PipeObj_1_Segment_5\"\n" +
+							"          },\n" +
+							"          {\n" +
+							"            \"pipeId\": 65,\n" +
+							"            \"pipeName\": \"PipeObj_1_Segment_6\"\n" +
+							"          }\n" +
 							"        ]\n" +
 							"      },\n" +
 							"      {\n" +
-							"        \"pipelineUuid\": \"PipeObj_1_8f1928cb-47fe-4994-8869-dfe08f484cd8\",\n" +
-							"        \"pipeUuids\": [\n" +
-							"          \"PipeObj_1_Segment_1_ssafy123_8f1928cb-47fe-4994-8869-dfe08f484cd8\",\n" +
-							"          \"PipeObj_1_Segment_2_ssafy123_8f1928cb-47fe-4994-8869-dfe08f484cd8\",\n" +
-							"          \"PipeObj_1_Segment_3_ssafy123_8f1928cb-47fe-4994-8869-dfe08f484cd8\",\n" +
-							"          \"PipeObj_1_Segment_4_ssafy123_8f1928cb-47fe-4994-8869-dfe08f484cd8\",\n" +
-							"          \"PipeObj_1_Segment_5_ssafy123_8f1928cb-47fe-4994-8869-dfe08f484cd8\",\n" +
-							"          \"PipeObj_1_Segment_6_ssafy123_8f1928cb-47fe-4994-8869-dfe08f484cd8\"\n" +
+							"        \"pipelineId\": 17,\n" +
+							"        \"pipes\": [\n" +
+							"          {\n" +
+							"            \"pipeId\": 66,\n" +
+							"            \"pipeName\": \"PipeObj_2_Segment_1\"\n" +
+							"          },\n" +
+							"          {\n" +
+							"            \"pipeId\": 67,\n" +
+							"            \"pipeName\": \"PipeObj_2_Connector_1\"\n" +
+							"          },\n" +
+							"          {\n" +
+							"            \"pipeId\": 68,\n" +
+							"            \"pipeName\": \"PipeObj_2_Segment_2\"\n" +
+							"          },\n" +
+							"          {\n" +
+							"            \"pipeId\": 69,\n" +
+							"            \"pipeName\": \"PipeObj_2_Segment_3\"\n" +
+							"          }\n" +
 							"        ]\n" +
 							"      },\n" +
 							"      {\n" +
-							"        \"pipelineUuid\": \"PipeObj_3_8f1928cb-47fe-4994-8869-dfe08f484cd8\",\n" +
-							"        \"pipeUuids\": [\n" +
-							"          \"PipeObj_3_Segment_1_ssafy123_8f1928cb-47fe-4994-8869-dfe08f484cd8\",\n" +
-							"          \"PipeObj_3_Segment_2_ssafy123_8f1928cb-47fe-4994-8869-dfe08f484cd8\"\n" +
+							"        \"pipelineId\": 18,\n" +
+							"        \"pipes\": [\n" +
+							"          {\n" +
+							"            \"pipeId\": 70,\n" +
+							"            \"pipeName\": \"PipeObj_3_Segment_1\"\n" +
+							"          },\n" +
+							"          {\n" +
+							"            \"pipeId\": 71,\n" +
+							"            \"pipeName\": \"PipeObj_3_Segment_2\"\n" +
+							"          }\n" +
 							"        ]\n" +
 							"      }\n" +
 							"    ],\n" +

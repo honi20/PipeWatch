@@ -322,12 +322,12 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 	}
 
 	private List<PipelineModelResponse.PipelineDto> getPipelineDto(List<Pipe> pipes) {
-		// pipeline의 uuid를 기준으로 group화한 후 각 PipelineDto로 변환
-		Map<String, List<String>> groupedByPipelineUuid = pipes.stream()
+		// pipeline의 name를 기준으로 group화한 후 각 PipelineDto로 변환
+		Map<Long, List<PipelineModelResponse.PipeDto>> groupedByPipelineUuid = pipes.stream()
 				.collect(Collectors.groupingBy(
-						pipe -> pipe.getPipeline().getUuid(), // Pipeline의 UUID로 그룹화
+						pipe -> pipe.getPipeline().getId(), // Pipeline의 UUID로 그룹화
 						Collectors.mapping(
-								Pipe::getUuid,
+								PipelineModelResponse.PipeDto::toDto,
 								Collectors.toList()
 						)
 				));
@@ -348,7 +348,7 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 			JSONObject node = (JSONObject) nodes.get(i);
 			String nodeName = (String) node.get("name");
 
-			if (nodeName.startsWith("PipeObj_") && (nodeName.contains("Segment") || nodeName.contains("Connector_"))) {
+			if (nodeName.startsWith("PipeObj_") && (nodeName.contains("Segment_") || nodeName.contains("Connector_"))) {
 				String[] parts = nodeName.split("_");
 				String pipelineNumber = parts[1];
 				Pipeline relatedPipeline = pipelineMap.get(pipelineNumber);
@@ -357,7 +357,6 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 				if (relatedPipeline == null) {
 					relatedPipeline = Pipeline.builder()
 							.name("PipeObj_" + pipelineNumber)
-							.uuid("PipeObj_" + pipelineNumber + "_" + UUID)
 							.pipelineModel(pipelineModel)
 							.build();
 
@@ -368,7 +367,6 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 				// 파이프 저장
 				Pipe pipe = Pipe.builder()
 						.name(nodeName)
-						.uuid(nodeName + "_" + UUID)
 						.pipeline(relatedPipeline)
 						.build();
 

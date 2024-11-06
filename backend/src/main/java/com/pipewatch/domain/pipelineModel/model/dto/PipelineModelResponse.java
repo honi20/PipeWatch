@@ -1,5 +1,7 @@
 package com.pipewatch.domain.pipelineModel.model.dto;
 
+import com.pipewatch.domain.pipeline.model.entity.Pipe;
+import com.pipewatch.domain.pipeline.model.entity.Pipeline;
 import com.pipewatch.domain.pipelineModel.model.entity.PipelineModel;
 import com.pipewatch.domain.pipelineModel.model.entity.PipelineModelMemo;
 import lombok.*;
@@ -96,8 +98,23 @@ public class PipelineModelResponse {
 	@Getter
 	@AllArgsConstructor
 	public static class PipelineDto {
-		private String pipelineUuid;
-		private List<String> pipeUuids;
+		private Long pipelineId;
+		private List<PipeDto> pipes;
+	}
+
+	@Getter
+	@Builder
+	@AllArgsConstructor
+	public static class PipeDto {
+		private Long pipeId;
+		private String pipeName;
+
+		public static PipeDto toDto(Pipe pipe) {
+			return PipeDto.builder()
+					.pipeId(pipe.getId())
+					.pipeName(pipe.getName())
+					.build();
+		}
 	}
 
 	@Getter

@@ -19,8 +19,6 @@ public class Pipe {
 
 	private String name;
 
-	private String uuid;
-
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "pipeline_id")
 	private Pipeline pipeline;
