@@ -15,4 +15,6 @@ public interface PipelineService {
 	PipelineResponse.PipelineMemoListDto getPipelineMemoList(Long userId, Long pipelineId);
 
 	PipelineResponse.MemoListDto getPipeMemoList(Long userId, Long pipeId);
+
+	void deletePipeMemo(Long userId, Long memoId);
 }

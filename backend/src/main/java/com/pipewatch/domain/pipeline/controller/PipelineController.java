@@ -64,7 +64,9 @@ public class PipelineController implements PipelineApiSwagger {
 	}
 
 	@DeleteMapping("/pipes/{memoId}")
-	public ResponseEntity<?> pipeMemoDelete(@PathVariable Long memoId) {
+	public ResponseEntity<?> pipeMemoDelete(@AuthenticationPrincipal Long userId, @PathVariable Long memoId) {
+		pipelineService.deletePipeMemo(userId, memoId);
+
 		return new ResponseEntity<>(ResponseDto.success(PIPE_MEMO_DELETED, null), HttpStatus.NO_CONTENT);
 	}
 

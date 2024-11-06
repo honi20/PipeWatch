@@ -166,4 +166,18 @@ public class PipelineServiceImpl implements PipelineService {
 				.memoList(memoList)
 				.build();
 	}
+
+	@Override
+	@Transactional
+	public void deletePipeMemo(Long userId, Long memoId) {
+		PipeMemo memo = pipeMemoRepository.findById(memoId)
+				.orElseThrow(() -> new BaseException(PIPE_MEMO_NOT_FOUND));
+
+		// 작성자와 일치하는지 확인
+		if (userId != memo.getUser().getId()) {
+			throw new BaseException(FORBIDDEN_USER_ROLE);
+		}
+
+		pipeMemoRepository.delete(memo);
+	}
 }

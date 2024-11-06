@@ -182,7 +182,7 @@ public interface PipelineApiSwagger {
 					examples = {@ExampleObject(value = "{\"header\":{\"httpStatusCode\": 204, \"message\": \"메모 삭제에 성공했습니다.\"},\n\"body\": null}")}
 			))
 	})
-	ResponseEntity<?> pipeMemoDelete(
-			@Schema(description = "메모 ID", example = "1")
-			@PathVariable Long memoId);
+	ResponseEntity<?> pipeMemoDelete(@AuthenticationPrincipal Long userId,
+									 @Schema(description = "메모 ID", example = "1")
+									 @PathVariable Long memoId);
 }
