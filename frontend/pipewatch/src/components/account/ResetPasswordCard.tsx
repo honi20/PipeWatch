@@ -117,7 +117,7 @@ const ResetPasswordCard = () => {
                 : "bg-gray-800 cursor-not-allowed"
             }
           `}
-          onClick={() => navigate("/account/auth/reset-pw/completed")}
+          onClick={() => navigate("/account/auth/reset-pw-completed")}
           disabled={!isFormValid}
         >
           {t("account.resetPassword.title")}

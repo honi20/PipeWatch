@@ -53,7 +53,9 @@
     "enterYourName": "Please enter your name.",
     "resetPassword": {
       "title": "Reset Your Password",
-      "instruction": "Please enter your new password."
+      "instruction": "Please enter your new password.",
+      "complete": "Your password has been successfully reset.",
+      "goToLoginPage": "Go To Login Page"
     }
   },
   "manageAccount": {

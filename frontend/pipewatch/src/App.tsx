@@ -18,6 +18,7 @@ import { LoginPage } from "@pages/account/LoginPage";
 import { FindPassword } from "@pages/account/FindPassword";
 import { SignUpPage } from "@pages/account/SignUpPage";
 import { ResetPasswordPage } from "@pages/account/ResetPasswordPage";
+import { CompletedResetPassword } from "@pages/account/CompletedResetPassword";
 
 import { Enterprise } from "@pages/Enterprise";
 import { EmpView } from "@pages/enterprise/EmpView";
@@ -101,6 +102,10 @@ function App() {
               <Route
                 path="/account/auth/reset-pw"
                 element={<ResetPasswordPage />}
+              />
+              <Route
+                path="/account/auth/reset-pw-completed"
+                element={<CompletedResetPassword />}
               />
               <Route
                 path="/account/auth/completed"

@@ -5,6 +5,7 @@ import { FindPassword } from "@pages/account/FindPassword";
 import { SignUpPage } from "@pages/account/SignUpPage";
 import { ResetPasswordPage } from "@pages/account/ResetPasswordPage";
 import { CompletedContact } from "@pages/CompletedContact";
+import { CompletedResetPassword } from "@pages/account/CompletedResetPassword";
 
 export const Auth = () => {
   const location = useLocation();
@@ -20,6 +21,8 @@ export const Auth = () => {
         return <SignUpPage />;
       case "reset-pw":
         return <ResetPasswordPage />;
+      case "reset-pw-completed":
+        return <CompletedResetPassword />;
       case "completed":
         return <CompletedContact />;
     }
