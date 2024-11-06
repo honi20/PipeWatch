@@ -24,7 +24,7 @@ public interface EnterpriseApiSwagger {
 							"\"body\": {" +
 							"    \"name\": \"paori\",\n" +
 							"    \"industry\": \"제조업\",\n" +
-							"    \"managerEmail\": \"paori_admin@ssafy.com\",\n" +
+							"    \"managerEmail\": \"pipewatch@paori.com\",\n" +
 							"    \"managerPhoneNumber\": \"010-1234-5678\"\n" +
 							"  }}")}
 			))

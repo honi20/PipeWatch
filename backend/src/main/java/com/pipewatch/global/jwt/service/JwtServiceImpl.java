@@ -22,7 +22,7 @@ import java.util.concurrent.TimeUnit;
 @Service
 @RequiredArgsConstructor
 public class JwtServiceImpl implements JwtService {
-	private static final String ISSUER = "paori@ssafy.com";
+	private static final String ISSUER = "pipewatch@paori.com";
 	private static final String ACCESS_TOKEN_CLAIM_NAME = "access_token";
 	private static final String REFRESH_TOKEN_CLAIM_NAME = "refresh_token";
 	private final RedisUtil redisUtil;

@@ -103,70 +103,70 @@ public interface PipelineModelApiSwagger {
 							"    \"name\": \"Pipeline Model\",\n" +
 							"    \"modelingUrl\": \"https://pipewatch-bucket.s3.ap-northeast-2.amazonaws.com/models/PipeLine_7d521f29-814d-4077-b3a6-04a425bd64bf.gltf\",\n" +
 							"    \"building\": \"역삼 멀티캠퍼스\",\n" +
-							"    \"floor\": 14,\n" +
+							"    \"floor\": 11,\n" +
 							"    \"isCompleted\": true,\n" +
-							"    \"updatedAt\": \"2024-11-06 11:41:26\",\n" +
+							"    \"updatedAt\": \"2024-11-06 13:20:53\",\n" +
 							"    \"pipelines\": [\n" +
 							"      {\n" +
-							"        \"pipelineId\": 16,\n" +
+							"        \"pipelineId\": 25,\n" +
 							"        \"pipes\": [\n" +
 							"          {\n" +
-							"            \"pipeId\": 60,\n" +
-							"            \"pipeName\": \"PipeObj_1_Segment_1\"\n" +
+							"            \"pipeId\": 96,\n" +
+							"            \"pipeUuid\": \"PipeObj_1_Segment_1\"\n" +
 							"          },\n" +
 							"          {\n" +
-							"            \"pipeId\": 61,\n" +
-							"            \"pipeName\": \"PipeObj_1_Segment_2\"\n" +
+							"            \"pipeId\": 97,\n" +
+							"            \"pipeUuid\": \"PipeObj_1_Segment_2\"\n" +
 							"          },\n" +
 							"          {\n" +
-							"            \"pipeId\": 62,\n" +
-							"            \"pipeName\": \"PipeObj_1_Segment_3\"\n" +
+							"            \"pipeId\": 98,\n" +
+							"            \"pipeUuid\": \"PipeObj_1_Segment_3\"\n" +
 							"          },\n" +
 							"          {\n" +
-							"            \"pipeId\": 63,\n" +
-							"            \"pipeName\": \"PipeObj_1_Segment_4\"\n" +
+							"            \"pipeId\": 99,\n" +
+							"            \"pipeUuid\": \"PipeObj_1_Segment_4\"\n" +
 							"          },\n" +
 							"          {\n" +
-							"            \"pipeId\": 64,\n" +
-							"            \"pipeName\": \"PipeObj_1_Segment_5\"\n" +
+							"            \"pipeId\": 100,\n" +
+							"            \"pipeUuid\": \"PipeObj_1_Segment_5\"\n" +
 							"          },\n" +
 							"          {\n" +
-							"            \"pipeId\": 65,\n" +
-							"            \"pipeName\": \"PipeObj_1_Segment_6\"\n" +
+							"            \"pipeId\": 101,\n" +
+							"            \"pipeUuid\": \"PipeObj_1_Segment_6\"\n" +
 							"          }\n" +
 							"        ]\n" +
 							"      },\n" +
 							"      {\n" +
-							"        \"pipelineId\": 17,\n" +
+							"        \"pipelineId\": 26,\n" +
 							"        \"pipes\": [\n" +
 							"          {\n" +
-							"            \"pipeId\": 66,\n" +
-							"            \"pipeName\": \"PipeObj_2_Segment_1\"\n" +
+							"            \"pipeId\": 102,\n" +
+							"            \"pipeUuid\": \"PipeObj_2_Segment_1\"\n" +
 							"          },\n" +
 							"          {\n" +
-							"            \"pipeId\": 67,\n" +
-							"            \"pipeName\": \"PipeObj_2_Connector_1\"\n" +
+							"            \"pipeId\": 103,\n" +
+							"            \"pipeUuid\": \"PipeObj_2_Connector_1\"\n" +
 							"          },\n" +
 							"          {\n" +
-							"            \"pipeId\": 68,\n" +
-							"            \"pipeName\": \"PipeObj_2_Segment_2\"\n" +
+							"            \"pipeId\": 104,\n" +
+							"            \"pipeUuid\": \"PipeObj_2_Segment_2\"\n" +
 							"          },\n" +
 							"          {\n" +
-							"            \"pipeId\": 69,\n" +
-							"            \"pipeName\": \"PipeObj_2_Segment_3\"\n" +
+							"            \"pipeId\": 105,\n" +
+							"            \"pipeUuid\": \"PipeObj_2_Segment_3\"\n" +
 							"          }\n" +
 							"        ]\n" +
 							"      },\n" +
 							"      {\n" +
-							"        \"pipelineId\": 18,\n" +
+							"        \"pipelineId\": 27,\n" +
 							"        \"pipes\": [\n" +
 							"          {\n" +
-							"            \"pipeId\": 70,\n" +
-							"            \"pipeName\": \"PipeObj_3_Segment_1\"\n" +
+							"            \"pipeId\": 106,\n" +
+							"            \"pipeUuid\": \"PipeObj_3_Segment_1\"\n" +
 							"          },\n" +
 							"          {\n" +
-							"            \"pipeId\": 71,\n" +
-							"            \"pipeName\": \"PipeObj_3_Segment_2\"\n" +
+							"            \"pipeId\": 107,\n" +
+							"            \"pipeUuid\": \"PipeObj_3_Segment_2\"\n" +
 							"          }\n" +
 							"        ]\n" +
 							"      }\n" +

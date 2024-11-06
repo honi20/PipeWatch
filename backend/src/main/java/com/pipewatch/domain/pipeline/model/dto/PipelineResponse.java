@@ -1,9 +1,13 @@
 package com.pipewatch.domain.pipeline.model.dto;
 
+import com.pipewatch.domain.pipeline.model.entity.Pipeline;
+import com.pipewatch.domain.pipeline.model.entity.PipelineProperty;
 import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
+import static com.pipewatch.global.format.DateFormatter.convertToDateFormat;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -15,9 +19,16 @@ public class PipelineResponse {
 	@AllArgsConstructor
 	public static class DetailDto {
 		private String name;
-		private LocalDateTime updatedAt;
 		private PropertyDto property;
-		private List<DefectDto> defects;
+		private String updatedAt;
+
+		public static DetailDto toDto(Pipeline pipeline) {
+			return DetailDto.builder()
+					.name(pipeline.getName())
+					.property(PropertyDto.toDto(pipeline.getProperty()))
+					.updatedAt(convertToDateFormat(pipeline.getUpdated_at()))
+					.build();
+		}
 	}
 
 	@Getter
@@ -30,6 +41,7 @@ public class PipelineResponse {
 	}
 
 	@Getter
+	@Builder
 	@AllArgsConstructor
 	public static class PropertyDto {
 		private String pipeMaterial;
@@ -37,6 +49,16 @@ public class PipelineResponse {
 		private Double innerDiameter;
 		private String fluidMaterial;
 		private Double velocity;
+
+		public static PropertyDto toDto(PipelineProperty property) {
+			return PropertyDto.builder()
+					.pipeMaterial(property.getPipeMaterial())
+					.outerDiameter(property.getOuterDiameter())
+					.innerDiameter(property.getInnerDiameter())
+					.fluidMaterial(property.getFluidMaterial())
+					.velocity(property.getVelocity())
+					.build();
+		}
 	}
 
 	@Getter

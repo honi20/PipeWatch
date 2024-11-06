@@ -23,7 +23,7 @@ public interface UserApiSwagger {
 									@ExampleObject(name = "직원 마이페이지 조회", value = "{\"header\":{\"httpStatusCode\": 200, \"message\": \"개인정보 조회에 성공했습니다.\"}," +
 											"\"body\": {\n" +
 											"    \"name\": \"최싸피\",\n" +
-											"    \"email\": \"test@ssafy.com\",\n" +
+											"    \"email\": \"test@paori.com\",\n" +
 											"    \"role\": \"EMPLOYEE\",\n" +
 											"    \"state\": \"PENDING\",\n" +
 											"    \"enterpriseName\": \"paori\",\n" +
@@ -36,7 +36,7 @@ public interface UserApiSwagger {
 									@ExampleObject(name = "기업 마이페이지 조회", value = "{\"header\":{\"httpStatusCode\": 200, \"message\": \"개인정보 조회에 성공했습니다.\"}," +
 											"\"body\": {\n" +
 											"    \"name\": \"paori\",\n" +
-											"    \"email\": \"pipewatch_admin@ssafy.com\",\n" +
+											"    \"email\": \"pipewatch_admin@paori.com\",\n" +
 											"    \"role\": \"ENTERPRISE\",\n" +
 											"    \"state\": \"ACTIVE\",\n" +
 											"    \"enterpriseName\": \"paori\",\n" +

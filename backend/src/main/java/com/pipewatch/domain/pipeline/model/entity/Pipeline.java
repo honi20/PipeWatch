@@ -1,6 +1,5 @@
 package com.pipewatch.domain.pipeline.model.entity;
 
-import com.pipewatch.domain.pipeline.model.entity.property.PipelineProperty;
 import com.pipewatch.domain.pipelineModel.model.entity.PipelineModel;
 import com.pipewatch.global.entity.BaseEntity;
 import jakarta.persistence.*;
@@ -30,10 +29,14 @@ public class Pipeline extends BaseEntity {
 	@JoinColumn(name = "pipeline_model_id")
 	private PipelineModel pipelineModel;
 
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+	@OneToOne(cascade = CascadeType.REMOVE)
 	@JoinColumn(name = "pipeline_property")
 	private PipelineProperty property;
 
 	@OneToMany(mappedBy = "pipeline", cascade = CascadeType.REMOVE)
 	private List<Pipe> pipeList = new ArrayList<>();
+
+	public void updateName(String name) {
+		this.name = name;
+	}
 }

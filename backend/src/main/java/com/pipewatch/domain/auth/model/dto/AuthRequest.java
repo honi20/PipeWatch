@@ -17,7 +17,7 @@ public class AuthRequest {
 	@NoArgsConstructor
 	@AllArgsConstructor
 	public static class EmailCodeSendDto {
-		@Schema(description = "인증코드 전송할 이메일", example = "paori@ssafy.com")
+		@Schema(description = "인증코드 전송할 이메일", example = "pipewatch@paori.com")
 		private String email;
 	}
 
@@ -27,7 +27,7 @@ public class AuthRequest {
 	@NoArgsConstructor
 	@AllArgsConstructor
 	public static class EmailCodeVerifyDto {
-		@Schema(description = "인증코드가 전송된 이메일", example = "paori@ssafy.com")
+		@Schema(description = "인증코드가 전송된 이메일", example = "pipewatch@paori.com")
 		private String email;
 		@Schema(description = "인증코드", example = "603942")
 		private String verifyCode;
@@ -39,7 +39,7 @@ public class AuthRequest {
 	@NoArgsConstructor
 	@AllArgsConstructor
 	public static class SignupDto {
-		@Schema(description = "이메일", example = "paori@ssafy.com")
+		@Schema(description = "이메일", example = "pipewatch@paori.com")
 		private String email;
 		@Schema(description = "비밀번호", example = "ssafy1234")
 		private String password;
@@ -86,7 +86,7 @@ public class AuthRequest {
 		private String name;
 		@Schema(description = "산업", example = "제조업")
 		private String industry;
-		@Schema(description = "대표 관리자 이메일", example = "paori_admin@ssafy.com")
+		@Schema(description = "대표 관리자 이메일", example = "pipewatch@paori.com")
 		private String managerEmail;
 		@Schema(description = "대표 관리자 전화번호", example = "010-1234-5678")
 		private String managerPhoneNumber;
@@ -109,7 +109,7 @@ public class AuthRequest {
 	@NoArgsConstructor
 	@AllArgsConstructor
 	public static class SigninDto {
-		@Schema(description = "이메일", example = "paori@ssafy.com")
+		@Schema(description = "이메일", example = "pipewatch@paori.com")
 		private String email;
 		@Schema(description = "비밀번호", example = "ssafy1234")
 		private String password;
@@ -123,7 +123,7 @@ public class AuthRequest {
 	public static class EmailPwdSendDto {
 		@Schema(description = "유저 이름", example = "김싸피")
 		private String name;
-		@Schema(description = "비밀번호 재설정 링크를 전송할 이메일", example = "paori@ssafy.com")
+		@Schema(description = "비밀번호 재설정 링크를 전송할 이메일", example = "pipewatch@paori.com")
 		private String email;
 	}
 
