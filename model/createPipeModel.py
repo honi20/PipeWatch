@@ -40,47 +40,43 @@ BASE_WORK_DIR = os.getenv("BASE_WORK_DIR")
 app = FastAPI()
 
 class CreatePipelineModelRequest(BaseModel):
-    id: str
-    pipelines: List[List[Tuple[float, float]]]
+    userUuid: str
+    coords: List[List[Tuple[float, float]]]
     radius: float = 1
-
-class CreateThumbnailRequest(BaseModel):
-    id: str
-    draco_gltf_url: str    
 
 # 파이프라인 모델 생성 api
 @app.post("/pipelineModel")
 def create_pipeline_model(data: CreatePipelineModelRequest):
-    work_dir = os.path.join(BASE_WORK_DIR, data.id)
+    work_dir = os.path.join(BASE_WORK_DIR, data.userUuid)
     os.makedirs(work_dir, exist_ok=True)
 
     # 파일 생성
-    stl_paths = create_stl_files(data.pipelines, data.radius, work_dir)
-    gltf_path = os.path.join(work_dir, f"origin_Pipeline_{data.id}.gltf")
-    compressed_gltf_path = create_gltf(stl_paths, data.id, work_dir, gltf_path)
+    stl_paths = create_stl_files(data.coords, data.radius, work_dir)
+    gltf_path = os.path.join(work_dir, f"origin_Pipeline_{data.userUuid}.gltf")
+    compressed_gltf_path = create_gltf(stl_paths, data.userUuid, work_dir, gltf_path)
 
     # gltf S3 업로드
-    model_key = f"models/PipeLine_{data.id}.gltf"
+    model_key = f"models/PipeLine_{data.userUuid}.gltf"
     pipeModel_URL = upload_S3(compressed_gltf_path, model_key)
 
     # 썸네일 생성
-    thumbnail_path = os.path.join(work_dir, f"Thumbnail_{data.id}.png")
+    thumbnail_path = os.path.join(work_dir, f"Thumbnail_{data.userUuid}.png")
     create_thumbnail(gltf_path, thumbnail_path)
 
     # 썸네일 S3 업로드
-    thumbnail_key = f"thumbnails/Thumbnail_{data.id}.png"
+    thumbnail_key = f"thumbnails/Thumbnail_{data.userUuid}.png"
     thumbnail_URL = upload_S3(thumbnail_path, thumbnail_key)
 
     # 작업 폴더 삭제
     shutil.rmtree(work_dir)
 
     # 결과 전송
-    send_data(data.id, pipeModel_URL, thumbnail_URL)
+    send_data(data.userUuid, pipeModel_URL, thumbnail_URL)
 
-def create_stl_files(pipelines, radius, work_dir):
+def create_stl_files(coords, radius, work_dir):
     stl_paths = []
 
-    for i, pipeline_coords in enumerate(pipelines):
+    for i, pipeline_coords in enumerate(coords):
         pipeline_name = f"PipeObj_{i + 1}"
         stl_paths.extend(create_pipeline(pipeline_coords, radius, pipeline_name, work_dir))
 
@@ -150,7 +146,7 @@ def create_connector(center, radius, name, work_dir, stl_paths):
     stl_paths.append(connector_path)
 
 # GLTF 생성 함수
-def create_gltf(stl_paths, id, work_dir, gltf_path):
+def create_gltf(stl_paths, userUuid, work_dir, gltf_path):
     scene = trimesh.Scene()
 
     # 각 STL 파일을 GLTF에 추가
@@ -163,7 +159,7 @@ def create_gltf(stl_paths, id, work_dir, gltf_path):
     scene.export(gltf_path, file_type='gltf')
 
     # 압축 GLTF 파일 생성
-    compressed_gltf_path = os.path.join(work_dir, f"PipeLine_{id}.gltf")
+    compressed_gltf_path = os.path.join(work_dir, f"PipeLine_{userUuid}.gltf")
     compress_gltf(gltf_path, compressed_gltf_path)
     
     return compressed_gltf_path
@@ -251,15 +247,12 @@ def send_data(user_uuid: str, model_url: str, preview_img_url: str) -> dict:
         }
 
 if __name__ == "__main__":
+    # HACK:
+    # 서버 업로드시 호스트 및 포트 변경
     host=os.getenv("LOCAL_HOST")
     port=os.getenv("LOCAL_PORT")
 
     uvicorn.run(app, host=host, port=int(port))
 
-# TODO:
-# 썸네일 용 api 만들기
-
-# 포트 오류: Stop-Process -Name python -Force
-
-# 경로 설정하기 -> 철민햄
-# 좌표 보정하기
+# NOTE:
+# 포트 오류 -> Stop-Process -Name python -Force
