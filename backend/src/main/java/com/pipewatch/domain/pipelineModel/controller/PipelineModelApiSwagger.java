@@ -105,7 +105,6 @@ public interface PipelineModelApiSwagger {
 							"    \"building\": \"역삼 멀티캠퍼스\",\n" +
 							"    \"floor\": 14,\n" +
 							"    \"isCompleted\": true,\n" +
-							"    \"modelUuid\": \"7d521f29-814d-4077-b3a6-04a425bd64bf\",\n" +
 							"    \"updatedAt\": \"2024-11-06 11:41:26\",\n" +
 							"    \"pipelines\": [\n" +
 							"      {\n" +
@@ -207,7 +206,7 @@ public interface PipelineModelApiSwagger {
 								  @PathVariable Long modelId);
 
 
-	@GetMapping("/memos/{modelUuid}")
+	@GetMapping("/memos/{modelId}")
 	@Operation(summary = "파이프라인 모델 메모 리스트")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "파이프라인 모델 메모 리스트 조회 성공", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -236,16 +235,16 @@ public interface PipelineModelApiSwagger {
 							"  }}")}
 			))
 	})
-	ResponseEntity<?> modelMemoList(@AuthenticationPrincipal Long userId, @PathVariable String modelUuid);
+	ResponseEntity<?> modelMemoList(@AuthenticationPrincipal Long userId, @PathVariable Long modelId);
 
-	@PostMapping("/memos/{modelUuid}")
+	@PostMapping("/memos/{modelId}")
 	@Operation(summary = "파이프라인 모델 메모 생성")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "201", description = "파이프라인 모델 메모 생성 성공", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
 					examples = {@ExampleObject(value = "{\"header\":{\"httpStatusCode\": 201, \"message\": \"모델 메모 생성에 성공했습니다.\"},\n\"body\": null}")}
 			))
 	})
-	ResponseEntity<?> modelMemoCreate(@AuthenticationPrincipal Long userId, @PathVariable String modelUuid, @RequestBody PipelineModelRequest.MemoDto requestDto);
+	ResponseEntity<?> modelMemoCreate(@AuthenticationPrincipal Long userId, @PathVariable Long modelId, @RequestBody PipelineModelRequest.MemoDto requestDto);
 
 	@DeleteMapping("/memos/{memoId}")
 	@Operation(summary = "파이프라인 모델 메모 삭제")

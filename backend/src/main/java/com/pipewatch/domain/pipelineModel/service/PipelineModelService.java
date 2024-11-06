@@ -22,9 +22,9 @@ public interface PipelineModelService {
 
 	void deleteModel(Long userId, Long modelId);
 
-	PipelineModelResponse.MemoListDto getModelMemoList(Long userId, String modelUuid);
+	PipelineModelResponse.MemoListDto getModelMemoList(Long userId, Long modelId);
 
-	void createModelMemo(Long userId, String modelUuid, PipelineModelRequest.MemoDto requestDto);
+	void createModelMemo(Long userId, Long modelId, PipelineModelRequest.MemoDto requestDto);
 
 	void deleteModelMemo(Long userId, Long memoId);
 }

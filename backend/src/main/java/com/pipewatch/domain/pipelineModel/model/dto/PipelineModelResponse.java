@@ -75,7 +75,6 @@ public class PipelineModelResponse {
 		private String building;
 		private Integer floor;
 		private Boolean isCompleted;
-		private String modelUuid;
 		private String updatedAt;
 		private List<PipelineDto> pipelines;
 		private Creator creator;
@@ -87,7 +86,6 @@ public class PipelineModelResponse {
 					.building(model.getBuildingAndFloor().getName())
 					.floor(model.getBuildingAndFloor().getFloor())
 					.isCompleted(model.getIsCompleted())
-					.modelUuid(model.getUuid())
 					.updatedAt(convertToDateFormat(model.getUpdated_at()))
 					.pipelines(pipelines)
 					.creator(new Creator(model.getUser().getUuid(), model.getUser().getName()))

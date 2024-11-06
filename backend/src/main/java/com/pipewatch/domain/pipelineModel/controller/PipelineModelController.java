@@ -72,16 +72,16 @@ public class PipelineModelController implements PipelineModelApiSwagger {
 		return new ResponseEntity<>(ResponseDto.success(MODEL_DELETED, null), HttpStatus.NO_CONTENT);
 	}
 
-	@GetMapping("/memos/{modelUuid}")
-	public ResponseEntity<?> modelMemoList(@AuthenticationPrincipal Long userId, @PathVariable String modelUuid) {
-		PipelineModelResponse.MemoListDto responseDto = pipelineModelService.getModelMemoList(userId, modelUuid);
+	@GetMapping("/memos/{modelId}")
+	public ResponseEntity<?> modelMemoList(@AuthenticationPrincipal Long userId, @PathVariable Long modelId) {
+		PipelineModelResponse.MemoListDto responseDto = pipelineModelService.getModelMemoList(userId, modelId);
 
 		return new ResponseEntity<>(ResponseDto.success(MODEL_MEMO_LIST_OK, responseDto), HttpStatus.OK);
 	}
 
-	@PostMapping("/memos/{modelUuid}")
-	public ResponseEntity<?> modelMemoCreate(@AuthenticationPrincipal Long userId, @PathVariable String modelUuid, @RequestBody PipelineModelRequest.MemoDto requestDto) {
-		pipelineModelService.createModelMemo(userId, modelUuid, requestDto);
+	@PostMapping("/memos/{modelId}")
+	public ResponseEntity<?> modelMemoCreate(@AuthenticationPrincipal Long userId, @PathVariable Long modelId, @RequestBody PipelineModelRequest.MemoDto requestDto) {
+		pipelineModelService.createModelMemo(userId, modelId, requestDto);
 
 		return new ResponseEntity<>(ResponseDto.success(MODEL_MEMO_CREATED, null), HttpStatus.OK);
 	}

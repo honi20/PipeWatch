@@ -259,7 +259,7 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 	}
 
 	@Override
-	public PipelineModelResponse.MemoListDto getModelMemoList(Long userId, String modelUuid) {
+	public PipelineModelResponse.MemoListDto getModelMemoList(Long userId, Long modelId) {
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new BaseException(USER_NOT_FOUND));
 
@@ -267,7 +267,8 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 			throw new BaseException(FORBIDDEN_USER_ROLE);
 		}
 
-		PipelineModel pipelineModel = pipelineModelRepository.findByUuid(modelUuid);
+		PipelineModel pipelineModel = pipelineModelRepository.findById(modelId)
+				.orElseThrow(() -> new BaseException(PIPELINE_MODEL_NOT_FOUND));
 
 		if (pipelineModel == null) {
 			throw new BaseException(PIPELINE_MODEL_NOT_FOUND);
@@ -285,7 +286,7 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 
 	@Override
 	@Transactional
-	public void createModelMemo(Long userId, String modelUuid, PipelineModelRequest.MemoDto requestDto) {
+	public void createModelMemo(Long userId, Long modelId, PipelineModelRequest.MemoDto requestDto) {
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new BaseException(USER_NOT_FOUND));
 
@@ -294,7 +295,8 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 			throw new BaseException(FORBIDDEN_USER_ROLE);
 		}
 
-		PipelineModel pipelineModel = pipelineModelRepository.findByUuid(modelUuid);
+		PipelineModel pipelineModel = pipelineModelRepository.findById(modelId)
+				.orElseThrow(() -> new BaseException(PIPELINE_MODEL_NOT_FOUND));
 
 		if (pipelineModel == null) {
 			throw new BaseException(PIPELINE_MODEL_NOT_FOUND);
