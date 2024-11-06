@@ -36,6 +36,7 @@ public enum ErrorCode {
 	FILE_UPLOAD_FAIL(HttpStatus.INTERNAL_SERVER_ERROR.value(), "파일 업로드에 실패하였습니다."),
 	FILE_DELETE_FAIL(HttpStatus.INTERNAL_SERVER_ERROR.value(), "파일 삭제에 실패하였습니다."),
 	INVALID_FILE_EXTENSION(HttpStatus.BAD_REQUEST.value(), "적절하지 않은 파일 확장자입니다. (gltf 파일만 가능)"),
+	PIPELINE_MODEL_MEMO_NOT_FOUND(HttpStatus.NOT_FOUND.value(), "해당 파이프라인 모델의 메모가 존재하지 않습니다."),
 
 	// Pipeline
 	PIPELINE_NOT_FOUND(HttpStatus.NOT_FOUND.value(), "해당 파이프라인이 존재하지 않습니다."),

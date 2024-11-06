@@ -12,4 +12,6 @@ public interface BuildingRepository extends JpaRepository<BuildingAndFloor, Long
 
 	@Query("SELECT DISTINCT bf.name FROM BuildingAndFloor bf WHERE bf.enterprise.id = :enterpriseId")
 	List<String> findDistinctNameByEnterpriseId(@Param("enterpriseId") Long enterpriseId);
+
+	BuildingAndFloor findByNameAndFloor(String name, Integer floor);
 }

@@ -223,9 +223,9 @@ public class AuthServiceImpl implements AuthService {
 
 	@Override
 	public void sendPasswordResetEmail(AuthRequest.EmailPwdSendDto requestDto) {
-		User user = userRepository.findByEmail(requestDto.getEmail());
+		User user = userRepository.findByEmailAndName(requestDto.getEmail(), requestDto.getName());
 		if (user == null) {
-			throw new BaseException(EMAIL_NOT_FOUND);
+			throw new BaseException(USER_NOT_FOUND);
 		}
 
 		// 메일 전송

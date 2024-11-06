@@ -44,43 +44,9 @@ public interface PipelineModelApiSwagger {
 					examples = {@ExampleObject(value = "{\"header\":{\"httpStatusCode\": 200, \"message\": \"모델 초기 정보 설정에 성공했습니다.\"},\n\"body\": null}")}
 			))
 	})
-	ResponseEntity<?> modelInit(
-			@Schema(description = "Model ID", example = "1")
-			@PathVariable Long modelId
-	);
-
-	@GetMapping("/{modelId}")
-	@Operation(summary = "파이프라인 모델 상세조회")
-	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = "파이프라인 모델 상세조회 성공", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-					examples = {@ExampleObject(value = "{\"header\":{\"httpStatusCode\": 200, \"message\": \"모델 상세 조회에 성공했습니다.\"}," +
-							"\"body\": {\n" +
-							"    \"name\": \"파이프라인 모델\",\n" +
-							"    \"description\": \"주기적인 점검 필요\",\n" +
-							"    \"modelingUrl\": \"s3 url\",\n" +
-							"    \"isCompleted\": true,\n" +
-							"    \"updatedAt\": \"2024-11-03T00:14:34.461461\",\n" +
-							"    \"creator\": {\n" +
-							"      \"userId\": 1,\n" +
-							"      \"userName\": \"김싸피\"\n" +
-							"    }\n" +
-							"  }}")}
-			))
-	})
-	ResponseEntity<?> modelDetail(
-			@Schema(description = "Model ID", example = "1")
-			@PathVariable Long modelId);
-
-	@PatchMapping("/{modelId}")
-	@Operation(summary = "파이프라인 모델 정보 수정")
-	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = "파이프라인 모델 정보 수정 성공", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-					examples = {@ExampleObject(value = "{\"header\":{\"httpStatusCode\": 200, \"message\": \"모델 정보 수정에 성공했습니다.\"},\n\"body\": null}")}
-			))
-	})
-	ResponseEntity<?> modelModify(
-			@Schema(description = "Model ID", example = "1")
-			@PathVariable Long modelId);
+	ResponseEntity<?> modelInit(@AuthenticationPrincipal Long userId,
+								@Schema(description = "Model ID", example = "1")
+								@PathVariable Long modelId, @RequestBody PipelineModelRequest.InitDto requestDto) throws IOException, ParseException;
 
 	@GetMapping
 	@Operation(summary = "파이프라인 모델 리스트 조회")
@@ -99,13 +65,13 @@ public interface PipelineModelApiSwagger {
 							"                \"modelId\": 1,\n" +
 							"                \"name\": \"model1\",\n" +
 							"                \"previewUrl\": \"previewUrl1\",\n" +
-							"                \"updatedAt\": \"2024-11-03T00:14:34.315565\"\n" +
+							"                \"updatedAt\": \"2024-11-03 00:14:34\"\n" +
 							"              },\n" +
 							"              {\n" +
 							"                \"modelId\": 2,\n" +
 							"                \"name\": \"model2\",\n" +
 							"                \"previewUrl\": \"previewUrl2\",\n" +
-							"                \"updatedAt\": \"2024-11-03T00:14:34.315587\"\n" +
+							"                \"updatedAt\": \"2024-11-03 00:14:34\"\n" +
 							"              }\n" +
 							"            ]\n" +
 							"          },\n" +
@@ -116,7 +82,7 @@ public interface PipelineModelApiSwagger {
 							"                \"modelId\": 3,\n" +
 							"                \"name\": \"model3\",\n" +
 							"                \"previewUrl\": \"previewUrl3\",\n" +
-							"                \"updatedAt\": \"2024-11-03T00:14:34.315594\"\n" +
+							"                \"updatedAt\": \"2024-11-03 00:14:34\"\n" +
 							"              }\n" +
 							"            ]\n" +
 							"          }\n" +
@@ -126,7 +92,72 @@ public interface PipelineModelApiSwagger {
 							"  }}")}
 			))
 	})
-	ResponseEntity<?> modelList(@RequestParam(required = false) String building, @RequestParam(required = false) Integer floor);
+	ResponseEntity<?> modelList(@AuthenticationPrincipal Long userId, @RequestParam(required = false) String building, @RequestParam(required = false) Integer floor);
+
+	@GetMapping("/{modelId}")
+	@Operation(summary = "파이프라인 모델 상세조회")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "파이프라인 모델 상세조회 성공", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+					examples = {@ExampleObject(value = "{\"header\":{\"httpStatusCode\": 200, \"message\": \"모델 상세 조회에 성공했습니다.\"}," +
+							"\"body\": {\n" +
+							"    \"name\": \"Pipeline Model\",\n" +
+							"    \"modelingUrl\": \"https://pipewatch-bucket.s3.ap-northeast-2.amazonaws.com/models/PipeLine_8f1928cb-47fe-4994-8869-dfe08f484cd8.gltf\",\n" +
+							"    \"building\": \"역삼 멀티캠퍼스\",\n" +
+							"    \"floor\": 4,\n" +
+							"    \"isCompleted\": true,\n" +
+							"    \"modelUuid\": \"8f1928cb-47fe-4994-8869-dfe08f484cd8\",\n" +
+							"    \"updatedAt\": \"2024-11-05 17:18:33\",\n" +
+							"    \"pipelines\": [\n" +
+							"      {\n" +
+							"        \"pipelineUuid\": \"PipeObj_2_8f1928cb-47fe-4994-8869-dfe08f484cd8\",\n" +
+							"        \"pipeUuids\": [\n" +
+							"          \"PipeObj_2_Segment_1_ssafy123_8f1928cb-47fe-4994-8869-dfe08f484cd8\",\n" +
+							"          \"PipeObj_2_Connector_1_ssafy123_8f1928cb-47fe-4994-8869-dfe08f484cd8\",\n" +
+							"          \"PipeObj_2_Segment_2_ssafy123_8f1928cb-47fe-4994-8869-dfe08f484cd8\",\n" +
+							"          \"PipeObj_2_Segment_3_ssafy123_8f1928cb-47fe-4994-8869-dfe08f484cd8\"\n" +
+							"        ]\n" +
+							"      },\n" +
+							"      {\n" +
+							"        \"pipelineUuid\": \"PipeObj_1_8f1928cb-47fe-4994-8869-dfe08f484cd8\",\n" +
+							"        \"pipeUuids\": [\n" +
+							"          \"PipeObj_1_Segment_1_ssafy123_8f1928cb-47fe-4994-8869-dfe08f484cd8\",\n" +
+							"          \"PipeObj_1_Segment_2_ssafy123_8f1928cb-47fe-4994-8869-dfe08f484cd8\",\n" +
+							"          \"PipeObj_1_Segment_3_ssafy123_8f1928cb-47fe-4994-8869-dfe08f484cd8\",\n" +
+							"          \"PipeObj_1_Segment_4_ssafy123_8f1928cb-47fe-4994-8869-dfe08f484cd8\",\n" +
+							"          \"PipeObj_1_Segment_5_ssafy123_8f1928cb-47fe-4994-8869-dfe08f484cd8\",\n" +
+							"          \"PipeObj_1_Segment_6_ssafy123_8f1928cb-47fe-4994-8869-dfe08f484cd8\"\n" +
+							"        ]\n" +
+							"      },\n" +
+							"      {\n" +
+							"        \"pipelineUuid\": \"PipeObj_3_8f1928cb-47fe-4994-8869-dfe08f484cd8\",\n" +
+							"        \"pipeUuids\": [\n" +
+							"          \"PipeObj_3_Segment_1_ssafy123_8f1928cb-47fe-4994-8869-dfe08f484cd8\",\n" +
+							"          \"PipeObj_3_Segment_2_ssafy123_8f1928cb-47fe-4994-8869-dfe08f484cd8\"\n" +
+							"        ]\n" +
+							"      }\n" +
+							"    ],\n" +
+							"    \"creator\": {\n" +
+							"      \"userUuid\": \"ssafy12\",\n" +
+							"      \"userName\": \"김싸피\"\n" +
+							"    }\n" +
+							"  }}")}
+			))
+	})
+	ResponseEntity<?> modelDetail(@AuthenticationPrincipal Long userId,
+								  @Schema(description = "Model ID", example = "1")
+								  @PathVariable Long modelId);
+
+	@PatchMapping("/{modelId}")
+	@Operation(summary = "파이프라인 모델 정보 수정")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "파이프라인 모델 정보 수정 성공", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+					examples = {@ExampleObject(value = "{\"header\":{\"httpStatusCode\": 200, \"message\": \"모델 정보 수정에 성공했습니다.\"},\n\"body\": null}")}
+			))
+	})
+	ResponseEntity<?> modelModify(
+			@AuthenticationPrincipal Long userId,
+			@Schema(description = "Model ID", example = "1")
+			@PathVariable Long modelId, @RequestBody PipelineModelRequest.ModifyDto requestDto);
 
 	@DeleteMapping("/{modelId}")
 	@Operation(summary = "파이프라인 모델 삭제")
@@ -135,7 +166,57 @@ public interface PipelineModelApiSwagger {
 					examples = {@ExampleObject(value = "{\"header\":{\"httpStatusCode\": 204, \"message\": \"모델 삭제에 성공했습니다.\"},\n\"body\": null}")}
 			))
 	})
-	ResponseEntity<?> modelDelete(
-			@Schema(description = "Model ID", example = "1")
-			@PathVariable Long modelId);
+	ResponseEntity<?> modelDelete(@AuthenticationPrincipal Long userId,
+								  @Schema(description = "Model ID", example = "1")
+								  @PathVariable Long modelId);
+
+
+	@GetMapping("/memos/{modelUuid}")
+	@Operation(summary = "파이프라인 모델 메모 리스트")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "파이프라인 모델 메모 리스트 조회 성공", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+					examples = {@ExampleObject(value = "{\"header\":{\"httpStatusCode\": 200, \"message\": \"모델 메모 리스트 조회에 성공했습니다.\"}," +
+							"\"body\": {\n" +
+							"    \"memoList\": [\n" +
+							"      {\n" +
+							"        \"memoId\": 1,\n" +
+							"        \"memo\": \"hi\",\n" +
+							"        \"writer\": {\n" +
+							"          \"userUuid\": \"ssafy12\",\n" +
+							"          \"userName\": \"김싸피\"\n" +
+							"        },\n" +
+							"        \"createdAt\": \"2024-11-05 17:32:19\"\n" +
+							"      },\n" +
+							"      {\n" +
+							"        \"memoId\": 3,\n" +
+							"        \"memo\": \"hihihi\",\n" +
+							"        \"writer\": {\n" +
+							"          \"userUuid\": \"ssafy12\",\n" +
+							"          \"userName\": \"김싸피\"\n" +
+							"        },\n" +
+							"        \"createdAt\": \"2024-11-05 17:52:42\"\n" +
+							"      }\n" +
+							"    ]\n" +
+							"  }}")}
+			))
+	})
+	ResponseEntity<?> modelMemoList(@AuthenticationPrincipal Long userId, @PathVariable String modelUuid);
+
+	@PostMapping("/memos/{modelUuid}")
+	@Operation(summary = "파이프라인 모델 메모 생성")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "201", description = "파이프라인 모델 메모 생성 성공", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+					examples = {@ExampleObject(value = "{\"header\":{\"httpStatusCode\": 201, \"message\": \"모델 메모 생성에 성공했습니다.\"},\n\"body\": null}")}
+			))
+	})
+	ResponseEntity<?> modelMemoCreate(@AuthenticationPrincipal Long userId, @PathVariable String modelUuid, @RequestBody PipelineModelRequest.MemoDto requestDto);
+
+	@DeleteMapping("/memos/{memoId}")
+	@Operation(summary = "파이프라인 모델 메모 삭제")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "201", description = "파이프라인 모델 메모 삭제 성공", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+					examples = {@ExampleObject(value = "{\"header\":{\"httpStatusCode\": 204, \"message\": \"모델 메모 삭제에 성공했습니다.\"},\n\"body\": null}")}
+			))
+	})
+	ResponseEntity<?> modelMemoCreate(@AuthenticationPrincipal Long userId, @PathVariable Long memoId);
 }

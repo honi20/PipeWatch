@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.util.List;
 
 import static com.pipewatch.global.statusCode.SuccessCode.*;
 
@@ -39,48 +37,59 @@ public class PipelineModelController implements PipelineModelApiSwagger {
 		return new ResponseEntity<>(ResponseDto.success(PIPELINE_MODELING_CREATED, responseDto), HttpStatus.CREATED);
 	}
 
-	@GetMapping
-	public ResponseEntity<?> modelList(@RequestParam(required = false) String building, @RequestParam(required = false) Integer floor) {
-		PipelineModelResponse.PipelineModelDto model1 = new PipelineModelResponse.PipelineModelDto(1L, "model1", "previewUrl1", LocalDateTime.now());
-		PipelineModelResponse.PipelineModelDto model2 = new PipelineModelResponse.PipelineModelDto(2L, "model2", "previewUrl2", LocalDateTime.now());
-		PipelineModelResponse.PipelineModelDto model3 = new PipelineModelResponse.PipelineModelDto(3L, "model3", "previewUrl3", LocalDateTime.now());
-		PipelineModelResponse.FloorListDto floorList1 = new PipelineModelResponse.FloorListDto(1, List.of(model1, model2));
-		PipelineModelResponse.FloorListDto floorList2 = new PipelineModelResponse.FloorListDto(2, List.of(model3));
-		PipelineModelResponse.BuildingListDto buildingList = new PipelineModelResponse.BuildingListDto("역삼 멀티캠퍼스", List.of(floorList1, floorList2));
+	@PatchMapping("/init/{modelId}")
+	public ResponseEntity<?> modelInit(@AuthenticationPrincipal Long userId, @PathVariable Long modelId, @RequestBody PipelineModelRequest.InitDto requestDto) throws IOException, ParseException {
+		pipelineModelService.initModel(userId, modelId, requestDto);
 
-		PipelineModelResponse.ListDto responseDto = PipelineModelResponse.ListDto.builder()
-				.buildings(List.of(buildingList))
-				.build();
+		return new ResponseEntity<>(ResponseDto.success(MODEL_INIT_OK, null), HttpStatus.OK);
+	}
+
+	@GetMapping
+	public ResponseEntity<?> modelList(@AuthenticationPrincipal Long userId, @RequestParam(required = false) String building, @RequestParam(required = false) Integer floor) {
+		PipelineModelResponse.ListDto responseDto = pipelineModelService.getModelList(userId, building, floor);
 
 		return new ResponseEntity<>(ResponseDto.success(MODEL_LIST_OK, responseDto), HttpStatus.OK);
 	}
 
-	@PatchMapping("/init/{modelId}")
-	public ResponseEntity<?> modelInit(@PathVariable Long modelId) {
-		return new ResponseEntity<>(ResponseDto.success(MODEL_INIT_OK, null), HttpStatus.OK);
-	}
-
-	@PatchMapping("/{modelId}")
-	public ResponseEntity<?> modelModify(@PathVariable Long modelId) {
-		return new ResponseEntity<>(ResponseDto.success(MODEL_MODIFIED_OK, null), HttpStatus.OK);
-	}
-
 	@GetMapping("/{modelId}")
-	public ResponseEntity<?> modelDetail(@PathVariable Long modelId) {
-		PipelineModelResponse.DetailDto responseDto = PipelineModelResponse.DetailDto.builder()
-				.name("파이프라인 모델")
-				.description("주기적인 점검 필요")
-				.modelingUrl("s3 url")
-				.isCompleted(true)
-				.updatedAt(LocalDateTime.now())
-				.creator(new PipelineModelResponse.Creator(1L, "김싸피"))
-				.build();
+	public ResponseEntity<?> modelDetail(@AuthenticationPrincipal Long userId, @PathVariable Long modelId) {
+		PipelineModelResponse.DetailDto responseDto = pipelineModelService.getModelDetail(userId, modelId);
 
 		return new ResponseEntity<>(ResponseDto.success(MODEL_DETAIL_OK, responseDto), HttpStatus.OK);
 	}
 
+	@PatchMapping("/{modelId}")
+	public ResponseEntity<?> modelModify(@AuthenticationPrincipal Long userId, @PathVariable Long modelId, @RequestBody PipelineModelRequest.ModifyDto requestDto) {
+		pipelineModelService.modifyModel(userId, modelId, requestDto);
+
+		return new ResponseEntity<>(ResponseDto.success(MODEL_MODIFIED_OK, null), HttpStatus.OK);
+	}
+
 	@DeleteMapping("/{modelId}")
-	public ResponseEntity<?> modelDelete(@PathVariable Long modelId) {
+	public ResponseEntity<?> modelDelete(@AuthenticationPrincipal Long userId, @PathVariable Long modelId) {
+		pipelineModelService.deleteModel(userId, modelId);
+
 		return new ResponseEntity<>(ResponseDto.success(MODEL_DELETED, null), HttpStatus.NO_CONTENT);
+	}
+
+	@GetMapping("/memos/{modelUuid}")
+	public ResponseEntity<?> modelMemoList(@AuthenticationPrincipal Long userId, @PathVariable String modelUuid) {
+		PipelineModelResponse.MemoListDto responseDto = pipelineModelService.getModelMemoList(userId, modelUuid);
+
+		return new ResponseEntity<>(ResponseDto.success(MODEL_MEMO_LIST_OK, responseDto), HttpStatus.OK);
+	}
+
+	@PostMapping("/memos/{modelUuid}")
+	public ResponseEntity<?> modelMemoCreate(@AuthenticationPrincipal Long userId, @PathVariable String modelUuid, @RequestBody PipelineModelRequest.MemoDto requestDto) {
+		pipelineModelService.createModelMemo(userId, modelUuid, requestDto);
+
+		return new ResponseEntity<>(ResponseDto.success(MODEL_MEMO_CREATED, null), HttpStatus.OK);
+	}
+
+	@DeleteMapping("/memos/{memoId}")
+	public ResponseEntity<?> modelMemoCreate(@AuthenticationPrincipal Long userId, @PathVariable Long memoId) {
+		pipelineModelService.deleteModelMemo(userId, memoId);
+
+		return new ResponseEntity<>(ResponseDto.success(MODEL_MEMO_DELETED, null), HttpStatus.OK);
 	}
 }

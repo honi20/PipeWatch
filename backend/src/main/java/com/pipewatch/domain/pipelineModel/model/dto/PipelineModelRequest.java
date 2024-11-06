@@ -1,5 +1,8 @@
 package com.pipewatch.domain.pipelineModel.model.dto;
 
+import com.pipewatch.domain.pipelineModel.model.entity.PipelineModel;
+import com.pipewatch.domain.pipelineModel.model.entity.PipelineModelMemo;
+import com.pipewatch.domain.user.model.entity.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
@@ -28,8 +31,6 @@ public class PipelineModelRequest {
 	public static class ModifyDto {
 		@Schema(description = "변경된 파이프라인 모델명", example = "New Pipeline Model")
 		private String name;
-		@Schema(description = "파이프라인 모델 설명", example = "New Description")
-		private String description;
 	}
 
 	@Getter
@@ -44,5 +45,22 @@ public class PipelineModelRequest {
 		private String previewImgUrl;
 		@Schema(description = "모델링 파일 URL", example = "s3 modeling file url")
 		private String modelUrl;
+	}
+
+	@Getter
+	@Setter
+	@Builder
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class MemoDto {
+		private String memo;
+
+		public PipelineModelMemo toEntity(User user, PipelineModel pipelineModel) {
+			return PipelineModelMemo.builder()
+					.memo(this.memo)
+					.user(user)
+					.pipelineModelMemo(pipelineModel)
+					.build();
+		}
 	}
 }

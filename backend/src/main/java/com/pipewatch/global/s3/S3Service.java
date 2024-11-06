@@ -79,10 +79,12 @@ public class S3Service {
 		return s3Object.getObjectContent();
 	}
 
-	public void fileDelete(String fileUrl) throws BaseException {
+	public void fileDelete(String fileUrl, String dirName) throws BaseException {
+		String originalFilename = fileUrl.substring(fileUrl.indexOf(dirName));
+
 		try {
 			try {
-				amazonS3Client.deleteObject(new DeleteObjectRequest(bucket, fileUrl));
+				amazonS3Client.deleteObject(new DeleteObjectRequest(bucket, originalFilename));
 			} catch (AmazonServiceException e) {
 				System.err.println(e.getErrorMessage());
 				throw new BaseException(FILE_DELETE_FAIL);

@@ -11,4 +11,20 @@ public interface PipelineModelService {
 	PipelineModelResponse.FileUploadDto uploadFile(Long userId, MultipartFile file) throws IOException, ParseException;
 
 	PipelineModelResponse.CreateModelingDto createModeling(PipelineModelRequest.ModelingDto requestDto) throws IOException, ParseException;
+
+	void initModel(Long userId, Long modelId, PipelineModelRequest.InitDto requestDto);
+
+	PipelineModelResponse.ListDto getModelList(Long userId, String building, Integer floor);
+
+	PipelineModelResponse.DetailDto getModelDetail(Long userId, Long modelId);
+
+	void modifyModel(Long userId, Long modelId, PipelineModelRequest.ModifyDto requestDto);
+
+	void deleteModel(Long userId, Long modelId);
+
+	PipelineModelResponse.MemoListDto getModelMemoList(Long userId, String modelUuid);
+
+	void createModelMemo(Long userId, String modelUuid, PipelineModelRequest.MemoDto requestDto);
+
+	void deleteModelMemo(Long userId, Long memoId);
 }

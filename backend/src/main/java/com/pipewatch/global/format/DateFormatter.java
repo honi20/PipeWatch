@@ -4,12 +4,10 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class DateFormatter {
-	public static String convertToDateFormat() {
-		LocalDateTime now = LocalDateTime.now();
+	public static String convertToDateFormat(LocalDateTime localDateTime) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH_mm_ss");
-
-		return now.format(formatter);
+		return localDateTime.format(formatter);
 	}
 
 	private static class TIME_MAXIMUM {

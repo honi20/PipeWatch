@@ -1,12 +1,16 @@
 package com.pipewatch.domain.pipelineModel.model.entity;
 
 import com.pipewatch.domain.enterprise.model.entity.BuildingAndFloor;
+import com.pipewatch.domain.enterprise.model.entity.Enterprise;
 import com.pipewatch.domain.user.model.entity.User;
 import com.pipewatch.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -23,8 +27,6 @@ public class PipelineModel extends BaseEntity {
 	@Builder.Default
 	private String name = "Pipeline Model";
 
-	private String description;
-
 	private String previewImgUrl;
 
 	private String modelingUrl;
@@ -40,10 +42,29 @@ public class PipelineModel extends BaseEntity {
 	private User user;
 
 	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "enterprise_id")
+	private Enterprise enterprise;
+
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "building_floor_id")
 	private BuildingAndFloor buildingAndFloor;
 
+	@OneToMany(mappedBy = "pipelineModelMemo", cascade = CascadeType.REMOVE)
+	private List<PipelineModelMemo> memoList = new ArrayList<>();
+
 	public void updateModelingUrl(String modelingUrl) {
 		this.modelingUrl = modelingUrl;
+	}
+
+	public void updateName(String name) {
+		this.name = name;
+	}
+
+	public void updatePreviewImgUrl(String previewImgUrl) {
+		this.previewImgUrl = previewImgUrl;
+	}
+
+	public void updateBuilding(BuildingAndFloor buildingAndFloor) {
+		this.buildingAndFloor = buildingAndFloor;
 	}
 }
