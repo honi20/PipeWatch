@@ -1,3 +1,5 @@
+import axios from "axios";
+
 import { useState, ChangeEvent } from "react";
 import { useTranslation, Trans } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
@@ -10,11 +12,26 @@ import { CompanyType } from "@src/components/account/SignUp/inputType";
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
 
+const API_URL = import.meta.env.VITE_URL;
+
+const verifyEmail = (email: string) => {
+  axios
+    .post(`${API_URL}/api/auth/send-email-code`, email)
+    .then((res) => {
+      console.log(res.data.body);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  return <></>;
+};
+
 const SignUpCard = () => {
   const tempEmailVeriCode = "123456";
   const [emailVeriCode, setEmailVeriCode] = useState("");
   const [isEmailVerified, setIsEmailVerified] = useState(false);
   const [EmailVeriError, setEmailVeriError] = useState(false);
+
   const [showEmailError, setEmailError] = useState(false);
   const [showPasswordError, setPasswordError] = useState(false);
   const [showConfirmPasswordError, setConfirmPasswordError] = useState(false);
@@ -80,7 +97,7 @@ const SignUpCard = () => {
     isEmailVerified &&
     Object.values(formState).every((value) => value !== "");
 
-  console.log(formState);
+  // console.log(formState);
 
   return (
     <div className="w-[500px] flex flex-col bg-block rounded-[30px] p-[50px] gap-[40px] text-white">
@@ -91,7 +108,7 @@ const SignUpCard = () => {
 
       {/* content */}
       <div className="flex flex-col gap-[20px]">
-        {/* email */}
+        {/* email verification */}
         <div className="flex justify-between">
           <Input
             type="email"
@@ -104,8 +121,13 @@ const SignUpCard = () => {
             onChange={handleInputChange}
           />
           <Button
-            className={`h-[56px] w-[120px] px-6 py-2 flex items-center justify-center text-white rounded-[20px] bg-primary-500 hover:bg-primary-500/80`}
-            onClick={() => console.log("Email Verification Button Clicked")}
+            className={`h-[56px] w-[120px] px-6 py-2 flex items-center justify-center text-white rounded-[20px] ${
+              showEmailError
+                ? "bg-gray-800 "
+                : "bg-primary-500 hover:bg-primary-500/80"
+            } `}
+            onClick={() => !showEmailError && verifyEmail(formState.email)}
+            disabled={showEmailError}
           >
             {t("account.requestVerification")}
           </Button>
@@ -115,6 +137,8 @@ const SignUpCard = () => {
             {t("account.emailError")}
           </span>
         )}
+
+        {/* email verification code */}
         <div className="flex items-center justify-between">
           <Input
             type="text"
@@ -136,7 +160,11 @@ const SignUpCard = () => {
             </div>
           ) : (
             <Button
-              className={`h-[56px] w-[120px] px-6 py-2 flex items-center justify-center text-white rounded-[20px] bg-black hover:bg-black/80`}
+              className={`h-[56px] w-[120px] px-6 py-2 flex items-center justify-center text-white rounded-[20px] ${
+                emailVeriCode !== ""
+                  ? "bg-black hover:bg-black/80"
+                  : "bg-gray-800"
+              } `}
               onClick={() => {
                 if (emailVeriCode === tempEmailVeriCode) {
                   setIsEmailVerified(true);
@@ -146,6 +174,7 @@ const SignUpCard = () => {
                   setEmailVeriError(true);
                 }
               }}
+              // disabled={emailVeriCode !== ""}
             >
               {t("account.confirm")}
             </Button>
@@ -157,6 +186,7 @@ const SignUpCard = () => {
             {t("account.verificationFailed")}
           </div>
         )}
+
         {/* password */}
         <Input
           type="password"
@@ -172,6 +202,7 @@ const SignUpCard = () => {
             {t("account.passwordError")}
           </span>
         )}
+
         {/* confirm password */}
         <Input
           type="password"
@@ -240,7 +271,7 @@ const SignUpCard = () => {
         </div>
       </div>
 
-      {/* button */}
+      {/* confirm button */}
       <Button
         className={`h-[56px] w-full text-white rounded-lg ${
           isFormValid ? "bg-button-background" : "bg-gray-800"
@@ -251,7 +282,6 @@ const SignUpCard = () => {
             state: { email: formState.email },
           })
         }
-        //  () => navigate(`/products/${id}`, { state: {product} })
       >
         {t("account.signUp")}
       </Button>

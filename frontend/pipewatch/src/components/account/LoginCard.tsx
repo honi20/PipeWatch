@@ -1,10 +1,31 @@
+import axios from "axios";
+
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Input, Button } from "@headlessui/react";
 import { useState, ChangeEvent, FocusEvent } from "react";
 
+const API_URL = import.meta.env.VITE_URL;
+
 const LoginCard = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+
+  const login = (email: string, password: string) => {
+    axios
+      .post(`${API_URL}/api/auth/signin`, { email, password })
+      .then((res) => {
+        // console.log(res.data.body);
+        // 로컬스토리지 저장
+        localStorage.setItem("accessToken", res.data.body.accessToken);
+        navigate("/");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    return <></>;
+  };
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showEmailError, setShowEmailError] = useState(false);
@@ -103,6 +124,7 @@ const LoginCard = () => {
             : "bg-button-background cursor-not-allowed"
         }`}
         disabled={!isFormValid}
+        onClick={() => (isFormValid ? login(email, password) : null)}
       >
         {t("account.login")}
       </Button>
