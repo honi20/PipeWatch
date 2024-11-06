@@ -316,13 +316,13 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new BaseException(USER_NOT_FOUND));
 
-		// 기업이나 관리자 유저만 가능
-		if (user.getRole() == Role.USER || user.getRole() == Role.EMPLOYEE) {
-			throw new BaseException(FORBIDDEN_USER_ROLE);
-		}
-
 		PipelineModelMemo memo = pipelineModelMemoRepository.findById(memoId)
 				.orElseThrow(() -> new BaseException(PIPELINE_MODEL_MEMO_NOT_FOUND));
+
+		// 작성자만 삭제 가능
+		if (userId != memo.getUser().getId()) {
+			throw new BaseException(FORBIDDEN_USER_ROLE);
+		}
 
 		pipelineModelMemoRepository.delete(memo);
 	}
