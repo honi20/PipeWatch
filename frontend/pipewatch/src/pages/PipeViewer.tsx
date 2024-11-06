@@ -5,7 +5,7 @@ import NoAccessImage from "@assets/images/status/no_access.png";
 import NoPipeModelImage from "@assets/images/status/no_pipe_model.png";
 import { ModelType } from "@src/components/pipeViewer/PipeType";
 
-export const PipeViewer = async () => {
+export const PipeViewer = () => {
   // const { t } = useTranslation();
 
   // 파이프 모델 get - 모델 조회
