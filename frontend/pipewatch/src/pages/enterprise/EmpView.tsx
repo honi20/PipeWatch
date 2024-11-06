@@ -1,5 +1,8 @@
 import { EmployInfoTable } from "@src/components/enterprise/EmployInfoTable";
+import { useTranslation } from "react-i18next";
+
 export const EmpView = () => {
+  const { t } = useTranslation();
   const employData = [
     {
       id: 1,
@@ -8,6 +11,7 @@ export const EmpView = () => {
       employeeId: "00000001",
       department: "Management Support",
       position: "Staff",
+      role: "staff",
     },
     {
       id: 2,
@@ -16,119 +20,132 @@ export const EmpView = () => {
       employeeId: "00000002",
       department: "-",
       position: "Director",
+      role: "staff",
     },
     {
       id: 3,
       name: "최예헌",
       email: "honey@paori.com",
       employeeId: "00000003",
-      department: "Managerment Support",
+      department: "Management Support",
       position: "Manager",
+      role: "staff",
     },
     {
-      id: 3,
+      id: 4,
       name: "최예헌",
       email: "honey@paori.com",
       employeeId: "00000003",
-      department: "Managerment Support",
+      department: "Management Support",
       position: "Manager",
+      role: "staff",
     },
     {
-      id: 3,
+      id: 5,
       name: "최예헌",
       email: "honey@paori.com",
       employeeId: "00000003",
-      department: "Managerment Support",
+      department: "Management Support",
       position: "Manager",
+      role: "staff",
     },
     {
-      id: 3,
+      id: 6,
       name: "최예헌",
       email: "honey@paori.com",
       employeeId: "00000003",
-      department: "Managerment Support",
+      department: "Management Support",
       position: "Manager",
+      role: "staff",
     },
     {
-      id: 3,
+      id: 7,
       name: "최예헌",
       email: "honey@paori.com",
       employeeId: "00000003",
-      department: "Managerment Support",
+      department: "Management Support",
       position: "Manager",
+      role: "staff",
     },
     {
-      id: 3,
+      id: 8,
       name: "최예헌",
       email: "honey@paori.com",
       employeeId: "00000003",
-      department: "Managerment Support",
+      department: "Management Support",
       position: "Manager",
+      role: "staff",
     },
     {
-      id: 3,
+      id: 9,
       name: "최예헌",
       email: "honey@paori.com",
       employeeId: "00000003",
-      department: "Managerment Support",
+      department: "Management Support",
       position: "Manager",
+      role: "staff",
     },
     {
-      id: 3,
+      id: 10,
       name: "최예헌",
       email: "honey@paori.com",
       employeeId: "00000003",
-      department: "Managerment Support",
+      department: "Management Support",
       position: "Manager",
+      role: "staff",
     },
     {
-      id: 3,
+      id: 11,
       name: "최예헌",
       email: "honey@paori.com",
       employeeId: "00000003",
-      department: "Managerment Support",
+      department: "Management Support",
       position: "Manager",
+      role: "staff",
     },
     {
-      id: 3,
+      id: 12,
       name: "최예헌",
       email: "honey@paori.com",
       employeeId: "00000003",
-      department: "Managerment Support",
+      department: "Management Support",
       position: "Manager",
+      role: "staff",
     },
     {
-      id: 3,
+      id: 13,
       name: "최예헌",
       email: "honey@paori.com",
       employeeId: "00000003",
-      department: "Managerment Support",
+      department: "Management Support",
       position: "Manager",
+      role: "staff",
     },
     {
-      id: 3,
+      id: 14,
       name: "최예헌",
       email: "honey@paori.com",
       employeeId: "00000003",
-      department: "Managerment Support",
+      department: "Management Support",
       position: "Manager",
+      role: "staff",
     },
     {
-      id: 3,
+      id: 15,
       name: "최예헌",
       email: "honey@paori.com",
       employeeId: "00000003",
-      department: "Managerment Support",
+      department: "Management Support",
       position: "Manager",
+      role: "staff",
     },
   ];
+
   return (
     <div className="flex flex-col gap-10">
       <div>
-        <h2 className="font-bold text-[32px]">사원 정보 조회/변경</h2>
-        <div className="">
-          사원의 관리자 권한을 설정하고 관리할 수 있습니다.
-        </div>
+        <h2 className="font-bold text-[32px]">{t("enterprise.view.title")}</h2>
+        <div className="">{t("enterprise.view.instruction")}</div>
       </div>
       <EmployInfoTable data={employData} />
     </div>

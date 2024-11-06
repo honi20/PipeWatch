@@ -1,5 +1,6 @@
 import React from "react";
 import { EnterpriseButton } from "@components/enterprise/EnterpriseButton";
+import { useTranslation } from "react-i18next";
 
 interface VerificationData {
   id: number;
@@ -15,18 +16,30 @@ interface TableProps {
 }
 
 export const VerificationTable: React.FC<TableProps> = ({ data }) => {
+  const { t } = useTranslation();
+
   return (
     <div className="border border-block rounded-xl overflow-hidden max-w-[1080px] w-full">
       <table className="w-full border-collapse">
         <thead className="font-normal text-white bg-block">
           <tr>
-            <th className="py-3 font-normal borde-b text-[15px]">Name</th>
-            <th className="font-normal border-b text-[15px]">Email</th>
-            <th className="font-normal border-b text-[15px]">Employee ID</th>
-            <th className="font-normal border-b text-[15px]">Department</th>
-            <th className="font-normal border-b text-[15px]">Position</th>
+            <th className="py-3 font-normal borde-b text-[15px]">
+              {t("enterprise.table.name")}
+            </th>
+            <th className="font-normal border-b text-[15px]">
+              {t("enterprise.table.email")}
+            </th>
+            <th className="font-normal border-b text-[15px]">
+              {t("enterprise.table.employeeId")}
+            </th>
+            <th className="font-normal border-b text-[15px]">
+              {t("enterprise.table.department")}
+            </th>
+            <th className="font-normal border-b text-[15px]">
+              {t("enterprise.table.position")}
+            </th>
             <th className="px-5 font-normal border-b text-[15px]">
-              Request Management
+              {t("enterprise.table.requestManagement")}
             </th>
           </tr>
         </thead>
@@ -44,13 +57,15 @@ export const VerificationTable: React.FC<TableProps> = ({ data }) => {
                 <div className="flex items-center justify-center h-full gap-2">
                   <EnterpriseButton
                     handleClick={() => console.log("button Clicked")}
-                    text="승인"
-                    color={"bg-primary-200"}
-                    hoverColor={"hover:bg-primary-200/80"}
+                    text={t("enterprise.verification.buttons.approve")}
+                    color={"bg-primary-200 dark:bg-primary-500"}
+                    hoverColor={
+                      "hover:bg-primary-200/80 hover:dark:bg-primary-500/80"
+                    }
                   />
                   <EnterpriseButton
                     handleClick={() => console.log("button Clicked")}
-                    text="거부"
+                    text={t("enterprise.verification.buttons.reject")}
                     color={"dark:bg-block bg-gray-500"}
                     hoverColor={"hover:dark:bg-block/80 hover:bg-gray-500/80"}
                   />

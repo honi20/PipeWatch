@@ -1,4 +1,4 @@
-import { useTranslation } from "react-i18next";
+import { useTranslation, Trans } from "react-i18next";
 import { Input, Button } from "@headlessui/react";
 import { useState, ChangeEvent, FocusEvent } from "react";
 import { Link } from "react-router-dom";
@@ -48,9 +48,7 @@ export const FindPasswordCard = () => {
         </div>
         {/* subtitle */}
         <div className="text-center whitespace-normal break-keep">
-          가입하신 이메일 주소로
-          <br />
-          새로운 비밀번호 설정을 위한 안내 메일이 발송됩니다.
+          <Trans i18nKey="account.passwordReset" components={{ br: <br /> }} />
         </div>
       </div>
 
@@ -71,7 +69,7 @@ export const FindPasswordCard = () => {
           />
           {showNameError && (
             <span className="w-full px-2 whitespace-normal text-warn break-keep">
-              성명을 입력해주세요.
+              {t("account.enterYourName")}
             </span>
           )}
         </div>
@@ -109,12 +107,12 @@ export const FindPasswordCard = () => {
         }`}
         disabled={!isFormValid}
       >
-        비밀번호 변경 메일 보내기
+        {t("account.sendPasswordResetEmail")}
       </Button>
 
       {/* footer */}
       <div className="flex justify-center underline">
-        <Link to="/account/auth/login">로그인 페이지로 돌아가기</Link>
+        <Link to="/account/auth/login">{t("account.goBackToLogin")}</Link>
       </div>
     </div>
   );

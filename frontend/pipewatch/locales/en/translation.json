@@ -46,7 +46,11 @@
     "employeeDepartment": "Department",
     "employeePosition": "Position",
     "employeeInformation": "Employee Information",
-    "termsAndPrivacyConsent": "By signing up, you consent to our <1>Terms of Service</1> and <3>Privacy Policy</3>."
+    "termsAndPrivacyConsent": "By signing up, you consent to our <1>Terms of Service</1> and <3>Privacy Policy</3>.",
+    "passwordReset": "An email will be sent to your registered address.<br />Follow the instructions to set a new password.",
+    "sendPasswordResetEmail": "Send password reset email",
+    "goBackToLogin": "Return to login page",
+    "enterYourName": "Please enter your name."
   },
   "manageAccount": {
     "dashboard": {
@@ -308,6 +312,37 @@
     "footer": {
       "instructions": "For any inquiries regarding pre-contact and registration,<br/>please reach out to our sales team.",
       "connectEmail": "Go to connect via email"
+    }
+  },
+  "enterprise": {
+    "enterprise": "Enterprise Account",
+    "manage": "Employee Management",
+    "table": {
+      "name": "Name",
+      "email": "Email",
+      "employeeId": "Employee ID",
+      "department": "Department",
+      "position": "Position",
+      "requestManagement": "Request Management"
+    },
+    "verification": {
+      "sidebarTitle": "Verification",
+      "title": "Employee Verification",
+      "instruction": "You can approve or reject employee verification requests.",
+      "buttons": {
+        "approve": "Approve",
+        "reject": "Reject"
+      }
+    },
+    "view": {
+      "sidebarTitle": "View/Update",
+      "title": "View/Update Employee Information",
+      "instruction": "Manage and set administrative rights for employees.",
+      "buttons": {
+        "staff": "Employee",
+        "admin": "Administrator",
+        "update": "Update"
+      }
     }
   }
 }
