@@ -17,6 +17,8 @@ import { Auth } from "@pages/account/Auth";
 import { LoginPage } from "@pages/account/LoginPage";
 import { FindPassword } from "@pages/account/FindPassword";
 import { SignUpPage } from "@pages/account/SignUpPage";
+import { ResetPasswordPage } from "@pages/account/ResetPasswordPage";
+import { CompletedResetPassword } from "@pages/account/CompletedResetPassword";
 
 import { Enterprise } from "@pages/Enterprise";
 import { EmpView } from "@pages/enterprise/EmpView";
@@ -97,6 +99,14 @@ function App() {
               <Route path="/account/auth/login" element={<LoginPage />} />
               <Route path="/account/auth/find-pw" element={<FindPassword />} />
               <Route path="/account/auth/sign-up" element={<SignUpPage />} />
+              <Route
+                path="/account/auth/reset-pw"
+                element={<ResetPasswordPage />}
+              />
+              <Route
+                path="/account/auth/reset-pw-completed"
+                element={<CompletedResetPassword />}
+              />
               <Route
                 path="/account/auth/completed"
                 element={<CompletedContact />}
