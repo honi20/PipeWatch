@@ -18,7 +18,7 @@ public class PipeMemo extends BaseEntity {
 	@Column(name = "pipe_memo_id")
 	private Long id;
 
-	private String meme;
+	private String memo;
 
 	private Boolean hasDefect;
 
