@@ -40,8 +40,8 @@ export const ModelListView: React.FC<ModelListViewProps> = ({ modelList }) => {
     outerDiameter: 10,
     innerDiameter: 10,
     fluidMaterial: "water",
-    flowRate: 10
-  }
+    flowRate: 10,
+  };
   // 장소 및 장소에 따른 floorList 변경
   const handleAreaChange = (selectedArea: AreaType) => {
     setSelectedArea(selectedArea);
@@ -121,7 +121,7 @@ export const ModelListView: React.FC<ModelListViewProps> = ({ modelList }) => {
           </div>
         ) : (
           // 선택된 모델이 없는 경우
-          <div className="flex items-center gap-2 ">
+          <div className="flex items-center gap-2 h-svh">
             <img src={SelectPipeModelIcon} width={"60px"} />
             <p className="text-[30px] text-gray-800 font-bold">
               파이프 모델을 선택하세요.

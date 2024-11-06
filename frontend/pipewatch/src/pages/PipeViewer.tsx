@@ -1,18 +1,24 @@
 // import { useTranslation } from "react-i18next";
-
+// import { getApiClient } from "@src/stores/apiClient";
 import { ModelListView } from "@src/components/pipeViewer/ModelListView";
 import NoAccessImage from "@assets/images/status/no_access.png";
 import NoPipeModelImage from "@assets/images/status/no_pipe_model.png";
 import { ModelType } from "@src/components/pipeViewer/PipeType";
 
-export const PipeViewer = () => {
+export const PipeViewer = async () => {
   // const { t } = useTranslation();
 
   // 파이프 모델 get - 모델 조회
   // 모델이 없을 때
   // const tempModelList = [];
   // 모델이 있을 때
-
+  // const apiClient = getApiClient();
+  // try {
+  //   const res = await apiClient.get("/api/models");
+  //   console.log(res);
+  // } catch (err) {
+  //   console.log(err);
+  // }
   const tempModelList: ModelType[] = [
     {
       id: 1,
