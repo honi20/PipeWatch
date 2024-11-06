@@ -1,4 +1,4 @@
-import { useState, ChangeEvent, FocusEvent } from "react";
+import { useState, ChangeEvent } from "react";
 import { useTranslation, Trans } from "react-i18next";
 import { Link } from "react-router-dom";
 
@@ -11,11 +11,20 @@ import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
 
 const SignUpCard = () => {
+  const tempEmailVeriCode = "123456";
+  const [emailVeriCode, setEmailVeriCode] = useState("");
+  const [isEmailVerified, setIsEmailVerified] = useState(false);
+  const [EmailVeriError, setEmailVeriError] = useState(false);
+  const [showEmailError, setEmailError] = useState(false);
+  const [showPasswordError, setPasswordError] = useState(false);
+  const [showConfirmPasswordError, setConfirmPasswordError] = useState(false);
+
   const { t } = useTranslation();
 
   const initialFormState = {
     email: "",
     password: "",
+    passwordConfirm: "",
     name: "",
     companyName: "",
     employeeId: "",
@@ -25,15 +34,14 @@ const SignUpCard = () => {
 
   const [formState, setFormState] = useState(initialFormState);
 
-  const handleCompanyChange = (selectedCompany: CompanyType) => {
-    setFormState((prevFormState) => ({
-      ...prevFormState,
-      companyName: selectedCompany.company,
-    }));
-  };
+  // 이메일 유효성 검사
+  const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  const validateEmail = (value: string) => emailPattern.test(value);
 
-  // console.log(formState.employeeId); // 빌드용
-  console.log(formState);
+  // 비밀번호 유효성 검사
+  const passwordPattern =
+    /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+  const validatePassword = (value: string) => passwordPattern.test(value);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -41,23 +49,34 @@ const SignUpCard = () => {
       ...prevFormState,
       [name]: value,
     }));
+
+    if (name === "email") {
+      setEmailError(value !== "" && !validateEmail(value));
+    }
+    if (name === "password") {
+      setPasswordError(value !== "" && !validatePassword(value));
+    }
+    if (name === "confirmPassword") {
+      setConfirmPasswordError(
+        value !== "" && !validatePassword(value) && value !== formState.password
+      );
+    }
   };
 
-  const tempEmailVeriCode = "123456";
-  const [emailVeriCode, setEmailVeriCode] = useState("");
-  const [isEmailVerified, setIsEmailVerified] = useState(false);
-  const [EmailVeriError, setEmailVeriError] = useState(false);
-  const [emailError, setEmailError] = useState(false);
-  const [passwordError, setPasswordError] = useState(false);
-  const [passwordCheckError, setPasswordCheckError] = useState(false);
+  const handleCompanyChange = (selectedCompany: CompanyType) => {
+    setFormState((prevFormState) => ({
+      ...prevFormState,
+      companyName: selectedCompany.company,
+    }));
+  };
 
-  const isFormValid =
+  const isFormValid: boolean =
     emailVeriCode !== "" &&
-    !emailError &&
-    !passwordError &&
-    !passwordCheckError &&
+    !showEmailError &&
+    !showPasswordError &&
+    !showConfirmPasswordError &&
     isEmailVerified &&
-    formState;
+    Object.values(formState).every((value) => value !== "");
 
   return (
     <div className="w-[500px] flex flex-col bg-block rounded-[30px] p-[50px] gap-[40px] text-white">
@@ -80,10 +99,16 @@ const SignUpCard = () => {
           />
           <Button
             className={`h-[56px] w-[120px] px-6 py-2 flex items-center justify-center text-white rounded-[20px] bg-primary-500 hover:bg-primary-500/80`}
+            onClick={() => console.log("Email Verification Button Clicked")}
           >
             {t("account.requestVerification")}
           </Button>
         </div>
+        {showEmailError && (
+          <span className="w-full px-2 whitespace-normal text-warn break-keep">
+            {t("account.emailError")}
+          </span>
+        )}
         <div className="flex items-center justify-between">
           <Input
             type="email"
@@ -134,11 +159,18 @@ const SignUpCard = () => {
           placeholder={t("account.password")}
           onChange={handleInputChange}
         />
+        {showEmailError && (
+          <span className="w-full px-2 whitespace-normal text-warn break-keep">
+            {t("account.emailError")}
+          </span>
+        )}
         {/* confirm password */}
         <Input
           type="password"
+          name="confirmPassword"
           className="h-[56px] w-full px-5 text-gray-500 rounded-[5px]"
           placeholder={t("account.confirmPassword")}
+          onChange={handleInputChange}
         />
 
         {/* name */}
