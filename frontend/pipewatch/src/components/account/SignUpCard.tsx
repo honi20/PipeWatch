@@ -4,11 +4,22 @@ import { Link } from "react-router-dom";
 
 import { Input, Button } from "@headlessui/react";
 
+import { CompanyListBox } from "@components/account/SignUp/CompanyListbox";
+import { CompanyType } from "@src/components/account/SignUp/inputType";
+
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
 
 const SignUpCard = () => {
   const { t } = useTranslation();
+
+  const [selectedCompany, setSelectedCompany] = useState<CompanyType | null>(
+    null
+  );
+  const handleCompanyChange = (selectedArea: CompanyType) => {
+    setSelectedCompany(selectedArea);
+  };
+  console.log(selectedCompany?.company); // 빌드용
 
   const tempEmailVeriCode = "123456";
   const [emailVeriCode, setEmailVeriCode] = useState("");
@@ -92,18 +103,22 @@ const SignUpCard = () => {
           className="h-[56px] w-full px-5 text-gray-500 rounded-[5px]"
           placeholder={t("account.confirmPassword")}
         />
+
         {/* name */}
         <Input
           type="text"
           className="h-[56px] w-full px-5 text-gray-500 rounded-[5px]"
           placeholder={t("account.name")}
         />
-        {/* company */}
-        <Input
-          type="text"
-          className="h-[56px] w-full px-5 text-gray-500 rounded-[5px]"
-          placeholder={t("account.companyName")}
-        />
+
+        {/* company name */}
+        <div className="flex items-center justify-between w-full h-[56px]">
+          <p className="">회사명</p>
+          <div className="flex flex-col w-2/3 h-full gap-5">
+            <CompanyListBox onCompanyChange={handleCompanyChange} />
+          </div>
+        </div>
+
         {/* employee */}
         <div className="flex items-start justify-between w-full">
           <div>{t("account.employeeInformation")}</div>
