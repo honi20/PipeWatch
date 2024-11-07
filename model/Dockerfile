@@ -3,7 +3,7 @@ FROM nikolaik/python-nodejs:python3.9-nodejs22-slim
 
 # Node.js 설치를 위해 필요한 패키지 추가 및 Node.js 설치
 RUN apt-get update && \
-    apt-get install -y libglu1-mesa libgl1-mesa-glx libgl1-mesa-dev && \
+    apt-get install -y libosmesa6-dev && \
     npm install -g gltf-pipeline && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
