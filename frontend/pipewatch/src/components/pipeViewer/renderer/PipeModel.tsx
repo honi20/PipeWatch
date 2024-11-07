@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader";
 import { ThreeEvent, useLoader } from "@react-three/fiber";
@@ -7,12 +7,20 @@ import * as THREE from "three";
 export const PipeModel: React.FC<{
   gltfUrl: string;
   onClick: (mesh: THREE.Mesh) => void;
-}> = ({ gltfUrl, onClick }) => {
+  onModelLoad: (scene: THREE.Object3D) => void;
+}> = ({ gltfUrl, onClick, onModelLoad }) => {
   const model = useLoader(GLTFLoader, gltfUrl, (loader) => {
     const dracoLoader = new DRACOLoader();
     dracoLoader.setDecoderPath("https://www.gstatic.com/draco/v1/decoders/");
     loader.setDRACOLoader(dracoLoader);
   });
+
+  // model 전달
+  useEffect(() => {
+    if (model.scene) {
+      onModelLoad(model.scene);
+    }
+  }, [model, onModelLoad]);
 
   // 각 mesh의 이름에 따라 그룹화
   const meshesByGroup = React.useMemo(() => {
@@ -55,9 +63,6 @@ export const PipeModel: React.FC<{
   return (
     <group position={[-5, 0, 0]}>
       {Object.entries(meshesByGroup).map(([groupName, meshes], index) => {
-        if (visibleGroup !== null && groupName !== visibleGroup) return null;
-        // 확대 비율 조정
-        // const position = 0, 0, 0];
         return (
           <group
             key={index}
@@ -67,22 +72,37 @@ export const PipeModel: React.FC<{
             onPointerOut={() => handlePointerOut(groupName)}
             onPointerDown={() => handlePointerDown(groupName)}
           >
-            {meshes.map(({ originalMesh, segmentName }, i) => (
-              <mesh
-                key={i}
-                name={segmentName}
-                geometry={originalMesh.geometry}
-                material={originalMesh.material}
-                position={originalMesh.position}
-                rotation={originalMesh.rotation}
-                scale={originalMesh.scale}
-                onPointerDown={(e: ThreeEvent<PointerEvent>) => {
-                  e.stopPropagation();
-                  onClick(e.object as THREE.Mesh); // 클릭된 mesh 객체 전달
-                  handlePointerDown(groupName);
-                }}
-              />
-            ))}
+            {meshes.map(({ originalMesh, segmentName }, i) => {
+              const isTransparent =
+                visibleGroup !== null && groupName !== visibleGroup;
+              if (originalMesh.material instanceof THREE.MeshStandardMaterial) {
+                originalMesh.material.transparent = !isTransparent;
+                originalMesh.material.opacity = isTransparent ? 0.2 : 1.0; // 투명도 설정
+                originalMesh.material.needsUpdate = true;
+                console.log(
+                  "test",
+                  originalMesh.material.transparent,
+                  originalMesh.material.opacity
+                );
+              }
+
+              return (
+                <mesh
+                  key={i}
+                  name={segmentName}
+                  geometry={originalMesh.geometry}
+                  material={originalMesh.material}
+                  position={originalMesh.position}
+                  rotation={originalMesh.rotation}
+                  scale={originalMesh.scale}
+                  onPointerDown={(e: ThreeEvent<PointerEvent>) => {
+                    e.stopPropagation();
+                    onClick(e.object as THREE.Mesh); // 클릭된 mesh 객체 전달
+                    handlePointerDown(groupName);
+                  }}
+                />
+              );
+            })}
           </group>
         );
       })}

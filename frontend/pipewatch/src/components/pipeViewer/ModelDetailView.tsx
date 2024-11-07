@@ -48,8 +48,7 @@ export const ModelDetailView: React.FC<ModelDetailViewProps> = ({
 
   return (
     <div className="relative w-full h-full">
-      <div>{modelId}</div>
-      <GLTFViewer gltfUrl="/assets/models/PipeLine.gltf" />
+      {modelDetail && <GLTFViewer gltfUrl={modelDetail.modelingUrl} />}
       <div className="absolute top-5 right-10">
         {modelDetail && (
           <ModelMemo
