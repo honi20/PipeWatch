@@ -290,7 +290,7 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 
 	@Override
 	@Transactional
-	public void createModelMemo(Long userId, Long modelId, PipelineModelRequest.MemoDto requestDto) {
+	public PipelineModelResponse.MemoListDto createModelMemo(Long userId, Long modelId, PipelineModelRequest.MemoDto requestDto) {
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new BaseException(USER_NOT_FOUND));
 
@@ -308,6 +308,15 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 
 		PipelineModelMemo memo = requestDto.toEntity(user, pipelineModel);
 		pipelineModelMemoRepository.save(memo);
+
+		List<PipelineModelMemo> memos = pipelineModelMemoRepository.findByPipelineModelIdOrder(pipelineModel.getId());
+		List<PipelineModelResponse.MemoDto> modelMemoList = memos.stream()
+				.map(PipelineModelResponse.MemoDto::fromEntity)
+				.toList();
+
+		return PipelineModelResponse.MemoListDto.builder()
+				.memoList(modelMemoList)
+				.build();
 	}
 
 	@Override
