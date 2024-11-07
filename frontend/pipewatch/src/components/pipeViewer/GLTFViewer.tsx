@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import * as THREE from "three";
 import { PipeModel } from "@src/components/pipeViewer/renderer/PipeModel";
-import { OrbitControls } from "@react-three/drei";
+import { CameraControls, OrbitControls } from "@react-three/drei";
 
 interface GLTFViewerProps {
   gltfUrl: string;
@@ -26,12 +26,14 @@ const GLTFViewer: React.FC<GLTFViewerProps> = ({ gltfUrl }) => {
         position: [0, 0, 10],
       }}
     >
+      <directionalLight position={[5, 5, 5]} />
+      <CameraControls enabled={true} dollyToCursor={true} />
       <ambientLight intensity={0.5} />
       <directionalLight position={[5, 10, 7.5]} intensity={1} castShadow />
       <PipeModel gltfUrl={gltfUrl} onClick={handleMeshClick} />
-      <OrbitControls />
       <axesHelper args={[10]} />
       <gridHelper />
+      {/* <ShowRoom/> */}
     </Canvas>
   );
 };
