@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 
 import { Button } from "@headlessui/react";
 import { motion, AnimatePresence } from "framer-motion";
-import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
 import DoubleArrowIcon from "@mui/icons-material/DoubleArrow";
 
 import HomePipe from "@assets/images/home_pipe.png";
@@ -27,7 +26,7 @@ export const Home = () => {
   const { t } = useTranslation();
   const [selectedTab, setSelectedTab] = useState(tabs[0]);
 
-  const { isLogin } = useUserStore();
+  const { isLogin, role } = useUserStore();
 
   const animation_variants_image1 = {
     first: {
@@ -52,15 +51,29 @@ export const Home = () => {
         <h1 className="font-bold text-[80px]">{t("home.greeting2")}</h1>
 
         {isLogin ? (
-          <div className="my-6">
-            <Link className="" to="/pipe-generator">
-              <Button className="flex items-center gap-2 px-6 py-3 border-black border-solid border-[1px] rounded-lg text-[24px] bg-transparent dark:bg-white dark:text-black hover:text-primary-500">
-                {/* {t("header.subMenu.pipeGenerator")} */}
-                파이프 모델 생성하기
-                <DoubleArrowIcon sx={{ fontSize: "30px" }} />
-              </Button>
-            </Link>
-          </div>
+          role === "ADMIN" || role === "ENTERPRISE" ? (
+            <div className="my-6">
+              <Link className="" to="/pipe-generator">
+                <Button className="flex items-center gap-2 px-6 py-3 border-black border-solid border-[1px] rounded-lg text-[24px] bg-transparent dark:bg-white dark:text-black hover:text-primary-500">
+                  {/* {t("header.subMenu.pipeGenerator")} */}
+                  파이프 모델 생성하기
+                  <DoubleArrowIcon sx={{ fontSize: "30px" }} />
+                </Button>
+              </Link>
+            </div>
+          ) : role === "EMPLOYEE" ? (
+            <div className="my-6">
+              <Link className="" to="/pipe-generator">
+                <Button className="flex items-center gap-2 px-6 py-3 border-black border-solid border-[1px] rounded-lg text-[24px] bg-transparent dark:bg-white dark:text-black hover:text-primary-500">
+                  {/* {t("header.subMenu.pipeGenerator")} */}
+                  파이프 모델 생성하기
+                  <DoubleArrowIcon sx={{ fontSize: "30px" }} />
+                </Button>
+              </Link>
+            </div>
+          ) : (
+            <div className="my-6"></div>
+          )
         ) : (
           <div className="flex gap-2 my-6">
             <Link className="" to="/account/auth/login">
