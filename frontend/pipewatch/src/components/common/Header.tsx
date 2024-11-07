@@ -1,3 +1,5 @@
+import axios from "axios";
+
 import { NavLink, Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 
@@ -34,7 +36,7 @@ interface Employees {
   role: string;
 }
 
-// 로그인 : 로컬스토리지에 저장하기
+// 로컬스토리지에 저장하기
 const saveLanguageToStorage = (language: string) => {
   localStorage.setItem("language", language);
 };
@@ -61,11 +63,27 @@ export const Header = ({ handleTheme, currentTheme }: Props) => {
     }
   };
 
+  // 로그인 상태 관리
   const [isLogin, setIsLogin] = useState(true); // store에 저장한 Login 상태 가져올 예정
+  const API_URL = import.meta.env.VITE_URL;
 
-  // const name = "개굴전자";
+  // 로그아웃 함수 : Login 상태 catch해서 적용
+  const logout = () => {
+    axios
+      .post(`${API_URL}/api/auth/logout`, {})
+      .then((res) => {
+        console.log(res.data.body);
+        localStorage.removeItem("accessToken");
+        // + store login 상태 바꾸는 함수
+        navigate("/");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    return <></>;
+  };
+
   const name: string = "너굴맨";
-  // const name = "Ariana Grande";
 
   const role: string = "ENTERPRISE";
   // const role: string = "ADMIN";
@@ -73,15 +91,6 @@ export const Header = ({ handleTheme, currentTheme }: Props) => {
   // const role: string = "USER";
 
   const temp_employees: Employees[] = [
-    {
-      uuid: "1604b772-adc0-4212-8a90-81186c57f598",
-      name: "테스트",
-      email: "test@paori.com",
-      empNo: 1243242,
-      department: "IT사업부",
-      empClass: "팀장",
-      role: "USER",
-    },
     {
       uuid: "1604b772-adc0-4212-8a90-81186c57f598",
       name: "테스트",
@@ -100,7 +109,6 @@ export const Header = ({ handleTheme, currentTheme }: Props) => {
   };
 
   const isKorean = i18n.language === "ko";
-  // const toggleLanguage = isKorean ? "en" : "ko";
   const currentLanguage = isKorean ? "한국어" : "English";
 
   const isDark = currentTheme === "dark";
@@ -287,26 +295,37 @@ export const Header = ({ handleTheme, currentTheme }: Props) => {
           {/* 계정 관련 status 변경 Box */}
           {isLogin ? (
             // 로그인 상태
+            <div className="flex items-center gap-4 cursor-pointer">
+              <div
+                className="flex items-center justify-center gap-2 cursor-pointer"
+                onClick={handleRoleNavigation}
+              >
+                <div>{name}</div>
+                {role === "ENTERPRISE" ? (
+                  // 기업 계정
+                  <div className="flex items-center justify-center px-2 rounded-[30px] text-[14px] bg-warn">
+                    {temp_employees && temp_employees.length}
+                  </div>
+                ) : (
+                  // 사원 계정(관리자/일반)
+                  <div
+                    id="badge"
+                    className="px-2 py-1 rounded-[30px] text-[12px] text-white bg-block dark:text-black dark:bg-white"
+                  >
+                    {role === "ADMIN" ? "관리자" : "사원"}
+                  </div>
+                )}
+              </div>
 
-            <div
-              className="flex items-center justify-center gap-2 mx-2 cursor-pointer"
-              onClick={handleRoleNavigation}
-            >
-              <div>{name}</div>
-              {role === "ENTERPRISE" ? (
-                // 기업 계정
-                <div className="flex items-center justify-center px-2 rounded-[30px] text-[14px] bg-warn">
-                  {temp_employees && temp_employees.length}
-                </div>
-              ) : (
-                // 사원 계정(관리자/일반)
-                <div
-                  id="badge"
-                  className="px-2 py-1 rounded-[30px] text-[12px] text-white bg-block dark:text-black dark:bg-white"
-                >
-                  {role === "ADMIN" ? "관리자" : "사원"}
-                </div>
-              )}
+              <Button
+                className="px-4 py-2 bg-white border-[1px] border-black border-solid rounded-lg text-s dark:bg-black dark:border-white hover:text-primary-200"
+                onClick={() => {
+                  logout();
+                }}
+              >
+                로그아웃
+                {/* {t("header.login")} */}
+              </Button>
             </div>
           ) : (
             // 로그인 필요
