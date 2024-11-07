@@ -28,8 +28,8 @@ const LoginCard = () => {
     }
   };
 
-  // 이메일 : pipewatch_admin@paori.com
-  // 비밀번호 : pipewatch941555!
+  // pipewatch_admin@paori.com
+  // pipewatch941555!
 
   const login = (email: string, password: string) => {
     axios

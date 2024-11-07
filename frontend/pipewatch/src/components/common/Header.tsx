@@ -1,7 +1,5 @@
-import axios from "axios";
-
 import { NavLink, Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import {
   Button,
@@ -66,26 +64,33 @@ export const Header = ({ handleTheme, currentTheme }: Props) => {
   };
 
   // 로그인 상태 관리
-  const { isLogin, userInfo } = useUserStore();
+  const { isLogin, userInfo, setLogin, setRole, setUserInfo } = useUserStore();
   console.log("UserInfo 확인: ", userInfo);
   console.log("login상태: ", isLogin);
 
-  // 로그아웃 함수 : Login 상태 catch해서 적용
-  // const apiClient = getApiClient();
-  // const logout = async () => {
-  //   try {
-  //     const res = await apiClient.get("/api/auth/logout");
-  //     console.log(res);
-  //     localStorage.removeItem("accessToken");
-  //     navigate("/");
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
+  useEffect(() => {
+    console.log("로그인 상태 변경됨: ", isLogin);
+  }, [isLogin]);
+
+  // 로그아웃 함수
+  const apiClient = getApiClient();
+  const logout = async () => {
+    try {
+      const res = await apiClient.get("/api/auth/logout");
+      localStorage.removeItem("accessToken");
+      setLogin(false);
+      setUserInfo(null);
+      setRole("UNAUTHORIZED");
+      console.log("로그아웃 API 호출: header.message", res.data.header.message);
+      window.location.href = "/";
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const name: string = "너굴맨";
 
-  const role = userInfo?.role;
+  const role = userInfo?.role || "UNAUTHORIZED";
   // const role: string = "ENTERPRISE";
   // const role: string = "ADMIN";
   // const role: string = "EMPLOYEE";

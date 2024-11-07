@@ -21,7 +21,7 @@ interface UserState {
   role: string | null;
   setRole: (role: string) => void;
   userInfo: UserInfo | null;
-  setUserInfo: (userinfo: UserInfo) => void;
+  setUserInfo: (userinfo: UserInfo | null) => void;
 }
 
 export const useUserStore = create<UserState>((set) => ({
@@ -31,5 +31,5 @@ export const useUserStore = create<UserState>((set) => ({
   setRole: (role) => set({ role }),
   userInfo: null,
   setUserInfo: (userInfo) =>
-    set({ userInfo, isLogin: true, role: userInfo.role }),
+    set({ userInfo, isLogin: true, role: userInfo?.role }),
 }));
