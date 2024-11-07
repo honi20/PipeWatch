@@ -4,6 +4,7 @@ const API_URL = import.meta.env.VITE_URL;
 export const createApiClient = (accessToken: string | null) => {
   if (!accessToken) {
     console.error("createApiClient: accessToken이 제공되지 않았습니다.");
+
     throw new Error("Access token is required to create an API client.");
   }
   return axios.create({
@@ -15,8 +16,8 @@ export const createApiClient = (accessToken: string | null) => {
 };
 
 const getAccessToken = () => localStorage.getItem("accessToken");
-// const setAccessToken = (token: string) =>
-//   localStorage.setItem("accessToken", token);
+const setAccessToken = (token: string) =>
+  localStorage.setItem("accessToken", token);
 // const clearAccessToken = () => localStorage.removeItem("accessToken");
 
 export const getApiClient = () => {
@@ -32,37 +33,29 @@ export const getApiClient = () => {
     },
     async (error) => {
       const originalRequest = error.config;
+
       if (originalRequest._retry) {
         console.error(
           "Refresh token request failed again, stopping further requests."
         );
         return Promise.reject(new Error("Unauthorized, please log in again."));
       }
-      originalRequest._retry = true;
-      if (error.response?.data.httpStatus === 401 && !originalRequest._retry) {
+
+      if (error.response?.status === 401) {
+        originalRequest._retry = true;
         try {
           console.log("accessToken 다시");
-          //   if (res.status == 200) {
-          //     setAccessToken(res.data.body.accessToken);
-          //     originalRequest.headers[
-          //       "Authorization"
-          //     ] = `Bearer ${getAccessToken()}`;
-          //     return apiClient(originalRequest);
-          //   } else {
-          //     return Promise.reject(
-          //       new Error("Token reissue failed, logging out.")
-          //     );
-          //   }
-          // } catch (err) {
-          //   return Promise.reject(err);
+          setAccessToken("test");
         } catch (err) {
           console.log(err);
+          return Promise.reject(err);
         }
       } else {
         console.log(
-          `error status: ${error.response.status}, httpStatus: ${error.response.data.httpStatus}`
+          `error status: ${error.response?.status}, httpStatus: ${error.response?.data?.httpStatus}`
         );
       }
+
       if (error.response?.status == 400) {
         console.error("Bad Request (400):", error.response.data);
         return Promise.reject(

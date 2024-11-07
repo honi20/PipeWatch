@@ -4,7 +4,7 @@ import { OrbitControls } from "@react-three/drei";
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader";
-
+import { getApiClient } from "@src/stores/apiClient";
 interface GLTFViewerProps {
   gltfUrl: string;
 }
@@ -18,8 +18,6 @@ const Model: React.FC<{
     dracoLoader.setDecoderPath("https://www.gstatic.com/draco/v1/decoders/");
     (loader as GLTFLoader).setDRACOLoader(dracoLoader);
   });
-
-  // const [hovered, setHovered] = useState<THREE.Mesh | null>(null);
 
   gltf.scene.traverse((child) => {
     if ((child as THREE.Mesh).isMesh) {
@@ -53,13 +51,25 @@ const Model: React.FC<{
     />
   );
 };
+const apiClient = getApiClient();
 
 const GLTFViewer: React.FC<GLTFViewerProps> = ({ gltfUrl }) => {
   const [selectedMesh, setSelectedMesh] = useState<THREE.Mesh | null>(null);
 
+  // const [modelList, setModelList] = useState();
+  // const [hovered, setHovered] = useState<THREE.Mesh | null>(null);
+  const test = async () => {
+    try {
+      const res = await apiClient.get("/api/models");
+      console.log(res.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
   const handleMeshClick = (mesh: THREE.Mesh) => {
     setSelectedMesh(mesh); // 클릭된 mesh 상태에 저장
     console.log("Clicked mesh:", mesh.name); // 클릭된 객체 콘솔 출력
+    test();
   };
 
   return (
