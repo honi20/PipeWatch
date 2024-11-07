@@ -4,7 +4,6 @@ import { ModelsType, BuildingType } from "@components/pipeViewer/PipeType";
 import { BuildingListbox } from "@components/pipeViewer/listbox/BuildingListbox";
 import "./viewer.css";
 import { FloorListbox } from "./listbox/FloorListbox";
-
 import { getApiClient } from "@src/stores/apiClient";
 import { ModelDetailView } from "@src/components/pipeViewer/ModelDetailView";
 
@@ -18,7 +17,6 @@ export const ModelListView: React.FC<ModelListViewProps> = ({ models }) => {
   const [selectedFloor, setSelectedFloor] = useState<number | null>(null);
   const [buildingList, setBuildingList] = useState<BuildingType[]>([]);
   const [floorList, setFloorList] = useState<number[]>([]);
-
 
   // 건물 및 층수 조회 함수
   const getBuildingFloors = async () => {
@@ -35,8 +33,6 @@ export const ModelListView: React.FC<ModelListViewProps> = ({ models }) => {
       console.log(err);
     }
   };
-
-  
 
   // 건물 리스트 업데이트 함수
   useEffect(() => {

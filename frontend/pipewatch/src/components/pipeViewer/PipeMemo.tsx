@@ -5,6 +5,7 @@ import { MemoType } from "@src/components/pipeViewer/PipeType";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 
+
 interface PipeDetail {
   name: string;
   building: string;
@@ -14,12 +15,15 @@ interface PipeMemoProps {
   pipeId: number;
   onViewChange: () => void;
 }
+
 export const PipeMemo: React.FC<PipeMemoProps> = ({ pipeId, onViewChange }) => {
   // pipe 이름, pipe 장소, 층, memolist 필요함
   const [pipe, setPipe] = useState<PipeDetail>();
   const [memo, setMemo] = useState<string>("");
   const [memoList, setMemoList] = useState<MemoType[]>([]);
   const modifiedAt = "2024-11-05 14:52:55";
+
+  // model의 memolist 불러오는 함수
 
   useEffect(() => {
     if (pipeId && memoList && memoList.length === 0) {

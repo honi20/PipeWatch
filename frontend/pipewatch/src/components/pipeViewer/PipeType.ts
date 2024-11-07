@@ -31,3 +31,27 @@ export interface FloorListboxProps {
   floorList: number[];
   selectedFloor: number | null;
 }
+
+export interface PipeType {
+  pipeId: number;
+  pipeUuid: string;
+}
+
+export interface PipelineType {
+  pipelineId: number;
+  pipes: PipeType[];
+}
+
+export interface ModelDetailType {
+  name: string;
+  modelingUrl: string;
+  building: string;
+  floor: number;
+  isCompleted: boolean;
+  updatedAt: string;
+  pipelines: PipelineType[];
+  creater: {
+    userName: string;
+    userUuid: string;
+  };
+}
