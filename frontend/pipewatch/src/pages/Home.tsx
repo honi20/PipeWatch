@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 
 import { Button } from "@headlessui/react";
 import { motion, AnimatePresence } from "framer-motion";
+import DoubleArrowIcon from "@mui/icons-material/DoubleArrow";
 
 import HomePipe from "@assets/images/home_pipe.png";
 import Upload1 from "@assets/images/home/upload_1.png";
@@ -12,6 +13,8 @@ import Upload3 from "@assets/images/home/upload_3.png";
 import Manage1 from "@assets/images/home/manage_1.png";
 import Manage2 from "@assets/images/home/manage_2.png";
 import Manage3 from "@assets/images/home/manage_3.png";
+
+import { useUserStore } from "@src/stores/userStore";
 
 const tabs = [
   { icon: "🍅", label: "전체 파이프 모델", url: Manage1 },
@@ -22,6 +25,8 @@ const tabs = [
 export const Home = () => {
   const { t } = useTranslation();
   const [selectedTab, setSelectedTab] = useState(tabs[0]);
+
+  const { isLogin, role } = useUserStore();
 
   const animation_variants_image1 = {
     first: {
@@ -44,18 +49,46 @@ export const Home = () => {
       <div className="flex flex-col items-center justify-center mb-[100px]">
         <h1 className="font-bold text-[80px]">{t("home.greeting1")}</h1>
         <h1 className="font-bold text-[80px]">{t("home.greeting2")}</h1>
-        <div className="flex gap-2 my-6">
-          <Link className="" to="/account/auth/login">
-            <Button className="px-6 py-3 border-[1px] bg-white dark:bg-black border-black border-solid rounded-lg text-s dark:border-white hover:text-primary-200">
-              {t("header.login")}
-            </Button>
-          </Link>
-          <Link className="" to="/account/auth/sign-up">
-            <Button className="px-6 py-3 rounded-lg bg-primary-200 b text-s dark:border-white hover:text-primary-500">
-              {t("home.signUp")}
-            </Button>
-          </Link>
-        </div>
+
+        {isLogin ? (
+          role === "ADMIN" || role === "ENTERPRISE" ? (
+            <div className="my-6">
+              <Link className="" to="/pipe-generator">
+                <Button className="flex items-center gap-2 px-6 py-3 border-black border-solid border-[1px] rounded-lg text-[24px] bg-transparent dark:bg-white dark:text-black hover:text-primary-500">
+                  {/* {t("header.subMenu.pipeGenerator")} */}
+                  파이프 모델 생성하기
+                  <DoubleArrowIcon sx={{ fontSize: "30px" }} />
+                </Button>
+              </Link>
+            </div>
+          ) : role === "EMPLOYEE" ? (
+            <div className="my-6">
+              <Link className="" to="/pipe-generator">
+                <Button className="flex items-center gap-2 px-6 py-3 border-black border-solid border-[1px] rounded-lg text-[24px] bg-transparent dark:bg-white dark:text-black hover:text-primary-500">
+                  {/* {t("header.subMenu.pipeGenerator")} */}
+                  파이프 모델 생성하기
+                  <DoubleArrowIcon sx={{ fontSize: "30px" }} />
+                </Button>
+              </Link>
+            </div>
+          ) : (
+            <div className="my-6"></div>
+          )
+        ) : (
+          <div className="flex gap-2 my-6">
+            <Link className="" to="/account/auth/login">
+              <Button className="px-6 py-3 border-[1px] bg-white dark:bg-black border-black border-solid rounded-lg text-s dark:border-white hover:text-primary-200">
+                {t("header.login")}
+              </Button>
+            </Link>
+            <Link className="" to="/account/auth/sign-up">
+              <Button className="px-6 py-3 rounded-lg bg-primary-200 b text-s dark:border-white hover:text-primary-500">
+                {t("home.signUp")}
+              </Button>
+            </Link>
+          </div>
+        )}
+
         <motion.div
           variants={animation_variants_image1}
           initial="first"

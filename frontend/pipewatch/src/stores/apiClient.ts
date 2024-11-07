@@ -44,16 +44,13 @@ export const getApiClient = () => {
         originalRequest._retry = true;
         try {
           console.log("accessToken 만료되었음");
-
-          // 에러 메시지에서 새로운 accessToken 추출
-          const newAccessToken = error.response.data?.newAccessToken;
+          const newAccessToken = error.response.data?.body;
           if (newAccessToken) {
             setAccessToken(newAccessToken);
             originalRequest.headers[
               "Authorization"
             ] = `Bearer ${newAccessToken}`;
 
-            // 새로운 accessToken으로 요청을 다시 시도합니다.
             return apiClient(originalRequest);
           } else {
             console.error("새로운 accessToken이 응답에 포함되지 않음");
