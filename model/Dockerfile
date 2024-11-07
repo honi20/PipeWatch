@@ -3,11 +3,11 @@ FROM nikolaik/python-nodejs:python3.9-nodejs22-slim
 
 # Node.js 설치를 위해 필요한 패키지 추가 및 Node.js 설치
 RUN apt-get update && \
-    apt update && \
+    apt-get install -y wget && \
     wget https://github.com/mmatl/travis_debs/raw/master/xenial/mesa_18.3.3-0.deb && \
     dpkg -i ./mesa_18.3.3-0.deb || true && \
     apt install -f && \
-    apt-get install -y libglu1-mesa libgl1-mesa-glx libgl1-mesa-dev llvm-6.0 freeglut3 freeglut3-dev && \
+    apt-get install -y libglu1-mesa libgl1-mesa-glx libgl1-mesa-dev llvm freeglut3-dev && \
     npm install -g gltf-pipeline && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
