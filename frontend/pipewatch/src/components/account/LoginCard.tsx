@@ -28,9 +28,6 @@ const LoginCard = () => {
     }
   };
 
-  // pipewatch_admin@paori.com
-  // pipewatch941555!
-
   const login = (email: string, password: string) => {
     axios
       .post(`${API_URL}/api/auth/signin`, { email, password })
