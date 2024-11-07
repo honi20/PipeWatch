@@ -68,7 +68,7 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 
 	@Override
 	@Transactional
-	public PipelineModelResponse.FileUploadDto uploadFile(Long userId, MultipartFile modelingFile, MultipartFile previewFile) throws IOException, ParseException {
+	public PipelineModelResponse.FileUploadDto uploadFile(Long userId, MultipartFile modelingFile) throws IOException, ParseException {
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new BaseException(USER_NOT_FOUND));
 
@@ -95,11 +95,7 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 			pipelineModel.updateModelingUrl(modelingImgUrl);
 		}
 
-		if (!previewFile.isEmpty()) {
-			String previewImgUrl = s3Service.upload(previewFile, "Thumbnail_" + UUID);
-			pipelineModel.updatePreviewImgUrl(previewImgUrl);
-		}
-
+		pipelineModel.updatePreviewImgUrl("https://pipewatch-bucket.s3.ap-northeast-2.amazonaws.com/assets/no_thumbnail.png");
 		pipelineModelRepository.save(pipelineModel);
 
 		if (modelingImgUrl != null) {

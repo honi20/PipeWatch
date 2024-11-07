@@ -8,7 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 
 public interface PipelineModelService {
-	PipelineModelResponse.FileUploadDto uploadFile(Long userId, MultipartFile modelingFile, MultipartFile previewFile) throws IOException, ParseException;
+	PipelineModelResponse.FileUploadDto uploadFile(Long userId, MultipartFile file) throws IOException, ParseException;
 
 	PipelineModelResponse.CreateModelingDto createModeling(PipelineModelRequest.ModelingDto requestDto) throws IOException, ParseException;
 
