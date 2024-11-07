@@ -12,13 +12,7 @@ export const PipeViewer = () => {
   // 모델이 없을 때
   // const tempModelList = [];
   // 모델이 있을 때
-  // const apiClient = getApiClient();
-  // try {
-  //   const res = await apiClient.get("/api/models");
-  //   console.log(res);
-  // } catch (err) {
-  //   console.log(err);
-  // }
+
   const tempModelList: ModelType[] = [
     {
       id: 1,

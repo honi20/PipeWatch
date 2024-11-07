@@ -8,7 +8,7 @@
     "build": "sh env.sh && tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "buildWithoutTsc": "sh env.sh && vite build"
+    "buildWithoutTsc": "sh env.sh && vite build -- base=./"
   },
   "dependencies": {
     "@emotion/react": "^11.13.3",
