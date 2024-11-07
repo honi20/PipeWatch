@@ -33,35 +33,45 @@ public class S3Service {
 	@Value("${S3_URL}")
 	private String bucketUrl;
 
-	public String upload(MultipartFile multipartFile, String dirName, String modelUuid) throws IOException {
+	public String upload(MultipartFile multipartFile, String modelUuid) throws IOException {
 		if (multipartFile.isEmpty() || Objects.isNull(multipartFile.getOriginalFilename())) {
 			throw new BaseException(FILE_UPLOAD_FAIL);
 		}
 
-		return bucketUrl + uploadS3(multipartFile, dirName, modelUuid);
+		return bucketUrl + uploadS3(multipartFile, modelUuid);
 	}
 
-	private String uploadS3(MultipartFile multipartFile, String dirName, String fileName) throws IOException {
+	private String uploadS3(MultipartFile multipartFile, String fileName) throws IOException {
 		validateImageFileExtention(multipartFile.getOriginalFilename());
 
 		String originalFilename = multipartFile.getOriginalFilename(); //원본 파일 명
 		String extension = originalFilename.substring(originalFilename.lastIndexOf(".")); //확장자 명
 
+		String dirName, contentType;
+
+		// modeling file
+		if (extension.equals(".gltf")) {
+			dirName = "models";
+			contentType = "model/gltf+json";
+		}
+		// thumbnail file
+		else {
+			dirName = "thumbnails";
+			contentType = "image/**";
+		}
+
 		String s3FileName = dirName + "/" + fileName + extension;
-
 		InputStream is = multipartFile.getInputStream();
-
 		byte[] bytes = IOUtils.toByteArray(is);
 
 		ObjectMetadata objectMetadata = new ObjectMetadata();
-		objectMetadata.setContentType("model/gltf+json");
+		objectMetadata.setContentType(contentType);
 		objectMetadata.setContentLength(bytes.length);
 
 		ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
 
 		try {
-			PutObjectRequest putObjectRequest =
-					new PutObjectRequest(bucket, s3FileName, byteArrayInputStream, objectMetadata);
+			PutObjectRequest putObjectRequest = new PutObjectRequest(bucket, s3FileName, byteArrayInputStream, objectMetadata);
 			amazonS3Client.putObject(putObjectRequest);
 		} catch (Exception e) {
 			throw new BaseException(FILE_UPLOAD_FAIL);
@@ -101,7 +111,7 @@ public class S3Service {
 		}
 
 		String extention = filename.substring(lastDotIndex + 1).toLowerCase();
-		List<String> allowedExtentionList = Arrays.asList("gltf");
+		List<String> allowedExtentionList = Arrays.asList("gltf", "png", "jpg", "jpeg");
 
 		if (!allowedExtentionList.contains(extention)) {
 			throw new BaseException(INVALID_FILE_EXTENSION);

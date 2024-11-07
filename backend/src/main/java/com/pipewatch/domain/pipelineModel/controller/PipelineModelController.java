@@ -24,8 +24,8 @@ public class PipelineModelController implements PipelineModelApiSwagger {
 	private final PipelineModelService pipelineModelService;
 
 	@PostMapping(value = "/upload-file", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-	public ResponseEntity<?> fileUpload(@AuthenticationPrincipal Long userId, @RequestPart(value = "file", required = false) MultipartFile file) throws IOException, ParseException {
-		PipelineModelResponse.FileUploadDto responseDto = pipelineModelService.uploadFile(userId, file);
+	public ResponseEntity<?> fileUpload(@AuthenticationPrincipal Long userId, @RequestPart(value = "modeling-file") MultipartFile modelingFile, @RequestPart(value = "preview-file", required = false) MultipartFile previewFile) throws IOException, ParseException {
+		PipelineModelResponse.FileUploadDto responseDto = pipelineModelService.uploadFile(userId, modelingFile, previewFile);
 
 		return new ResponseEntity<>(ResponseDto.success(FILE_UPLOAD_AND_MODEL_CREATED, responseDto), HttpStatus.CREATED);
 	}

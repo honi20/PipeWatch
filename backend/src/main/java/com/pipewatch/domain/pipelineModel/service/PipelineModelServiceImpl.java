@@ -66,7 +66,7 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 
 	@Override
 	@Transactional
-	public PipelineModelResponse.FileUploadDto uploadFile(Long userId, MultipartFile file) throws IOException, ParseException {
+	public PipelineModelResponse.FileUploadDto uploadFile(Long userId, MultipartFile modelingFile, MultipartFile previewFile) throws IOException, ParseException {
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new BaseException(USER_NOT_FOUND));
 
@@ -86,20 +86,21 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 				.uuid(UUID)
 				.build();
 
-		String imgUrl = null;
-		if (!file.isEmpty()) {
-			imgUrl = s3Service.upload(file, "models", "PipeLine_" + UUID);
-			pipelineModel.updateModelingUrl(imgUrl);
+		String modelingImgUrl = null;
+		if (!modelingFile.isEmpty()) {
+			modelingImgUrl = s3Service.upload(modelingFile, "PipeLine_" + UUID);
+			pipelineModel.updateModelingUrl(modelingImgUrl);
 		}
 
-		// TODO: Fast API로 썸네일 이미지 url 요청보내기
-		String previewImgUrl = "sample preview image url";
-		pipelineModel.updatePreviewImgUrl(previewImgUrl);
+		if (!previewFile.isEmpty()) {
+			String previewImgUrl = s3Service.upload(previewFile, "Thumbnail_" + UUID);
+			pipelineModel.updatePreviewImgUrl(previewImgUrl);
+		}
 
 		pipelineModelRepository.save(pipelineModel);
 
-		if (imgUrl != null) {
-			savePipelineObject(imgUrl, UUID, pipelineModel);
+		if (modelingImgUrl != null) {
+			savePipelineObject(modelingImgUrl, UUID, pipelineModel);
 		}
 
 		return PipelineModelResponse.FileUploadDto.builder()
@@ -344,9 +345,9 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 				.collect(Collectors.toList());
 	}
 
-	private void savePipelineObject(String modelUrl, String UUID, PipelineModel pipelineModel) throws IOException, ParseException {
+	private void savePipelineObject(String modelingImgUrl, String UUID, PipelineModel pipelineModel) throws IOException, ParseException {
 		// Json 정보 추출
-		JSONObject jsonObject = getJsonObject(modelUrl);
+		JSONObject jsonObject = getJsonObject(modelingImgUrl);
 		JSONArray nodes = (JSONArray) jsonObject.get("nodes");
 		Map<String, Pipeline> pipelineMap = new HashMap<>();
 
