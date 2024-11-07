@@ -5,4 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface EnterpriseRepository extends JpaRepository<Enterprise, Long> {
 	Enterprise findByUserId(Long id);
+
+	Enterprise findByManagerEmail(String managerEmail);
 }
