@@ -20,6 +20,8 @@ import LightModeIcon from "@mui/icons-material/LightMode";
 import LanguageIcon from "@mui/icons-material/Language";
 
 import { StatusBar } from "@components/common/StatusBar";
+import { getApiClient } from "@src/stores/apiClient";
+import { useUserStore } from "@src/stores/userStore";
 
 type Props = {
   handleTheme: () => void;
@@ -64,28 +66,27 @@ export const Header = ({ handleTheme, currentTheme }: Props) => {
   };
 
   // 로그인 상태 관리
-  const [isLogin, setIsLogin] = useState(true); // store에 저장한 Login 상태 가져올 예정
-  const API_URL = import.meta.env.VITE_URL;
+  const { isLogin, userInfo } = useUserStore();
+  console.log("UserInfo 확인: ", userInfo);
+  console.log("login상태: ", isLogin);
 
   // 로그아웃 함수 : Login 상태 catch해서 적용
-  const logout = () => {
-    axios
-      .post(`${API_URL}/api/auth/logout`, {})
-      .then((res) => {
-        console.log(res.data.body);
-        localStorage.removeItem("accessToken");
-        // + store login 상태 바꾸는 함수
-        navigate("/");
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    return <></>;
-  };
+  // const apiClient = getApiClient();
+  // const logout = async () => {
+  //   try {
+  //     const res = await apiClient.get("/api/auth/logout");
+  //     console.log(res);
+  //     localStorage.removeItem("accessToken");
+  //     navigate("/");
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
 
   const name: string = "너굴맨";
 
-  const role: string = "ENTERPRISE";
+  const role = userInfo?.role;
+  // const role: string = "ENTERPRISE";
   // const role: string = "ADMIN";
   // const role: string = "EMPLOYEE";
   // const role: string = "USER";

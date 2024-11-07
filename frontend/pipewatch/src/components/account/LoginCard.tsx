@@ -1,5 +1,8 @@
 import axios from "axios";
 
+import { useUserStore } from "@src/stores/userStore";
+import { getApiClient } from "@src/stores/apiClient";
+
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import { Input, Button } from "@headlessui/react";
@@ -11,14 +14,36 @@ const LoginCard = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
+  const { setLogin, setUserInfo } = useUserStore();
+
+  // UserInfo 호출, store 저장
+  const saveUserInfo = async () => {
+    const apiClient = getApiClient();
+    try {
+      const res = await apiClient.get("/api/users/mypage");
+      console.log(res.data.body);
+      setUserInfo(res.data.body);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  // 이메일 : pipewatch_admin@paori.com
+  // 비밀번호 : pipewatch941555!
+
   const login = (email: string, password: string) => {
     axios
       .post(`${API_URL}/api/auth/signin`, { email, password })
       .then((res) => {
         // console.log(res.data.body);
-        // 로컬스토리지 저장
         localStorage.setItem("accessToken", res.data.body.accessToken);
+        // 로그인 상태 변경
+        setLogin(true);
+        // Role 불러와서 store에 저장
+        saveUserInfo();
+        // Home으로 이동
         navigate("/");
+        console.log("로그인 완료");
       })
       .catch((err) => {
         console.log(err);
