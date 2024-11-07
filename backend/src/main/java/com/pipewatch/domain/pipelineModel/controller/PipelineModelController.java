@@ -24,7 +24,7 @@ public class PipelineModelController implements PipelineModelApiSwagger {
 	private final PipelineModelService pipelineModelService;
 
 	@PostMapping(value = "/upload-file", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-	public ResponseEntity<?> fileUpload(@AuthenticationPrincipal Long userId, @RequestPart(value = "file", required = false) MultipartFile file) throws IOException, ParseException {
+	public ResponseEntity<?> fileUpload(@AuthenticationPrincipal Long userId, @RequestPart(value = "file") MultipartFile file) throws IOException, ParseException {
 		PipelineModelResponse.FileUploadDto responseDto = pipelineModelService.uploadFile(userId, file);
 
 		return new ResponseEntity<>(ResponseDto.success(FILE_UPLOAD_AND_MODEL_CREATED, responseDto), HttpStatus.CREATED);
@@ -81,9 +81,9 @@ public class PipelineModelController implements PipelineModelApiSwagger {
 
 	@PostMapping("/memos/{modelId}")
 	public ResponseEntity<?> modelMemoCreate(@AuthenticationPrincipal Long userId, @PathVariable Long modelId, @RequestBody PipelineModelRequest.MemoDto requestDto) {
-		pipelineModelService.createModelMemo(userId, modelId, requestDto);
+		PipelineModelResponse.MemoListDto responseDto = pipelineModelService.createModelMemo(userId, modelId, requestDto);
 
-		return new ResponseEntity<>(ResponseDto.success(MODEL_MEMO_CREATED, null), HttpStatus.OK);
+		return new ResponseEntity<>(ResponseDto.success(MODEL_MEMO_CREATED, responseDto), HttpStatus.OK);
 	}
 
 	@DeleteMapping("/memos/{memoId}")

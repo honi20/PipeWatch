@@ -10,7 +10,7 @@ public interface PipelineService {
 
 	void modifyPipelinePropery(Long userId, Long pipelineId, PipelineRequest.ModifyPropertyDto requestDto);
 
-	void createPipeMemo(Long userId, Long pipeId, PipelineRequest.CreateMemoDto requestDto);
+	PipelineResponse.MemoListDto createPipeMemo(Long userId, Long pipeId, PipelineRequest.CreateMemoDto requestDto);
 
 	PipelineResponse.PipelineMemoListDto getPipelineMemoList(Long userId, Long pipelineId);
 

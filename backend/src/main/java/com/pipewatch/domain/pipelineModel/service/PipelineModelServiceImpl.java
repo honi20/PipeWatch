@@ -1,5 +1,7 @@
 package com.pipewatch.domain.pipelineModel.service;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pipewatch.domain.enterprise.model.entity.BuildingAndFloor;
 import com.pipewatch.domain.enterprise.model.entity.Enterprise;
 import com.pipewatch.domain.enterprise.repository.BuildingRepository;
@@ -66,7 +68,7 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 
 	@Override
 	@Transactional
-	public PipelineModelResponse.FileUploadDto uploadFile(Long userId, MultipartFile file) throws IOException, ParseException {
+	public PipelineModelResponse.FileUploadDto uploadFile(Long userId, MultipartFile modelingFile) throws IOException, ParseException {
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new BaseException(USER_NOT_FOUND));
 
@@ -86,20 +88,18 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 				.uuid(UUID)
 				.build();
 
-		String imgUrl = null;
-		if (!file.isEmpty()) {
-			imgUrl = s3Service.upload(file, "models", "PipeLine_" + UUID);
-			pipelineModel.updateModelingUrl(imgUrl);
+		String modelingImgUrl = null;
+		if (!modelingFile.isEmpty()) {
+			validatePipelineObject(modelingFile);
+			modelingImgUrl = s3Service.upload(modelingFile, "PipeLine_" + UUID);
+			pipelineModel.updateModelingUrl(modelingImgUrl);
 		}
 
-		// TODO: Fast API로 썸네일 이미지 url 요청보내기
-		String previewImgUrl = "sample preview image url";
-		pipelineModel.updatePreviewImgUrl(previewImgUrl);
-
+		pipelineModel.updatePreviewImgUrl("https://pipewatch-bucket.s3.ap-northeast-2.amazonaws.com/assets/no_thumbnail.png");
 		pipelineModelRepository.save(pipelineModel);
 
-		if (imgUrl != null) {
-			savePipelineObject(imgUrl, UUID, pipelineModel);
+		if (modelingImgUrl != null) {
+			savePipelineObject(modelingImgUrl, pipelineModel);
 		}
 
 		return PipelineModelResponse.FileUploadDto.builder()
@@ -135,7 +135,7 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 
 		pipelineModelRepository.save(pipelineModel);
 
-		savePipelineObject(requestDto.getModelUrl(), UUID, pipelineModel);
+		savePipelineObject(requestDto.getModelUrl(), pipelineModel);
 
 		return PipelineModelResponse.CreateModelingDto.builder()
 				.modelId(pipelineModel.getId())
@@ -290,7 +290,7 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 
 	@Override
 	@Transactional
-	public void createModelMemo(Long userId, Long modelId, PipelineModelRequest.MemoDto requestDto) {
+	public PipelineModelResponse.MemoListDto createModelMemo(Long userId, Long modelId, PipelineModelRequest.MemoDto requestDto) {
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new BaseException(USER_NOT_FOUND));
 
@@ -308,6 +308,15 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 
 		PipelineModelMemo memo = requestDto.toEntity(user, pipelineModel);
 		pipelineModelMemoRepository.save(memo);
+
+		List<PipelineModelMemo> memos = pipelineModelMemoRepository.findByPipelineModelIdOrder(pipelineModel.getId());
+		List<PipelineModelResponse.MemoDto> modelMemoList = memos.stream()
+				.map(PipelineModelResponse.MemoDto::fromEntity)
+				.toList();
+
+		return PipelineModelResponse.MemoListDto.builder()
+				.memoList(modelMemoList)
+				.build();
 	}
 
 	@Override
@@ -344,47 +353,79 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 				.collect(Collectors.toList());
 	}
 
-	private void savePipelineObject(String modelUrl, String UUID, PipelineModel pipelineModel) throws IOException, ParseException {
+	private void validatePipelineObject(MultipartFile modelingFile) throws IOException, ParseException {
+		ObjectMapper objectMapper = new ObjectMapper();
+		JsonNode jsonNode = objectMapper.readTree(modelingFile.getInputStream());
+
+		JsonNode nodes = jsonNode.get("meshes");
+
+		// 객체 이름이 하나도 없는 경우
+		if (nodes == null || !nodes.isArray() || nodes.isEmpty()) {
+			throw new BaseException(INVALID_FILE_CONTENT);
+		}
+	}
+
+	private void savePipelineObject(String modelingImgUrl, PipelineModel pipelineModel) throws IOException, ParseException {
 		// Json 정보 추출
-		JSONObject jsonObject = getJsonObject(modelUrl);
-		JSONArray nodes = (JSONArray) jsonObject.get("nodes");
+		JSONObject jsonObject = getJsonObject(modelingImgUrl);
+		JSONArray nodes = (JSONArray) jsonObject.get("meshes");
 		Map<String, Pipeline> pipelineMap = new HashMap<>();
 
-		for (int i = 0; i < nodes.size(); i++) {
-			JSONObject node = (JSONObject) nodes.get(i);
+		for (int idx = 0; idx < nodes.size(); idx++) {
+			JSONObject node = (JSONObject) nodes.get(idx);
 			String nodeName = (String) node.get("name");
 
-			if (nodeName.startsWith("PipeObj_") && (nodeName.contains("Segment_") || nodeName.contains("Connector_"))) {
+			String pipelineNumber = "1";
+			String pipeType = "";
+			String pipeNumber = "";
+
+			if (isFormattedName(nodeName)) {
 				String[] parts = nodeName.split("_");
-				String pipelineNumber = parts[1];
-				Pipeline relatedPipeline = pipelineMap.get(pipelineNumber);
+				pipelineNumber = parts[1];
+				pipeType = parts[2];
+				pipeNumber = parts[3];
+			}
+			Pipeline relatedPipeline = pipelineMap.get(pipelineNumber);
 
-				// 파이프 라인 저장
-				if (relatedPipeline == null) {
-					PipelineProperty property = PipelineProperty.builder().build();
-					pipelinePropertyRepository.save(property);
+			// 파이프 라인 저장
+			if (relatedPipeline == null) {
+				PipelineProperty property = PipelineProperty.builder().build();
+				pipelinePropertyRepository.save(property);
 
-					relatedPipeline = Pipeline.builder()
-							.name("PipeLine_" + pipelineNumber)
-							.pipelineModel(pipelineModel)
-							.property(property)
-							.build();
-
-					pipelineRepository.save(relatedPipeline);
-					pipelineMap.put(pipelineNumber, relatedPipeline);
-				}
-
-				// 파이프 저장
-				String name = (parts[2].equals("Segment") ? "Pipe" : parts[2]);
-				Pipe pipe = Pipe.builder()
-						.name(name + "_" + parts[3])
-						.uuid(nodeName)
-						.pipeline(relatedPipeline)
+				relatedPipeline = Pipeline.builder()
+						.name("PipeLine_" + pipelineNumber)
+						.pipelineModel(pipelineModel)
+						.property(property)
 						.build();
 
-				pipeRepository.save(pipe);
+				pipelineRepository.save(relatedPipeline);
+				pipelineMap.put(pipelineNumber, relatedPipeline);
 			}
+
+			// 파이프 저장
+			String name = "";
+			if (isFormattedName(nodeName)) {
+				name = (pipeType.equals("Segment") ? "Pipe" : pipeType) + "_" + pipeNumber;
+			} else {
+				name = "Pipe_" + (idx+1);
+			}
+
+			Pipe pipe = Pipe.builder()
+					.name(name)
+					.uuid(nodeName)
+					.pipeline(relatedPipeline)
+					.build();
+
+			pipeRepository.save(pipe);
 		}
+	}
+
+	private boolean isFormattedName(String nodeName) {
+		if (nodeName.startsWith("PipeObj_")) {
+			if (nodeName.contains("Segment_") || nodeName.contains("Connector_"))
+				return true;
+		}
+		return false;
 	}
 
 	private Enterprise getEnterprise(User user) {
