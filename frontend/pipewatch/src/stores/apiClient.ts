@@ -4,8 +4,7 @@ const API_URL = import.meta.env.VITE_URL;
 export const createApiClient = (accessToken: string | null) => {
   if (!accessToken) {
     console.error("createApiClient: accessToken이 제공되지 않았습니다.");
-
-    throw new Error("Access token is required to create an API client.");
+    window.location.href = "/account/auth/login";
   }
   return axios.create({
     baseURL: API_URL,
@@ -18,7 +17,7 @@ export const createApiClient = (accessToken: string | null) => {
 const getAccessToken = () => localStorage.getItem("accessToken");
 const setAccessToken = (token: string) =>
   localStorage.setItem("accessToken", token);
-// const clearAccessToken = () => localStorage.removeItem("accessToken");
+const clearAccessToken = () => localStorage.removeItem("accessToken");
 
 export const getApiClient = () => {
   const accessToken: string | null = getAccessToken();
@@ -44,10 +43,27 @@ export const getApiClient = () => {
       if (error.response?.status === 401) {
         originalRequest._retry = true;
         try {
-          console.log("accessToken 다시");
-          setAccessToken("test");
+          console.log("accessToken 만료되었음");
+
+          // 에러 메시지에서 새로운 accessToken 추출
+          const newAccessToken = error.response.data?.newAccessToken;
+          if (newAccessToken) {
+            setAccessToken(newAccessToken);
+            originalRequest.headers[
+              "Authorization"
+            ] = `Bearer ${newAccessToken}`;
+
+            // 새로운 accessToken으로 요청을 다시 시도합니다.
+            return apiClient(originalRequest);
+          } else {
+            console.error("새로운 accessToken이 응답에 포함되지 않음");
+            clearAccessToken();
+            window.location.href = "/account/auth/login";
+          }
         } catch (err) {
           console.log(err);
+          clearAccessToken();
+          window.location.href = "/account/auth/login";
           return Promise.reject(err);
         }
       } else {
@@ -56,7 +72,7 @@ export const getApiClient = () => {
         );
       }
 
-      if (error.response?.status == 400) {
+      if (error.response?.status === 400) {
         console.error("Bad Request (400):", error.response.data);
         return Promise.reject(
           new Error(

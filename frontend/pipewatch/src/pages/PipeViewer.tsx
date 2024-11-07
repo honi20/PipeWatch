@@ -1,122 +1,38 @@
 // import { useTranslation } from "react-i18next";
-// import { getApiClient } from "@src/stores/apiClient";
+import { getApiClient } from "@src/stores/apiClient";
 import { ModelListView } from "@src/components/pipeViewer/ModelListView";
 import NoAccessImage from "@assets/images/status/no_access.png";
 import NoPipeModelImage from "@assets/images/status/no_pipe_model.png";
-import { ModelType } from "@src/components/pipeViewer/PipeType";
+import { ModelsType } from "@src/components/pipeViewer/PipeType";
+import { useState, useEffect } from "react";
 
 export const PipeViewer = () => {
   // const { t } = useTranslation();
+  // const apiClient = getApiClient();
+  const [models, setModels] = useState<ModelsType[]>([]);
 
-  // 파이프 모델 get - 모델 조회
-  // 모델이 없을 때
-  // const tempModelList = [];
-  // 모델이 있을 때
+  // modelList 조회 함수
+  const getModelList = async () => {
+    const apiClient = getApiClient();
+    try {
+      const res = await apiClient({
+        method: "get",
+        url: "/api/models",
+      });
+      console.log(res.data.header.httpStatusCode, res.data.header.message);
+      console.log(res.data.body.models);
+      setModels(res.data.body.models);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
-  const tempModelList: ModelType[] = [
-    {
-      id: 1,
-      name: "model1",
-      area: "역삼 멀티캠퍼스",
-      floor: 14,
-      imagePath: "src/assets/images/sample/sample_pipe_model.png",
-      pipelineName: "pipeline1",
-      memolist: [],
-      modifiedDate: new Date(),
-    },
-    {
-      id: 2,
-      name: "model1",
-      area: "경덕이네 집",
-      floor: 1,
-      imagePath: "@assets/images/sample/mallang.png",
-      pipelineName: "pipeline",
-      memolist: [],
-      modifiedDate: new Date(),
-    },
-    {
-      id: 3,
-      name: "model1",
-      area: "역삼 멀티캠퍼스",
-      floor: -1,
-      imagePath: "src/assets/images/sample/sample_pipe_model.png",
-      pipelineName: "pipeline",
-      memolist: [],
-      modifiedDate: new Date(),
-    },
-    {
-      id: 4,
-      name: "model1",
-      area: "역삼 멀티캠퍼스",
-      floor: 14,
-      imagePath: "src/assets/images/sample/sample_pipe_model.png",
-      pipelineName: "pipeline",
-      memolist: [],
-      modifiedDate: new Date(),
-    },
-    {
-      id: 5,
-      name: "model1",
-      area: "역삼 멀티캠퍼스",
-      floor: 14,
-      imagePath: "src/assets/images/sample/sample_pipe_model.png",
-      pipelineName: "pipeline",
-      memolist: [],
-      modifiedDate: new Date(),
-    },
-    {
-      id: 6,
-      name: "model1",
-      area: "역삼 멀티캠퍼스",
-      floor: 14,
-      imagePath: "src/assets/images/sample/sample_pipe_model.png",
-      pipelineName: "pipeline",
-      memolist: [],
-      modifiedDate: new Date(),
-    },
-    {
-      id: 7,
-      name: "model1",
-      area: "경덕이네 집",
-      floor: 1,
-      imagePath: "src/assets/images/sample/mallang.png",
-      pipelineName: "말랑파이프",
-      memolist: [],
-      modifiedDate: new Date(),
-    },
-    {
-      id: 8,
-      name: "model1",
-      area: "경덕이네 집",
-      floor: 2,
-      imagePath: "src/assets/images/sample/posil.png",
-      pipelineName: "포실파이프",
-      memolist: [],
-      modifiedDate: new Date(),
-    },
-    {
-      id: 9,
-      name: "model1",
-      area: "경덕이네 집",
-      floor: 1,
-      imagePath: "src/assets/images/sample/mallang.png",
-      pipelineName: "말랑파이프",
-      memolist: [],
-      modifiedDate: new Date(),
-    },
-    {
-      id: 10,
-      name: "model1",
-      area: "경덕이네 집",
-      floor: 2,
-      imagePath: "src/assets/images/sample/posil.png",
-      pipelineName: "포실파이프",
-      memolist: [],
-      modifiedDate: new Date(),
-    },
-  ];
-  // 모델 없을 경우
-  // tempModelList = [];
+  useEffect(() => {
+    if (!models || models.length === 0) {
+      console.log("모델리스트 없음");
+      getModelList();
+    }
+  }, [models]);
 
   // 임시 계정명
   const tempUserRole: string = "admin";
@@ -130,11 +46,11 @@ export const PipeViewer = () => {
 
       <div className="flex items-center justify-center my-4 h-fit">
         {isAdmin ? (
-          tempModelList && tempModelList.length > 0 ? (
-            <ModelListView modelList={tempModelList} />
+          models && models.length > 0 ? (
+            <ModelListView models={models} />
           ) : (
             <div className="flex flex-col items-center gap-[40px]">
-              {tempModelList && Array.isArray(tempModelList) ? (
+              {models && Array.isArray(models) ? (
                 <>
                   <img src={NoPipeModelImage} width="350px" alt="No Model" />
                   <div className="flex flex-col justify-center">

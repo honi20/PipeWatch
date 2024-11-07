@@ -1,21 +1,23 @@
 import { useState, useEffect } from "react";
 import SelectPipeModelIcon from "@assets/icons/select_pipe_model.png";
-import { AreaType, ModelType } from "@src/components/pipeViewer/PipeType";
-import { AreaListbox } from "./listbox/AreaListbox";
+import { ModelsType, BuildingType } from "@components/pipeViewer/PipeType";
+import { BuildingListbox } from "@components/pipeViewer/listbox/BuildingListbox";
 import "./viewer.css";
 import { FloorListbox } from "./listbox/FloorListbox";
 import GLTFViewer from "@src/components/pipeViewer/GLTFViewer";
 import { PipeMemo } from "@src/components/pipeViewer/PipeMemo";
 import { PipeProperty } from "@src/components/pipeViewer/PipeProperty";
+import { getApiClient } from "@src/stores/apiClient";
 
 interface ModelListViewProps {
-  modelList: ModelType[];
+  models: ModelsType[];
 }
 
-export const ModelListView: React.FC<ModelListViewProps> = ({ modelList }) => {
-  const [selectModel, setSelectModel] = useState<ModelType | null>(null);
-  const [selectedArea, setSelectedArea] = useState<AreaType | null>(null);
+export const ModelListView: React.FC<ModelListViewProps> = ({ models }) => {
+  const [selectModel, setSelectModel] = useState<ModelsType | null>(null);
+  const [selectedBuilding, setSelectedBuilding] = useState<string | null>(null);
   const [selectedFloor, setSelectedFloor] = useState<number | null>(null);
+  const [buildingList, setBuildingList] = useState<BuildingType[]>([]);
   const [floorList, setFloorList] = useState<number[]>([]);
   const [selectView, setSelectView] = useState<"MEMO" | "PROPERTY">("PROPERTY");
   const [cardFlipClass, setCardFlipClass] = useState("");
@@ -26,15 +28,34 @@ export const ModelListView: React.FC<ModelListViewProps> = ({ modelList }) => {
     );
   }, [selectView]);
 
-  // api 받기
-  const floorDict: { [key: string]: number[] } = {
-    "역삼 멀티캠퍼스": [-1, 14],
-    "경덕이네 집": [1, 2],
+  // 건물 및 층수 조회 함수
+  const getBuildingFloors = async () => {
+    const apiClient = getApiClient();
+    try {
+      const res = await apiClient({
+        method: "get",
+        url: "/api/enterprises/floors",
+      });
+      console.log(res.data.header.httpStatusCode, res.data.header.message);
+      console.log(res.data.body);
+      setBuildingList(res.data.body.buildings);
+    } catch (err) {
+      console.log(err);
+    }
   };
+  useEffect(() => {
+    if (!buildingList || buildingList.length === 0) {
+      getBuildingFloors();
+    }
+  }, [buildingList]);
+  // const floorDict: { [key: string]: number[] } = {
+  //   "역삼 멀티캠퍼스": [-1, 14],
+  //   "경덕이네 집": [1, 2],
+  // };
   // 임의로 pipe 만듦
   const pipe = {
     pipeName: "파이프 이름이다",
-    pipeArea: "파이프 장소",
+    pipeBuilding: "파이프 장소",
     pipeFloor: -10,
     pipeMaterial: "aluminum",
     outerDiameter: 10,
@@ -43,9 +64,9 @@ export const ModelListView: React.FC<ModelListViewProps> = ({ modelList }) => {
     flowRate: 10,
   };
   // 장소 및 장소에 따른 floorList 변경
-  const handleAreaChange = (selectedArea: AreaType) => {
-    setSelectedArea(selectedArea);
-    setFloorList(floorDict[selectedArea.area] || []);
+  const handleBuildingChange = (selectedBuilding: string) => {
+    setSelectedBuilding(selectedBuilding);
+    // setFloorList(floorDict[selectedBuilding] || []);
     setSelectedFloor(null); // 층 초기화
   };
 
@@ -53,18 +74,23 @@ export const ModelListView: React.FC<ModelListViewProps> = ({ modelList }) => {
     setSelectedFloor(floor);
   };
 
-  // 선택된 Area에 따라 모델 필터링
-  const filteredModelList = modelList.filter((model) => {
-    const matchesArea = selectedArea ? model.area === selectedArea.area : true;
+  // 선택된 Building에 따라 모델 필터링
+  const filteredModelList = models.filter((model) => {
+    const matchesBuilding = selectedBuilding
+      ? model.building === selectedBuilding
+      : true;
     const matchesFloor = selectedFloor ? model.floor === selectedFloor : true; // model.floor가 어떤 속성을 의미하는지 확인 필요
-    return matchesArea && matchesFloor;
+    return matchesBuilding && matchesFloor;
   });
 
   return (
     <div className="w-full h-full">
       {/* 장소 및 층 선택 */}
       <div className="flex gap-5 mx-6">
-        <AreaListbox onAreaChange={handleAreaChange} />
+        <BuildingListbox
+          onBuildingChange={handleBuildingChange}
+          buildingList={buildingList}
+        />
         <FloorListbox
           onFloorChange={handleFloorChange}
           floorList={floorList}
@@ -75,18 +101,19 @@ export const ModelListView: React.FC<ModelListViewProps> = ({ modelList }) => {
       {/* pipe list view */}
       <div className="flex justify-center w-full py-[20px] bg-block overflow-x-auto scrollable">
         <div className="flex gap-4 flex-nowrap ">
-          {filteredModelList.map((model) => (
-            <div className="relative w-[100px] h-[100px]" key={model.id}>
-              {(selectModel === null || selectModel.id !== model.id) && (
+          {filteredModelList.map((item) => (
+            <div className="relative w-[100px] h-[100px]" key={item.modelId}>
+              {(selectModel === null ||
+                selectModel.modelId !== item.modelId) && (
                 <div
                   className="absolute inset-0 bg-black opacity-50 rounded-[20px]"
                   onClick={() => {
-                    setSelectModel(model);
+                    setSelectModel(item);
                   }}
                 />
               )}
               <img
-                src={model.imagePath}
+                src={item.previewUrl}
                 className="h-full bg-gray-400 rounded-[20px] object-cover"
                 style={{ zIndex: -1 }}
               />
@@ -100,7 +127,7 @@ export const ModelListView: React.FC<ModelListViewProps> = ({ modelList }) => {
         {selectModel ? (
           // 모델id에 따른 gltf url 넣기
           <div className="relative w-full h-full">
-            <div>{selectModel.id}</div>
+            <div>{selectModel.modelId}</div>
             <GLTFViewer gltfUrl="/assets/models/PipeLine.gltf" />
             <div className="absolute card-container top-5 right-10">
               <div className="card" style={{ transform: cardFlipClass }}>

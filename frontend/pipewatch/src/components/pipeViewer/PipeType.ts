@@ -7,24 +7,23 @@ export interface MemoType {
   createdAt: string;
 }
 
-export interface ModelType {
-  id: number;
-  area: string;
+export interface ModelsType {
+  modelId: number;
+  building: string;
   floor: number;
   name: string;
-  imagePath: string;
-  pipelineName: string;
-  memolist: MemoType[];
-  modifiedDate: Date;
+  previewUrl: string;
+  updatedAt: string;
 }
 
-export interface AreaType {
-  id: number;
-  area: string;
+export interface BuildingType {
+  building: string | null;
+  floors: number[];
 }
 
-export interface AreaListboxProps {
-  onAreaChange: (selectedArea: AreaType) => void;
+export interface BuildingListboxProps {
+  onBuildingChange: (selectedBuilding: string | null) => void;
+  buildingList: BuildingType[];
 }
 
 export interface FloorListboxProps {
