@@ -93,7 +93,7 @@ public class PipelineServiceImpl implements PipelineService {
 
 	@Override
 	@Transactional
-	public void createPipeMemo(Long userId, Long pipeId, PipelineRequest.CreateMemoDto requestDto) {
+	public PipelineResponse.MemoListDto createPipeMemo(Long userId, Long pipeId, PipelineRequest.CreateMemoDto requestDto) {
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new BaseException(USER_NOT_FOUND));
 
@@ -108,6 +108,17 @@ public class PipelineServiceImpl implements PipelineService {
 		PipeMemo memo = requestDto.toEntity(user, pipe);
 
 		pipeMemoRepository.save(memo);
+
+		List<PipeMemo> memos = pipeMemoRepository.findByPipeId(pipeId);
+
+		List<PipelineResponse.MemoDto> memoList = memos.stream()
+				.map(PipelineResponse.MemoDto::fromEntity).toList();
+
+		return PipelineResponse.MemoListDto.builder()
+				.pipeId(pipe.getId())
+				.pipeName(pipe.getName())
+				.memoList(memoList)
+				.build();
 	}
 
 	@Override

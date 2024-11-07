@@ -44,9 +44,9 @@ public class PipelineController implements PipelineApiSwagger {
 
 	@PostMapping("/pipes/{pipeId}")
 	public ResponseEntity<?> pipeMemoCreate(@AuthenticationPrincipal Long userId, @PathVariable Long pipeId, PipelineRequest.CreateMemoDto requestDto) {
-		pipelineService.createPipeMemo(userId, pipeId, requestDto);
+		PipelineResponse.MemoListDto responseDto = pipelineService.createPipeMemo(userId, pipeId, requestDto);
 
-		return new ResponseEntity<>(ResponseDto.success(PIPE_MEMO_CREATED, null), HttpStatus.CREATED);
+		return new ResponseEntity<>(ResponseDto.success(PIPE_MEMO_CREATED, responseDto), HttpStatus.CREATED);
 	}
 
 	@GetMapping("/{pipelineId}/memo")
