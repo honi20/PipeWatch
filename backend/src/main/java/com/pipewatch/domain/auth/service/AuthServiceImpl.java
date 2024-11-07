@@ -4,7 +4,6 @@ import com.pipewatch.domain.auth.model.dto.AuthRequest;
 import com.pipewatch.domain.auth.model.dto.AuthResponse;
 import com.pipewatch.domain.enterprise.model.entity.Enterprise;
 import com.pipewatch.domain.enterprise.repository.EnterpriseRepository;
-import com.pipewatch.domain.management.model.entity.Waiting;
 import com.pipewatch.domain.management.repository.WaitingRepository;
 import com.pipewatch.domain.user.model.entity.EmployeeInfo;
 import com.pipewatch.domain.user.model.entity.Role;
@@ -18,7 +17,6 @@ import com.pipewatch.global.jwt.service.JwtService;
 import com.pipewatch.global.mail.MailService;
 import com.pipewatch.global.redis.RedisUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,16 +32,10 @@ import static com.pipewatch.global.statusCode.ErrorCode.*;
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 	private final UserRepository userRepository;
-
 	private final RedisUtil redisUtil;
-
 	private final MailService mailService;
-
 	private final JwtService jwtService;
-
 	private final PasswordEncoder passwordEncoder;
-
-	private final WaitingRepository waitingRepository;
 	private final EnterpriseRepository enterpriseRepository;
 	private final EmployeeRepository employeeRepository;
 
@@ -94,8 +86,7 @@ public class AuthServiceImpl implements AuthService {
 
 		// 서비스 시연을 위해 gmail/naver 등의 메일 형식은 ssafy 기업이라고 가정
 		String domain = getEmailDomain(requestDto.getEmail());
-		domain = isEnterpriseDomain(domain) ? domain : "paori.com";
-		if (!getEmailDomain(enterprise.getUser().getEmail()).equals(domain)) {
+		if (isEnterpriseDomain(domain) && !getEmailDomain(enterprise.getManagerEmail()).equals(domain)) {
 			throw new BaseException(INVALID_EMAIL_FORMAT);
 		}
 
@@ -131,14 +122,6 @@ public class AuthServiceImpl implements AuthService {
 
 		employeeRepository.save(employee);
 
-		// 승인대기 저장
-		Waiting waiting = Waiting.builder()
-				.role(Role.EMPLOYEE)
-				.user(user)
-				.build();
-
-		waitingRepository.save(waiting);
-
 		// jwt 토큰 발급
 		JwtToken jwtToken = requestDto.toRedis(uuid, user.getId(), jwtService.createRefreshToken(uuid));
 		redisUtil.setData(uuid, jwtToken);
@@ -152,17 +135,17 @@ public class AuthServiceImpl implements AuthService {
 	@Transactional
 	public void registEnterprise(AuthRequest.EnterpriseRegistDto requestDto) throws NoSuchAlgorithmException {
 		String domain = getEmailDomain(requestDto.getManagerEmail());
-
-		// 서비스 시연을 위해 gmail/naver 등의 메일 형식은 ssafy 기업이라고 가정
-		domain = isEnterpriseDomain(domain) ? domain : "paori.com";
 		String email = "pipewatch_admin@" + domain;
 
-		String password = "pipewatch" + generateRandomNumber() + "!";
+		String password = "pipewatch" + generateRandomNumber(6) + "!";
 		String passwordEncode = passwordEncoder.encode(password);
 		String uuid = UUID.randomUUID().toString();
 
 		// 이미 등록된 기업인지 확인
-		if (userRepository.findByEmail(email) != null) {
+		if (enterpriseRepository.findByManagerEmail(requestDto.getManagerEmail()) != null) {
+			throw new BaseException(DUPLICATED_ENTERPRISE);
+		}
+		else if (isEnterpriseDomain(domain) && userRepository.findByEmail(email) != null) {
 			throw new BaseException(DUPLICATED_ENTERPRISE);
 		}
 
@@ -179,10 +162,17 @@ public class AuthServiceImpl implements AuthService {
 		userRepository.save(user);
 
 		// 기업 저장
-		enterpriseRepository.save(requestDto.toEntity(user));
+		Enterprise enterprise = requestDto.toEntity(user);
+		enterpriseRepository.save(enterprise);
+
+		// gmail, naver인 경우 기업 생성
+		if (!isEnterpriseDomain(domain)) {
+			user.updateEmail("pipewatch_admin" + enterprise.getId() + "@paori.com");
+			enterpriseRepository.save(enterprise);
+		}
 
 		// 메일 전송
-		mailService.sendEnterpriseAccountEmail(requestDto.getManagerEmail(), email, password);
+		mailService.sendEnterpriseAccountEmail(requestDto.getManagerEmail(), enterprise.getName(), user.getEmail(), password);
 	}
 
 	@Override
@@ -261,8 +251,8 @@ public class AuthServiceImpl implements AuthService {
 		return !domain.equals("gmail.com") && !domain.equals("naver.com");
 	}
 
-	private String generateRandomNumber() throws NoSuchAlgorithmException {
-		int lenth = 6;
+	private String generateRandomNumber(int len) throws NoSuchAlgorithmException {
+		int lenth = len;
 		Random random = SecureRandom.getInstanceStrong();
 		StringBuilder builder = new StringBuilder();
 		for (int i = 0; i < lenth; i++) {

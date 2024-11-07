@@ -33,14 +33,16 @@ public class MailService {
 			mimeMessage.setSubject("PipeWatch 이메일 인증");
 
 			String body = "";
-			body += "<div style='border: 2px solid black; padding: 20px; max-width: 600px; margin: auto;'>";
-			body += "<h2 style='text-align: center;'>이메일 인증 코드</h2>";
-			body += "<div style='background-color: #f0f0f0; padding: 20px; text-align: center;'>";
-			body += "<h3>요청하신 인증 코드입니다.</h3>";
-			body += "<p style='font-size: 24px; font-weight: bold;'>" + verify + "</p>";
+			body += "<div style='border: 2px solid black; padding: 20px; max-width: 600px; margin: auto; font-family: Arial, sans-serif;'>";
+			body += "<div style='text-align: center; margin-bottom: 20px;'>";
+			body += "<img src='https://pipewatch.co.kr/assets/logo_header_light-q23IjUN-.png' alt='PipeWatch 로고' style='width: 150px; height: auto;'>";
+			body += "</div>";
+			body += "<h2 style='text-align: center; color: #333;'>이메일 인증 코드</h2>";
+			body += "<div style='background-color: #f7f7f7; padding: 20px; text-align: center; border-radius: 8px;'>";
+			body += "<h3 style='color: #333;'>요청하신 인증 코드입니다.</h3>";
+			body += "<p style='font-size: 24px; font-weight: bold; color: #333;'>" + verify + "</p>";
 			body += "</div>";
 			body += "<div style='text-align: center; margin-top: 20px;'>";
-			body += "<p>감사합니다.</p>";
 			body += "</div>";
 			body += "</div>";
 
@@ -59,7 +61,7 @@ public class MailService {
 		return verify;
 	}
 
-	public MimeMessage createEnterpriseAccountMail(String managerEmail, String email, String password) {
+	public MimeMessage createEnterpriseAccountMail(String managerEmail, String enterpriseName, String email, String password) {
 		MimeMessage mimeMessage = javaMailSender.createMimeMessage();
 
 		try {
@@ -68,15 +70,20 @@ public class MailService {
 			mimeMessage.setSubject("PipeWatch 기업 등록 안내");
 
 			String body = "";
-			body += "<div style='border: 2px solid black; padding: 20px; max-width: 600px; margin: auto;'>";
-			body += "<h2 style='text-align: center;'>기업 등록 안내 메일</h2>";
-			body += "<div style='background-color: #f0f0f0; padding: 20px; text-align: center;'>";
-			body += "<h3>관리자 계정</h3>";
-			body += "<p><strong>EMAIL :</strong> " + email + "</p>";
-			body += "<p><strong>PW :</strong> " + password + "</p>";
+			body += "<div style='border: 2px solid black; padding: 20px; max-width: 600px; margin: auto; font-family: Arial, sans-serif;'>";
+			body += "<div style='text-align: center; margin-bottom: 20px;'>";
+			body += "<img src='https://pipewatch.co.kr/assets/logo_header_light-q23IjUN-.png' alt='PipeWatch 로고' style='width: 150px; height: auto;'>";
+			body += "</div>";
+			body += "<h2 style='text-align: center; color: #333;'>" + enterpriseName + " 기업 등록 안내 메일</h2>";
+			body += "<div style='background-color: #f7f7f7; padding: 20px; text-align: center; border-radius: 8px;'>";
+			body += "<h3 style='color: #333;'>관리자 계정</h3>";
+			body += "<div style='text-align: left; display: inline-block; text-align: left;'>";
+			body += "<p style='font-size: 16px;'><strong>EMAIL :</strong> " + email + "</p>";
+			body += "<p style='font-size: 16px;'><strong>PASSWORD :</strong> " + password + "</p>";
+			body += "</div>";
 			body += "</div>";
 			body += "<div style='text-align: center; margin-top: 20px;'>";
-			body += "<a href='https://pipewatch.co.kr/account/auth/login' style='display: inline-block; padding: 10px 20px; background-color: #f0f0f0; color: black; text-decoration: none; border-radius: 5px;'>PAORI 사이트로 이동</a>";
+			body += "<a href='https://pipewatch.co.kr/account/auth/login' style='display: inline-block; padding: 12px 25px; background-color: #333; color: white; text-decoration: none; font-size: 16px; border-radius: 5px;'>사이트로 이동</a>";
 			body += "</div>";
 			body += "</div>";
 
@@ -88,8 +95,8 @@ public class MailService {
 		return mimeMessage;
 	}
 
-	public void sendEnterpriseAccountEmail(String managerEmail, String email, String password) {
-		MimeMessage message = createEnterpriseAccountMail(managerEmail, email, password);
+	public void sendEnterpriseAccountEmail(String managerEmail, String enterpriseName, String email, String password) {
+		MimeMessage message = createEnterpriseAccountMail(managerEmail, enterpriseName, email, password);
 		javaMailSender.send(message);
 	}
 
@@ -103,13 +110,16 @@ public class MailService {
 
 			String verificationLink = "https://pipewatch.co.kr/account/auth/reset-pw/" + pwdUuid;
 			String body = "";
-			body += "<div style='border: 2px solid black; padding: 20px; max-width: 600px; margin: auto;'>";
-			body += "<h2 style='text-align: center;'>비밀번호 재설정 메일</h2>";
-			body += "<div style='background-color: #f0f0f0; padding: 20px; text-align: center;'>";
-			body += "<h3>아래 링크를 클릭하여 비밀번호를 재설정하세요.</h3>";
+			body += "<div style='border: 2px solid black; padding: 20px; max-width: 600px; margin: auto; font-family: Arial, sans-serif;'>";
+			body += "<div style='text-align: center; margin-bottom: 20px;'>";
+			body += "<img src='https://pipewatch.co.kr/assets/logo_header_light-q23IjUN-.png' alt='PipeWatch 로고' style='width: 150px; height: auto;'>";
+			body += "</div>";
+			body += "<h2 style='text-align: center; color: #333;'>비밀번호 재설정 안내</h2>";
+			body += "<div style='padding: 20px; padding-top: 10px; padding-bottom: 10px; text-align: center; border-radius: 8px;'>";
+			body += "<h3 style='color: #333;'>아래 링크를 클릭하여 비밀번호를 재설정하세요.</h3>";
 			body += "</div>";
 			body += "<div style='text-align: center; margin-top: 20px;'>";
-			body += "<a href=\"" + verificationLink + "\" style='display: inline-block; padding: 10px 20px; background-color: #f0f0f0; color: black; text-decoration: none; border-radius: 5px;'>PAORI 비밀번호 재설정</a>";
+			body += "<a href='" + verificationLink + "' style='display: inline-block; padding: 12px 25px; background-color: #333; color: white; text-decoration: none; font-size: 16px; border-radius: 5px;'>비밀번호 재설정</a>";
 			body += "</div>";
 			body += "</div>";
 
