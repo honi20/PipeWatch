@@ -63,7 +63,7 @@ jwt:
   access:
     expiration: 1800 # 30분
   refresh:
-    expiration: 1209600 # 2주
+    expiration: 86400  # 1일
 
 logging:
   level:
