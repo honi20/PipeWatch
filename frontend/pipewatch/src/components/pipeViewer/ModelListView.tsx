@@ -51,16 +51,6 @@ export const ModelListView: React.FC<ModelListViewProps> = ({ models }) => {
     }
   }, [selectedBuilding, buildingList]);
 
-  const pipe = {
-    pipeName: "파이프 이름이다",
-    pipeBuilding: "파이프 장소",
-    pipeFloor: -10,
-    pipeMaterial: "aluminum",
-    outerDiameter: 10,
-    innerDiameter: 10,
-    fluidMaterial: "water",
-    flowRate: 10,
-  };
   // 건물 선택 및 층 초기화 함수
   const handleBuildingChange = (selectedBuilding: string | null) => {
     setSelectedBuilding(selectedBuilding);

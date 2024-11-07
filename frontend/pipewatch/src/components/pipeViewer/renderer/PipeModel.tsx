@@ -79,11 +79,6 @@ export const PipeModel: React.FC<{
                 originalMesh.material.transparent = !isTransparent;
                 originalMesh.material.opacity = isTransparent ? 0.2 : 1.0; // 투명도 설정
                 originalMesh.material.needsUpdate = true;
-                console.log(
-                  "test",
-                  originalMesh.material.transparent,
-                  originalMesh.material.opacity
-                );
               }
 
               return (
