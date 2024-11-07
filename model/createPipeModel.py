@@ -18,6 +18,15 @@ import shutil
 # 환경 변수 주입
 load_dotenv()
 
+# 개발 환경에 따른 변수 주입
+if os.getenv("ENVIRONMENT") == "dev":
+    host=os.getenv("LOCAL_HOST")
+    port=os.getenv("LOCAL_PORT")
+else:
+    os.environ['PYOPENGL_PLATFORM'] = 'osmesa'
+    host=os.getenv("SERVER_HOST")
+    port=os.getenv("SERVER_PORT")
+
 # S3 환경 변수
 AWS_REGION = os.getenv("S3_REGION_NAME")
 AWS_ACCESS_KEY_ID = os.getenv("S3_PUBLIC_ACCESS_KEY")
@@ -72,6 +81,8 @@ def create_pipeline_model(data: CreatePipelineModelRequest):
 
     # 결과 전송
     send_data(data.userUuid, pipeModel_URL, thumbnail_URL)
+
+    return {"pipeModel_URL": pipeModel_URL, "thumbnail_URL": thumbnail_URL}
 
 def create_stl_files(coords, radius, work_dir):
     stl_paths = []
@@ -247,11 +258,6 @@ def send_data(user_uuid: str, model_url: str, preview_img_url: str) -> dict:
         }
 
 if __name__ == "__main__":
-    # HACK:
-    # 서버 업로드시 호스트 및 포트 변경
-    host=os.getenv("LOCAL_HOST")
-    port=os.getenv("LOCAL_PORT")
-
     uvicorn.run(app, host=host, port=int(port))
 
 # NOTE:
