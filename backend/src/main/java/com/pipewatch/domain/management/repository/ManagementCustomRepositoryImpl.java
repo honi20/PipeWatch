@@ -1,6 +1,5 @@
 package com.pipewatch.domain.management.repository;
 
-import com.pipewatch.domain.enterprise.model.entity.BuildingAndFloor;
 import com.pipewatch.domain.management.model.dto.ManagementResponse;
 import com.pipewatch.domain.user.model.entity.Role;
 import com.pipewatch.domain.user.model.entity.State;
@@ -12,7 +11,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static com.pipewatch.domain.management.model.entity.QWaiting.waiting;
 import static com.pipewatch.domain.user.model.entity.QEmployeeInfo.employeeInfo;
 import static com.pipewatch.domain.user.model.entity.QUser.user;
 
@@ -36,12 +34,10 @@ public class ManagementCustomRepositoryImpl implements ManagementCustomRepositor
 				))
 				.from(employeeInfo)
 				.leftJoin(employeeInfo.user, user)
-				.leftJoin(waiting).on(waiting.user.id.eq(employeeInfo.user.id))
 				.where(employeeInfo.enterprise.id.eq(enterpriseId))
 
 				// 일반회원에서 사원으로 요청 중인 사원만
 				.where(user.role.eq(Role.USER).and(user.state.eq(State.PENDING)))
-				.where(waiting.role.eq(Role.EMPLOYEE))
 				.fetch();
 	}
 

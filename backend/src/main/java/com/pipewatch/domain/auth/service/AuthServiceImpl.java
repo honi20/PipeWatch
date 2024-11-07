@@ -4,7 +4,6 @@ import com.pipewatch.domain.auth.model.dto.AuthRequest;
 import com.pipewatch.domain.auth.model.dto.AuthResponse;
 import com.pipewatch.domain.enterprise.model.entity.Enterprise;
 import com.pipewatch.domain.enterprise.repository.EnterpriseRepository;
-import com.pipewatch.domain.management.model.entity.Waiting;
 import com.pipewatch.domain.management.repository.WaitingRepository;
 import com.pipewatch.domain.user.model.entity.EmployeeInfo;
 import com.pipewatch.domain.user.model.entity.Role;
@@ -18,7 +17,6 @@ import com.pipewatch.global.jwt.service.JwtService;
 import com.pipewatch.global.mail.MailService;
 import com.pipewatch.global.redis.RedisUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,16 +32,10 @@ import static com.pipewatch.global.statusCode.ErrorCode.*;
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 	private final UserRepository userRepository;
-
 	private final RedisUtil redisUtil;
-
 	private final MailService mailService;
-
 	private final JwtService jwtService;
-
 	private final PasswordEncoder passwordEncoder;
-
-	private final WaitingRepository waitingRepository;
 	private final EnterpriseRepository enterpriseRepository;
 	private final EmployeeRepository employeeRepository;
 
@@ -130,14 +122,6 @@ public class AuthServiceImpl implements AuthService {
 
 		employeeRepository.save(employee);
 
-		// 승인대기 저장
-		Waiting waiting = Waiting.builder()
-				.role(Role.EMPLOYEE)
-				.user(user)
-				.build();
-
-		waitingRepository.save(waiting);
-
 		// jwt 토큰 발급
 		JwtToken jwtToken = requestDto.toRedis(uuid, user.getId(), jwtService.createRefreshToken(uuid));
 		redisUtil.setData(uuid, jwtToken);
@@ -188,7 +172,7 @@ public class AuthServiceImpl implements AuthService {
 		}
 
 		// 메일 전송
-		mailService.sendEnterpriseAccountEmail(requestDto.getManagerEmail(), user.getEmail(), password);
+		mailService.sendEnterpriseAccountEmail(requestDto.getManagerEmail(), enterprise.getName(), user.getEmail(), password);
 	}
 
 	@Override
