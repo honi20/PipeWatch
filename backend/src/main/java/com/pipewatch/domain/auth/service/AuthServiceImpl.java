@@ -143,7 +143,7 @@ public class AuthServiceImpl implements AuthService {
 
 		// 이미 등록된 기업인지 확인
 		if (enterpriseRepository.findByManagerEmail(requestDto.getManagerEmail()) != null) {
-			throw new BaseException(DUPLICATED_ENTERPRISE);
+			throw new BaseException(DUPLICATED_EMAIL);
 		}
 		else if (isEnterpriseDomain(domain) && userRepository.findByEmail(email) != null) {
 			throw new BaseException(DUPLICATED_ENTERPRISE);
