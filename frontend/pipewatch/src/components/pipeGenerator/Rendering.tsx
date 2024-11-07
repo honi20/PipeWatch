@@ -1,8 +1,7 @@
-import { useRef, useState } from "react";
+import { Suspense, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
-import { Suspense } from "react";
 import { Leva } from "leva";
 import { Loader } from "@react-three/drei";
 import TestRendering from "@components/pipeGenerator/TestRendering";
@@ -33,10 +32,14 @@ export const Rendering = () => {
   //   }
   // };
 
+  const testRenderingRef = useRef<{ takeScreenshot: () => void }>(null);
+
   // 저장 버튼 Click Action
   const handleSave = () => {
     // POST 함수 추가 예정
-
+    if (testRenderingRef.current) {
+      testRenderingRef.current.takeScreenshot();
+    }
     // 모델 렌더링 페이지로 이동
     navigate("/pipe-generator/completed");
   };
@@ -55,11 +58,10 @@ export const Rendering = () => {
 
       <div className="w-full h-[400px]">
         <Suspense fallback={<Loader />}>
-          <TestRendering />
+          <TestRendering ref={testRenderingRef} />
           <Leva collapsed />
         </Suspense>
       </div>
-      <button>Screenshot찍기</button>
 
       {/* <div className="flex justify-center w-full my-[20px]">
         <div className="w-[500px] h-[300px] flex flex-col justify-center items-center bg-whiteBox shadow-md rounded-[12px] shadow-gray-500">
@@ -90,7 +92,8 @@ export const Rendering = () => {
       </div> */}
       <div className="flex justify-center w-full">
         <IconButton
-          handleClick={() => handleSave()}
+          // handleClick={() => handleSave()}
+          handleClick={handleSave}
           text={t("pipeGenerator.commonButtons.save")}
           color={"bg-primary-500"}
           hoverColor={"hover:bg-primary-500/80"}
