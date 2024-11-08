@@ -88,6 +88,7 @@ export const UploadModelManual = () => {
 
   // 저장 버튼 Click Action
   const handleSave = () => {
+    console.log(modelId);
     // POST 함수 내부 (success) : POST로 받아진 modelId 전달 & 모델 렌더링 페이지로 이동
     navigate("/pipe-generator/input-data", { state: { modelId: modelId } });
   };

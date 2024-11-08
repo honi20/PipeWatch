@@ -1,4 +1,4 @@
-import { useState, useMemo, ChangeEvent } from "react";
+import { useState, useMemo, ChangeEvent, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { IconButton } from "@components/common/IconButton";
 import clsx from "clsx";
@@ -32,6 +32,17 @@ export const InputData = () => {
   const [newLocation, setNewLocation] = useState("");
 
   const [selectedLocation, setSelectedLocation] = useState<Location | null>();
+
+  // modelId: Upload Page에서 POST 요청 후 navigate state로 받아옴
+  const [modelId, setModelId] = useState("");
+  const location = useLocation();
+
+  useEffect(() => {
+    setModelId(location.state.modelId);
+  }, []);
+
+  console.log("modelId in InputData: ", modelId);
+  // const modelId: string = "13"; // 테스트용
 
   type Location = {
     id: number;
@@ -100,15 +111,11 @@ export const InputData = () => {
 
   const apiClient = getApiClient();
 
-  // modelId: Upload Page에서 POST 요청 후 navigate state로 받아옴
-  const location = useLocation();
-  const modelId = location.state.modelId;
-  // const modelId: string = "13"; // 테스트용
-
   console.log(pipelineName, selectedLocation?.name, floorNum);
 
   // 저장 버튼 Click Action
   const handleSave = async (modelId: string) => {
+    console.log("modelId in handlSave: ", modelId);
     console.log(pipelineName, selectedLocation?.name, floorNum);
 
     try {
