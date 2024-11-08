@@ -149,6 +149,36 @@ def create_cylinder(p1, p2, radius, name, work_dir, stl_paths):
     cylinder.val().exportStl(cylinder_path)
     stl_paths.append(cylinder_path)
 
+    # 플렌지 좌표 계산
+    p1_flange_x = p1[0] + (radius * 2) * math.cos(math.radians(angle))
+    p1_flange_y = p1[1] + (radius * 2) * math.sin(math.radians(angle))
+
+    p2_flange_x = p2[0] - (radius * 2) * math.cos(math.radians(angle))
+    p2_flange_y = p2[1] - (radius * 2) * math.sin(math.radians(angle))
+
+    # 플랜지 생성
+    create_flange((p1_flange_x, p1_flange_y), radius, name + "_Flange_Start", work_dir, stl_paths, angle)
+    create_flange((p2_flange_x, p2_flange_y), radius, name + "_Flange_End", work_dir, stl_paths, angle)
+
+# 플렌지 생성 함수
+def create_flange(center, radius, name, work_dir, stl_paths, angle):
+    distance = 0.2
+    flange_radius = radius * 1.5
+
+    flange = (
+        cq.Workplane("XY")
+        .center(0, 0)
+        .circle(flange_radius)
+        .extrude(distance)
+        .rotate((0, 0, 0), (0, 1, 0), 90)
+        .rotate((0, 0, 0), (0, 0, 1), angle)
+        .translate((center[0], center[1], 0))
+    )
+
+    flange_path = os.path.join(work_dir, f"{name}.stl")
+    flange.val().exportStl(flange_path)
+    stl_paths.append(flange_path)
+
 # 커넥터 생성 함수
 def create_connector(center, radius, name, work_dir, stl_paths):
     connector = cq.Workplane("XY").sphere(radius).translate((center[0], center[1], 0))
