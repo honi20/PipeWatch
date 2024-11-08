@@ -78,12 +78,13 @@ export const UploadModelManual = () => {
   const handleSave = () => {
     // POST 함수 추가 예정
 
-    // 모델 렌더링 페이지로 이동
-    navigate("/pipe-generator/input-data");
+    // POST 함수 내부 (success) : POST로 받아진 modelId 전달
+    const modelId: string = "20";
+    // POST 함수 내부 (success): 모델 렌더링 페이지로 이동
+    navigate("/pipe-generator/input-data", { state: { modelId: modelId } });
   };
 
   console.log(file);
-
   return (
     <>
       <p className="text-[16px]">
