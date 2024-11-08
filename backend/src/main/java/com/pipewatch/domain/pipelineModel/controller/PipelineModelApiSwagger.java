@@ -194,6 +194,17 @@ public interface PipelineModelApiSwagger {
 			@Schema(description = "Model ID", example = "1")
 			@PathVariable Long modelId, @RequestBody PipelineModelRequest.ModifyDto requestDto);
 
+	@PatchMapping("/thumbnail/{modelId}")
+	@Operation(summary = "파이프라인 모델 썸네일 이미지 수정")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "파이프라인 모델 썸네일 이미지 수정 성공", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+					examples = {@ExampleObject(value = "{\"header\":{\"httpStatusCode\": 200, \"message\": \"모델 정보 수정에 성공했습니다.\"},\n\"body\": null}")}
+			))
+	})
+	ResponseEntity<?> modelThumbnailModify(@AuthenticationPrincipal Long userId,
+										   @PathVariable Long modelId,
+										   @RequestPart(value = "file") MultipartFile file) throws IOException;
+
 	@DeleteMapping("/{modelId}")
 	@Operation(summary = "파이프라인 모델 삭제")
 	@ApiResponses(value = {

@@ -241,6 +241,32 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 
 	@Override
 	@Transactional
+	public void modifyThumbnailModel(Long userId, Long modelId, MultipartFile thumbnailFile) throws IOException {
+		User user = userRepository.findById(userId)
+				.orElseThrow(() -> new BaseException(USER_NOT_FOUND));
+
+		PipelineModel pipelineModel = pipelineModelRepository.findById(modelId)
+				.orElseThrow(() -> new BaseException(PIPELINE_MODEL_NOT_FOUND));
+
+		// 기업이나 관리자 유저만 가능
+		if (user.getRole() == Role.USER || user.getRole() == Role.EMPLOYEE) {
+			throw new BaseException(FORBIDDEN_USER_ROLE);
+		}
+
+		if (pipelineModel.getUser().getId() != userId) {
+			throw new BaseException(FORBIDDEN_USER_ROLE);
+		}
+
+		String thumbnailImgUrl = null;
+		if (!thumbnailFile.isEmpty()) {
+			thumbnailImgUrl = s3Service.upload(thumbnailFile, "Thumbnail_" + pipelineModel.getUuid());
+			pipelineModel.updatePreviewImgUrl(thumbnailImgUrl);
+			pipelineModelRepository.save(pipelineModel);
+		}
+	}
+
+	@Override
+	@Transactional
 	public void deleteModel(Long userId, Long modelId) {
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new BaseException(USER_NOT_FOUND));

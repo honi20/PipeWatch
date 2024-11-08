@@ -65,6 +65,13 @@ public class PipelineModelController implements PipelineModelApiSwagger {
 		return new ResponseEntity<>(ResponseDto.success(MODEL_MODIFIED_OK, null), HttpStatus.OK);
 	}
 
+	@PatchMapping(value = "/thumbnail/{modelId}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+	public ResponseEntity<?> modelThumbnailModify(@AuthenticationPrincipal Long userId, @PathVariable Long modelId, @RequestPart(value = "file") MultipartFile file) throws IOException {
+		pipelineModelService.modifyThumbnailModel(userId, modelId, file);
+
+		return new ResponseEntity<>(ResponseDto.success(MODEL_MODIFIED_OK, null), HttpStatus.OK);
+	}
+
 	@DeleteMapping("/{modelId}")
 	public ResponseEntity<?> modelDelete(@AuthenticationPrincipal Long userId, @PathVariable Long modelId) {
 		pipelineModelService.deleteModel(userId, modelId);
