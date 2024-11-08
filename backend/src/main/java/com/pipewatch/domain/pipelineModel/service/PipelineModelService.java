@@ -20,6 +20,8 @@ public interface PipelineModelService {
 
 	void modifyModel(Long userId, Long modelId, PipelineModelRequest.ModifyDto requestDto);
 
+	void modifyThumbnailModel(Long userId, Long modelId, MultipartFile file) throws IOException;
+
 	void deleteModel(Long userId, Long modelId);
 
 	PipelineModelResponse.MemoListDto getModelMemoList(Long userId, Long modelId);
