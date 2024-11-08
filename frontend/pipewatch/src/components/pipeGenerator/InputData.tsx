@@ -17,8 +17,6 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useTranslation } from "react-i18next";
 
 import { getApiClient } from "@src/stores/apiClient";
-// import { pipe } from "framer-motion";
-// import { pipeline } from "stream";
 
 export const InputData = () => {
   const { t } = useTranslation();
@@ -128,7 +126,7 @@ export const InputData = () => {
       console.log("Input Data 저장: header.message", res.data.header.message);
 
       // 모델 렌더링 페이지로 이동
-      navigate("/pipe-generator/rendering");
+      navigate("/pipe-generator/rendering", { state: { modelId: modelId } });
     } catch (err) {
       console.log(err);
     }

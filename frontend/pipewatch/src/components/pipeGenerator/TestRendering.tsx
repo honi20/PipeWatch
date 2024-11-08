@@ -9,6 +9,12 @@ import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader";
 
+import { getApiClient } from "@src/stores/apiClient";
+
+interface TestRenderingProps {
+  modelId: string;
+}
+
 // GLTF 모델 경로
 const gltfUrl = "/assets/models/PipeLine.gltf";
 
@@ -33,52 +39,89 @@ const Model: React.FC = () => {
   });
 
   // 모델 보여주기
-  return (
-    <primitive
-      object={gltf.scene}
-      //   onPointerDown={(e: ThreeEvent<PointerEvent>) => {
-      //     e.stopPropagation();
-      //   }}
-    />
-  );
+  return <primitive object={gltf.scene} />;
 };
+
+const apiClient = getApiClient();
+
+// const modelId = 15; // 테스트용
 
 // const TestRendering = () => {
 //   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-const TestRendering = forwardRef((_, ref) => {
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  // Screenshot 찍는 함수
-  const takeScreenshot = () => {
-    if (!canvasRef.current) return;
+const TestRendering = forwardRef<unknown, TestRenderingProps>(
+  ({ modelId }, ref) => {
+    const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
-    const canvas = canvasRef.current;
-    const link = document.createElement("a");
-    link.setAttribute("download", "screenshot.png");
-    link.setAttribute(
-      "href",
-      canvas.toDataURL("image/png").replace("image/png", "image/octet-stream")
+    const takeScreenshot = () => {
+      if (!canvasRef.current) return;
+
+      // Screenshot 찍는 함수
+      const canvas = canvasRef.current;
+      const link = document.createElement("a");
+      link.setAttribute("download", `screenshot${modelId}.png`);
+      link.setAttribute(
+        "href",
+        canvas.toDataURL("image/png").replace("image/png", "image/octet-stream")
+      );
+      link.click();
+
+      // PATCH 요청 수행하는 함수
+      // 캔버스 데이터를 Blob으로 변환
+      canvas.toBlob(async (blob) => {
+        if (!blob) {
+          console.error("Canvas Blob creation failed");
+          return;
+        }
+
+        // FormData 생성 및 이미지 파일 추가
+        const formData = new FormData();
+
+        console.log("screenshot 찍기 전 modelId 확인: ", modelId);
+        formData.append("file", blob, `screenshot${modelId}.png`);
+
+        // 이미지 추출 확인
+        for (const [key, value] of formData.entries()) {
+          console.log(key, value);
+        }
+
+        try {
+          console.log("Rendering modelId 확인: ", modelId);
+          const response = await apiClient.patch(
+            `/api/models/thumbnail/${modelId}`,
+            formData,
+            {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            }
+          );
+
+          console.log("Image uploaded successfully:", response.data);
+        } catch (error) {
+          console.error("Image upload failed:", error);
+        }
+      }, "image/png"); // 두 번째 인자로 MIME 타입을 지정
+    };
+
+    // 부모 컴포넌트에서 takeScreenshot 호출 가능하도록 expose
+    useImperativeHandle(ref, () => ({
+      takeScreenshot,
+    }));
+
+    return (
+      <Canvas
+        ref={canvasRef}
+        shadows
+        gl={{ preserveDrawingBuffer: true }}
+        //   onClick={takeScreenshot}
+      >
+        <ambientLight intensity={0.5} />
+        <directionalLight position={[5, 10, 7.5]} intensity={5} castShadow />
+        <Model />
+        <OrbitControls enableDamping />
+      </Canvas>
     );
-    link.click();
-  };
-
-  // 부모 컴포넌트에서 takeScreenshot 호출 가능하도록 expose
-  useImperativeHandle(ref, () => ({
-    takeScreenshot,
-  }));
-
-  return (
-    <Canvas
-      ref={canvasRef}
-      shadows
-      gl={{ preserveDrawingBuffer: true }}
-      //   onClick={takeScreenshot}
-    >
-      <ambientLight intensity={0.5} />
-      <directionalLight position={[5, 10, 7.5]} intensity={5} castShadow />
-      <Model />
-      <OrbitControls enableDamping />
-    </Canvas>
-  );
-});
+  }
+);
 
 export default TestRendering;

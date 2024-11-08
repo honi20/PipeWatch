@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
@@ -59,7 +58,7 @@ export const UploadModelManual = () => {
 
         console.log(response.data);
         setStatus("success");
-        console.log("modelId: ", response.data.body.modelId);
+        console.log("modelId in UploadModel: ", response.data.body.modelId);
         setModelId(response.data.body.modelId);
       } catch (error) {
         console.error(error);
