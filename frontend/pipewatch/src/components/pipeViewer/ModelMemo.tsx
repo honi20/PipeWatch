@@ -3,6 +3,7 @@ import { Textarea } from "@headlessui/react";
 import clsx from "clsx";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { useMemoStore } from "@src/stores/memoStore";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 
 interface PipeMemoProps {
   modelId: number;
@@ -10,11 +11,13 @@ interface PipeMemoProps {
   building: string;
   floor: number;
   updatedAt: string;
+  onViewChange: () => void;
 }
 
 export const ModelMemo: React.FC<PipeMemoProps> = (props) => {
   const { memo, setMemo, memoList, getMemoList, postMemo } = useMemoStore();
-  const { modelId, modelName, building, floor, updatedAt } = props;
+  const { modelId, modelName, building, floor, updatedAt, onViewChange } =
+    props;
 
   // memoList renderer
   useEffect(() => {
@@ -51,6 +54,14 @@ export const ModelMemo: React.FC<PipeMemoProps> = (props) => {
   return (
     <div className="w-[400px] h-[680px] flex flex-col bg-block rounded-[30px] px-[50px] py-[30px] text-white justify-between items-center gap-5">
       <div className="flex flex-col w-full h-full">
+        {/* navigate */}
+        <div
+          className="flex justify-start cursor-pointer hover:text-primary-200"
+          onClick={onViewChange}
+        >
+          <ChevronLeftIcon />
+          <p>속성</p>
+        </div>
         <div className="flex flex-col w-full h-full gap-7">
           {/* header */}
           <div className="flex flex-col items-center w-full">

@@ -6,21 +6,21 @@ import * as THREE from "three";
 
 export const PipeModel: React.FC<{
   gltfUrl: string;
-  onClick: (mesh: THREE.Mesh) => void;
   onModelLoad: (scene: THREE.Object3D) => void;
-}> = ({ gltfUrl, onClick, onModelLoad }) => {
+}> = ({ gltfUrl, onModelLoad }) => {
+  // gltf loader
   const model = useLoader(GLTFLoader, gltfUrl, (loader) => {
     const dracoLoader = new DRACOLoader();
     dracoLoader.setDecoderPath("https://www.gstatic.com/draco/v1/decoders/");
     loader.setDRACOLoader(dracoLoader);
   });
 
-  // model 전달
+  // 카메라 제어를 위한 model 전달
   useEffect(() => {
     if (model.scene) {
       onModelLoad(model.scene);
     }
-  }, [model, onModelLoad]);
+  }, [model]);
 
   // 각 mesh의 이름에 따라 그룹화
   const meshesByGroup = React.useMemo(() => {
@@ -46,7 +46,9 @@ export const PipeModel: React.FC<{
   const handlePointerOver = (groupName: string) => {
     const group = meshesByGroup[groupName];
     group.forEach(({ originalMesh }) => {
-      (originalMesh.material as THREE.MeshStandardMaterial).color.set("blue"); // 그룹 내 모든 메쉬의 색상을 파란색으로 변경
+      (originalMesh.material as THREE.MeshStandardMaterial).color.set(
+        "#a6bdfc"
+      ); // 그룹 내 모든 메쉬의 색상을 파란색으로 변경
     });
   };
 
@@ -92,9 +94,9 @@ export const PipeModel: React.FC<{
                   scale={originalMesh.scale}
                   onPointerDown={(e: ThreeEvent<PointerEvent>) => {
                     e.stopPropagation();
-                    onClick(e.object as THREE.Mesh); // 클릭된 mesh 객체 전달
                     handlePointerDown(groupName);
                   }}
+                  onClick={() => console.log(segmentName)}
                 />
               );
             })}

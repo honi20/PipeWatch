@@ -4,6 +4,7 @@ import "./viewer.css";
 import { getApiClient } from "@src/stores/apiClient";
 import { ModelDetailType } from "@src/components/pipeViewer/PipeType";
 import { ModelMemo } from "@src/components/pipeViewer/ModelMemo";
+import { ModelProperty } from "@src/components/pipeViewer/ModelProperty";
 
 interface ModelDetailViewProps {
   modelId: number;
@@ -33,10 +34,8 @@ export const ModelDetailView: React.FC<ModelDetailViewProps> = ({
   };
 
   useEffect(() => {
-    if (!modelDetail || Object.keys(modelDetail).length === 0) {
-      getModelDetail();
-    }
-  }, [modelDetail]);
+    getModelDetail();
+  }, [modelId]);
 
   // pipe 정보 조회해야함
   // 카드 회전 CSS
@@ -50,15 +49,24 @@ export const ModelDetailView: React.FC<ModelDetailViewProps> = ({
     <div className="relative w-full h-full">
       {modelDetail && <GLTFViewer gltfUrl={modelDetail.modelingUrl} />}
       <div className="absolute top-5 right-10">
-        {modelDetail && (
-          <ModelMemo
-            modelId={modelId}
-            modelName={modelDetail!.name}
-            building={modelDetail!.building}
-            floor={modelDetail!.floor}
-            updatedAt={modelDetail!.updatedAt}
-          />
-        )}
+        {modelDetail &&
+          (selectView === "MEMO" ? (
+            <ModelMemo
+              modelId={modelId}
+              modelName={modelDetail!.name}
+              building={modelDetail!.building}
+              floor={modelDetail!.floor}
+              updatedAt={modelDetail!.updatedAt}
+              onViewChange={() => setSelectView("PROPERTY")}
+            />
+          ) : (
+            <ModelProperty
+              pipelines={modelDetail!.pipelines}
+              building={modelDetail!.building}
+              floor={modelDetail!.floor}
+              onViewChange={() => setSelectView("MEMO")}
+            />
+          ))}
       </div>
     </div>
   );

@@ -55,3 +55,10 @@ export interface ModelDetailType {
     userUuid: string;
   };
 }
+export interface PropertyType {
+  pipeMaterial: string;
+  outerDiameter: number;
+  innerDiameter: number;
+  fluidMaterial: string;
+  velocity: number;
+}

@@ -44,7 +44,7 @@ export const getApiClient = () => {
         originalRequest._retry = true;
         try {
           console.log("accessToken 만료되었음");
-          const newAccessToken = error.response.data?.body;
+          const newAccessToken = error.response.data.body;
           if (newAccessToken) {
             setAccessToken(newAccessToken);
             originalRequest.headers[

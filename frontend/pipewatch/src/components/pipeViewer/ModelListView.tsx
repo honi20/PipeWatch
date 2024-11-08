@@ -17,7 +17,6 @@ export const ModelListView: React.FC<ModelListViewProps> = ({ models }) => {
   const [selectedFloor, setSelectedFloor] = useState<number | null>(null);
   const [buildingList, setBuildingList] = useState<BuildingType[]>([]);
   const [floorList, setFloorList] = useState<number[]>([]);
-
   // 건물 및 층수 조회 함수
   const getBuildingFloors = async () => {
     const apiClient = getApiClient();
