@@ -252,6 +252,8 @@
         },
         "uploadBox": {
           "selectFile": "파일 선택",
+          "uploadedFile": "첨부한 파일",
+          "upload": "업로드",
           "statusMessages": {
             "uploading": "파일 업로드 중",
             "success": "업로드가 완료되었습니다.",
