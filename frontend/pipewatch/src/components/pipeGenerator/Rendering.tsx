@@ -1,6 +1,6 @@
 import { Suspense, useRef, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 import { Leva } from "leva";
 import { Loader } from "@react-three/drei";
@@ -8,11 +8,8 @@ import TestRendering from "@components/pipeGenerator/TestRendering";
 
 import { IconButton } from "@components/common/IconButton";
 
-// import { getApiClient } from "@src/stores/apiClient";
-
 export const Rendering = () => {
   const { t } = useTranslation();
-  // const navigate = useNavigate();
 
   const testRenderingRef = useRef<{ takeScreenshot: () => void }>(null);
 
@@ -24,11 +21,8 @@ export const Rendering = () => {
     setModelId(location.state.modelId);
   }, []);
 
-  // const modelId = "15"; // 테스트용
-
   // 저장 버튼 Click Action
   const handleSave = async () => {
-    // POST 함수 추가 예정
     if (testRenderingRef.current) {
       testRenderingRef.current.takeScreenshot();
     }

@@ -39,9 +39,6 @@ export const InputData = () => {
     setModelId(location.state.modelId);
   }, []);
 
-  console.log("modelId in InputData: ", modelId);
-  // const modelId: string = "13"; // 테스트용
-
   type Location = {
     id: number;
     name: string;
@@ -113,9 +110,6 @@ export const InputData = () => {
 
   // 저장 버튼 Click Action
   const handleSave = async (modelId: string) => {
-    console.log("modelId in handlSave: ", modelId);
-    console.log(pipelineName, selectedLocation?.name, floorNum);
-
     try {
       const res = await apiClient.patch(`/api/models/init/${modelId}`, {
         name: pipelineName,
@@ -123,7 +117,7 @@ export const InputData = () => {
         floor: floorNum,
       });
 
-      console.log("Input Data 저장: header.message", res.data.header.message);
+      console.log("input Data: ", res.data.header.message);
 
       // 모델 렌더링 페이지로 이동
       navigate("/pipe-generator/rendering", { state: { modelId: modelId } });

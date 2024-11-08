@@ -22,7 +22,7 @@ export const UploadModelManual = () => {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
-      const file = e.target.files[0]; // 첫 번째 파일 선택
+      const file = e.target.files[0];
       if (file.name.endsWith(".gltf")) {
         setStatus("initial");
         setFile(file);
@@ -56,8 +56,9 @@ export const UploadModelManual = () => {
           }
         );
 
-        console.log(response.data);
         setStatus("success");
+
+        console.log("upload model: ", response.data.header.message);
         console.log("modelId in UploadModel: ", response.data.body.modelId);
         setModelId(response.data.body.modelId);
       } catch (error) {
@@ -87,8 +88,7 @@ export const UploadModelManual = () => {
 
   // 저장 버튼 Click Action
   const handleSave = () => {
-    console.log(modelId);
-    // POST 함수 내부 (success) : POST로 받아진 modelId 전달 & 모델 렌더링 페이지로 이동
+    // POST로 받아진 modelId 전달 & 모델 렌더링 페이지로 이동
     navigate("/pipe-generator/input-data", { state: { modelId: modelId } });
   };
 

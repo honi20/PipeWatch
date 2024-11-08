@@ -1,9 +1,7 @@
 import { useRef, forwardRef, useImperativeHandle } from "react";
-import {
-  Canvas,
-  // ThreeEvent,
-  useLoader,
-} from "@react-three/fiber";
+import { useNavigate } from "react-router-dom";
+
+import { Canvas, useLoader } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
@@ -19,9 +17,6 @@ interface TestRenderingProps {
 const gltfUrl = "/assets/models/PipeLine.gltf";
 
 const Model: React.FC = () => {
-  // canvas내에서만 호출
-  //   const { gl } = useThree();
-
   // gltf 파일 가져오기
   const gltf = useLoader(GLTFLoader, gltfUrl, (loader) => {
     const dracoLoader = new DRACOLoader();
@@ -44,26 +39,25 @@ const Model: React.FC = () => {
 
 const apiClient = getApiClient();
 
-// const modelId = 15; // 테스트용
-
-// const TestRendering = () => {
-//   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 const TestRendering = forwardRef<unknown, TestRenderingProps>(
   ({ modelId }, ref) => {
+    const navigate = useNavigate();
+
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
     const takeScreenshot = () => {
       if (!canvasRef.current) return;
 
-      // Screenshot 찍는 함수
       const canvas = canvasRef.current;
-      const link = document.createElement("a");
-      link.setAttribute("download", `screenshot${modelId}.png`);
-      link.setAttribute(
-        "href",
-        canvas.toDataURL("image/png").replace("image/png", "image/octet-stream")
-      );
-      link.click();
+
+      // Screenshot 찍는 함수
+      // const link = document.createElement("a");
+      // link.setAttribute("download", `screenshot${modelId}.png`);
+      // link.setAttribute(
+      //   "href",
+      //   canvas.toDataURL("image/png").replace("image/png", "image/octet-stream")
+      // );
+      // link.click();
 
       // PATCH 요청 수행하는 함수
       // 캔버스 데이터를 Blob으로 변환
@@ -76,16 +70,9 @@ const TestRendering = forwardRef<unknown, TestRenderingProps>(
         // FormData 생성 및 이미지 파일 추가
         const formData = new FormData();
 
-        console.log("screenshot 찍기 전 modelId 확인: ", modelId);
         formData.append("file", blob, `screenshot${modelId}.png`);
 
-        // 이미지 추출 확인
-        for (const [key, value] of formData.entries()) {
-          console.log(key, value);
-        }
-
         try {
-          console.log("Rendering modelId 확인: ", modelId);
           const response = await apiClient.patch(
             `/api/models/thumbnail/${modelId}`,
             formData,
@@ -96,11 +83,12 @@ const TestRendering = forwardRef<unknown, TestRenderingProps>(
             }
           );
 
-          console.log("Image uploaded successfully:", response.data);
+          console.log("upload thumbnail: ", response.data.header.message);
+          navigate("/pipe-generator/completed");
         } catch (error) {
           console.error("Image upload failed:", error);
         }
-      }, "image/png"); // 두 번째 인자로 MIME 타입을 지정
+      }, "image/png");
     };
 
     // 부모 컴포넌트에서 takeScreenshot 호출 가능하도록 expose
@@ -109,12 +97,7 @@ const TestRendering = forwardRef<unknown, TestRenderingProps>(
     }));
 
     return (
-      <Canvas
-        ref={canvasRef}
-        shadows
-        gl={{ preserveDrawingBuffer: true }}
-        //   onClick={takeScreenshot}
-      >
+      <Canvas ref={canvasRef} shadows gl={{ preserveDrawingBuffer: true }}>
         <ambientLight intensity={0.5} />
         <directionalLight position={[5, 10, 7.5]} intensity={5} castShadow />
         <Model />
