@@ -13,15 +13,25 @@ interface PipeMaterialListboxProps {
   onChange: (material: string) => void;
 }
 
+interface PipeMaterialType {
+  id: number;
+  material: string;
+}
+
 export const PipeMaterialListbox: React.FC<PipeMaterialListboxProps> = ({
   value,
   onChange,
 }) => {
-  const pipeMaterialList: string[] = ["-", "aluminium", "steel", "stainless"];
+  const pipeMaterialList: PipeMaterialType[] = [
+    { id: 0, material: "-" },
+    { id: 1, material: "알루미늄" },
+    { id: 2, material: "철" },
+    { id: 3, material: "스테인리스" },
+  ];
 
   // 초기 선택된 재질 설정
   const [selected, setSelected] = useState<string>(
-    value || pipeMaterialList[0]
+    value || pipeMaterialList[0].material
   );
 
   const handleChange = (material: string) => {
@@ -57,10 +67,10 @@ export const PipeMaterialListbox: React.FC<PipeMaterialListboxProps> = ({
           {pipeMaterialList.map((item, idx) => (
             <ListboxOption
               key={idx}
-              value={item} // 여기서 item 전체 객체를 전달
+              value={item.material} // 여기서 item 전체 객체를 전달
               className="group flex cursor-default items-center gap-2 rounded-lg py-1.5 px-3 select-none data-[focus]:bg-white/10"
             >
-              <div className="dark:text-white text-sm/6">{item}</div>
+              <div className="dark:text-white text-sm/6">{item.material}</div>
             </ListboxOption>
           ))}
         </ListboxOptions>
