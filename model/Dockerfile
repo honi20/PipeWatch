@@ -7,7 +7,7 @@ RUN apt-get update && \
     wget https://github.com/mmatl/travis_debs/raw/master/xenial/mesa_18.3.3-0.deb && \
     dpkg -i ./mesa_18.3.3-0.deb || true && \
     apt-get install -f -y && \
-    apt-get install -y libglu1-mesa libgl1-mesa-glx libgl1-mesa-dev && \
+    apt-get install -y libglu1-mesa libgl1-mesa-glx libgl1-mesa-dev libosmesa6 libosmesa6-dev && \
     npm install -g gltf-pipeline && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
