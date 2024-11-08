@@ -23,18 +23,19 @@ public class PipelineModelCustomRepositoryImpl implements PipelineModelCustomRep
 
 	@Override
 	public List<PipelineModel> findAllByBuildingAndFloor(Enterprise enterprise, String building, Integer floor) {
-		 JPAQuery<PipelineModel> query = queryFactory.selectFrom(pipelineModel)
+		JPAQuery<PipelineModel> query = queryFactory.selectFrom(pipelineModel)
 				.leftJoin(buildingAndFloor).on(buildingAndFloor.eq(pipelineModel.buildingAndFloor))
-				.where(pipelineModel.enterprise.eq(enterprise));
+				.where(pipelineModel.enterprise.eq(enterprise))
+				.where(buildingAndFloor.isNotNull());
 
-		 if (building != null) {
-			 query.where(buildingAndFloor.name.eq(building));
-		 }
-		 if (floor != null) {
-			 query.where(buildingAndFloor.floor.eq(floor));
-		 }
+		if (building != null) {
+			query.where(buildingAndFloor.name.eq(building));
+		}
+		if (floor != null) {
+			query.where(buildingAndFloor.floor.eq(floor));
+		}
 
-		 return query.fetch();
+		return query.fetch();
 	}
 
 	@Override
