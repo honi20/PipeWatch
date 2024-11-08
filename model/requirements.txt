@@ -36,7 +36,7 @@ PyGetWindow==0.0.9
 pyglet==1.5.29
 pygltflib==1.16.2
 PyMsgBox==1.0.9
-PyOpenGL==3.1.0
+PyOpenGL==3.1.4
 pyparsing==3.1.4
 pyperclip==1.9.0
 PyRect==0.2.0
