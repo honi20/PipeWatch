@@ -1,37 +1,45 @@
-import { useRef, useState } from "react";
+import { Suspense, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
+import { Leva } from "leva";
+import { Loader } from "@react-three/drei";
+import TestRendering from "@components/pipeGenerator/TestRendering";
+
 import { IconButton } from "@components/common/IconButton";
 
-import SamplePipeAnimation from "@assets/images/sample/sample_pipe_animation.gif";
-import SamplePipeVideo from "@assets/images/sample/sample_pipe_video.mp4";
+// import SamplePipeAnimation from "@assets/images/sample/sample_pipe_animation.gif";
+// import SamplePipeVideo from "@assets/images/sample/sample_pipe_video.mp4";
 
-import PlayCircleIcon from "@mui/icons-material/PlayCircle";
+// import PlayCircleIcon from "@mui/icons-material/PlayCircle";
 
 export const Rendering = () => {
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
+  // const videoRef = useRef<HTMLVideoElement>(null);
+  // const [isPlaying, setIsPlaying] = useState(false);
 
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const handlePlayPause = () => {
-    if (videoRef.current) {
-      if (videoRef.current.paused) {
-        videoRef.current.play();
-        setIsPlaying(true);
-      } else {
-        videoRef.current.pause();
-        setIsPlaying(false);
-      }
-    }
-  };
+  // const handlePlayPause = () => {
+  //   if (videoRef.current) {
+  //     if (videoRef.current.paused) {
+  //       videoRef.current.play();
+  //       setIsPlaying(true);
+  //     } else {
+  //       videoRef.current.pause();
+  //       setIsPlaying(false);
+  //     }
+  //   }
+  // };
+
+  const testRenderingRef = useRef<{ takeScreenshot: () => void }>(null);
 
   // 저장 버튼 Click Action
   const handleSave = () => {
     // POST 함수 추가 예정
-
+    if (testRenderingRef.current) {
+      testRenderingRef.current.takeScreenshot();
+    }
     // 모델 렌더링 페이지로 이동
     navigate("/pipe-generator/completed");
   };
@@ -48,9 +56,14 @@ export const Rendering = () => {
         {t("pipeGenerator.rendering.instructions.completed.previewAndSave")}
       </p>
 
-      {/* 실제 모델 렌더링 방식 논의 후 결정(.mp4/.gif/else?) */}
+      <div className="w-full h-[400px]">
+        <Suspense fallback={<Loader />}>
+          <TestRendering ref={testRenderingRef} />
+          <Leva collapsed />
+        </Suspense>
+      </div>
 
-      <div className="flex justify-center w-full my-[20px]">
+      {/* <div className="flex justify-center w-full my-[20px]">
         <div className="w-[500px] h-[300px] flex flex-col justify-center items-center bg-whiteBox shadow-md rounded-[12px] shadow-gray-500">
           <img
             src={SamplePipeAnimation}
@@ -58,7 +71,6 @@ export const Rendering = () => {
           />
         </div>
       </div>
-
       <div className="flex justify-center w-full my-[20px]">
         <div
           onClick={handlePlayPause}
@@ -77,11 +89,11 @@ export const Rendering = () => {
             muted
           />
         </div>
-      </div>
-
+      </div> */}
       <div className="flex justify-center w-full">
         <IconButton
-          handleClick={() => handleSave()}
+          // handleClick={() => handleSave()}
+          handleClick={handleSave}
           text={t("pipeGenerator.commonButtons.save")}
           color={"bg-primary-500"}
           hoverColor={"hover:bg-primary-500/80"}
