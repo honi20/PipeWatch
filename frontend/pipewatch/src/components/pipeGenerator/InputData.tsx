@@ -103,7 +103,7 @@ export const InputData = () => {
   // modelId: Upload Page에서 POST 요청 후 navigate state로 받아옴
   const location = useLocation();
   const modelId = location.state.modelId;
-  // const modelId: string = "20"; // 테스트용
+  // const modelId: string = "13"; // 테스트용
 
   console.log(pipelineName, selectedLocation?.name, floorNum);
 

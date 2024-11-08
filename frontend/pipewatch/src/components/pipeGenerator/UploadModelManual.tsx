@@ -8,6 +8,8 @@ import { IconButton } from "@components/common/IconButton";
 import DriveFolderUploadIcon from "@mui/icons-material/DriveFolderUpload";
 import ReplayIcon from "@mui/icons-material/Replay";
 
+import { getApiClient } from "@src/stores/apiClient";
+
 export const UploadModelManual = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -17,10 +19,12 @@ export const UploadModelManual = () => {
     "initial" | "uploading" | "success" | "fail"
   >("initial");
 
+  const [modelId, setModelId] = useState<string>("");
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0]; // 첫 번째 파일 선택
-      if (file.name.endsWith(".gltf") || file.name.endsWith(".glb")) {
+      if (file.name.endsWith(".gltf")) {
         setStatus("initial");
         setFile(file);
         console.log("file:", file);
@@ -29,6 +33,8 @@ export const UploadModelManual = () => {
       }
     }
   };
+
+  const apiClient = getApiClient();
 
   const handleUpload = async () => {
     if (!file) {
@@ -41,14 +47,20 @@ export const UploadModelManual = () => {
       formData.append("file", file);
 
       try {
-        const response = await axios.post("/api/models/upload-file", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
+        const response = await apiClient.post(
+          "/api/models/upload-file",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
 
         console.log(response.data);
         setStatus("success");
+        console.log("modelId: ", response.data.body.modelId);
+        setModelId(response.data.body.modelId);
       } catch (error) {
         console.error(error);
         setStatus("fail");
@@ -76,11 +88,7 @@ export const UploadModelManual = () => {
 
   // 저장 버튼 Click Action
   const handleSave = () => {
-    // POST 함수 추가 예정
-
-    // POST 함수 내부 (success) : POST로 받아진 modelId 전달
-    const modelId: string = "20";
-    // POST 함수 내부 (success): 모델 렌더링 페이지로 이동
+    // POST 함수 내부 (success) : POST로 받아진 modelId 전달 & 모델 렌더링 페이지로 이동
     navigate("/pipe-generator/input-data", { state: { modelId: modelId } });
   };
 
