@@ -17,7 +17,7 @@ export const UploadModelManual = () => {
   const navigate = useNavigate();
 
   const [file, setFile] = useState<File | null>(null);
-  // const [status, setStatus] = useState("initial");
+
   const [status, setStatus] = useState<
     "initial" | "uploading" | "success" | "fail"
   >("initial");
@@ -111,7 +111,7 @@ export const UploadModelManual = () => {
         {t("pipeGenerator.uploadModel.directUpload.instructions.uploadModel")}
       </p>
       <p className="text-[16px]">
-        {t("pipeGenerator.uploadModel.directUpload.instructions.Format")}:{" "}
+        {t("pipeGenerator.uploadModel.directUpload.instructions.Format")}
         <span className="font-bold">.gltf</span>
       </p>
 
@@ -174,14 +174,18 @@ export const UploadModelManual = () => {
         <div className="flex items-center justify-center gap-6 w-full text-[16px]">
           <div className="flex items-center justify-center gap-2">
             <FilePresentIcon sx={{ fontSize: "40px", color: "#499B50" }} />
-            <p>첨부한 파일</p>
+            <p>
+              {t(
+                "pipeGenerator.uploadModel.directUpload.uploadBox.uploadedFile"
+              )}
+            </p>
             <div className="bg-gray-200 rounded-[8px] px-[20px] py-[6px]">
               {file.name}
             </div>
           </div>
           <IconButton
             handleClick={() => handleUpload()}
-            text={"업로드"}
+            text={t("pipeGenerator.uploadModel.directUpload.uploadBox.upload")}
             color={"bg-primary-500"}
             hoverColor={"hover:bg-primary-500/80"}
             icon={""}
