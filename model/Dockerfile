@@ -22,7 +22,7 @@ COPY createPipeModel.py requirements.txt /app/
 RUN python -m venv venv && \
     . venv/bin/activate && \
     pip install --upgrade pip && \
-    pip install -r requirements.txt
+    pip install -r requirements.txt --use-deprecated=legacy-resolver
 
 # 가상 환경 활성화 후 앱 실행
 EXPOSE 8000
