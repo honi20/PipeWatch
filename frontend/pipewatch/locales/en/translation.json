@@ -248,7 +248,7 @@
       "directUpload": {
         "instructions": {
           "uploadModel": "Please upload the 3D model file of the pipe.",
-          "recommendedFormat": "Recommended Format"
+          "Format": "Format"
         },
         "uploadBox": {
           "selectFile": "Select File",

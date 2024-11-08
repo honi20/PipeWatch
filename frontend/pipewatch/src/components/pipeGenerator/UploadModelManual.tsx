@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
@@ -17,28 +18,36 @@ export const UploadModelManual = () => {
   >("initial");
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      setStatus("initial");
-      setFile(e.target.files[0]);
+    if (e.target.files && e.target.files.length > 0) {
+      const file = e.target.files[0]; // 첫 번째 파일 선택
+      if (file.name.endsWith(".gltf") || file.name.endsWith(".glb")) {
+        setStatus("initial");
+        setFile(file);
+        console.log("file:", file);
+      } else {
+        alert("GLTF 파일로 업로드해주세요.");
+      }
     }
   };
 
   const handleUpload = async () => {
-    if (file) {
+    if (!file) {
+      alert("파일 없음");
+      return;
+    } else {
       setStatus("uploading");
 
       const formData = new FormData();
       formData.append("file", file);
 
       try {
-        const result = await fetch("", {
-          method: "POST",
-          body: formData,
+        const response = await axios.post("/api/models/upload-file", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
         });
 
-        const data = await result.json();
-
-        console.log(data);
+        console.log(response.data);
         setStatus("success");
       } catch (error) {
         console.error(error);
@@ -73,16 +82,16 @@ export const UploadModelManual = () => {
     navigate("/pipe-generator/input-data");
   };
 
+  console.log(file);
+
   return (
     <>
       <p className="text-[16px]">
         {t("pipeGenerator.uploadModel.directUpload.instructions.uploadModel")}
       </p>
       <p className="text-[16px]">
-        {t(
-          "pipeGenerator.uploadModel.directUpload.instructions.recommendedFormat"
-        )}
-        : <span className="font-bold">.gltf</span>
+        {t("pipeGenerator.uploadModel.directUpload.instructions.Format")}:{" "}
+        <span className="font-bold">.gltf</span>
       </p>
 
       <div className="flex justify-center w-full my-[20px]">
@@ -91,8 +100,9 @@ export const UploadModelManual = () => {
             <input
               type="file"
               className="hidden"
-              multiple
+              multiple={false}
               onChange={handleFileChange}
+              accept=".gltf"
             />
             <DriveFolderUploadIcon
               sx={{ fontSize: "96px", color: "#D9D9D9" }}
@@ -103,59 +113,51 @@ export const UploadModelManual = () => {
           </label>
 
           {file && (
-            <section>
-              File details:
-              <ul>
-                <li>Name: {file.name}</li>
-                <li>Type: {file.type}</li>
-                <li>Size: {file.size} bytes</li>
-              </ul>
-            </section>
+            <IconButton
+              handleClick={() => handleUpload()}
+              text={"파일 업로드"}
+              color={"bg-primary-200"}
+              hoverColor={"hover:bg-primary-200/80"}
+              icon={""}
+            />
           )}
-
-          {file && (
-            <button onClick={handleUpload} className="submit">
-              Upload a file
-            </button>
-          )}
-
-          <p className="preview_uploading">
-            {t(
-              "pipeGenerator.uploadModel.directUpload.uploadBox.statusMessages.uploading"
-            )}
-          </p>
-          <p>
-            {t(
-              "pipeGenerator.uploadModel.directUpload.uploadBox.statusMessages.success"
-            )}
-          </p>
-          <p>
-            {t(
-              "pipeGenerator.uploadModel.directUpload.uploadBox.statusMessages.failed"
-            )}
-          </p>
         </div>
       </div>
 
-      <Result status={status} />
+      {file && (
+        <section className="absolute">
+          <ul>
+            <li>Name: {file.name}</li>
+            <li>Type: {file.type}</li>
+          </ul>
+        </section>
+      )}
 
       <div className="flex justify-center w-full">
-        <IconButton
-          handleClick={() => handleSave()}
-          text={t("pipeGenerator.commonButtons.save")}
-          color={"bg-primary-500"}
-          hoverColor={"hover:bg-primary-500/80"}
-        />
+        <Result status={status} />
       </div>
-      <div className="flex justify-center w-full">
-        <IconButton
-          handleClick={() => window.location.reload()}
-          text={t("pipeGenerator.commonButtons.retry")}
-          color={"bg-gray-800"}
-          hoverColor={"hover:bg-gray-800/80"}
-          icon={<ReplayIcon sx={{ fontSize: "20px" }} />}
-        />
-      </div>
+
+      {status === "success" && (
+        <div className="flex justify-center w-full">
+          <IconButton
+            handleClick={() => handleSave()}
+            text={t("pipeGenerator.commonButtons.save")}
+            color={"bg-primary-500"}
+            hoverColor={"hover:bg-primary-500/80"}
+          />
+        </div>
+      )}
+      {status === "fail" && (
+        <div className="flex justify-center w-full">
+          <IconButton
+            handleClick={() => window.location.reload()}
+            text={t("pipeGenerator.commonButtons.retry")}
+            color={"bg-gray-800"}
+            hoverColor={"hover:bg-gray-800/80"}
+            icon={<ReplayIcon sx={{ fontSize: "20px" }} />}
+          />
+        </div>
+      )}
     </>
   );
 };
