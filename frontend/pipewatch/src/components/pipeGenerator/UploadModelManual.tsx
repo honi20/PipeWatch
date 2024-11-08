@@ -17,10 +17,10 @@ export const UploadModelManual = () => {
   const navigate = useNavigate();
 
   const [file, setFile] = useState<File | null>(null);
-  const [status, setStatus] = useState("uploading");
-  // const [status, setStatus] = useState<
-  //   "initial" | "uploading" | "success" | "fail"
-  // >("initial");
+  // const [status, setStatus] = useState("initial");
+  const [status, setStatus] = useState<
+    "initial" | "uploading" | "success" | "fail"
+  >("initial");
 
   const [modelId, setModelId] = useState<string>("");
 
@@ -37,6 +37,7 @@ export const UploadModelManual = () => {
     }
   };
 
+  const [uploadProgress, setUploadProgress] = useState(0);
   const apiClient = getApiClient();
 
   const handleUpload = async () => {
@@ -56,6 +57,13 @@ export const UploadModelManual = () => {
           {
             headers: {
               "Content-Type": "multipart/form-data",
+            },
+            onUploadProgress: (progressEvent) => {
+              const percentage = Math.round(
+                (progressEvent.loaded * 100) / (progressEvent?.total ?? 1)
+              );
+
+              setUploadProgress(percentage);
             },
           }
         );
@@ -128,12 +136,23 @@ export const UploadModelManual = () => {
                 <CancelIcon sx={{ fontSize: "96px", color: "#FF5353" }} />
               )
             )}
-            {status === "initial" && (
+            {status === "initial" ? (
               <p className="text-gray-500 underline preview_msg">
                 {t(
                   "pipeGenerator.uploadModel.directUpload.uploadBox.selectFile"
                 )}
               </p>
+            ) : (
+              status === "uploading" && (
+                <div className="flex flex-col items-center justify-center">
+                  <div>{uploadProgress}%</div>
+                  <progress
+                    value={uploadProgress}
+                    max="100"
+                    className="rounded-[20px]"
+                  />
+                </div>
+              )
             )}
           </label>
 
@@ -152,7 +171,7 @@ export const UploadModelManual = () => {
       </div>
 
       {file && status === "initial" && (
-        <div className="flex items-center justify-center gap-6 w-full text-[20px]">
+        <div className="flex items-center justify-center gap-6 w-full text-[16px]">
           <div className="flex items-center justify-center gap-2">
             <FilePresentIcon sx={{ fontSize: "40px", color: "#499B50" }} />
             <p>첨부한 파일</p>
@@ -163,8 +182,8 @@ export const UploadModelManual = () => {
           <IconButton
             handleClick={() => handleUpload()}
             text={"업로드"}
-            color={"bg-primary-200"}
-            hoverColor={"hover:bg-primary-200/80"}
+            color={"bg-primary-500"}
+            hoverColor={"hover:bg-primary-500/80"}
             icon={""}
           />
         </div>
