@@ -1,19 +1,5 @@
-from dotenv import load_dotenv
-from fastapi import FastAPI
-from pydantic import BaseModel
-from typing import List, Tuple
-from PIL import Image
-import pyrender
-import numpy as np
 import os
-import subprocess
-import cadquery as cq
-import trimesh
-import math
-import boto3
-import uvicorn
-import requests
-import shutil
+from dotenv import load_dotenv
 
 # 환경 변수 주입
 load_dotenv()
@@ -26,6 +12,21 @@ else:
     os.environ['PYOPENGL_PLATFORM'] = 'osmesa'
     host=os.getenv("SERVER_HOST")
     port=os.getenv("SERVER_PORT")
+
+from fastapi import FastAPI
+from pydantic import BaseModel
+from typing import List, Tuple
+from PIL import Image
+import pyrender
+import numpy as np
+import subprocess
+import cadquery as cq
+import trimesh
+import math
+import boto3
+import uvicorn
+import requests
+import shutil
 
 # S3 환경 변수
 AWS_REGION = os.getenv("S3_REGION_NAME")
