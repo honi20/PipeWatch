@@ -1,5 +1,5 @@
-import { useState, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useMemo, ChangeEvent, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { IconButton } from "@components/common/IconButton";
 import clsx from "clsx";
 
@@ -16,6 +16,8 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 import { useTranslation } from "react-i18next";
 
+import { getApiClient } from "@src/stores/apiClient";
+
 export const InputData = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -28,6 +30,14 @@ export const InputData = () => {
   const [newLocation, setNewLocation] = useState("");
 
   const [selectedLocation, setSelectedLocation] = useState<Location | null>();
+
+  // modelId: Upload Page에서 POST 요청 후 navigate state로 받아옴
+  const [modelId, setModelId] = useState("");
+  const location = useLocation();
+
+  useEffect(() => {
+    setModelId(location.state.modelId);
+  }, []);
 
   type Location = {
     id: number;
@@ -55,6 +65,12 @@ export const InputData = () => {
 
   const updateFloorInfo = (groundInfo: string) => {
     setGroundInfo(groundInfo);
+    if (
+      (groundInfo === "G" && floorNum < 0) ||
+      (groundInfo === "UG" && floorNum > 0)
+    ) {
+      setFloorNum(floorNum * -1);
+    }
   };
 
   const [isFloorNumInvalid, setIsFloorNumInvalid] = useState(false);
@@ -64,9 +80,13 @@ export const InputData = () => {
 
     // 숫자 여부를 확인하고 상태를 설정
     if (/^\d*$/.test(value)) {
-      console.log("value:", value);
-      console.log("floorNum:", floorNum);
-      setFloorNum(Number(value)); // 숫자로 변환하여 설정
+      if (groundInfo === "G") {
+        setFloorNum(Number(value));
+      } // 숫자로 변환하여 설정
+      else {
+        setFloorNum(Number(value) * -1);
+      }
+
       setIsFloorNumInvalid(false); // 숫자면 경고 색상 해제
       console.log("floorNumNext:", floorNum);
     } else {
@@ -84,12 +104,26 @@ export const InputData = () => {
     !isFloorNumInvalid &&
     !(query === "" && !selectedLocation);
 
-  // 저장 버튼 Click Action
-  const handleSave = () => {
-    // POST 함수 추가 예정
+  const apiClient = getApiClient();
 
-    // 모델 렌더링 페이지로 이동
-    navigate("/pipe-generator/rendering");
+  console.log(pipelineName, selectedLocation?.name, floorNum);
+
+  // 저장 버튼 Click Action
+  const handleSave = async (modelId: string) => {
+    try {
+      const res = await apiClient.patch(`/api/models/init/${modelId}`, {
+        name: pipelineName,
+        building: selectedLocation?.name,
+        floor: floorNum,
+      });
+
+      console.log("input Data: ", res.data.header.message);
+
+      // 모델 렌더링 페이지로 이동
+      navigate("/pipe-generator/rendering", { state: { modelId: modelId } });
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
@@ -111,7 +145,9 @@ export const InputData = () => {
               <Input
                 type="text"
                 value={pipelineName}
-                onChange={(event) => setPipelineName(event.target.value)}
+                onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                  setPipelineName(event.target.value)
+                }
                 className="focus:outline-success h-full w-full px-5 py-[12px] bg-white rounded-[5px] box-border"
                 required
               />
@@ -171,7 +207,9 @@ export const InputData = () => {
                   <Input
                     type="text"
                     value={newLocation}
-                    onChange={(event) => setNewLocation(event.target.value)}
+                    onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                      setNewLocation(event.target.value)
+                    }
                     className="w-full focus:outline-success h-full px-5 py-[12px] bg-white rounded-[5px] box-border"
                     required
                   />
@@ -230,7 +268,7 @@ export const InputData = () => {
       {isFormValid && (
         <div className="flex justify-center w-full my-[20px]">
           <IconButton
-            handleClick={() => handleSave()}
+            handleClick={() => handleSave(modelId)}
             text={t("pipeGenerator.commonButtons.save")}
             color={"bg-primary-500"}
             hoverColor={"hover:bg-primary-500/80"}

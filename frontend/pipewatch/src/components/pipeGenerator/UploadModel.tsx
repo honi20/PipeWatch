@@ -11,7 +11,7 @@ export const UploadModel = () => {
   const query = new URLSearchParams(location.search);
   const action = query.get("action");
 
-  console.log("action 탐지중: ", action);
+  // console.log("action 탐지중: ", action);
 
   return (
     <div className="p-[40px]">
