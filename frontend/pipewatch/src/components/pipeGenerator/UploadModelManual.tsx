@@ -6,6 +6,9 @@ import { IconButton } from "@components/common/IconButton";
 
 import DriveFolderUploadIcon from "@mui/icons-material/DriveFolderUpload";
 import ReplayIcon from "@mui/icons-material/Replay";
+import FilePresentIcon from "@mui/icons-material/FilePresent";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import CancelIcon from "@mui/icons-material/Cancel";
 
 import { getApiClient } from "@src/stores/apiClient";
 
@@ -14,9 +17,10 @@ export const UploadModelManual = () => {
   const navigate = useNavigate();
 
   const [file, setFile] = useState<File | null>(null);
-  const [status, setStatus] = useState<
-    "initial" | "uploading" | "success" | "fail"
-  >("initial");
+  const [status, setStatus] = useState("uploading");
+  // const [status, setStatus] = useState<
+  //   "initial" | "uploading" | "success" | "fail"
+  // >("initial");
 
   const [modelId, setModelId] = useState<string>("");
 
@@ -113,38 +117,58 @@ export const UploadModelManual = () => {
               onChange={handleFileChange}
               accept=".gltf"
             />
-            <DriveFolderUploadIcon
-              sx={{ fontSize: "96px", color: "#D9D9D9" }}
-            />
-            <p className="text-gray-500 underline preview_msg">
-              {t("pipeGenerator.uploadModel.directUpload.uploadBox.selectFile")}
-            </p>
+            {status === "initial" || status === "uploading" ? (
+              <DriveFolderUploadIcon
+                sx={{ fontSize: "96px", color: "#D9D9D9" }}
+              />
+            ) : status === "success" ? (
+              <CheckCircleIcon sx={{ fontSize: "96px", color: "#499B50" }} />
+            ) : (
+              status === "fail" && (
+                <CancelIcon sx={{ fontSize: "96px", color: "#FF5353" }} />
+              )
+            )}
+            {status === "initial" && (
+              <p className="text-gray-500 underline preview_msg">
+                {t(
+                  "pipeGenerator.uploadModel.directUpload.uploadBox.selectFile"
+                )}
+              </p>
+            )}
           </label>
 
-          {file && (
-            <IconButton
-              handleClick={() => handleUpload()}
-              text={"파일 업로드"}
-              color={"bg-primary-200"}
-              hoverColor={"hover:bg-primary-200/80"}
-              icon={""}
-            />
-          )}
+          <div
+            className={`flex justify-center w-full my-[10px] ${
+              status === "success"
+                ? "text-success"
+                : status === "fail"
+                ? " text-warn"
+                : "text-black"
+            }`}
+          >
+            <Result status={status} />
+          </div>
         </div>
       </div>
 
-      {file && (
-        <section className="absolute">
-          <ul>
-            <li>Name: {file.name}</li>
-            <li>Type: {file.type}</li>
-          </ul>
-        </section>
+      {file && status === "initial" && (
+        <div className="flex items-center justify-center gap-6 w-full text-[20px]">
+          <div className="flex items-center justify-center gap-2">
+            <FilePresentIcon sx={{ fontSize: "40px", color: "#499B50" }} />
+            <p>첨부한 파일</p>
+            <div className="bg-gray-200 rounded-[8px] px-[20px] py-[6px]">
+              {file.name}
+            </div>
+          </div>
+          <IconButton
+            handleClick={() => handleUpload()}
+            text={"업로드"}
+            color={"bg-primary-200"}
+            hoverColor={"hover:bg-primary-200/80"}
+            icon={""}
+          />
+        </div>
       )}
-
-      <div className="flex justify-center w-full">
-        <Result status={status} />
-      </div>
 
       {status === "success" && (
         <div className="flex justify-center w-full">
