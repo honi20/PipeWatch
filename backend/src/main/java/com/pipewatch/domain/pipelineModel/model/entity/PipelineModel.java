@@ -67,4 +67,8 @@ public class PipelineModel extends BaseEntity {
 	public void updateBuilding(BuildingAndFloor buildingAndFloor) {
 		this.buildingAndFloor = buildingAndFloor;
 	}
+
+	public void updateIsCompleted(boolean isCompleted) {
+		this.isCompleted = isCompleted;
+	}
 }

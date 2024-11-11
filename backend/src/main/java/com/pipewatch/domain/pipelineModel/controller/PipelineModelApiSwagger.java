@@ -19,6 +19,15 @@ import java.io.IOException;
 
 @Tag(name = "Pipeline Model API", description = "Pipeline Model API Document")
 public interface PipelineModelApiSwagger {
+	@PostMapping(value = "/upload-img", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+	@Operation(summary = "Image File 업로드")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "201", description = "Image File 업로드 성공", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+					examples = {@ExampleObject(value = "{\"header\":{\"httpStatusCode\": 201, \"message\": \"이미지 파일 업로드에 성공했습니다. 파이프라인 모델이 생성될 예정입니다.\"},\n\"body\": {\"modelId\": 1}}")}
+			))
+	})
+	ResponseEntity<?> imageUpload(@AuthenticationPrincipal Long userId, @RequestPart(value = "file") MultipartFile file) throws IOException, ParseException;
+
 	@PostMapping(value = "/upload-file", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
 	@Operation(summary = "GLTF File 업로드")
 	@ApiResponses(value = {

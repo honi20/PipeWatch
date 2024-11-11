@@ -65,6 +65,38 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 
 	@Override
 	@Transactional
+	public PipelineModelResponse.FileUploadDto uploadImage(Long userId, MultipartFile imageFile) {
+		User user = userRepository.findById(userId)
+				.orElseThrow(() -> new BaseException(USER_NOT_FOUND));
+
+		// 관리자 및 기업만 가능
+		if (user.getRole() == Role.USER || user.getRole() == Role.EMPLOYEE) {
+			throw new BaseException(FORBIDDEN_USER_ROLE);
+		}
+
+		Enterprise enterprise = getEnterprise(user);
+
+		String modelUuid = java.util.UUID.randomUUID().toString();
+
+		// TODO: AI 쪽으로 파일 & modelUuid 전송. 에러 응답 시 ErrorCode 반환
+
+		// 모델 데이터 생성
+		PipelineModel pipelineModel = PipelineModel.builder()
+				.user(user)
+				.enterprise(enterprise)
+				.isCompleted(false)
+				.uuid(modelUuid)
+				.build();
+
+		pipelineModelRepository.save(pipelineModel);
+
+		return PipelineModelResponse.FileUploadDto.builder()
+				.modelId(pipelineModel.getId())
+				.build();
+	}
+
+	@Override
+	@Transactional
 	public PipelineModelResponse.FileUploadDto uploadFile(Long userId, MultipartFile modelingFile) throws IOException, ParseException {
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new BaseException(USER_NOT_FOUND));
@@ -107,29 +139,15 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 	@Override
 	@Transactional
 	public PipelineModelResponse.CreateModelingDto createModeling(PipelineModelRequest.ModelingDto requestDto) throws IOException, ParseException {
-		User user = userRepository.findByUuid(requestDto.getUserUuid());
-		if (user == null) {
-			throw new BaseException(USER_NOT_FOUND);
+		PipelineModel pipelineModel = pipelineModelRepository.findByUuid(requestDto.getModelUuid());
+
+		if (pipelineModel == null) {
+			throw new BaseException(PIPELINE_MODEL_NOT_FOUND);
 		}
 
-		// 일반 사원이나 직원은 생성 불가
-		if (user.getRole() == Role.USER || user.getRole() == Role.EMPLOYEE) {
-			throw new BaseException(FORBIDDEN_USER_ROLE);
-		}
-
-		Enterprise enterprise = getEnterprise(user);
-
-		String UUID = java.util.UUID.randomUUID().toString();
-
-		PipelineModel pipelineModel = PipelineModel.builder()
-				.user(user)
-				.enterprise(enterprise)
-				.modelingUrl(requestDto.getModelUrl())
-				.previewImgUrl(requestDto.getPreviewImgUrl())
-				.isCompleted(true)
-				.uuid(UUID)
-				.build();
-
+		pipelineModel.updateModelingUrl(requestDto.getModelUrl());
+		pipelineModel.updatePreviewImgUrl(requestDto.getPreviewImgUrl());
+		pipelineModel.updateIsCompleted(true);
 		pipelineModelRepository.save(pipelineModel);
 
 		savePipelineObject(requestDto.getModelUrl(), pipelineModel);
@@ -409,8 +427,7 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 				if (nodeName.contains("Flange_")) {
 					pipeType = parts[4];
 					pipeNumber = parts[5];
-				}
-				else {
+				} else {
 					pipeType = parts[2];
 					pipeNumber = parts[3];
 				}

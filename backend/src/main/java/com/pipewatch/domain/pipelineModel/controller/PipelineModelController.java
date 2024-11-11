@@ -23,6 +23,13 @@ import static com.pipewatch.global.statusCode.SuccessCode.*;
 public class PipelineModelController implements PipelineModelApiSwagger {
 	private final PipelineModelService pipelineModelService;
 
+	@PostMapping(value = "/upload-img", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+	public ResponseEntity<?> imageUpload(@AuthenticationPrincipal Long userId, @RequestPart(value = "file") MultipartFile file) throws IOException, ParseException {
+		PipelineModelResponse.FileUploadDto responseDto = pipelineModelService.uploadImage(userId, file);
+
+		return new ResponseEntity<>(ResponseDto.success(IMAGE_UPLOAD_AND_MODEL_CREATED, responseDto), HttpStatus.CREATED);
+	}
+
 	@PostMapping(value = "/upload-file", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
 	public ResponseEntity<?> fileUpload(@AuthenticationPrincipal Long userId, @RequestPart(value = "file") MultipartFile file) throws IOException, ParseException {
 		PipelineModelResponse.FileUploadDto responseDto = pipelineModelService.uploadFile(userId, file);
