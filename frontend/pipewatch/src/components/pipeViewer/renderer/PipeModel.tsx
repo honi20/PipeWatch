@@ -4,12 +4,25 @@ import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader";
 import { ThreeEvent, useLoader } from "@react-three/fiber";
 import { CameraControls } from "@react-three/drei";
 import * as THREE from "three";
+import { PipelineType } from "@src/components/pipeViewer/PipeType";
 
 export const PipeModel: React.FC<{
   gltfUrl: string;
   onModelLoad: (scene: THREE.Object3D) => void;
   cameraControlsRef: React.RefObject<CameraControls>;
-}> = ({ gltfUrl, onModelLoad, cameraControlsRef }) => {
+  isTotalView: boolean;
+  setIsTotalView: React.Dispatch<React.SetStateAction<boolean>>;
+  pipelines: PipelineType[];
+}> = ({
+  gltfUrl,
+  onModelLoad,
+  cameraControlsRef,
+  isTotalView,
+  setIsTotalView,
+  pipelines,
+}) => {
+  // selectedPipe
+  const [selectedPipe, setSelectedPipe] = useState<number>();
   // gltf loader
   const model = useLoader(GLTFLoader, gltfUrl, (loader) => {
     const dracoLoader = new DRACOLoader();
@@ -17,12 +30,19 @@ export const PipeModel: React.FC<{
     loader.setDRACOLoader(dracoLoader);
   });
 
+  // 카메라 제어 함수
+  const ControlTotalView = () => {
+    if (model.scene && isTotalView) {
+      onModelLoad(model.scene);
+      setIsTotalView(false);
+    }
+  };
+
   // 카메라 제어를 위한 model 전달
   useEffect(() => {
-    if (model.scene) {
-      onModelLoad(model.scene);
-    }
-  }, [model]);
+    ControlTotalView();
+    console.log("test중");
+  }, [model, isTotalView]);
 
   // 각 mesh의 이름에 따라 그룹화
   const meshesByGroup = React.useMemo(() => {
@@ -55,14 +75,20 @@ export const PipeModel: React.FC<{
     }
   };
   const handlePointerDown = (segmentName: string) => {
-    setClickedSegment(segmentName); // 클릭된 세그먼트를 상태로 설정
+    setClickedSegment(segmentName);
   };
 
   // camera control
-  const handleClick = (originalMesh: THREE.Mesh) => {
+  const handleClick = async(originalMesh: THREE.Mesh) => {
+    model.scene.traverse((child) => {
+      if (child instanceof THREE.Mesh) {
+        if (child.name !== originalMesh.name) {
+          (child.material as THREE.MeshStandardMaterial).color.set("white");
+        }
+      }
+    });
     const meshPosition = new THREE.Vector3();
     originalMesh.getWorldPosition(meshPosition);
-    console.log(originalMesh.geometry.boundingBox?.max);
 
     if (cameraControlsRef.current) {
       cameraControlsRef.current.setTarget(
@@ -77,7 +103,21 @@ export const PipeModel: React.FC<{
     }
 
     console.log(`Clicked on: ${originalMesh.name}`);
+    (originalMesh.material as THREE.MeshStandardMaterial).color.set("#a6bdfc");
+    setClickedSegment(originalMesh.name);
+
+    // 클릭된 mesh와 같은 이름의 파이프ID 찾아서 -> 메모 리스트 요청
+    console.log("pipelines");
+    if (pipelines) {
+      const filteredPipe = pipelines[0].pipes.filter(
+        (item) => item.pipeUuid === originalMesh.name
+      );
+      console.log(filteredPipe);
+      setSelectedPipe(filteredPipe[0].pipeId);
+    }
+    // 파이프 메모 뷰 띄우기
   };
+  
   return (
     <group position={[0, 0, 0]}>
       {Object.entries(meshesByGroup).map(([groupName, meshes], index) => {

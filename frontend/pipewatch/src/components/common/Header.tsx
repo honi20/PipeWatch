@@ -132,7 +132,7 @@ export const Header = ({ handleTheme, currentTheme }: Props) => {
   const isDark = currentTheme === "dark";
 
   return (
-    <header className="min-w-[850px] fixed top-0 left-0 right-0 flex flex-col items-center justify-between p-2 text-black bg-white dark:bg-black dark:text-white z-10">
+    <header className="min-w-[850px] fixed top-0 left-0 right-0 flex flex-col items-center justify-between p-2 text-black bg-white dark:bg-black dark:text-white z-20">
       <div className="flex justify-between w-full">
         <div className="flex items-center gap-4">
           <Link className="p-2 hover:text-primary-200 " to="/">

@@ -32,7 +32,7 @@ export const PipeViewer = () => {
       console.log("모델리스트 없음");
       getModelList();
     }
-  }, [models]);
+  }, []);
 
   // 임시 계정명
   const tempUserRole: string = "admin";

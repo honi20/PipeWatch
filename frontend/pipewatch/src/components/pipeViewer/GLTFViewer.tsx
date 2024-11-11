@@ -1,87 +1,72 @@
-import React, { useRef } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { Canvas, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 import { PipeModel } from "@src/components/pipeViewer/renderer/PipeModel";
 import { CameraControls } from "@react-three/drei";
+import {
+  ModelDetailType,
+  PipelineType,
+} from "@src/components/pipeViewer/PipeType";
+import { SceneContent } from "@src/components/pipeViewer/SceneContent";
+import { ModelMemo } from "@src/components/pipeViewer/ModelMemo";
+import { ModelProperty } from "@src/components/pipeViewer/ModelProperty";
 
 interface GLTFViewerProps {
   gltfUrl: string;
+  pipelines: PipelineType[];
+  modelId: number;
+  modelDetail: ModelDetailType;
 }
 
-const SceneContent: React.FC<{
-  gltfUrl: string;
-  cameraControlsRef: React.RefObject<CameraControls>;
-}> = ({ gltfUrl, cameraControlsRef }) => {
-  const { camera, scene } = useThree();
-  const helper = new THREE.CameraHelper(camera);
-  scene.add(helper);
-
-  // 모델 로드 시 카메라 제어
-  const adjustCameraOnModelLoad = (scene: THREE.Object3D) => {
-    if (camera instanceof THREE.PerspectiveCamera) {
-      const box = new THREE.Box3().setFromObject(scene);
-      const size = new THREE.Vector3();
-      box.getSize(size);
-      const center = new THREE.Vector3();
-      box.getCenter(center);
-
-      // Z축에서 XY 평면을 바라보도록 카메라 위치 조정
-      // const maxDim = Math.max(size.x, size.y, size.z);
-      // const fov = camera.fov * (Math.PI / 180);
-      // const cameraZ = Math.abs(maxDim / (2 * Math.tan(fov / 2)));
-      // 카메라를 Z축에서 XY 평면을 바라보는 위치로 설정
-      // camera.position.set(0, 0, cameraZ + maxDim * 1.5); // Z축 상에서 일정 거리 뒤에 위치
-      camera.position.set(0, 5, 0);
-      camera.lookAt(0, 1, 0); // XY 평면의 중심을 향해 회전
-
-      if (cameraControlsRef.current) {
-        cameraControlsRef.current.setTarget(0, 1, 0, true);
-        cameraControlsRef.current.fitToBox(scene, true, {
-          paddingLeft: 20,
-          paddingRight: 20,
-        });
-        console.log(" gltfviewer");
-      }
-
-      console.log(
-        "Camera adjusted to view from Z-axis:",
-        camera.position,
-        cameraControlsRef
-      );
-    } else {
-      console.warn("Camera type is not PerspectiveCamera");
-    }
-  };
-  return (
-    <>
-      <PipeModel
-        gltfUrl={gltfUrl}
-        onModelLoad={adjustCameraOnModelLoad}
-        cameraControlsRef={cameraControlsRef}
-      />
-      <CameraControls
-        ref={cameraControlsRef}
-        enabled={true}
-        dollyToCursor={true}
-        minDistance={5}
-        // maxDistance={1000}
-      />
-      <axesHelper args={[10]} />
-      <gridHelper />
-    </>
-  );
-};
-
-const GLTFViewer: React.FC<GLTFViewerProps> = ({ gltfUrl }) => {
-  const cameraControlsRef = useRef<CameraControls>(null!);
+const GLTFViewer: React.FC<GLTFViewerProps> = (props) => {
+  const [selectView, setSelectView] = useState<string | null>("MEMO");
+  const { gltfUrl, pipelines, modelId, modelDetail } = props;
+  const cameraControlsRef = useRef<CameraControls | null>(null);
+  const [isTotalView, setIsTotalView] = useState<boolean>(true);
 
   return (
-    <Canvas style={{ height: "100vh" }}>
-      <ambientLight intensity={1} />
-      <directionalLight position={[5, 10, 7.5]} intensity={1} castShadow />
-      <directionalLight position={[5, 10, -7.5]} intensity={1} castShadow />
-      <SceneContent gltfUrl={gltfUrl} cameraControlsRef={cameraControlsRef} />
-    </Canvas>
+    <div className="relative w-full h-full">
+      <Canvas style={{ height: "100vh" }}>
+        <ambientLight intensity={1} />
+        <directionalLight position={[5, 10, 7.5]} intensity={1} castShadow />
+        <directionalLight position={[5, 10, -7.5]} intensity={1} castShadow />
+        <SceneContent
+          gltfUrl={gltfUrl}
+          cameraControlsRef={cameraControlsRef}
+          isTotalView={isTotalView}
+          setIsTotalView={setIsTotalView}
+          pipelines={pipelines}
+        />
+      </Canvas>
+      <button
+        className="sticky z-10 transform -translate-x-1/2 -translate-y-10 bottom-10 left-1/2"
+        onClick={() => setIsTotalView(true)}
+      >
+        전체 뷰 보기 버튼
+      </button>
+      <div className="absolute z-10 top-10 right-10">
+        {modelDetail &&
+          (selectView === "MEMO" ? (
+            <ModelMemo
+              modelId={modelId}
+              modelName={modelDetail!.name}
+              building={modelDetail!.building}
+              floor={modelDetail!.floor}
+              updatedAt={modelDetail!.updatedAt}
+              onViewChange={() => setSelectView("PROPERTY")}
+            />
+          ) : (
+            selectView === "PROPERTY" && (
+              <ModelProperty
+                pipelines={modelDetail!.pipelines}
+                building={modelDetail!.building}
+                floor={modelDetail!.floor}
+                onViewChange={() => setSelectView("MEMO")}
+              />
+            )
+          ))}
+      </div>
+    </div>
   );
 };
 

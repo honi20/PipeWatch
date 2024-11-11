@@ -8,6 +8,8 @@ interface MemoState {
   setMemo: (memo: string) => void;
   getMemoList: (modelId: number) => Promise<void>;
   postMemo: (modelId: number, memo: string) => Promise<void>;
+  getPipeMemo: (pipeId: number) => Promise<void>;
+  postPipeMemo: (pipeId: number, memo: string) => Promise<void>;
 }
 
 export const useMemoStore = create<MemoState>((set, get) => ({
@@ -43,6 +45,38 @@ export const useMemoStore = create<MemoState>((set, get) => ({
       console.log(res.data.header.httpStatusCode, res.data.header.message);
       // 메모 저장
       await get().getMemoList(modelId);
+    } catch (err) {
+      console.log(err);
+    }
+  },
+
+  getPipeMemo: async (pipeId) => {
+    const apiClient = getApiClient();
+    try {
+      const res = await apiClient({
+        method: "get",
+        url: `/api/pipelines/pipes/${pipeId}`,
+      });
+      console.log(res.data.header.httpStatusCode, res.data.header.message);
+      set({ memoList: res.data.body.memoList });
+    } catch (err) {
+      console.log(err);
+    }
+  },
+
+  postPipeMemo: async (pipeId, memo) => {
+    const apiClient = getApiClient();
+    try {
+      const res = await apiClient({
+        method: "post",
+        url: `/api/models/memos/${pipeId}`,
+        data: {
+          memo: memo,
+        },
+      });
+      console.log(res.data.header.httpStatusCode, res.data.header.message);
+      // 메모 저장
+      await get().getMemoList(pipeId);
     } catch (err) {
       console.log(err);
     }
