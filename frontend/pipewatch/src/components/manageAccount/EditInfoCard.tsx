@@ -31,9 +31,21 @@ const EditInfoCard = () => {
   const getUserInfo = async () => {
     try {
       const res = await apiClient.get(`/api/users/mypage`);
-
       console.log("userInfo: ", res.data.body);
       setUserInfo(res.data.body);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const updateUserInfo = async (department: string, empClass: string) => {
+    try {
+      const res = await apiClient.put(`/api/users/mypage`, {
+        department: department,
+        empClass: empClass,
+      });
+      console.log("회원정보 수정 성공: ", res.data.header.message);
+      window.location.reload();
     } catch (err) {
       console.log(err);
     }
@@ -64,7 +76,11 @@ const EditInfoCard = () => {
     setDepartment(value);
   };
 
-  const isFormValid: boolean = empClass !== "" && department !== "";
+  const isFormValid: boolean =
+    empClass !== "" &&
+    department !== "" &&
+    (userInfo?.employee?.department !== department ||
+      userInfo?.employee?.empClass !== empClass);
 
   console.log(empClass, department);
 
@@ -138,7 +154,8 @@ const EditInfoCard = () => {
                 ? "bg-button-background hover:bg-button-background/80"
                 : "bg-gray-800 cursor-not-allowed"
             }`}
-          onClick={() => navigate("/account/manage/edit-info/completed")}
+          // onClick={() => navigate("/account/manage/edit-info/completed")}
+          onClick={() => updateUserInfo(department, empClass)}
           disabled={!isFormValid}
         >
           {t("manageAccount.editInfo.editPersonalInfo")}
