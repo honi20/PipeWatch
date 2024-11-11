@@ -1,6 +1,5 @@
 import axios from "axios";
 
-import { useUserStore } from "@src/stores/userStore";
 import { getApiClient } from "@src/stores/apiClient";
 
 import { useTranslation } from "react-i18next";
@@ -14,40 +13,40 @@ const LoginCard = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const { setLogin, setUserInfo } = useUserStore();
-
-  // UserInfo 호출, store 저장
   const saveUserInfo = async () => {
-    console.log("test");
     const apiClient = getApiClient();
     try {
       const res = await apiClient.get("/api/users/mypage");
-      console.log(res.data.body);
-      setUserInfo(res.data.body);
+      const userInfo = res.data.body;
+      console.log("userInfo in LoginCard: ", userInfo);
+
+      localStorage.setItem("role", userInfo.role);
+      localStorage.setItem("name", userInfo.name);
+      localStorage.setItem("userState", userInfo.state);
     } catch (err) {
-      console.log(err);
+      console.error("UserInfo 저장 실패", err);
+
+      throw err;
     }
   };
 
-  const login = (email: string, password: string) => {
-    console.log("test");
-    axios
-      .post(`${API_URL}/api/auth/signin`, { email, password })
-      .then((res) => {
-        console.log(res.data.body);
-        localStorage.setItem("accessToken", res.data.body.accessToken);
-        // 로그인 상태 변경
-        setLogin(true);
-        // Role 불러와서 store에 저장
-        saveUserInfo();
-        // Home으로 이동
-        navigate("/");
-        console.log("로그인 완료");
-      })
-      .catch((err) => {
-        console.log(err);
+  const login = async (email: string, password: string) => {
+    try {
+      const res = await axios.post(`${API_URL}/api/auth/signin`, {
+        email,
+        password,
       });
-    return <></>;
+
+      await localStorage.setItem("accessToken", res.data.body.accessToken);
+
+      await saveUserInfo();
+
+      navigate("/");
+
+      console.log("로그인 완료");
+    } catch (err) {
+      console.error("로그인 실패", err);
+    }
   };
 
   const [email, setEmail] = useState("");

@@ -11,6 +11,7 @@ export const createApiClient = (accessToken: string | null) => {
     console.error("createApiClient: accessToken이 제공되지 않았습니다.");
     window.location.href = LOGIN;
   }
+
   return axios.create({
     baseURL: API_URL,
     headers: {
