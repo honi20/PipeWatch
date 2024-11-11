@@ -49,6 +49,7 @@ public enum SuccessCode {
 	// Pipeline
 	PIPELINE_DETAIL_OK(HttpStatus.OK.value(), "단일 파이프라인 조회에 성공했습니다."),
 	PIPELINE_MODIFIED_OK(HttpStatus.OK.value(), "단일 파이프라인 기본 정보 수정에 성공했습니다."),
+	PIPELINE_PROPERTY_LIST_OK(HttpStatus.OK.value(), "단일 파이프라인 속성 리스트 조회에 성공했습니다."),
 	PIPELINE_PROPERTY_MODIFIED_OK(HttpStatus.OK.value(), "단일 파이프라인 속성 정보 수정에 성공했습니다."),
 	PIPELINE_MODELING_CREATED(HttpStatus.CREATED.value(), "파이프라인 모델링이 생성되었습니다."),
 

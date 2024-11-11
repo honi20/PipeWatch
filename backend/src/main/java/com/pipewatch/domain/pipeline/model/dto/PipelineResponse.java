@@ -1,11 +1,8 @@
 package com.pipewatch.domain.pipeline.model.dto;
 
-import com.pipewatch.domain.pipeline.model.entity.PipeMemo;
-import com.pipewatch.domain.pipeline.model.entity.Pipeline;
-import com.pipewatch.domain.pipeline.model.entity.PipelineProperty;
+import com.pipewatch.domain.pipeline.model.entity.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.pipewatch.global.format.DateFormatter.convertToDateFormat;
@@ -26,8 +23,35 @@ public class PipelineResponse {
 		public static DetailDto fromEntity(Pipeline pipeline) {
 			return DetailDto.builder()
 					.name(pipeline.getName())
-					.property(PropertyDto.fromEntity(pipeline.getProperty()))
+					.property(pipeline.getProperty() == null ? null : PropertyDto.fromEntity(pipeline.getProperty()))
 					.updatedAt(convertToDateFormat(pipeline.getUpdated_at()))
+					.build();
+		}
+	}
+
+	@Getter
+	@Setter
+	@Builder
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class MaterialListDto {
+		private Type type;
+		private List<MaterialDto> materials;
+	}
+
+	@Getter
+	@Builder
+	@AllArgsConstructor
+	public static class MaterialDto {
+		private Long materialId;
+		private String koreanName;
+		private String englishName;
+
+		public static MaterialDto fromEntity(PipelineMaterial material) {
+			return MaterialDto.builder()
+					.materialId(material.getId())
+					.koreanName(material.getKoreanName())
+					.englishName(material.getEnglishName())
 					.build();
 		}
 	}
@@ -56,18 +80,23 @@ public class PipelineResponse {
 	@Builder
 	@AllArgsConstructor
 	public static class PropertyDto {
-		private String pipeMaterial;
+		private MaterialDto pipeMaterial;
 		private Double outerDiameter;
 		private Double innerDiameter;
-		private String fluidMaterial;
+		private MaterialDto fluidMaterial;
 		private Double velocity;
 
 		public static PropertyDto fromEntity(PipelineProperty property) {
+			PipelineMaterial pipeMaterial = property.getPipeMaterial();
+			PipelineMaterial fluidMaterial = property.getFluidMaterial();
+
 			return PropertyDto.builder()
-					.pipeMaterial(property.getPipeMaterial())
+					.pipeMaterial(pipeMaterial == null ? null :
+							new MaterialDto(pipeMaterial.getId(), pipeMaterial.getKoreanName(), pipeMaterial.getEnglishName()))
 					.outerDiameter(property.getOuterDiameter())
 					.innerDiameter(property.getInnerDiameter())
-					.fluidMaterial(property.getFluidMaterial())
+					.fluidMaterial(fluidMaterial == null ? null :
+							new MaterialDto(fluidMaterial.getId(), fluidMaterial.getKoreanName(), fluidMaterial.getEnglishName()))
 					.velocity(property.getVelocity())
 					.build();
 		}

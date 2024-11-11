@@ -23,13 +23,21 @@ public interface PipelineApiSwagger {
 							"\"body\": {\n" +
 							"    \"name\": \"PipeLine_1\",\n" +
 							"    \"property\": {\n" +
-							"      \"pipeMaterial\": \"알루미늄\",\n" +
+							"      \"pipeMaterial\": {\n" +
+							"        \"materialId\": 1,\n" +
+							"        \"koreanName\": \"알루미늄\",\n" +
+							"        \"englishName\": \"Aluminum\"\n" +
+							"      },\n" +
 							"      \"outerDiameter\": 150,\n" +
-							"      \"innerDiameter\": 10,\n" +
-							"      \"fluidMaterial\": \"물\",\n" +
-							"      \"velocity\": 1\n" +
+							"      \"innerDiameter\": 10.3,\n" +
+							"      \"fluidMaterial\": {\n" +
+							"        \"materialId\": 4,\n" +
+							"        \"koreanName\": \"수증기\",\n" +
+							"        \"englishName\": \"Steam\"\n" +
+							"      },\n" +
+							"      \"velocity\": 1.5\n" +
 							"    },\n" +
-							"    \"updatedAt\": \"2024-11-06 13:57:07\"\n" +
+							"    \"updatedAt\": \"2024-11-11 12:59:14\"\n" +
 							"  }}")}
 			))
 	})
@@ -47,6 +55,15 @@ public interface PipelineApiSwagger {
 	ResponseEntity<?> pipelineModify(@AuthenticationPrincipal Long userId,
 									 @Schema(description = "파이프라인 Id", example = "1")
 									 @PathVariable Long pipelineId, @RequestBody PipelineRequest.ModifyDto requestDto);
+
+	@GetMapping("/property")
+	@Operation(summary = "파이프 속성 리스트 조회")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "파이프 속성 리스트 조회 성공", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+					examples = {@ExampleObject(value = "{\"header\":{\"httpStatusCode\": 200, \"message\": \"단일 파이프라인 속성 리스트 조회에 성공했습니다.\"},\n\"body\": null}")}
+			))
+	})
+	ResponseEntity<?> pipeMaterialList();
 
 	@PutMapping("/{pipelineId}/property")
 	@Operation(summary = "단일 파이프라인 속성 정보 수정")

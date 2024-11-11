@@ -16,26 +16,23 @@ public class PipelineProperty {
 	private Long id;
 
 	@NotNull
-	@Builder.Default
-	private String pipeMaterial = "알루미늄";
+	private Double outerDiameter;
 
 	@NotNull
-	@Builder.Default
-	private Double outerDiameter = 150.0;
+	private Double innerDiameter;
 
 	@NotNull
-	@Builder.Default
-	private Double innerDiameter = 10.0;
+	private Double velocity;
 
-	@NotNull
-	@Builder.Default
-	private String fluidMaterial = "물";
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "pipe_material_id")
+	private PipelineMaterial pipeMaterial;
 
-	@NotNull
-	@Builder.Default
-	private Double velocity = 1.0;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "fluid_material_id")
+	private PipelineMaterial fluidMaterial;
 
-	public void updatePipeMaterial(String pipeMaterial) {
+	public void updatePipeMaterial(PipelineMaterial pipeMaterial) {
 		this.pipeMaterial = pipeMaterial;
 	}
 
@@ -47,7 +44,7 @@ public class PipelineProperty {
 		this.innerDiameter = innerDiameter;
 	}
 
-	public void updateFluidMaterial(String fluidMaterial) {
+	public void updateFluidMaterial(PipelineMaterial fluidMaterial) {
 		this.fluidMaterial = fluidMaterial;
 	}
 

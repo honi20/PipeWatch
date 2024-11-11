@@ -2,13 +2,8 @@ package com.pipewatch.domain.pipeline.service;
 
 import com.pipewatch.domain.pipeline.model.dto.PipelineRequest;
 import com.pipewatch.domain.pipeline.model.dto.PipelineResponse;
-import com.pipewatch.domain.pipeline.model.entity.Pipe;
-import com.pipewatch.domain.pipeline.model.entity.PipeMemo;
-import com.pipewatch.domain.pipeline.model.entity.Pipeline;
-import com.pipewatch.domain.pipeline.model.entity.PipelineProperty;
-import com.pipewatch.domain.pipeline.repository.PipeMemoRepository;
-import com.pipewatch.domain.pipeline.repository.PipeRepository;
-import com.pipewatch.domain.pipeline.repository.PipelineRepository;
+import com.pipewatch.domain.pipeline.model.entity.*;
+import com.pipewatch.domain.pipeline.repository.*;
 import com.pipewatch.domain.user.model.entity.Role;
 import com.pipewatch.domain.user.model.entity.User;
 import com.pipewatch.domain.user.repository.UserRepository;
@@ -32,6 +27,8 @@ public class PipelineServiceImpl implements PipelineService {
 	private final PipelineRepository pipelineRepository;
 	private final PipeRepository pipeRepository;
 	private final PipeMemoRepository pipeMemoRepository;
+	private final PipelineMaterialRepository pipelineMaterialRepository;
+	private final PipelinePropertyRepository pipelinePropertyRepository;
 
 	@Override
 	public PipelineResponse.DetailDto getPipelineDetail(Long userId, Long pipelineId) {
@@ -68,6 +65,28 @@ public class PipelineServiceImpl implements PipelineService {
 	}
 
 	@Override
+	public List<PipelineResponse.MaterialListDto> getPipeMaterialList() {
+		List<PipelineMaterial> materials = pipelineMaterialRepository.findAll();
+
+		// Type별로 분류된 MaterialDto 리스트 생성
+		Map<Type, List<PipelineResponse.MaterialDto>> materialsByType = materials.stream()
+				.collect(Collectors.groupingBy(
+						PipelineMaterial::getType,
+						Collectors.mapping(PipelineResponse.MaterialDto::fromEntity, Collectors.toList())
+				));
+
+		// MaterialListDto 객체 생성
+		List<PipelineResponse.MaterialListDto> materialListDtos = materialsByType.entrySet().stream()
+				.map(entry -> PipelineResponse.MaterialListDto.builder()
+						.type(entry.getKey())
+						.materials(entry.getValue())
+						.build()
+				).collect(Collectors.toList());
+
+		return materialListDtos;
+	}
+
+	@Override
 	@Transactional
 	public void modifyPipelinePropery(Long userId, Long pipelineId, PipelineRequest.ModifyPropertyDto requestDto) {
 		User user = userRepository.findById(userId)
@@ -81,14 +100,38 @@ public class PipelineServiceImpl implements PipelineService {
 		Pipeline pipeline = pipelineRepository.findById(pipelineId)
 				.orElseThrow(() -> new BaseException(PIPELINE_NOT_FOUND));
 
-		PipelineProperty property = pipeline.getProperty();
-		property.updatePipeMaterial(requestDto.getPipeMaterial());
-		property.updateOuterDiameter(requestDto.getOuterDiameter());
-		property.updateInnerDiameter(requestDto.getInnerDiameter());
-		property.updateFluidMaterial(requestDto.getFluidMaterial());
-		property.updateVelocity(requestDto.getVelocity());
+		PipelineMaterial pipeMaterial = pipelineMaterialRepository.findById(requestDto.getPipeMaterialId())
+				.orElseThrow(() -> new BaseException(MATERIAL_NOT_FOUND));
 
-		pipelineRepository.save(pipeline);
+		PipelineMaterial fluidMaterial = pipelineMaterialRepository.findById(requestDto.getFluidMaterialId())
+				.orElseThrow(() -> new BaseException(MATERIAL_NOT_FOUND));
+
+		PipelineProperty property = pipeline.getProperty();
+
+		// 초기 속성 설정인 경우
+		if (property == null) {
+			property = PipelineProperty.builder()
+					.pipeMaterial(pipeMaterial)
+					.fluidMaterial(fluidMaterial)
+					.innerDiameter(requestDto.getInnerDiameter())
+					.outerDiameter(requestDto.getOuterDiameter())
+					.velocity(requestDto.getVelocity())
+					.build();
+
+			pipelinePropertyRepository.save(property);
+			pipeline.updateProperty(property);
+			pipelineRepository.save(pipeline);
+		}
+		// 변경인 경우
+		else {
+			property.updatePipeMaterial(pipeMaterial);
+			property.updateOuterDiameter(requestDto.getOuterDiameter());
+			property.updateInnerDiameter(requestDto.getInnerDiameter());
+			property.updateFluidMaterial(fluidMaterial);
+			property.updateVelocity(requestDto.getVelocity());
+
+			pipelinePropertyRepository.save(property);
+		}
 	}
 
 	@Override

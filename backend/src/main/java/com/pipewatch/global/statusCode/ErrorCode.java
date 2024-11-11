@@ -41,6 +41,7 @@ public enum ErrorCode {
 
 	// Pipeline
 	PIPELINE_NOT_FOUND(HttpStatus.NOT_FOUND.value(), "해당 파이프라인이 존재하지 않습니다."),
+	MATERIAL_NOT_FOUND(HttpStatus.NOT_FOUND.value(), "해당 파이프라인 재질이 존재하지 않습니다."),
 
 	// Pipe
 	PIPE_NOT_FOUND(HttpStatus.NOT_FOUND.value(), "해당 파이프가 존재하지 않습니다."),
