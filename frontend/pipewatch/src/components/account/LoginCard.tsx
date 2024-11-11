@@ -18,6 +18,7 @@ const LoginCard = () => {
 
   // UserInfo 호출, store 저장
   const saveUserInfo = async () => {
+    console.log("test");
     const apiClient = getApiClient();
     try {
       const res = await apiClient.get("/api/users/mypage");

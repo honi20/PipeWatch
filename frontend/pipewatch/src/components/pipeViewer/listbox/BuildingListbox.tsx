@@ -7,23 +7,25 @@ import {
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import clsx from "clsx";
 import { useState } from "react";
-import {
-  AreaType,
-  AreaListboxProps,
-} from "@src/components/pipeViewer/PipeType";
+import { BuildingListboxProps } from "@src/components/pipeViewer/PipeType";
 
-export const AreaListbox = ({ onAreaChange }: AreaListboxProps) => {
-  // api연결해서 해당 유저의 arealist 불러오기
-  const areaList: AreaType[] = [
-    { id: 0, area: "장소" },
-    { id: 1, area: "역삼 멀티캠퍼스" },
-    { id: 2, area: "경덕이네 집" },
-  ];
-  const handleChange = (area: AreaType) => {
-    setSelected(area);
-    onAreaChange(area);
+export const BuildingListbox = ({
+  onBuildingChange,
+  buildingList,
+}: BuildingListboxProps) => {
+  const enhancedBuildingList = [{ building: "장소" }, ...buildingList];
+
+  // 장소 클릭한 함수
+  const handleChange = (building: string) => {
+    setSelected(building);
+    if (building === "장소") {
+      onBuildingChange(null);
+    } else {
+      onBuildingChange(building);
+    }
   };
-  const [selected, setSelected] = useState<AreaType>(areaList[0]);
+  const [selected, setSelected] = useState<string>("장소");
+
   return (
     <div className="w-[150px] pb-5">
       <Listbox value={selected} onChange={handleChange}>
@@ -34,7 +36,7 @@ export const AreaListbox = ({ onAreaChange }: AreaListboxProps) => {
               "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25"
             )}
           >
-            {selected.area}
+            {selected}
             <ExpandMoreIcon
               sx={{ color: "#5E5E5E" }}
               className="pl-1 transition-transform duration-200 group size-6"
@@ -49,13 +51,13 @@ export const AreaListbox = ({ onAreaChange }: AreaListboxProps) => {
             "transition duration-100 ease-in data-[leave]:data-[closed]:opacity-0"
           )}
         >
-          {areaList.map((item) => (
+          {enhancedBuildingList.map((item, idx) => (
             <ListboxOption
-              key={item.id}
-              value={item}
+              key={idx}
+              value={item.building}
               className="group flex cursor-default items-center gap-2 rounded-lg py-1.5 px-3 select-none data-[focus]:bg-white/10"
             >
-              <div className="dark:text-white text-sm/6">{item.area}</div>
+              <div className="dark:text-white text-sm/6">{item.building}</div>
             </ListboxOption>
           ))}
         </ListboxOptions>

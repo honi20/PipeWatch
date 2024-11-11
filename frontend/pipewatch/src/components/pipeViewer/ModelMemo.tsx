@@ -1,81 +1,35 @@
-import React, { useState, useEffect, ChangeEvent } from "react";
+import React, { useEffect, ChangeEvent } from "react";
 import { Textarea } from "@headlessui/react";
 import clsx from "clsx";
-import { MemoType } from "@src/components/pipeViewer/PipeType";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import { useMemoStore } from "@src/stores/memoStore";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 
-
-interface PipeDetail {
-  name: string;
+interface PipeMemoProps {
+  modelId: number;
+  modelName: string;
   building: string;
   floor: number;
-}
-interface PipeMemoProps {
-  pipeId: number;
+  updatedAt: string;
   onViewChange: () => void;
 }
 
-export const PipeMemo: React.FC<PipeMemoProps> = ({ pipeId, onViewChange }) => {
-  // pipe 이름, pipe 장소, 층, memolist 필요함
-  const [pipe, setPipe] = useState<PipeDetail>();
-  const [memo, setMemo] = useState<string>("");
-  const [memoList, setMemoList] = useState<MemoType[]>([]);
-  const modifiedAt = "2024-11-05 14:52:55";
+export const ModelMemo: React.FC<PipeMemoProps> = (props) => {
+  const { memo, setMemo, memoList, getMemoList, postMemo } = useMemoStore();
+  const { modelId, modelName, building, floor, updatedAt, onViewChange } =
+    props;
 
-  // model의 memolist 불러오는 함수
-
+  // memoList renderer
   useEffect(() => {
-    if (pipeId && memoList && memoList.length === 0) {
-      // pipe api 호출
-      setPipe({
-        name: "Pipeline Model",
-        building: "역삼 멀티캠퍼스",
-        floor: 20,
-      });
-      // api 호출
-      setMemoList([
-        {
-          memo: "hihihi",
-          writer: {
-            userUuid: "8e7dfbe3-aeca-4392-8d90-c1d3ae4fd35f",
-            userName: "파오리",
-          },
-          createdAt: "2024-11-03 14:52:57",
-        },
-        {
-          memo: "hi",
-          writer: {
-            userUuid: "8e7dfbe3-aeca-4392-8d90-c1d3ae4fd35f",
-            userName: "파오리",
-          },
-          createdAt: "2024-11-05 14:52:55",
-        },
-      ]);
-      // setMemoList(pipe.memolist);
-    }
-  }, [pipeId]);
+    getMemoList(modelId);
+  }, [modelId]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter") {
       e.preventDefault();
-      sendRequest(memo);
+      postMemo(modelId, memo);
       setMemo("");
     }
-  };
-
-  const sendRequest = (newMemo: string) => {
-    // api 요청보내기
-    const newMemoObject: MemoType = {
-      memo: newMemo,
-      writer: {
-        userUuid: "test",
-        userName: "주연핑",
-      },
-      createdAt: new Date().toISOString(),
-    };
-
-    setMemoList((prev) => [newMemoObject, ...prev]);
   };
 
   // format Memo Date
@@ -96,6 +50,7 @@ export const PipeMemo: React.FC<PipeMemoProps> = ({ pipeId, onViewChange }) => {
     const day = String(date.getDate()).padStart(2, "0");
     return `${year}. ${month}. ${day}`;
   };
+
   return (
     <div className="w-[400px] h-[680px] flex flex-col bg-block rounded-[30px] px-[50px] py-[30px] text-white justify-between items-center gap-5">
       <div className="flex flex-col w-full h-full">
@@ -110,12 +65,9 @@ export const PipeMemo: React.FC<PipeMemoProps> = ({ pipeId, onViewChange }) => {
         <div className="flex flex-col w-full h-full gap-7">
           {/* header */}
           <div className="flex flex-col items-center w-full">
-            <h2 className="text-[30px] font-bold">{pipe && pipe.name}</h2>
+            <h2 className="text-[30px] font-bold">{modelName}</h2>
             <p className="text-[20px]">
-              {pipe &&
-                `${pipe.building} ${
-                  pipe.floor > 0 ? `${pipe.floor}층` : `지하 ${-pipe.floor}층`
-                }`}
+              {building} {floor > 0 ? `${floor}층` : `지하 ${-floor}층`}
             </p>
           </div>
 
@@ -135,27 +87,31 @@ export const PipeMemo: React.FC<PipeMemoProps> = ({ pipeId, onViewChange }) => {
             />
 
             {/* 메모 조회창 */}
-            <ul className="max-h-[270px] mt-4 space-y-4 overflow-auto">
-              {memoList.map((item, idx) => (
-                <li
-                  key={idx}
-                  className="flex justify-between w-full gap-1 px-1 bg-gray-700"
-                >
-                  <div className="flex flex-col gap-1">
-                    <div className="text-[17px]">{item.memo}</div>
-                    <div className="flex gap-2 text-[15px]">
-                      <p>{item.writer.userName}</p>
-                      <p className="text-gray-500">
-                        {formatMemoDate(new Date(item.createdAt))}
-                      </p>
-                    </div>
-                  </div>
-                  <DeleteForeverIcon
-                    onClick={() => console.log("삭제할거지롱 포실")}
-                    className="self-end h-full text-gray-500 hover:text-primary-200"
-                  />
-                </li>
-              ))}
+            <ul className="max-h-[330px] mt-4 space-y-4 overflow-auto">
+              {memoList &&
+                memoList
+                  .slice()
+                  .reverse()
+                  .map((item, idx) => (
+                    <li
+                      key={idx}
+                      className="flex justify-between w-full gap-1 px-1 bg-gray-700"
+                    >
+                      <div className="flex flex-col gap-1">
+                        <div className="text-[17px]">{item.memo}</div>
+                        <div className="flex gap-2 text-[15px]">
+                          <p>{item.writer.userName}</p>
+                          <p className="text-gray-500">
+                            {formatMemoDate(new Date(item.createdAt))}
+                          </p>
+                        </div>
+                      </div>
+                      <DeleteForeverIcon
+                        onClick={() => console.log("삭제할거지롱 포실")}
+                        className="self-end h-full text-gray-500 hover:text-primary-200"
+                      />
+                    </li>
+                  ))}
             </ul>
           </div>
         </div>
@@ -164,7 +120,7 @@ export const PipeMemo: React.FC<PipeMemoProps> = ({ pipeId, onViewChange }) => {
         <div className="flex items-center justify-between w-full">
           <div className="text-[20px]">수정일</div>
           <div className="px-16 py-1 rounded-2xl bg-black/60">
-            {formatModifiedDate(new Date(modifiedAt))}
+            {formatModifiedDate(new Date(updatedAt))}
           </div>
         </div>
       </div>
