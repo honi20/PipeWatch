@@ -37,8 +37,6 @@ const Model: React.FC = () => {
   return <primitive object={gltf.scene} />;
 };
 
-const apiClient = getApiClient();
-
 const TestRendering = forwardRef<unknown, TestRenderingProps>(
   ({ modelId }, ref) => {
     const navigate = useNavigate();
@@ -73,6 +71,7 @@ const TestRendering = forwardRef<unknown, TestRenderingProps>(
         formData.append("file", blob, `screenshot${modelId}.png`);
 
         try {
+          const apiClient = getApiClient();
           const response = await apiClient.patch(
             `/api/models/thumbnail/${modelId}`,
             formData,

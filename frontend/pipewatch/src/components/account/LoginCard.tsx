@@ -1,6 +1,5 @@
 import axios from "axios";
 
-import { useUserStore } from "@src/stores/userStore";
 import { getApiClient } from "@src/stores/apiClient";
 
 import { useTranslation } from "react-i18next";
@@ -14,26 +13,19 @@ const LoginCard = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const { setRole, setLogin, setUserInfo } = useUserStore();
-
-  // UserInfo 호출, store 저장
   const saveUserInfo = async () => {
-    console.log("test");
     const apiClient = getApiClient();
     try {
       const res = await apiClient.get("/api/users/mypage");
       const userInfo = res.data.body;
+      console.log("userInfo in LoginCard: ", userInfo);
 
-      setUserInfo(userInfo);
-      if (userInfo) {
-        setLogin(true);
-        setRole(userInfo.role);
-      } else {
-        setLogin(false);
-      }
+      localStorage.setItem("role", userInfo.role);
+      localStorage.setItem("name", userInfo.name);
+      localStorage.setItem("userState", userInfo.state);
     } catch (err) {
       console.error("UserInfo 저장 실패", err);
-      setLogin(false); // UserInfo 저장 실패 시 로그인 상태를 false로 설정
+
       throw err;
     }
   };
@@ -47,18 +39,13 @@ const LoginCard = () => {
 
       await localStorage.setItem("accessToken", res.data.body.accessToken);
 
-      // Role 및 UserInfo 저장
-      saveUserInfo(); // 성공하면 로그인 상태를 설정
+      await saveUserInfo();
 
-      // localStorage에 login 상태 저장
-      localStorage.setItem("isLogin", "true");
-
-      // Home으로 이동
       navigate("/");
+
       console.log("로그인 완료");
     } catch (err) {
       console.error("로그인 실패", err);
-      // 예외 처리 추가
     }
   };
 
