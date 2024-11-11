@@ -23,7 +23,7 @@ public class PipelineResponse {
 		public static DetailDto fromEntity(Pipeline pipeline) {
 			return DetailDto.builder()
 					.name(pipeline.getName())
-					.property(PropertyDto.fromEntity(pipeline.getProperty()))
+					.property(pipeline.getProperty() == null ? null : PropertyDto.fromEntity(pipeline.getProperty()))
 					.updatedAt(convertToDateFormat(pipeline.getUpdated_at()))
 					.build();
 		}

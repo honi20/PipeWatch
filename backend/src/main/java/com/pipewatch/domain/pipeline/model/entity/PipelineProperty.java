@@ -24,11 +24,11 @@ public class PipelineProperty {
 	@NotNull
 	private Double velocity;
 
-	@OneToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "pipe_material_id")
 	private PipelineMaterial pipeMaterial;
 
-	@OneToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "fluid_material_id")
 	private PipelineMaterial fluidMaterial;
 
