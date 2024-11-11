@@ -56,7 +56,7 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 	private final EnterpriseRepository enterpriseRepository;
 	private final BuildingRepository buildingRepository;
 	private final EmployeeRepository employeeRepository;
-
+	private final PipelineModelApiService pipelineModelApiService;
 
 	@Value("${S3_URL}")
 	private String S3_URL;
@@ -82,7 +82,10 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 
 		String modelUuid = java.util.UUID.randomUUID().toString();
 
-		// TODO: AI 쪽으로 파일 & modelUuid 전송. 에러 응답 시 ErrorCode 반환
+		boolean fastApiResponse = pipelineModelApiService.transferImgFile(imageFile, modelUuid);
+		if (!fastApiResponse) {
+			throw new BaseException(INVALID_IMAGE_FILE_CONTENT);
+		}
 
 		// 모델 데이터 생성
 		PipelineModel pipelineModel = PipelineModel.builder()
