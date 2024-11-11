@@ -48,6 +48,15 @@ public interface PipelineApiSwagger {
 									 @Schema(description = "파이프라인 Id", example = "1")
 									 @PathVariable Long pipelineId, @RequestBody PipelineRequest.ModifyDto requestDto);
 
+	@GetMapping("/property")
+	@Operation(summary = "파이프 속성 리스트 조회")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "파이프 속성 리스트 조회 성공", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+					examples = {@ExampleObject(value = "{\"header\":{\"httpStatusCode\": 200, \"message\": \"단일 파이프라인 속성 리스트 조회에 성공했습니다.\"},\n\"body\": null}")}
+			))
+	})
+	ResponseEntity<?> pipeMaterialList();
+
 	@PutMapping("/{pipelineId}/property")
 	@Operation(summary = "단일 파이프라인 속성 정보 수정")
 	@ApiResponses(value = {
