@@ -13,8 +13,9 @@ import {
   CompanyType,
   CompanyListboxProps,
 } from "@src/components/account/SignUp/inputType";
+import Config from "@src/constants/Config";
 
-const API_URL = import.meta.env.VITE_URL;
+const API_URL = Config.API_URL;
 
 const getCompanyList = (): Promise<CompanyType[]> => {
   return axios

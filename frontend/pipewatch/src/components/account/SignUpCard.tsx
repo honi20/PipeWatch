@@ -11,8 +11,9 @@ import { CompanyType } from "@src/components/account/SignUp/inputType";
 
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
+import Config from "@src/constants/Config";
 
-const API_URL = import.meta.env.VITE_URL;
+const API_URL = Config.API_URL;
 
 interface FormState {
   email: string;

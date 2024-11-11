@@ -6,8 +6,9 @@ import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import { Input, Button } from "@headlessui/react";
 import { useState, ChangeEvent, FocusEvent } from "react";
+import Config from "@src/constants/Config";
 
-const API_URL = import.meta.env.VITE_URL;
+const API_URL = Config.API_URL;
 
 const LoginCard = () => {
   const { t } = useTranslation();
