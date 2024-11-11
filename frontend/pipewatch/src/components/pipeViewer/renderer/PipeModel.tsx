@@ -2,12 +2,14 @@ import React, { useEffect, useState } from "react";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader";
 import { ThreeEvent, useLoader } from "@react-three/fiber";
+import { CameraControls } from "@react-three/drei";
 import * as THREE from "three";
 
 export const PipeModel: React.FC<{
   gltfUrl: string;
   onModelLoad: (scene: THREE.Object3D) => void;
-}> = ({ gltfUrl, onModelLoad }) => {
+  cameraControlsRef: React.RefObject<CameraControls>;
+}> = ({ gltfUrl, onModelLoad, cameraControlsRef }) => {
   // gltf loader
   const model = useLoader(GLTFLoader, gltfUrl, (loader) => {
     const dracoLoader = new DRACOLoader();
@@ -41,48 +43,47 @@ export const PipeModel: React.FC<{
     return groups;
   }, [model]);
 
-  const [visibleGroup, setVisibleGroup] = useState<string | null>(null);
+  const [clickedSegment, setClickedSegment] = useState<string | null>(null);
 
-  const handlePointerOver = (groupName: string) => {
-    const group = meshesByGroup[groupName];
-    group.forEach(({ originalMesh }) => {
-      (originalMesh.material as THREE.MeshStandardMaterial).color.set(
-        "#a6bdfc"
-      ); // 그룹 내 모든 메쉬의 색상을 파란색으로 변경
-    });
+  const handlePointerOver = (originalMesh: THREE.Mesh) => {
+    (originalMesh.material as THREE.MeshStandardMaterial).color.set("#a6bdfc");
   };
 
-  const handlePointerOut = (groupName: string) => {
-    const group = meshesByGroup[groupName];
-    group.forEach(({ originalMesh }) => {
-      (originalMesh.material as THREE.MeshStandardMaterial).color.set("white"); // 그룹 내 모든 메쉬의 색상을 원래 색상으로 변경
-    });
+  const handlePointerOut = (originalMesh: THREE.Mesh) => {
+    if (clickedSegment !== originalMesh.name) {
+      (originalMesh.material as THREE.MeshStandardMaterial).color.set("white");
+    }
   };
-  const handlePointerDown = (groupName: string) => {
-    setVisibleGroup(groupName); // 클릭된 그룹을 상태로 설정
+  const handlePointerDown = (segmentName: string) => {
+    setClickedSegment(segmentName); // 클릭된 세그먼트를 상태로 설정
   };
-  // const scale = [1.5, 1.5, 1.5];
+
+  // camera control
+  const handleClick = (originalMesh: THREE.Mesh) => {
+    const meshPosition = new THREE.Vector3();
+    originalMesh.getWorldPosition(meshPosition);
+    console.log(originalMesh.geometry.boundingBox?.max);
+
+    if (cameraControlsRef.current) {
+      cameraControlsRef.current.setTarget(
+        originalMesh.geometry.boundingBox!.max.x,
+        originalMesh.geometry.boundingBox!.max.y,
+        originalMesh.geometry.boundingBox!.max.z
+      );
+      cameraControlsRef.current.fitToBox(originalMesh, true, {
+        paddingLeft: 5,
+        paddingRight: 5,
+      });
+    }
+
+    console.log(`Clicked on: ${originalMesh.name}`);
+  };
   return (
-    <group position={[-5, 0, 0]}>
+    <group position={[0, 0, 0]}>
       {Object.entries(meshesByGroup).map(([groupName, meshes], index) => {
         return (
-          <group
-            key={index}
-            name={groupName}
-            scale={[1.5, 1.5, 1.5]}
-            onPointerOver={() => handlePointerOver(groupName)}
-            onPointerOut={() => handlePointerOut(groupName)}
-            onPointerDown={() => handlePointerDown(groupName)}
-          >
+          <group key={index} name={groupName} scale={[1.5, 1.5, 1.5]}>
             {meshes.map(({ originalMesh, segmentName }, i) => {
-              const isTransparent =
-                visibleGroup !== null && groupName !== visibleGroup;
-              if (originalMesh.material instanceof THREE.MeshStandardMaterial) {
-                originalMesh.material.transparent = !isTransparent;
-                originalMesh.material.opacity = isTransparent ? 0.2 : 1.0; // 투명도 설정
-                originalMesh.material.needsUpdate = true;
-              }
-
               return (
                 <mesh
                   key={i}
@@ -92,11 +93,13 @@ export const PipeModel: React.FC<{
                   position={originalMesh.position}
                   rotation={originalMesh.rotation}
                   scale={originalMesh.scale}
+                  onPointerOver={() => handlePointerOver(originalMesh)}
+                  onPointerOut={() => handlePointerOut(originalMesh)}
                   onPointerDown={(e: ThreeEvent<PointerEvent>) => {
                     e.stopPropagation();
                     handlePointerDown(groupName);
                   }}
-                  onClick={() => console.log(segmentName)}
+                  onClick={() => handleClick(originalMesh)}
                 />
               );
             })}
