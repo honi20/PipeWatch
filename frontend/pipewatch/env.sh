@@ -10,5 +10,6 @@ fi
 echo "window._env_ = {" > ./env-config.js
 echo "  VITE_URL: '$VITE_URL'," >> ./env-config.js
 echo "  VITE_LOGIN_URL: '$VITE_LOGIN_URL'," >> ./env-config.js
-echo "  VITE_LOCAL_LOGIN_URL: '$VITE_LOCAL_LOGIN_URL'" >> ./env-config.js
+echo "  VITE_LOCAL_LOGIN_URL: '$VITE_LOCAL_LOGIN_URL'," >> ./env-config.js
+echo "  VITE_NODE_ENV: '$VITE_NODE_ENV'" >> ./env-config.js
 echo "};" >> ./env-config.js
