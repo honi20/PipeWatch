@@ -1,7 +1,10 @@
 import { EnterpriseButton } from "@components/enterprise/EnterpriseButton";
 import { useTranslation } from "react-i18next";
 
+import { getApiClient } from "@src/stores/apiClient";
+
 interface VerificationData {
+  uuid: string;
   id: number;
   name: string;
   email: string;
@@ -16,6 +19,21 @@ interface TableProps {
 
 export const VerificationTable: React.FC<TableProps> = ({ data }) => {
   const { t } = useTranslation();
+
+  const apiClient = getApiClient();
+
+  const handleVerification = async (newRole: string, userUuid: string) => {
+    try {
+      const res = await apiClient.patch(`/api/management`, {
+        userUuid: userUuid,
+        newRole: newRole,
+      });
+
+      console.log("employees Data ", res.data.body.employees);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <div className="border border-block rounded-xl overflow-hidden max-w-[1080px] w-full">
@@ -55,7 +73,9 @@ export const VerificationTable: React.FC<TableProps> = ({ data }) => {
               <td className="px-5 border-t text-[15px]">
                 <div className="flex items-center justify-center h-full gap-2">
                   <EnterpriseButton
-                    handleClick={() => console.log("button Clicked")}
+                    handleClick={() =>
+                      handleVerification("EMPLOYEE", item.uuid)
+                    }
                     text={t("enterprise.verification.buttons.approve")}
                     color={"bg-primary-200 dark:bg-primary-500"}
                     hoverColor={
@@ -63,7 +83,7 @@ export const VerificationTable: React.FC<TableProps> = ({ data }) => {
                     }
                   />
                   <EnterpriseButton
-                    handleClick={() => console.log("button Clicked")}
+                    handleClick={() => handleVerification("USER", item.uuid)}
                     text={t("enterprise.verification.buttons.reject")}
                     color={"dark:bg-block bg-gray-500"}
                     hoverColor={"hover:dark:bg-block/80 hover:bg-gray-500/80"}

@@ -12,7 +12,6 @@ export const EmpVerification = () => {
 
   const apiClient = getApiClient();
 
-  // 저장 버튼 Click Action
   const getWaitingList = async () => {
     try {
       const res = await apiClient.get(`/api/management/waiting-list`);
