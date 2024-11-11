@@ -26,14 +26,14 @@ public class PipelineRequest {
 	@NoArgsConstructor
 	@AllArgsConstructor
 	public static class ModifyPropertyDto {
-		@Schema(description = "변경된 파이프 재질", example = "알루미늄")
-		private String pipeMaterial;
+		@Schema(description = "변경된 파이프 재질", example = "1")
+		private Long pipeMaterialId;
 		@Schema(description = "변경된 파이프 외경", example = "150.0")
 		private Double outerDiameter;
 		@Schema(description = "변경된 파이프 내경", example = "10.3")
 		private Double innerDiameter;
-		@Schema(description = "변경된 유체 재질", example = "물")
-		private String fluidMaterial;
+		@Schema(description = "변경된 유체 재질", example = "3")
+		private Long fluidMaterialId;
 		@Schema(description = "변경된 유체 유속", example = "1.5")
 		private Double velocity;
 	}

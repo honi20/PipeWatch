@@ -39,4 +39,8 @@ public class Pipeline extends BaseEntity {
 	public void updateName(String name) {
 		this.name = name;
 	}
+
+	public void updateProperty(PipelineProperty property) {
+		this.property = property;
+	}
 }
