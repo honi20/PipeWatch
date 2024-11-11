@@ -27,7 +27,6 @@ import boto3
 import uvicorn
 import requests
 import shutil
-import uuid
 
 # S3 환경 변수
 AWS_REGION = os.getenv("S3_REGION_NAME")
@@ -51,32 +50,31 @@ BASE_WORK_DIR = os.getenv("BASE_WORK_DIR")
 app = FastAPI()
 
 class CreatePipelineModelRequest(BaseModel):
-    userUuid: str
+    modelUuid: str
     coords: List[List[Tuple[float, float]]]
     radius: float = 1
 
 # 파이프라인 모델 생성 api
 @app.post("/pipelineModel")
 def create_pipeline_model(data: CreatePipelineModelRequest):
-    tmp_uuid = uuid.uuid4()
-    work_dir = os.path.join(BASE_WORK_DIR, str(tmp_uuid))
+    work_dir = os.path.join(BASE_WORK_DIR, data.modelUuid)
     os.makedirs(work_dir, exist_ok=True)
 
     # 파일 생성
     stl_paths = create_stl_files(data.coords, data.radius, work_dir)
-    gltf_path = os.path.join(work_dir, f"origin_Pipeline_{tmp_uuid}.gltf")
-    compressed_gltf_path = create_gltf(stl_paths, tmp_uuid, work_dir, gltf_path)
+    gltf_path = os.path.join(work_dir, f"origin_Pipeline_{data.modelUuid}.gltf")
+    compressed_gltf_path = create_gltf(stl_paths, data.modelUuid, work_dir, gltf_path)
 
     # gltf S3 업로드
-    model_key = f"models/PipeLine_{tmp_uuid}.gltf"
+    model_key = f"models/PipeLine_{data.modelUuid}.gltf"
     pipeModel_URL = upload_S3(compressed_gltf_path, model_key)
 
     # 썸네일 생성
-    thumbnail_path = os.path.join(work_dir, f"Thumbnail_{tmp_uuid}.png")
+    thumbnail_path = os.path.join(work_dir, f"Thumbnail_{data.modelUuid}.png")
     create_thumbnail(gltf_path, thumbnail_path)
 
     # 썸네일 S3 업로드
-    thumbnail_key = f"thumbnails/Thumbnail_{tmp_uuid}.png"
+    thumbnail_key = f"thumbnails/Thumbnail_{data.modelUuid}.png"
     thumbnail_URL = upload_S3(thumbnail_path, thumbnail_key)
 
     # 작업 폴더 삭제
@@ -190,7 +188,7 @@ def create_connector(center, radius, name, work_dir, stl_paths):
     stl_paths.append(connector_path)
 
 # GLTF 생성 함수
-def create_gltf(stl_paths, tmp_uuid, work_dir, gltf_path):
+def create_gltf(stl_paths, modelUuid, work_dir, gltf_path):
     scene = trimesh.Scene()
 
     # 각 STL 파일을 GLTF에 추가
@@ -203,7 +201,7 @@ def create_gltf(stl_paths, tmp_uuid, work_dir, gltf_path):
     scene.export(gltf_path, file_type='gltf')
 
     # 압축 GLTF 파일 생성
-    compressed_gltf_path = os.path.join(work_dir, f"PipeLine_{tmp_uuid}.gltf")
+    compressed_gltf_path = os.path.join(work_dir, f"PipeLine_{modelUuid}.gltf")
     compress_gltf(gltf_path, compressed_gltf_path)
     
     return compressed_gltf_path
