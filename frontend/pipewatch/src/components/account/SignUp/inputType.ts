@@ -1,6 +1,7 @@
 export interface CompanyType {
-  id: number;
-  company: string;
+  enterpriseId: number;
+  name: string;
+  industry: string;
 }
 
 export interface CompanyListboxProps {

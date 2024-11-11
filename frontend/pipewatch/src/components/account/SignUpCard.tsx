@@ -84,7 +84,7 @@ const SignUpCard = () => {
   const handleCompanyChange = (selectedCompany: CompanyType) => {
     setFormState((prevFormState) => ({
       ...prevFormState,
-      companyName: selectedCompany.company,
+      companyName: selectedCompany.name,
     }));
   };
 
