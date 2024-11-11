@@ -76,9 +76,13 @@ const SignUpCard = () => {
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+
+    const transformedValue =
+      name === "empNo" || name === "verifyCode" ? Number(value) : value;
+
     setFormState((prevFormState) => ({
       ...prevFormState,
-      [name]: value,
+      [name]: transformedValue,
     }));
 
     if (name === "email") {
