@@ -38,9 +38,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.pipewatch.global.statusCode.ErrorCode.*;
@@ -73,6 +71,12 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 		if (user.getRole() == Role.USER || user.getRole() == Role.EMPLOYEE) {
 			throw new BaseException(FORBIDDEN_USER_ROLE);
 		}
+
+		// 파일 적합성 확인
+		if (imageFile.isEmpty() || Objects.isNull(imageFile.getOriginalFilename())) {
+			throw new BaseException(FILE_UPLOAD_FAIL);
+		}
+		validateImageFileExtention(imageFile.getOriginalFilename());
 
 		Enterprise enterprise = getEnterprise(user);
 
@@ -392,6 +396,20 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 		return groupedByPipelineUuid.entrySet().stream()
 				.map(entry -> new PipelineModelResponse.PipelineDto(entry.getKey(), entry.getValue()))
 				.collect(Collectors.toList());
+	}
+
+	private void validateImageFileExtention(String filename) {
+		int lastDotIndex = filename.lastIndexOf(".");
+		if (lastDotIndex == -1) {
+			throw new BaseException(FILE_UPLOAD_FAIL);
+		}
+
+		String extention = filename.substring(lastDotIndex + 1).toLowerCase();
+		List<String> allowedExtentionList = Arrays.asList("mpeg4", "mp4", "mov", "wmv", "png", "jpg", "jpeg");
+
+		if (!allowedExtentionList.contains(extention)) {
+			throw new BaseException(INVALID_FILE_EXTENSION);
+		}
 	}
 
 	private void validatePipelineObject(MultipartFile modelingFile) throws IOException, ParseException {
