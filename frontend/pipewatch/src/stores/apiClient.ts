@@ -2,7 +2,10 @@ import axios from "axios";
 const API_URL = import.meta.env.VITE_URL;
 
 export const createApiClient = (accessToken: string | null) => {
-  if (!accessToken) {
+  if (
+    !accessToken &&
+    window.location.href !== "http://localhost:5173/account/auth/login"
+  ) {
     console.error("createApiClient: accessToken이 제공되지 않았습니다.");
     window.location.href = "/account/auth/login";
   }
