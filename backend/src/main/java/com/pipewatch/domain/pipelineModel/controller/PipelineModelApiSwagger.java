@@ -54,39 +54,30 @@ public interface PipelineModelApiSwagger {
 			@ApiResponse(responseCode = "200", description = "파이프라인 모델 리스트 조회 성공", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
 					examples = {@ExampleObject(value = "{\"header\":{\"httpStatusCode\": 200, \"message\": \"모델 리스트 조회에 성공했습니다.\"}," +
 							"\"body\": {\n" +
-							"    \"buildings\": [\n" +
+							"    \"models\": [\n" +
 							"      {\n" +
+							"        \"modelId\": 4,\n" +
+							"        \"name\": \"Pipeline Model\",\n" +
+							"        \"previewUrl\": \"https://pipewatch-bucket.s3.ap-northeast-2.amazonaws.com/assets/no_thumbnail.png\",\n" +
 							"        \"building\": \"역삼 멀티캠퍼스\",\n" +
-							"        \"floors\": [\n" +
-							"          {\n" +
-							"            \"floor\": 1,\n" +
-							"            \"models\": [\n" +
-							"              {\n" +
-							"                \"modelId\": 1,\n" +
-							"                \"name\": \"model1\",\n" +
-							"                \"previewUrl\": \"previewUrl1\",\n" +
-							"                \"updatedAt\": \"2024-11-03 00:14:34\"\n" +
-							"              },\n" +
-							"              {\n" +
-							"                \"modelId\": 2,\n" +
-							"                \"name\": \"model2\",\n" +
-							"                \"previewUrl\": \"previewUrl2\",\n" +
-							"                \"updatedAt\": \"2024-11-03 00:14:34\"\n" +
-							"              }\n" +
-							"            ]\n" +
-							"          },\n" +
-							"          {\n" +
-							"            \"floor\": 2,\n" +
-							"            \"models\": [\n" +
-							"              {\n" +
-							"                \"modelId\": 3,\n" +
-							"                \"name\": \"model3\",\n" +
-							"                \"previewUrl\": \"previewUrl3\",\n" +
-							"                \"updatedAt\": \"2024-11-03 00:14:34\"\n" +
-							"              }\n" +
-							"            ]\n" +
-							"          }\n" +
-							"        ]\n" +
+							"        \"floor\": 14,\n" +
+							"        \"updatedAt\": \"2024-11-11 12:22:19\"\n" +
+							"      },\n" +
+							"      {\n" +
+							"        \"modelId\": 5,\n" +
+							"        \"name\": \"Pipeline Model\",\n" +
+							"        \"previewUrl\": \"https://pipewatch-bucket.s3.ap-northeast-2.amazonaws.com/assets/no_thumbnail.png\",\n" +
+							"        \"building\": null,\n" +
+							"        \"floor\": null,\n" +
+							"        \"updatedAt\": \"2024-11-11 12:34:39\"\n" +
+							"      },\n" +
+							"      {\n" +
+							"        \"modelId\": 6,\n" +
+							"        \"name\": \"Pipeline Model\",\n" +
+							"        \"previewUrl\": \"https://pipewatch-bucket.s3.ap-northeast-2.amazonaws.com/assets/no_thumbnail.png\",\n" +
+							"        \"building\": null,\n" +
+							"        \"floor\": null,\n" +
+							"        \"updatedAt\": \"2024-11-11 12:53:50\"\n" +
 							"      }\n" +
 							"    ]\n" +
 							"  }}")}

@@ -427,7 +427,7 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 			if (isFormattedName(nodeName)) {
 				name = (pipeType.equals("Segment") ? "Pipe" : pipeType) + "_" + pipeNumber;
 			} else {
-				name = "Pipe_" + (idx+1);
+				name = "Pipe_" + (idx + 1);
 			}
 
 			Pipe pipe = Pipe.builder()
@@ -442,8 +442,7 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 
 	private boolean isFormattedName(String nodeName) {
 		if (nodeName.startsWith("PipeObj_")) {
-			if (nodeName.contains("Segment_") || nodeName.contains("Connector_"))
-				return true;
+			return nodeName.contains("Segment_") || nodeName.contains("Connector_");
 		}
 		return false;
 	}
