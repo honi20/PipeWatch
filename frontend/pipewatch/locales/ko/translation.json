@@ -353,7 +353,7 @@
       "title": "사원 정보 조회/변경",
       "instruction": "사원의 관리자 권한을 설정하고 관리할 수 있습니다.",
       "buttons": {
-        "staff": "사원",
+        "staff": "일반",
         "admin": "관리자",
         "update": "변경"
       }

@@ -6,9 +6,9 @@ interface EmployeeData {
   id: number;
   name: string;
   email: string;
-  employeeId: string;
+  empNo: string;
   department: string;
-  position: string;
+  empClass: string;
   role: string;
 }
 
@@ -51,9 +51,9 @@ export const EmployInfoTable: React.FC<TableProps> = ({ data }) => {
               <td className=" px-5 border-t text-[15px] break-all">
                 {item.email}
               </td>
-              <td className="px-5 border-t text-[15px]">{item.employeeId}</td>
+              <td className="px-5 border-t text-[15px]">{item.empNo}</td>
               <td className="px-5 border-t text-[15px]">{item.department}</td>
-              <td className="px-5 border-t text-[15px]">{item.position}</td>
+              <td className="px-5 border-t text-[15px]">{item.empClass}</td>
               <td className="px-5 border-t text-[15px]">
                 <div className="flex items-center justify-center h-full gap-2">
                   <RoleListbox currentRole={item.role} />

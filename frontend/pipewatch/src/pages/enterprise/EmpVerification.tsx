@@ -16,7 +16,7 @@ export const EmpVerification = () => {
     try {
       const res = await apiClient.get(`/api/management/waiting-list`);
 
-      console.log("employees Data ", res.data.body.employees);
+      console.log("Waiting Employees Data: ", res.data.body.employees);
       setWaitingList(res.data.body.employees);
     } catch (err) {
       console.log(err);
@@ -36,11 +36,12 @@ export const EmpVerification = () => {
         <div className="">{t("enterprise.verification.instruction")}</div>
       </div>
 
-      {waitingList.length > 0 ? (
+      <VerificationTable data={waitingList} />
+      {/* {waitingList.length > 0 ? (
         <VerificationTable data={waitingList} />
       ) : (
         <div>데이터 없음</div>
-      )}
+      )} */}
     </div>
   );
 };
