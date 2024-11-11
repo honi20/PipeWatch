@@ -1,7 +1,9 @@
+import Config from "@src/constants/Config";
 import axios from "axios";
-const API_URL = import.meta.env.VITE_URL;
-const PRODUCT_LOGIN_URL = import.meta.env.VITE_LOGIN_URL;
-const LOCAL_LOGIN_URL = import.meta.env.VITE_LOCAL_LOGIN_URL;
+
+const API_URL = Config.API_URL;
+const PRODUCT_LOGIN_URL = Config.PRODUCT_LOGIN_URL;
+const LOCAL_LOGIN_URL = Config.LOCAL_LOGIN_URL;
 
 const LOGIN =
   process.env.NODE_ENV === "development" ? LOCAL_LOGIN_URL : PRODUCT_LOGIN_URL;
