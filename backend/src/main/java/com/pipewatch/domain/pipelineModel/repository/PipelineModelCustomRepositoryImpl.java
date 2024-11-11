@@ -25,8 +25,7 @@ public class PipelineModelCustomRepositoryImpl implements PipelineModelCustomRep
 	public List<PipelineModel> findAllByBuildingAndFloor(Enterprise enterprise, String building, Integer floor) {
 		JPAQuery<PipelineModel> query = queryFactory.selectFrom(pipelineModel)
 				.leftJoin(buildingAndFloor).on(buildingAndFloor.eq(pipelineModel.buildingAndFloor))
-				.where(pipelineModel.enterprise.eq(enterprise))
-				.where(buildingAndFloor.isNotNull());
+				.where(pipelineModel.enterprise.eq(enterprise));
 
 		if (building != null) {
 			query.where(buildingAndFloor.name.eq(building));

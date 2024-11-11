@@ -8,9 +8,7 @@ import com.pipewatch.domain.enterprise.repository.BuildingRepository;
 import com.pipewatch.domain.enterprise.repository.EnterpriseRepository;
 import com.pipewatch.domain.pipeline.model.entity.Pipe;
 import com.pipewatch.domain.pipeline.model.entity.Pipeline;
-import com.pipewatch.domain.pipeline.model.entity.PipelineProperty;
 import com.pipewatch.domain.pipeline.repository.PipeRepository;
-import com.pipewatch.domain.pipeline.repository.PipelinePropertyRepository;
 import com.pipewatch.domain.pipeline.repository.PipelineRepository;
 import com.pipewatch.domain.pipelineModel.model.dto.PipelineModelRequest;
 import com.pipewatch.domain.pipelineModel.model.dto.PipelineModelResponse;
@@ -55,7 +53,6 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 	private final PipelineModelCustomRepository pipelineModelCustomRepository;
 	private final PipelineModelMemoRepository pipelineModelMemoRepository;
 	private final PipelineRepository pipelineRepository;
-	private final PipelinePropertyRepository pipelinePropertyRepository;
 	private final PipeRepository pipeRepository;
 	private final S3Service s3Service;
 	private final EnterpriseRepository enterpriseRepository;
@@ -415,13 +412,10 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 
 			// 파이프 라인 저장
 			if (relatedPipeline == null) {
-				PipelineProperty property = PipelineProperty.builder().build();
-				pipelinePropertyRepository.save(property);
-
 				relatedPipeline = Pipeline.builder()
 						.name("PipeLine_" + pipelineNumber)
 						.pipelineModel(pipelineModel)
-						.property(property)
+						.property(null)
 						.build();
 
 				pipelineRepository.save(relatedPipeline);

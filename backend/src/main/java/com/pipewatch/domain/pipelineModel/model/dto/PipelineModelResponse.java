@@ -39,8 +39,8 @@ public class PipelineModelResponse {
 					.modelId(model.getId())
 					.name(model.getName())
 					.previewUrl(model.getPreviewImgUrl())
-					.building(model.getBuildingAndFloor().getName())
-					.floor(model.getBuildingAndFloor().getFloor())
+					.building(model.getBuildingAndFloor() == null ? null : model.getBuildingAndFloor().getName())
+					.floor(model.getBuildingAndFloor() == null ? null : model.getBuildingAndFloor().getFloor())
 					.updatedAt(convertToDateFormat(model.getUpdated_at()))
 					.build();
 		}
@@ -83,8 +83,8 @@ public class PipelineModelResponse {
 			return DetailDto.builder()
 					.name(model.getName())
 					.modelingUrl(model.getModelingUrl())
-					.building(model.getBuildingAndFloor().getName())
-					.floor(model.getBuildingAndFloor().getFloor())
+					.building(model.getBuildingAndFloor() == null ? null : model.getBuildingAndFloor().getName())
+					.floor(model.getBuildingAndFloor() == null ? null : model.getBuildingAndFloor().getFloor())
 					.isCompleted(model.getIsCompleted())
 					.updatedAt(convertToDateFormat(model.getUpdated_at()))
 					.pipelines(pipelines)
