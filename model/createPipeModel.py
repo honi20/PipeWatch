@@ -157,8 +157,8 @@ def create_cylinder(p1, p2, radius, name, work_dir, stl_paths):
     p2_flange_y = p2[1] - (radius * 2) * math.sin(math.radians(angle))
 
     # 플랜지 생성
-    create_flange((p1_flange_x, p1_flange_y), radius, name + "_Flange_Start", work_dir, stl_paths, angle)
-    create_flange((p2_flange_x, p2_flange_y), radius, name + "_Flange_End", work_dir, stl_paths, angle)
+    create_flange((p1_flange_x, p1_flange_y), radius, name + "_Flange_1", work_dir, stl_paths, angle)
+    create_flange((p2_flange_x, p2_flange_y), radius, name + "_Flange_2", work_dir, stl_paths, angle)
 
 # 플렌지 생성 함수
 def create_flange(center, radius, name, work_dir, stl_paths, angle):
