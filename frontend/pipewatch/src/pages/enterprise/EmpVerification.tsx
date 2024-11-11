@@ -1,35 +1,32 @@
+import { useEffect, useState } from "react";
+
 import { VerificationTable } from "@src/components/enterprise/VerificationTable";
 import { useTranslation } from "react-i18next";
 
+import { getApiClient } from "@src/stores/apiClient";
+
 export const EmpVerification = () => {
+  const [waitingList, setWaitingList] = useState([]);
+
   const { t } = useTranslation();
 
-  const verificationData = [
-    {
-      id: 1,
-      name: "고민혁",
-      email: "thinking@paori.com",
-      employeeId: "00000001",
-      department: "Management Support",
-      position: "Staff",
-    },
-    {
-      id: 2,
-      name: "장지현",
-      email: "jihyeon@paori.com",
-      employeeId: "00000002",
-      department: "-",
-      position: "Director",
-    },
-    {
-      id: 3,
-      name: "최예헌",
-      email: "honey@paori.com",
-      employeeId: "00000003",
-      department: "Managerment Support",
-      position: "Manager",
-    },
-  ];
+  const apiClient = getApiClient();
+
+  const getWaitingList = async () => {
+    try {
+      const res = await apiClient.get(`/api/management/waiting-list`);
+
+      console.log("Waiting Employees Data: ", res.data.body.employees);
+      setWaitingList(res.data.body.employees);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    getWaitingList();
+  }, []);
+
   return (
     <div className="flex flex-col gap-10">
       <div>
@@ -38,7 +35,13 @@ export const EmpVerification = () => {
         </h2>
         <div className="">{t("enterprise.verification.instruction")}</div>
       </div>
-      <VerificationTable data={verificationData} />
+
+      <VerificationTable data={waitingList} />
+      {/* {waitingList.length > 0 ? (
+        <VerificationTable data={waitingList} />
+      ) : (
+        <div>데이터 없음</div>
+      )} */}
     </div>
   );
 };

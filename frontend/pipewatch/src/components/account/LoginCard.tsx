@@ -23,6 +23,7 @@ const LoginCard = () => {
       localStorage.setItem("role", userInfo.role);
       localStorage.setItem("name", userInfo.name);
       localStorage.setItem("userState", userInfo.state);
+      localStorage.setItem("enterpriseName", userInfo.enterpriseName);
     } catch (err) {
       console.error("UserInfo 저장 실패", err);
 
