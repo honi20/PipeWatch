@@ -18,6 +18,7 @@ const LoginCard = () => {
 
   // UserInfo 호출, store 저장
   const saveUserInfo = async () => {
+    console.log("test");
     const apiClient = getApiClient();
     try {
       const res = await apiClient.get("/api/users/mypage");
@@ -29,10 +30,11 @@ const LoginCard = () => {
   };
 
   const login = (email: string, password: string) => {
+    console.log("test");
     axios
       .post(`${API_URL}/api/auth/signin`, { email, password })
       .then((res) => {
-        // console.log(res.data.body);
+        console.log(res.data.body);
         localStorage.setItem("accessToken", res.data.body.accessToken);
         // 로그인 상태 변경
         setLogin(true);
