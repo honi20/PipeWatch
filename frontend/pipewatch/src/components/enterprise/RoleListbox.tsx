@@ -48,6 +48,7 @@ export const RoleListbox = ({ currentRole, uuid }: Props) => {
         newRole: newRole,
       });
       console.log("권한 업데이트 성공:", res.data);
+      window.location.reload();
     } catch (err) {
       console.log(err);
     }
@@ -110,6 +111,7 @@ export const RoleListbox = ({ currentRole, uuid }: Props) => {
             ? "hover:dark:bg-primary-200/80 hover:bg-primary-500/80"
             : "hover:dark:bg-block/80 hover:bg-gray-500/80"
         }
+        disabled={currentRole === selected.role}
       />
     </div>
   );
