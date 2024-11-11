@@ -6,7 +6,7 @@ const PRODUCT_LOGIN_URL = Config.PRODUCT_LOGIN_URL;
 const LOCAL_LOGIN_URL = Config.LOCAL_LOGIN_URL;
 
 const LOGIN =
-  process.env.NODE_ENV === "development" ? LOCAL_LOGIN_URL : PRODUCT_LOGIN_URL;
+  Config.NODE_ENV === "development" ? LOCAL_LOGIN_URL : PRODUCT_LOGIN_URL;
 
 export const createApiClient = (accessToken: string | null) => {
   if (!accessToken && window.location.href !== LOGIN) {

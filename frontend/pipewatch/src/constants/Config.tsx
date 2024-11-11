@@ -6,6 +6,9 @@ const Config = {
   LOCAL_LOGIN_URL: window._env_
     ? window._env_.VITE_LOCAL_LOGIN_URL
     : import.meta.env.VITE_LOCAL_LOGIN_URL,
+  NODE_ENV: window._env_
+    ? window._env_.VITE_NODE_ENV
+    : import.meta.env.VITE_NODE_ENV,
 };
 
 export default Config;
