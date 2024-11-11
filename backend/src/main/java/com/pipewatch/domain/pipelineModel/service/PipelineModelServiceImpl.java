@@ -405,8 +405,15 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 			if (isFormattedName(nodeName)) {
 				String[] parts = nodeName.split("_");
 				pipelineNumber = parts[1];
-				pipeType = parts[2];
-				pipeNumber = parts[3];
+
+				if (nodeName.contains("Flange_")) {
+					pipeType = parts[4];
+					pipeNumber = parts[5];
+				}
+				else {
+					pipeType = parts[2];
+					pipeNumber = parts[3];
+				}
 			}
 			Pipeline relatedPipeline = pipelineMap.get(pipelineNumber);
 
