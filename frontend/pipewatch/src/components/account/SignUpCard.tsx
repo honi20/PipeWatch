@@ -14,6 +14,17 @@ import CloseIcon from "@mui/icons-material/Close";
 
 const API_URL = import.meta.env.VITE_URL;
 
+interface FormState {
+  email: string;
+  password: string;
+  name: string;
+  enterpriseId: number;
+  empNo: number;
+  department: string;
+  empClass: string;
+  verifyCode: string;
+}
+
 const verifyEmail = (email: string) => {
   axios
     .post(`${API_URL}/api/auth/send-email-code`, email)
@@ -26,20 +37,7 @@ const verifyEmail = (email: string) => {
   return <></>;
 };
 
-const confirmSignUp = (formState) => {
-  axios
-    .post(`${API_URL}/api/auth`, formState)
-    .then((res) => {
-      console.log(res.data.body);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-  return <></>;
-};
-
 const SignUpCard = () => {
-  const tempEmailVeriCode = "123456";
   const [emailVeriCode, setEmailVeriCode] = useState("");
   const [isEmailVerified, setIsEmailVerified] = useState(false);
   const [EmailVeriError, setEmailVeriError] = useState(false);
@@ -52,7 +50,7 @@ const SignUpCard = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const initialFormState = {
+  const initialFormState: FormState = {
     email: "",
     password: "",
     name: "",
@@ -60,7 +58,7 @@ const SignUpCard = () => {
     empNo: 0,
     department: "",
     empClass: "",
-    veryfiCode: 0,
+    verifyCode: "",
   };
 
   const [formState, setFormState] = useState(initialFormState);
@@ -77,8 +75,7 @@ const SignUpCard = () => {
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
-    const transformedValue =
-      name === "empNo" || name === "verifyCode" ? Number(value) : value;
+    const transformedValue = name === "empNo" ? Number(value) : value;
 
     setFormState((prevFormState) => ({
       ...prevFormState,
@@ -100,6 +97,22 @@ const SignUpCard = () => {
     }
   };
 
+  const verifyEmailCode = (email: string, verifyCode: number) => {
+    axios
+      .post(`${API_URL}/api/auth/verify-email-code`, { email, verifyCode })
+      .then((res) => {
+        console.log(res.data.body);
+        setIsEmailVerified(true);
+        setEmailVeriError(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setIsEmailVerified(false);
+        setEmailVeriError(true);
+      });
+    return <></>;
+  };
+
   const handleCompanyChange = (selectedCompany: CompanyType) => {
     setFormState((prevFormState) => ({
       ...prevFormState,
@@ -115,6 +128,21 @@ const SignUpCard = () => {
     !passwordMatchError &&
     isEmailVerified &&
     Object.values(formState).every((value) => value !== "");
+
+  const confirmSignUp = (formState: FormState) => {
+    axios
+      .post(`${API_URL}/api/auth`, formState)
+      .then((res) => {
+        console.log("회원가입 성공: ", res.data.body);
+        navigate("/account/auth/completed", {
+          state: { email: formState.email },
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    return <></>;
+  };
 
   console.log(formState);
 
@@ -184,15 +212,8 @@ const SignUpCard = () => {
                   : "bg-gray-800"
               } `}
               onClick={() => {
-                if (emailVeriCode === tempEmailVeriCode) {
-                  setIsEmailVerified(true);
-                  setEmailVeriError(false);
-                } else {
-                  setIsEmailVerified(false);
-                  setEmailVeriError(true);
-                }
+                verifyEmailCode(formState.email, formState.verifyCode);
               }}
-              // disabled={emailVeriCode !== ""}
             >
               {t("account.confirm")}
             </Button>
@@ -299,11 +320,9 @@ const SignUpCard = () => {
           isFormValid ? "bg-button-background" : "bg-gray-800"
         }`}
         disabled={!isFormValid}
-        onClick={() =>
-          navigate("/account/auth/completed", {
-            state: { email: formState.email },
-          })
-        }
+        onClick={() => {
+          confirmSignUp(formState);
+        }}
       >
         {t("account.signUp")}
       </Button>
