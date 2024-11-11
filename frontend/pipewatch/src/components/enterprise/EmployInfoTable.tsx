@@ -3,6 +3,7 @@ import { RoleListbox } from "@src/components/enterprise/RoleListbox";
 import { useTranslation } from "react-i18next";
 
 interface EmployeeData {
+  uuid: string;
   id: number;
   name: string;
   email: string;
@@ -56,7 +57,7 @@ export const EmployInfoTable: React.FC<TableProps> = ({ data }) => {
               <td className="px-5 border-t text-[15px]">{item.empClass}</td>
               <td className="px-5 border-t text-[15px]">
                 <div className="flex items-center justify-center h-full gap-2">
-                  <RoleListbox currentRole={item.role} />
+                  <RoleListbox currentRole={item.role} uuid={item.uuid} />
                 </div>
               </td>
             </tr>
