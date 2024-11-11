@@ -153,7 +153,7 @@ public interface PipelineApiSwagger {
 							"          {\n" +
 							"            \"memoId\": 1,\n" +
 							"            \"memo\": \"파이프에 결함 존재\",\n" +
-							"            \"creator\": {\n" +
+							"            \"writer\": {\n" +
 							"              \"userUuid\": \"ssafy12\",\n" +
 							"              \"userName\": \"김싸피\"\n" +
 							"            },\n" +
@@ -162,7 +162,7 @@ public interface PipelineApiSwagger {
 							"          {\n" +
 							"            \"memoId\": 4,\n" +
 							"            \"memo\": \"파이프1 확인 완료\",\n" +
-							"            \"creator\": {\n" +
+							"            \"writer\": {\n" +
 							"              \"userUuid\": \"ssafy12\",\n" +
 							"              \"userName\": \"김싸피\"\n" +
 							"            },\n" +
@@ -177,7 +177,7 @@ public interface PipelineApiSwagger {
 							"          {\n" +
 							"            \"memoId\": 2,\n" +
 							"            \"memo\": \"파이프2에 결함 존재\",\n" +
-							"            \"creator\": {\n" +
+							"            \"writer\": {\n" +
 							"              \"userUuid\": \"ssafy12\",\n" +
 							"              \"userName\": \"김싸피\"\n" +
 							"            },\n" +
@@ -192,7 +192,7 @@ public interface PipelineApiSwagger {
 							"          {\n" +
 							"            \"memoId\": 3,\n" +
 							"            \"memo\": \"파이프4 확인 완료\",\n" +
-							"            \"creator\": {\n" +
+							"            \"writer\": {\n" +
 							"              \"userUuid\": \"ssafy12\",\n" +
 							"              \"userName\": \"김싸피\"\n" +
 							"            },\n" +
@@ -221,7 +221,7 @@ public interface PipelineApiSwagger {
 							"      {\n" +
 							"        \"memoId\": 1,\n" +
 							"        \"memo\": \"파이프에 결함 존재\",\n" +
-							"        \"creator\": {\n" +
+							"        \"writer\": {\n" +
 							"          \"userUuid\": \"ssafy12\",\n" +
 							"          \"userName\": \"김싸피\"\n" +
 							"        },\n" +
@@ -230,7 +230,7 @@ public interface PipelineApiSwagger {
 							"      {\n" +
 							"        \"memoId\": 4,\n" +
 							"        \"memo\": \"파이프1 확인 완료\",\n" +
-							"        \"creator\": {\n" +
+							"        \"writer\": {\n" +
 							"          \"userUuid\": \"ssafy12\",\n" +
 							"          \"userName\": \"김싸피\"\n" +
 							"        },\n" +

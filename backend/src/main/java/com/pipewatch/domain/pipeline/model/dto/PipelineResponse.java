@@ -108,14 +108,14 @@ public class PipelineResponse {
 	public static class MemoDto {
 		private Long memoId;
 		private String memo;
-		private Creator creator;
+		private Creator writer;
 		private String createdAt;
 
 		public static MemoDto fromEntity(PipeMemo memo) {
 			return MemoDto.builder()
 					.memoId(memo.getId())
 					.memo(memo.getMemo())
-					.creator(new Creator(memo.getUser().getUuid(), memo.getUser().getName()))
+					.writer(new Creator(memo.getUser().getUuid(), memo.getUser().getName()))
 					.createdAt(convertToDateFormat(memo.getCreated_at()))
 					.build();
 		}
