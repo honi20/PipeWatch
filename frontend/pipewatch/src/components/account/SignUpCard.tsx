@@ -26,6 +26,18 @@ const verifyEmail = (email: string) => {
   return <></>;
 };
 
+const confirmSignUp = (formState) => {
+  axios
+    .post(`${API_URL}/api/auth`, formState)
+    .then((res) => {
+      console.log(res.data.body);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  return <></>;
+};
+
 const SignUpCard = () => {
   const tempEmailVeriCode = "123456";
   const [emailVeriCode, setEmailVeriCode] = useState("");
@@ -43,12 +55,12 @@ const SignUpCard = () => {
   const initialFormState = {
     email: "",
     password: "",
-    confirmPassword: "",
     name: "",
-    companyName: "",
-    employeeId: "",
+    enterpriseId: 0,
+    empNo: 0,
     department: "",
-    position: "",
+    empClass: "",
+    veryfiCode: 0,
   };
 
   const [formState, setFormState] = useState(initialFormState);
@@ -79,12 +91,15 @@ const SignUpCard = () => {
       setConfirmPasswordError(value !== "" && !validatePassword(value));
       setPasswordMatchError(value !== "" && value !== formState.password);
     }
+    if (name === "verifyCode") {
+      setEmailVeriCode(e.target.value);
+    }
   };
 
   const handleCompanyChange = (selectedCompany: CompanyType) => {
     setFormState((prevFormState) => ({
       ...prevFormState,
-      companyName: selectedCompany.name,
+      enterpriseId: selectedCompany.enterpriseId,
     }));
   };
 
@@ -97,7 +112,7 @@ const SignUpCard = () => {
     isEmailVerified &&
     Object.values(formState).every((value) => value !== "");
 
-  // console.log(formState);
+  console.log(formState);
 
   return (
     <div className="w-[500px] flex flex-col bg-block rounded-[30px] p-[50px] gap-[40px] text-white">
@@ -142,13 +157,12 @@ const SignUpCard = () => {
         <div className="flex items-center justify-between">
           <Input
             type="text"
+            name="verifyCode"
             value={emailVeriCode}
             className={`h-[56px] px-5 text-gray-500 rounded-[5px] ${
               isEmailVerified ? "bg-gray-800" : "bg-white"
             } ${EmailVeriError && "border-solid border-2 border-warn"}`}
-            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              setEmailVeriCode(e.target.value)
-            }
+            onChange={handleInputChange}
             placeholder={t("account.verificationCode")}
             required
             disabled={isEmailVerified}
@@ -211,7 +225,11 @@ const SignUpCard = () => {
             showConfirmPasswordError && "border-solid border-2 border-warn"
           }`}
           placeholder={t("account.confirmPassword")}
-          onChange={handleInputChange}
+          onChange={(e: ChangeEvent<HTMLInputElement>) => {
+            const value = e.target.value;
+            setConfirmPasswordError(value !== "" && !validatePassword(value));
+            setPasswordMatchError(value !== "" && value !== formState.password);
+          }}
         />
         {showConfirmPasswordError ? (
           <span className="w-full px-2 whitespace-normal text-warn break-keep">
@@ -248,7 +266,7 @@ const SignUpCard = () => {
           <div className="flex flex-col w-2/3 gap-5">
             <Input
               type="text"
-              name="employeeId"
+              name="empNo"
               className="h-[56px] w-full px-5 text-gray-500 rounded-[5px]"
               placeholder={t("account.employeeId")}
               onChange={handleInputChange}
@@ -262,7 +280,7 @@ const SignUpCard = () => {
             />
             <Input
               type="text"
-              name="position"
+              name="empClass"
               className="h-[56px] w-full px-5 text-gray-500 rounded-[5px]"
               placeholder={t("account.employeePosition")}
               onChange={handleInputChange}
