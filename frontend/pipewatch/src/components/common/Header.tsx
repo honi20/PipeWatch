@@ -70,26 +70,32 @@ export const Header = ({ handleTheme, currentTheme }: Props) => {
   console.log("login상태: ", isLogin);
 
   useEffect(() => {
-    console.log("로그인 상태 변경됨: ", isLogin);
-  }, [isLogin]);
+    const isLoginFromStorage = localStorage.getItem("isLogin") === "true";
+    console.log("Header: 로그인 상태 확인 ", isLoginFromStorage);
+    setLogin(isLoginFromStorage);
+  }, []);
 
   // 로그아웃 함수
   const apiClient = getApiClient();
   const logout = async () => {
     try {
       const res = await apiClient.get("/api/auth/logout");
+      console.log("로그아웃 API 호출: header.message", res.data.header.message);
+    } catch (err) {
+      console.error("로그아웃 API 호출 실패", err);
+    } finally {
+      // 로그아웃 처리
       localStorage.removeItem("accessToken");
       setLogin(false);
       setUserInfo(null);
       setRole("UNAUTHORIZED");
-      console.log("로그아웃 API 호출: header.message", res.data.header.message);
+      localStorage.removeItem("isLogin");
       window.location.href = "/";
-    } catch (err) {
-      console.log(err);
     }
   };
 
-  const name: string = "너굴맨";
+  // const name: string = "너굴맨";
+  const name = userInfo?.name;
 
   const role = userInfo?.role || "UNAUTHORIZED";
   // const role: string = "ENTERPRISE";

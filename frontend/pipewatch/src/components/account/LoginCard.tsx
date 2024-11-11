@@ -14,38 +14,51 @@ const LoginCard = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const { setLogin, setUserInfo } = useUserStore();
+  const { setRole, setLogin, setUserInfo } = useUserStore();
 
   // UserInfo 호출, store 저장
   const saveUserInfo = async () => {
     const apiClient = getApiClient();
     try {
       const res = await apiClient.get("/api/users/mypage");
-      console.log(res.data.body);
-      setUserInfo(res.data.body);
+      const userInfo = res.data.body;
+
+      setUserInfo(userInfo);
+      if (userInfo) {
+        setLogin(true);
+        setRole(userInfo.role);
+      } else {
+        setLogin(false);
+      }
     } catch (err) {
-      console.log(err);
+      console.error("UserInfo 저장 실패", err);
+      setLogin(false); // UserInfo 저장 실패 시 로그인 상태를 false로 설정
+      throw err;
     }
   };
 
-  const login = (email: string, password: string) => {
-    axios
-      .post(`${API_URL}/api/auth/signin`, { email, password })
-      .then((res) => {
-        // console.log(res.data.body);
-        localStorage.setItem("accessToken", res.data.body.accessToken);
-        // 로그인 상태 변경
-        setLogin(true);
-        // Role 불러와서 store에 저장
-        saveUserInfo();
-        // Home으로 이동
-        navigate("/");
-        console.log("로그인 완료");
-      })
-      .catch((err) => {
-        console.log(err);
+  const login = async (email: string, password: string) => {
+    try {
+      const res = await axios.post(`${API_URL}/api/auth/signin`, {
+        email,
+        password,
       });
-    return <></>;
+
+      await localStorage.setItem("accessToken", res.data.body.accessToken);
+
+      // Role 및 UserInfo 저장
+      saveUserInfo(); // 성공하면 로그인 상태를 설정
+
+      // localStorage에 login 상태 저장
+      localStorage.setItem("isLogin", "true");
+
+      // Home으로 이동
+      navigate("/");
+      console.log("로그인 완료");
+    } catch (err) {
+      console.error("로그인 실패", err);
+      // 예외 처리 추가
+    }
   };
 
   const [email, setEmail] = useState("");
