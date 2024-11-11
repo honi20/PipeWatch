@@ -33,7 +33,7 @@ public enum ErrorCode {
 
 	// Pipeline Model
 	PIPELINE_MODEL_NOT_FOUND(HttpStatus.NOT_FOUND.value(), "해당 파이프라인 모델이 존재하지 않습니다."),
-	FILE_UPLOAD_FAIL(HttpStatus.INTERNAL_SERVER_ERROR.value(), "파일 업로드에 실패하였습니다."),
+	FILE_UPLOAD_FAIL(HttpStatus.BAD_REQUEST.value(), "파일 업로드에 실패하였습니다."),
 	FILE_DELETE_FAIL(HttpStatus.INTERNAL_SERVER_ERROR.value(), "파일 삭제에 실패하였습니다."),
 	INVALID_FILE_EXTENSION(HttpStatus.BAD_REQUEST.value(), "적절하지 않은 파일 확장자입니다."),
 	INVALID_FILE_CONTENT(HttpStatus.BAD_REQUEST.value(), "적절하지 않은 파일 형식입니다. meshes 리스트에 각 객체의 name이 존재해야 합니다."),
