@@ -1,16 +1,15 @@
 import axios from "axios";
 const API_URL = import.meta.env.VITE_URL;
+const PRODUCT_LOGIN_URL = import.meta.env.VITE_LOGIN_URL;
+const LOCAL_LOGIN_URL = import.meta.env.VITE_LOCAL_LOGIN_URL;
+
+const LOGIN =
+  process.env.NODE_ENV === "development" ? LOCAL_LOGIN_URL : PRODUCT_LOGIN_URL;
 
 export const createApiClient = (accessToken: string | null) => {
-  const allowedPaths = [
-    "http://localhost:5173/account/auth/login",
-    "http://localhost:5173/",
-  ];
-
-  if (!accessToken && !allowedPaths.includes(window.location.href)) {
+  if (!accessToken && window.location.href !== LOGIN) {
     console.error("createApiClient: accessToken이 제공되지 않았습니다.");
-    // window.location.href = "/account/auth/login";
-    window.location.href = "/";
+    window.location.href = LOGIN;
   }
 
   return axios.create({
