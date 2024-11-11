@@ -46,7 +46,6 @@ export const Header = ({ handleTheme, currentTheme }: Props) => {
   // User Box 관련 로직
   const navigate = useNavigate();
 
-  const [openStatusBar, setOpenStatusBar] = useState(false);
   const handleRoleNavigation = () => {
     switch (role) {
       case "ENTERPRISE":
@@ -57,7 +56,6 @@ export const Header = ({ handleTheme, currentTheme }: Props) => {
         navigate("/account/manage");
         break;
       case "USER":
-        setOpenStatusBar(true);
         break;
       default:
         console.log("Unknown role");
@@ -65,37 +63,50 @@ export const Header = ({ handleTheme, currentTheme }: Props) => {
   };
 
   // 로그인 상태 관리
-  const { isLogin, userInfo, setLogin, setRole, setUserInfo } = useUserStore();
-  console.log("UserInfo 확인: ", userInfo);
+  const {
+    name,
+    role,
+    userState,
+    isLogin,
+    setName,
+    setLogin,
+    setRole,
+    setUserState,
+  } = useUserStore();
   console.log("login상태: ", isLogin);
 
   useEffect(() => {
-    console.log("로그인 상태 변경됨: ", isLogin);
-  }, [isLogin]);
+    const isLoggedIn = !!localStorage.getItem("accessToken");
+    console.log("Header: 로그인 상태 확인 ", isLoggedIn);
+    setLogin(isLoggedIn);
+
+    const role = localStorage.getItem("role") || "UNAUTHORIZED";
+    setRole(role);
+    const name = localStorage.getItem("name") || "";
+    setName(name);
+    const state = localStorage.getItem("userState") || "";
+    setUserState(state);
+    console.log("useEffect 실행");
+  }, []);
 
   // 로그아웃 함수
   const apiClient = getApiClient();
   const logout = async () => {
     try {
       const res = await apiClient.get("/api/auth/logout");
-      localStorage.removeItem("accessToken");
-      setLogin(false);
-      setUserInfo(null);
-      setRole("UNAUTHORIZED");
       console.log("로그아웃 API 호출: header.message", res.data.header.message);
-      window.location.href = "/";
     } catch (err) {
-      console.log(err);
+      console.error("로그아웃 API 호출 실패", err);
+    } finally {
+      // 로그아웃 처리
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("role");
+      localStorage.removeItem("name");
+      localStorage.removeItem("userState");
+
+      window.location.href = "/";
     }
   };
-
-  const name: string = "너굴맨";
-
-  const role = userInfo?.role || "UNAUTHORIZED";
-  // const role: string = "ENTERPRISE";
-  // const role: string = "ADMIN";
-  // const role: string = "EMPLOYEE";
-  // const role: string = "USER";
 
   const temp_employees: Employees[] = [
     {
@@ -344,7 +355,7 @@ export const Header = ({ handleTheme, currentTheme }: Props) => {
           )}
         </div>
       </div>
-      {openStatusBar && (
+      {userState === "PENDING" && (
         <StatusBar
           // text={t("pipeGenerator.takePhoto.connectRCCar.statusMessages.failed")}
           text={
