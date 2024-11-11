@@ -23,13 +23,21 @@ public interface PipelineApiSwagger {
 							"\"body\": {\n" +
 							"    \"name\": \"PipeLine_1\",\n" +
 							"    \"property\": {\n" +
-							"      \"pipeMaterial\": \"알루미늄\",\n" +
+							"      \"pipeMaterial\": {\n" +
+							"        \"materialId\": 1,\n" +
+							"        \"koreanName\": \"알루미늄\",\n" +
+							"        \"englishName\": \"Aluminum\"\n" +
+							"      },\n" +
 							"      \"outerDiameter\": 150,\n" +
-							"      \"innerDiameter\": 10,\n" +
-							"      \"fluidMaterial\": \"물\",\n" +
-							"      \"velocity\": 1\n" +
+							"      \"innerDiameter\": 10.3,\n" +
+							"      \"fluidMaterial\": {\n" +
+							"        \"materialId\": 4,\n" +
+							"        \"koreanName\": \"수증기\",\n" +
+							"        \"englishName\": \"Steam\"\n" +
+							"      },\n" +
+							"      \"velocity\": 1.5\n" +
 							"    },\n" +
-							"    \"updatedAt\": \"2024-11-06 13:57:07\"\n" +
+							"    \"updatedAt\": \"2024-11-11 12:59:14\"\n" +
 							"  }}")}
 			))
 	})
