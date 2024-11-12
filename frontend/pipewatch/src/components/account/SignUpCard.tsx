@@ -1,22 +1,30 @@
-import axios from "axios";
-
-import { useState, ChangeEvent } from "react";
-import { useTranslation, Trans } from "react-i18next";
+import { ChangeEvent, useState } from "react";
+import { Trans, useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 
-import { Input, Button } from "@headlessui/react";
+import { Button, Input } from "@headlessui/react";
 
 import { CompanyListBox } from "@components/account/SignUp/CompanyListbox";
 import { CompanyType } from "@src/components/account/SignUp/inputType";
 
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
+import { baseInstance } from "@src/stores/apiClient";
 
-const API_URL = import.meta.env.VITE_URL;
+interface FormState {
+  email: string;
+  password: string;
+  name: string;
+  enterpriseId: number;
+  empNo: number;
+  department: string;
+  empClass: string;
+  verifyCode: string;
+}
 
 const verifyEmail = (email: string) => {
-  axios
-    .post(`${API_URL}/api/auth/send-email-code`, email)
+  baseInstance
+    .post("/api/auth/send-email-code", email)
     .then((res) => {
       console.log(res.data.body);
     })
@@ -27,7 +35,6 @@ const verifyEmail = (email: string) => {
 };
 
 const SignUpCard = () => {
-  const tempEmailVeriCode = "123456";
   const [emailVeriCode, setEmailVeriCode] = useState("");
   const [isEmailVerified, setIsEmailVerified] = useState(false);
   const [EmailVeriError, setEmailVeriError] = useState(false);
@@ -40,15 +47,15 @@ const SignUpCard = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const initialFormState = {
+  const initialFormState: FormState = {
     email: "",
     password: "",
-    confirmPassword: "",
     name: "",
-    companyName: "",
-    employeeId: "",
+    enterpriseId: 0,
+    empNo: 0,
     department: "",
-    position: "",
+    empClass: "",
+    verifyCode: "",
   };
 
   const [formState, setFormState] = useState(initialFormState);
@@ -64,9 +71,12 @@ const SignUpCard = () => {
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+
+    const transformedValue = name === "empNo" ? Number(value) : value;
+
     setFormState((prevFormState) => ({
       ...prevFormState,
-      [name]: value,
+      [name]: transformedValue,
     }));
 
     if (name === "email") {
@@ -79,12 +89,31 @@ const SignUpCard = () => {
       setConfirmPasswordError(value !== "" && !validatePassword(value));
       setPasswordMatchError(value !== "" && value !== formState.password);
     }
+    if (name === "verifyCode") {
+      setEmailVeriCode(e.target.value);
+    }
+  };
+
+  const verifyEmailCode = (email: string, verifyCode: number) => {
+    baseInstance
+      .post("/api/auth/verify-email-code", { email, verifyCode })
+      .then((res) => {
+        console.log(res.data.body);
+        setIsEmailVerified(true);
+        setEmailVeriError(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setIsEmailVerified(false);
+        setEmailVeriError(true);
+      });
+    return <></>;
   };
 
   const handleCompanyChange = (selectedCompany: CompanyType) => {
     setFormState((prevFormState) => ({
       ...prevFormState,
-      companyName: selectedCompany.company,
+      enterpriseId: selectedCompany.enterpriseId,
     }));
   };
 
@@ -97,7 +126,22 @@ const SignUpCard = () => {
     isEmailVerified &&
     Object.values(formState).every((value) => value !== "");
 
-  // console.log(formState);
+  const confirmSignUp = (formState: FormState) => {
+    baseInstance
+      .post("/api/auth", formState)
+      .then((res) => {
+        console.log("회원가입 성공: ", res.data.body);
+        navigate("/account/auth/completed", {
+          state: { email: formState.email },
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    return <></>;
+  };
+
+  console.log(formState);
 
   return (
     <div className="w-[500px] flex flex-col bg-block rounded-[30px] p-[50px] gap-[40px] text-white">
@@ -142,13 +186,12 @@ const SignUpCard = () => {
         <div className="flex items-center justify-between">
           <Input
             type="text"
+            name="verifyCode"
             value={emailVeriCode}
             className={`h-[56px] px-5 text-gray-500 rounded-[5px] ${
               isEmailVerified ? "bg-gray-800" : "bg-white"
             } ${EmailVeriError && "border-solid border-2 border-warn"}`}
-            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              setEmailVeriCode(e.target.value)
-            }
+            onChange={handleInputChange}
             placeholder={t("account.verificationCode")}
             required
             disabled={isEmailVerified}
@@ -166,15 +209,8 @@ const SignUpCard = () => {
                   : "bg-gray-800"
               } `}
               onClick={() => {
-                if (emailVeriCode === tempEmailVeriCode) {
-                  setIsEmailVerified(true);
-                  setEmailVeriError(false);
-                } else {
-                  setIsEmailVerified(false);
-                  setEmailVeriError(true);
-                }
+                verifyEmailCode(formState.email, formState.verifyCode);
               }}
-              // disabled={emailVeriCode !== ""}
             >
               {t("account.confirm")}
             </Button>
@@ -211,7 +247,11 @@ const SignUpCard = () => {
             showConfirmPasswordError && "border-solid border-2 border-warn"
           }`}
           placeholder={t("account.confirmPassword")}
-          onChange={handleInputChange}
+          onChange={(e: ChangeEvent<HTMLInputElement>) => {
+            const value = e.target.value;
+            setConfirmPasswordError(value !== "" && !validatePassword(value));
+            setPasswordMatchError(value !== "" && value !== formState.password);
+          }}
         />
         {showConfirmPasswordError ? (
           <span className="w-full px-2 whitespace-normal text-warn break-keep">
@@ -248,7 +288,7 @@ const SignUpCard = () => {
           <div className="flex flex-col w-2/3 gap-5">
             <Input
               type="text"
-              name="employeeId"
+              name="empNo"
               className="h-[56px] w-full px-5 text-gray-500 rounded-[5px]"
               placeholder={t("account.employeeId")}
               onChange={handleInputChange}
@@ -262,7 +302,7 @@ const SignUpCard = () => {
             />
             <Input
               type="text"
-              name="position"
+              name="empClass"
               className="h-[56px] w-full px-5 text-gray-500 rounded-[5px]"
               placeholder={t("account.employeePosition")}
               onChange={handleInputChange}
@@ -277,11 +317,9 @@ const SignUpCard = () => {
           isFormValid ? "bg-button-background" : "bg-gray-800"
         }`}
         disabled={!isFormValid}
-        onClick={() =>
-          navigate("/account/auth/completed", {
-            state: { email: formState.email },
-          })
-        }
+        onClick={() => {
+          confirmSignUp(formState);
+        }}
       >
         {t("account.signUp")}
       </Button>

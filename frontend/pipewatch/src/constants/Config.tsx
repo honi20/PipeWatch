@@ -1,7 +1,25 @@
+declare global {
+  interface Window {
+    _env_: {
+      VITE_URL: string;
+      VITE_LOGIN_URL: string;
+      VITE_LOCAL_LOGIN_URL: string;
+      VITE_NODE_ENV: string;
+    };
+  }
+}
+
 const Config = {
-  backendUrl: window._env_
-    ? window._env_.VITE_BACKEND_URL
-    : import.meta.env.VITE_BACKEND_URL,
+  API_URL: window._env_ ? window._env_.VITE_URL : import.meta.env.VITE_URL,
+  PRODUCT_LOGIN_URL: window._env_
+    ? window._env_.VITE_LOGIN_URL
+    : import.meta.env.VITE_LOGIN_URL,
+  LOCAL_LOGIN_URL: window._env_
+    ? window._env_.VITE_LOCAL_LOGIN_URL
+    : import.meta.env.VITE_LOCAL_LOGIN_URL,
+  NODE_ENV: window._env_
+    ? window._env_.VITE_NODE_ENV
+    : import.meta.env.VITE_NODE_ENV,
 };
 
 export default Config;

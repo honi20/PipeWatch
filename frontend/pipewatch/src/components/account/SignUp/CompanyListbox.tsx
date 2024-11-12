@@ -1,3 +1,5 @@
+import axios from "axios";
+
 import {
   Listbox,
   ListboxButton,
@@ -6,27 +8,46 @@ import {
 } from "@headlessui/react";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import clsx from "clsx";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   CompanyType,
   CompanyListboxProps,
 } from "@src/components/account/SignUp/inputType";
+import Config from "@src/constants/Config";
+
+const API_URL = Config.API_URL;
+
+const getCompanyList = (): Promise<CompanyType[]> => {
+  return axios
+    .get(`${API_URL}/api/enterprises/list`)
+    .then((res) => {
+      console.log("기업 리스트 조회: ", res.data.body.enterprises);
+      return res.data.body.enterprises;
+    })
+    .catch((err) => {
+      console.log("오류 발생:", err);
+      return [];
+    });
+};
 
 export const CompanyListBox = ({ onCompanyChange }: CompanyListboxProps) => {
-  // api연결해서 해당 유저의 companyList 불러오기
-  const companyList: CompanyType[] = [
-    { id: 0, company: "개굴전자" },
-    { id: 1, company: "너굴제약" },
-    { id: 2, company: "꼬꼬에너지" },
-  ];
+  const [companyList, setCompanyList] = useState<CompanyType[]>([]);
+
+  const [selected, setSelected] = useState<CompanyType | null>(null);
+
+  useEffect(() => {
+    const fetchCompanyList = async () => {
+      const companyList = await getCompanyList();
+      setCompanyList(companyList);
+    };
+
+    fetchCompanyList();
+  }, []);
 
   const handleChange = (company: CompanyType) => {
     setSelected(company);
-    setSelectedCompany(company.company);
     onCompanyChange(company);
   };
-  const [selected, setSelected] = useState<CompanyType>(companyList[0]);
-  const [selectedCompany, setSelectedCompany] = useState<string>("");
 
   return (
     <div className="w-full h-full">
@@ -38,7 +59,7 @@ export const CompanyListBox = ({ onCompanyChange }: CompanyListboxProps) => {
               "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25"
             )}
           >
-            {selectedCompany === "" ? "선택" : selected.company}
+            {selected === null ? "선택" : selected.name}
             <ExpandMoreIcon
               sx={{ color: "#5E5E5E" }}
               className="pl-1 transition-transform duration-200 group size-6"
@@ -55,11 +76,11 @@ export const CompanyListBox = ({ onCompanyChange }: CompanyListboxProps) => {
         >
           {companyList.map((item) => (
             <ListboxOption
-              key={item.id}
+              key={item.enterpriseId}
               value={item}
               className="group h-[56px] font-[16px] flex cursor-default items-center gap-2 rounded-lg py-1.5 px-5 select-none data-[focus]:bg-white/10"
             >
-              <div className="dark:text-white text-sm/6">{item.company}</div>
+              <div className="dark:text-white text-sm/6">{item.name}</div>
             </ListboxOption>
           ))}
         </ListboxOptions>

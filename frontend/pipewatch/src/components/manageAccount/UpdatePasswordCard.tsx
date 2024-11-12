@@ -1,13 +1,29 @@
 import { useTranslation } from "react-i18next";
 import { Button, Input } from "@headlessui/react";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, ChangeEvent } from "react";
+
+import { getApiClient } from "@src/stores/apiClient";
 
 const UpdatePasswordCard = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const currentPassword = "paori1234@";
+  const apiClient = getApiClient();
+
+  const updatePassword = async (password: string, newPassword: string) => {
+    try {
+      const res = await apiClient.patch(`/api/users/modify-pwd`, {
+        password: password,
+        newPassword: newPassword,
+      });
+      console.log("비밀번호 수정 성공: ", res.data.header.message);
+      navigate("/account/manage/update-pw/completed");
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const passwordPattern =
     /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
 
@@ -31,14 +47,12 @@ const UpdatePasswordCard = () => {
       case "inputPassword":
         setPasswordErrors((prevErrors) => ({
           ...prevErrors,
-          currentPasswordError: currentPassword !== value,
         }));
         break;
       case "newPassword":
         setPasswordErrors((prevErrors) => ({
           ...prevErrors,
           newPasswordError: !passwordPattern.test(value),
-          passwordMismatchError: currentPassword === value,
         }));
         break;
       case "checkNewPassword":
@@ -66,7 +80,7 @@ const UpdatePasswordCard = () => {
         <Input
           type="password"
           value={passwordData.inputPassword}
-          onChange={(e) =>
+          onChange={(e: ChangeEvent<HTMLInputElement>) =>
             handlePasswordChange("inputPassword", e.target.value)
           }
           className="h-[56px] w-full px-5 text-gray-500 rounded-[5px] peer"
@@ -82,7 +96,9 @@ const UpdatePasswordCard = () => {
         <Input
           type="password"
           value={passwordData.newPassword}
-          onChange={(e) => handlePasswordChange("newPassword", e.target.value)}
+          onChange={(e: ChangeEvent<HTMLInputElement>) =>
+            handlePasswordChange("newPassword", e.target.value)
+          }
           className="h-[56px] w-full px-5 text-gray-500 rounded-[5px] peer"
           placeholder={t("manageAccount.updatePassword.newPassword")}
           required
@@ -102,7 +118,7 @@ const UpdatePasswordCard = () => {
         <Input
           type="password"
           value={passwordData.checkNewPassword}
-          onChange={(e) =>
+          onChange={(e: ChangeEvent<HTMLInputElement>) =>
             handlePasswordChange("checkNewPassword", e.target.value)
           }
           className="h-[56px] w-full px-5 text-gray-500 rounded-[5px] peer"
@@ -125,7 +141,9 @@ const UpdatePasswordCard = () => {
                 : "bg-gray-800 cursor-not-allowed"
             }
           `}
-          onClick={() => navigate("/account/manage/update-pw/completed")}
+          onClick={() =>
+            updatePassword(passwordData.inputPassword, passwordData.newPassword)
+          }
           disabled={!isFormValid}
         >
           {t("manageAccount.dashboard.updatePassword")}

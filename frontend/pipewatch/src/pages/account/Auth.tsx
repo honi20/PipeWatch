@@ -2,6 +2,7 @@ import { useLocation } from "react-router-dom";
 
 import { LoginPage } from "@pages/account/LoginPage";
 import { FindPassword } from "@pages/account/FindPassword";
+import { FindPasswordPending } from "@pages/account/FindPasswordPending";
 import { SignUpPage } from "@pages/account/SignUpPage";
 import { ResetPasswordPage } from "@pages/account/ResetPasswordPage";
 import { CompletedContact } from "@pages/CompletedContact";
@@ -17,6 +18,8 @@ export const Auth = () => {
         return <LoginPage />;
       case "find-pw":
         return <FindPassword />;
+      case "pending":
+        return <FindPasswordPending />;
       case "sign-up":
         return <SignUpPage />;
       case "reset-pw":

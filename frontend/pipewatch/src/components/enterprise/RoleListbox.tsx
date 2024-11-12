@@ -10,6 +10,8 @@ import clsx from "clsx";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
+import { getApiClient } from "@src/stores/apiClient";
+
 type Role = {
   id: number;
   role: string;
@@ -17,26 +19,38 @@ type Role = {
 
 type Props = {
   currentRole: string;
+  uuid: string;
 };
 
-export const RoleListbox = ({ currentRole }: Props) => {
+export const RoleListbox = ({ currentRole, uuid }: Props) => {
+  const apiClient = getApiClient();
+
   const { t, i18n } = useTranslation();
   const isKorean = i18n.language === "ko";
 
   const roles = [
-    { id: 1, role: "admin" },
-    { id: 2, role: "staff" },
+    { id: 1, role: "ADMIN" },
+    { id: 2, role: "EMPLOYEE" },
   ];
-  const [selected, setSelected] = useState(roles[1]);
-  const [isRoleChanged, setIsRoleChanged] = useState(false);
+
+  const [selected, setSelected] = useState(
+    roles.find((r) => r.role === currentRole) || roles[0]
+  );
 
   const handleChange = (selected: Role) => {
     setSelected(selected);
-    if (currentRole !== selected.role) {
-      // console.log("Role Changed");
-      setIsRoleChanged(true);
-    } else {
-      setIsRoleChanged(false);
+  };
+
+  const handleRoleUpdate = async (newRole: string, uuid: string) => {
+    try {
+      const res = await apiClient.patch(`/api/management`, {
+        userUuid: uuid,
+        newRole: newRole,
+      });
+      console.log("권한 업데이트 성공:", res.data);
+      window.location.reload();
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -51,7 +65,7 @@ export const RoleListbox = ({ currentRole }: Props) => {
                 "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25"
               )}
             >
-              {selected && selected.role === "admin"
+              {selected && selected.role === "ADMIN"
                 ? t("enterprise.view.buttons.admin")
                 : t("enterprise.view.buttons.staff")}
               <ExpandMoreIcon
@@ -75,7 +89,7 @@ export const RoleListbox = ({ currentRole }: Props) => {
                 className="group flex cursor-default items-center gap-2 rounded-lg py-1.5 px-3 select-none data-[focus]:bg-white/10"
               >
                 <div className=" dark:text-white text-sm/6">
-                  {role.role === "admin"
+                  {role.role === "ADMIN"
                     ? t("enterprise.view.buttons.admin")
                     : t("enterprise.view.buttons.staff")}
                 </div>
@@ -85,18 +99,19 @@ export const RoleListbox = ({ currentRole }: Props) => {
         </Listbox>
       </div>
       <EnterpriseButton
-        handleClick={() => console.log("button Clicked")}
+        handleClick={() => handleRoleUpdate(selected.role, uuid)}
         text={t("enterprise.view.buttons.update")}
         color={
-          isRoleChanged
+          currentRole !== selected.role
             ? "bg-primary-200 dark:bg-primary-500"
             : "bg-gray-500 dark:bg-block"
         }
         hoverColor={
-          isRoleChanged
+          currentRole !== selected.role
             ? "hover:dark:bg-primary-200/80 hover:bg-primary-500/80"
             : "hover:dark:bg-block/80 hover:bg-gray-500/80"
         }
+        disabled={currentRole === selected.role}
       />
     </div>
   );

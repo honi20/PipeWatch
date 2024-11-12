@@ -1,5 +1,5 @@
 import { NavLink, Link, useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 
 import {
   Button,
@@ -89,6 +89,12 @@ export const Header = ({ handleTheme, currentTheme }: Props) => {
     console.log("useEffect 실행");
   }, []);
 
+  useEffect(() => {
+    if (userState === "INACTIVE") {
+      logout();
+    }
+  });
+
   // 로그아웃 함수
   const apiClient = getApiClient();
   const logout = async () => {
@@ -103,6 +109,7 @@ export const Header = ({ handleTheme, currentTheme }: Props) => {
       localStorage.removeItem("role");
       localStorage.removeItem("name");
       localStorage.removeItem("userState");
+      localStorage.removeItem("enterpriseName");
 
       window.location.href = "/";
     }

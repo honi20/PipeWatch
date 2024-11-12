@@ -1,13 +1,9 @@
-import axios from "axios";
+import { baseInstance, getApiClient } from "@src/stores/apiClient";
 
-import { getApiClient } from "@src/stores/apiClient";
-
+import { Button, Input } from "@headlessui/react";
+import { ChangeEvent, FocusEvent, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
-import { Input, Button } from "@headlessui/react";
-import { useState, ChangeEvent, FocusEvent } from "react";
-
-const API_URL = import.meta.env.VITE_URL;
 
 const LoginCard = () => {
   const { t } = useTranslation();
@@ -23,6 +19,7 @@ const LoginCard = () => {
       localStorage.setItem("role", userInfo.role);
       localStorage.setItem("name", userInfo.name);
       localStorage.setItem("userState", userInfo.state);
+      localStorage.setItem("enterpriseName", userInfo.enterpriseName);
     } catch (err) {
       console.error("UserInfo 저장 실패", err);
 
@@ -32,7 +29,7 @@ const LoginCard = () => {
 
   const login = async (email: string, password: string) => {
     try {
-      const res = await axios.post(`${API_URL}/api/auth/signin`, {
+      const res = await baseInstance.post("/api/auth/signin", {
         email,
         password,
       });
