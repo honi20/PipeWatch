@@ -37,10 +37,10 @@ public class SecurityConfig {
 						.requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
 						.requestMatchers(
 								"/error", "/actuator/**",
-								"/api/auth/enterprise", "/api/auth", "/api/auth/signin",
-								"/api/auth/send-email-code", "/api/auth/verify-email-code",
-								"/api/auth/send-pwd-reset", "/api/auth/reset-pwd",
-								"/api/enterprises/list", "/api/models/modeling", "/api/pipelines/property",
+								"/api/auth/enterprise", "/api/auth", "/api/auth/login",
+								"/api/auth/email-code/send", "/api/auth/email-code/verify",
+								"/api/auth/password-reset/request", "/api/auth/password-reset",
+								"/api/enterprises", "/api/models/modeling", "/api/pipelines/materials",
 								"/swagger-ui/**", "/v3/api-docs/**").permitAll()
 						.anyRequest().authenticated()
 				)
