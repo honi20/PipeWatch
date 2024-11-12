@@ -8,6 +8,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { MaterialType } from "@src/components/pipeViewer/Type/MaterialType";
 import clsx from "clsx";
 import { useState, useEffect } from "react";
+import { l } from "vite/dist/node/types.d-aGj9QkWt";
 
 interface PipeMaterialListboxProps {
   value: number;
@@ -22,7 +23,14 @@ export const PipeMaterialListbox: React.FC<PipeMaterialListboxProps> = ({
 }) => {
   // 초기 선택된 재질 설정
   const [selected, setSelected] = useState<number>(value || 0);
-  const language = localStorage.getItem("language");
+  const [language, setLanguage] = useState<string>(
+    localStorage.getItem("language") || "kr"
+  );
+
+  useEffect(() => {
+    const savedLanguage = localStorage.getItem("language") || "kr";
+    setLanguage(savedLanguage);
+  }, [language]);
 
   useEffect(() => {
     setSelected(value || 0);
@@ -34,7 +42,7 @@ export const PipeMaterialListbox: React.FC<PipeMaterialListboxProps> = ({
     );
     if (material) {
       setSelected(0);
-      onChange(materialId); // materialId를 전달
+      onChange(materialId);
     }
   };
 
@@ -48,7 +56,18 @@ export const PipeMaterialListbox: React.FC<PipeMaterialListboxProps> = ({
               "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25"
             )}
           >
-            {selected}
+            {pipeMaterialList &&
+              pipeMaterialList
+                .filter((item) => item.materialId === selected)
+                .map((filteredItem) => (
+                  <div key={filteredItem.materialId}>
+                    <p>
+                      {language === "ko"
+                        ? filteredItem.koreanName
+                        : filteredItem.englishName}
+                    </p>
+                  </div>
+                ))}
             <ExpandMoreIcon
               sx={{ color: "#5E5E5E" }}
               className="pl-1 transition-transform duration-200 group size-6"
