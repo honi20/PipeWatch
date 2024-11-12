@@ -1,17 +1,51 @@
 import { Trans, useTranslation } from "react-i18next";
 import { Button, Input } from "@headlessui/react";
 import { useNavigate } from "react-router-dom";
-import { useState, ChangeEvent, FocusEvent } from "react";
+import { useState, ChangeEvent, FocusEvent, useEffect } from "react";
+import { AxiosError } from "axios";
+import { getApiClient } from "@src/stores/apiClient";
 
 const WithdrawalCard = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [password, setPassword] = useState("");
   const [showPasswordError, setShowPasswordError] = useState(false);
+  const [showPasswordMismatchError, setShowPasswordMismatchError] =
+    useState(false);
   const [isNoticeChecked, setIsNoticeChecked] = useState(false);
+  const [email, setEmail] = useState("");
 
-  // 임시 가입 이메일
-  const tempRegisteredEmail = "zoozoofin7755@gmail.com";
+  const apiClient = getApiClient();
+
+  const getUserInfo = async () => {
+    try {
+      const res = await apiClient.get(`/api/users/mypage`);
+      console.log("userInfo: ", res.data.body);
+      setEmail(res.data.body.email);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const withdraw = async (password: string) => {
+    try {
+      const res = await apiClient.delete(`/api/users/withdraw`, {
+        data: { password: password },
+      });
+      console.log("탈퇴 성공 status: ", res.status);
+      localStorage.setItem("userState", "INACTIVE");
+      navigate("/account/manage/withdrawal/completed");
+    } catch (err: unknown) {
+      if (err instanceof AxiosError && err.response?.status === 403) {
+        setShowPasswordMismatchError(true);
+      }
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    getUserInfo();
+  }, []);
 
   const passwordPattern =
     /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
@@ -24,6 +58,9 @@ const WithdrawalCard = () => {
     const value = e.target.value;
     setPassword(value);
     setShowPasswordError(!validatePassword(value));
+    if (showPasswordMismatchError) {
+      setShowPasswordMismatchError(false);
+    }
   };
   const handlePasswordBlur = (e: FocusEvent<HTMLInputElement>) => {
     setShowPasswordError(!validatePassword(e.target.value));
@@ -43,7 +80,7 @@ const WithdrawalCard = () => {
         <div className="flex-[3] font-bold">
           {t("manageAccount.withdrawal.registrationEmail")}
         </div>
-        <div className="flex-[4]">{tempRegisteredEmail}</div>
+        <div className="flex-[4]">{email}</div>
       </div>
 
       {/* 탈퇴 안내 Box */}
@@ -90,11 +127,15 @@ const WithdrawalCard = () => {
           placeholder={t("account.password")}
           required
         />
-        {showPasswordError && (
-          <span className="w-full px-2 whitespace-normal text-warn break-keep">
+        {showPasswordError ? (
+          <span className="w-full p-2 whitespace-normal text-warn break-keep">
             {t("account.passwordError")}
           </span>
-        )}
+        ) : showPasswordMismatchError ? (
+          <span className="w-full p-2 whitespace-normal text-warn break-keep">
+            비밀번호가 일치하지 않습니다. 다시 확인해주세요.
+          </span>
+        ) : null}
       </div>
 
       <div className="flex flex-col gap-[20px]">
@@ -105,7 +146,7 @@ const WithdrawalCard = () => {
                 ? "bg-button-background hover:bg-button-background/80"
                 : "bg-gray-800 cursor-not-allowed"
             }`}
-          onClick={() => navigate("/account/manage/withdrawal/completed")}
+          onClick={() => withdraw(password)}
           disabled={!isFormValid}
         >
           {t("manageAccount.withdrawal.confirmWithdrawal")}

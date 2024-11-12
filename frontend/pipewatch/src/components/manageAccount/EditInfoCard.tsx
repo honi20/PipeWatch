@@ -1,30 +1,89 @@
 import { useTranslation } from "react-i18next";
 import { Button, Input } from "@headlessui/react";
 import { useNavigate } from "react-router-dom";
-import { useState, ChangeEvent } from "react";
+import { useEffect, useState, ChangeEvent } from "react";
+
+import { getApiClient } from "@src/stores/apiClient";
+
+interface Employee {
+  empNo: number;
+  department: string;
+  empClass: string;
+}
+
+interface User {
+  name: string;
+  email: string;
+  role: string;
+  state: string;
+  enterpriseName: string | null;
+  employee: Employee;
+}
 
 const EditInfoCard = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const [position, setPosition] = useState("");
-  const [department, setDepartment] = useState("");
 
-  const tempRegisteredEmail = "zoozoofin7755@gmail.com";
-  const tempCompanyName = "개굴전자";
-  const tempEmployeeId = "1234567";
+  const [userInfo, setUserInfo] = useState<User | null>(null);
+
+  const apiClient = getApiClient();
+
+  const getUserInfo = async () => {
+    try {
+      const res = await apiClient.get(`/api/users/mypage`);
+      console.log("userInfo: ", res.data.body);
+      setUserInfo(res.data.body);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const updateUserInfo = async (department: string, empClass: string) => {
+    try {
+      const res = await apiClient.put(`/api/users/mypage`, {
+        department: department,
+        empClass: empClass,
+      });
+      console.log("회원정보 수정 성공: ", res.data.header.message);
+      window.location.reload();
+      navigate("/account/manage/edit-info/completed");
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    getUserInfo();
+  }, []);
+
+  useEffect(() => {
+    if (userInfo?.employee?.department) {
+      setDepartment(userInfo.employee.department);
+    }
+    if (userInfo?.employee?.empClass) {
+      setEmpClass(userInfo.employee.empClass);
+    }
+  }, [userInfo]);
+
+  const [empClass, setEmpClass] = useState("");
+  const [department, setDepartment] = useState("");
 
   const handlePositionChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    setPosition(value);
+    setEmpClass(value);
   };
   const handleDepartmentChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setDepartment(value);
   };
 
-  const isFormValid: boolean = position !== "" && department !== "";
+  const isFormValid: boolean =
+    empClass !== "" &&
+    department !== "" &&
+    (userInfo?.employee?.department !== department ||
+      userInfo?.employee?.empClass !== empClass);
 
-  console.log(position, department);
+  console.log(empClass, department);
 
   return (
     <div className="w-[500px] flex flex-col bg-block rounded-[30px] p-[50px] gap-[40px] text-white">
@@ -38,21 +97,21 @@ const EditInfoCard = () => {
           <div className="flex-[3] font-bold">
             {t("manageAccount.editInfo.registrationEmail")}
           </div>
-          <div className="flex-[4]">{tempRegisteredEmail}</div>
+          <div className="flex-[4]">{userInfo?.email}</div>
         </div>
 
         <div className="flex px-[20px] text-[16px]">
           <div className="flex-[3] font-bold">
             {t("manageAccount.editInfo.companyName")}
           </div>
-          <div className="flex-[4]">{tempCompanyName}</div>
+          <div className="flex-[4]">{userInfo?.enterpriseName}</div>
         </div>
 
         <div className="flex px-[20px] text-[16px]">
           <div className="flex-[3] font-bold">
             {t("manageAccount.editInfo.employeeId")}
           </div>
-          <div className="flex-[4]">{tempEmployeeId}</div>
+          <div className="flex-[4]">{userInfo?.employee.empNo}</div>
         </div>
 
         {/* 부서 Input */}
@@ -79,7 +138,7 @@ const EditInfoCard = () => {
           <div className="flex-[4]">
             <Input
               type="text"
-              value={position}
+              value={empClass}
               onChange={handlePositionChange}
               className="h-full w-full px-[20px] py-[10px] text-gray-800 rounded-[5px] focus:outline-success"
               required
@@ -96,7 +155,8 @@ const EditInfoCard = () => {
                 ? "bg-button-background hover:bg-button-background/80"
                 : "bg-gray-800 cursor-not-allowed"
             }`}
-          onClick={() => navigate("/account/manage/edit-info/completed")}
+          // onClick={() => navigate("/account/manage/edit-info/completed")}
+          onClick={() => updateUserInfo(department, empClass)}
           disabled={!isFormValid}
         >
           {t("manageAccount.editInfo.editPersonalInfo")}

@@ -89,6 +89,12 @@ export const Header = ({ handleTheme, currentTheme }: Props) => {
     console.log("useEffect 실행");
   }, []);
 
+  useEffect(() => {
+    if (userState === "INACTIVE") {
+      logout();
+    }
+  });
+
   // 로그아웃 함수
   const apiClient = getApiClient();
   const logout = async () => {
