@@ -13,7 +13,7 @@ const UpdatePasswordCard = () => {
 
   const updatePassword = async (password: string, newPassword: string) => {
     try {
-      const res = await apiClient.patch(`/api/users/modify-pwd`, {
+      const res = await apiClient.patch(`/api/users/password`, {
         password: password,
         newPassword: newPassword,
       });

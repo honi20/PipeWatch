@@ -14,7 +14,7 @@ export const EmpVerification = () => {
 
   const getWaitingList = async () => {
     try {
-      const res = await apiClient.get(`/api/management/waiting-list`);
+      const res = await apiClient.get(`/api/employees/waiting`);
 
       console.log("Waiting Employees Data: ", res.data.body.employees);
       setWaitingList(res.data.body.employees);

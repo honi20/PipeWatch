@@ -19,7 +19,7 @@ const WithdrawalCard = () => {
 
   const getUserInfo = async () => {
     try {
-      const res = await apiClient.get(`/api/users/mypage`);
+      const res = await apiClient.get(`/api/users/profile`);
       console.log("userInfo: ", res.data.body);
       setEmail(res.data.body.email);
     } catch (err) {
@@ -29,11 +29,11 @@ const WithdrawalCard = () => {
 
   const withdraw = async (password: string) => {
     try {
-      const res = await apiClient.delete(`/api/users/withdraw`, {
+      const res = await apiClient.delete(`/api/users`, {
         data: { password: password },
       });
       console.log("탈퇴 성공 status: ", res.status);
-      localStorage.setItem("userState", "INACTIVE");
+      sessionStorage.setItem("userState", "INACTIVE");
       navigate("/account/manage/withdrawal/completed");
     } catch (err: unknown) {
       if (err instanceof AxiosError && err.response?.status === 403) {

@@ -12,14 +12,14 @@ const LoginCard = () => {
   const saveUserInfo = async () => {
     const apiClient = getApiClient();
     try {
-      const res = await apiClient.get("/api/users/mypage");
+      const res = await apiClient.get("/api/users/profile");
       const userInfo = res.data.body;
       console.log("userInfo in LoginCard: ", userInfo);
 
-      localStorage.setItem("role", userInfo.role);
-      localStorage.setItem("name", userInfo.name);
-      localStorage.setItem("userState", userInfo.state);
-      localStorage.setItem("enterpriseName", userInfo.enterpriseName);
+      sessionStorage.setItem("role", userInfo.role);
+      sessionStorage.setItem("name", userInfo.name);
+      sessionStorage.setItem("userState", userInfo.state);
+      sessionStorage.setItem("enterpriseName", userInfo.enterpriseName);
     } catch (err) {
       console.error("UserInfo 저장 실패", err);
 
@@ -29,12 +29,12 @@ const LoginCard = () => {
 
   const login = async (email: string, password: string) => {
     try {
-      const res = await baseInstance.post("/api/auth/signin", {
+      const res = await baseInstance.post("/api/auth/login", {
         email,
         password,
       });
 
-      await localStorage.setItem("accessToken", res.data.body.accessToken);
+      await sessionStorage.setItem("accessToken", res.data.body.accessToken);
 
       await saveUserInfo();
 
