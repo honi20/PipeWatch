@@ -80,6 +80,15 @@ public interface UserApiSwagger {
 	})
 	ResponseEntity<?> passwordModify(@AuthenticationPrincipal Long userId, @RequestBody UserRequest.PasswordModifyDto requestDto);
 
+	@PatchMapping("/request")
+	@Operation(summary = "기업 승인 재요청")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "기업 승인 재요청 성공", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+					examples = {@ExampleObject(value = "{\"header\":{\"httpStatusCode\": 200, \"message\": \"기업 승인 요청에 성공했습니다.\"},\n\"body\": null}")}
+			))
+	})
+	ResponseEntity<?> requestAssign(@AuthenticationPrincipal Long userId);
+
 	@DeleteMapping("/withdraw")
 	@Operation(summary = "회원 탈퇴")
 	@ApiResponses(value = {

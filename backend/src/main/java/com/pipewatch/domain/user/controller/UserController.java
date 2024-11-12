@@ -39,6 +39,13 @@ public class UserController implements UserApiSwagger {
 		return new ResponseEntity<>(ResponseDto.success(PASSWORD_MODIFIED_OK, null), HttpStatus.OK);
 	}
 
+	@PatchMapping("/request")
+	public ResponseEntity<?> requestAssign(@AuthenticationPrincipal Long userId) {
+		userService.modifyUserState(userId);
+
+		return new ResponseEntity<>(ResponseDto.success(ROLE_ASSIGN_REQUEST_OK, null), HttpStatus.OK);
+	}
+
 	@DeleteMapping("/withdraw")
 	public ResponseEntity<?> withdraw(@AuthenticationPrincipal Long userId, @RequestBody UserRequest.WithdrawDto requestDto) {
 		userService.deleteUser(userId, requestDto);

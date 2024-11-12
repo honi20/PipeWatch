@@ -76,6 +76,22 @@ public class UserServiceImpl implements UserService {
 		userRepository.save(user);
 	}
 
+
+	@Override
+	@Transactional
+	public void modifyUserState(Long userId) {
+		User user = userRepository.findById(userId)
+				.orElseThrow(() -> new BaseException(USER_NOT_FOUND));
+		
+		if (user.getRole() != Role.USER || user.getState() != State.ACTIVE) {
+			return;
+		}
+
+		// 다시 기업의 승인 요청을 보내는 경우
+		user.updateState(State.PENDING);
+		userRepository.save(user);
+	}
+
 	@Override
 	@Transactional
 	public void deleteUser(Long userId, UserRequest.WithdrawDto requestDto) {
