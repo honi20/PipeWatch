@@ -30,6 +30,7 @@ export const VerificationTable: React.FC<TableProps> = ({ data }) => {
       });
 
       console.log("권한 변경 완료: ", res.data);
+      window.location.reload();
     } catch (err) {
       console.log(err);
     }

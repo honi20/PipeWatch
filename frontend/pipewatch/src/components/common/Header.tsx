@@ -1,5 +1,5 @@
 import { NavLink, Link, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import {
   Button,
@@ -26,16 +26,6 @@ type Props = {
   handleTheme: () => void;
   currentTheme: string;
 };
-
-interface Employees {
-  uuid: string;
-  name: string;
-  email: string;
-  empNo: number;
-  department: string;
-  empClass: string;
-  role: string;
-}
 
 // 로컬스토리지에 저장하기
 const saveLanguageToStorage = (language: string) => {
@@ -115,17 +105,24 @@ export const Header = ({ handleTheme, currentTheme }: Props) => {
     }
   };
 
-  const temp_employees: Employees[] = [
-    {
-      uuid: "1604b772-adc0-4212-8a90-81186c57f598",
-      name: "테스트",
-      email: "test@paori.com",
-      empNo: 1243242,
-      department: "IT사업부",
-      empClass: "팀장",
-      role: "USER",
-    },
-  ];
+  const [waitingList, setWaitingList] = useState([]);
+
+  const getWaitingList = async () => {
+    try {
+      const res = await apiClient.get(`/api/management/waiting-list`);
+
+      console.log("Waiting Employees Data: ", res.data.body.employees);
+      setWaitingList(res.data.body.employees);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    if (role === "ENTERPRISE") {
+      getWaitingList();
+    }
+  }, []);
 
   const { t, i18n } = useTranslation();
   const handleLanguage = (language: string) => {
@@ -329,7 +326,7 @@ export const Header = ({ handleTheme, currentTheme }: Props) => {
                 {role === "ENTERPRISE" ? (
                   // 기업 계정
                   <div className="flex items-center justify-center px-2 rounded-[30px] text-[14px] bg-warn">
-                    {temp_employees && temp_employees.length}
+                    {waitingList && waitingList.length}
                   </div>
                 ) : (
                   // 사원 계정(관리자/일반)
