@@ -326,7 +326,7 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 		// 해당 기업에 속하는 유저만 수정 가능
 		validateEnterprise(user, pipelineModel.getEnterprise());
 
-		List<PipelineModelMemo> memos = pipelineModelMemoRepository.findByPipelineModelIdOrder(pipelineModel.getId());
+		List<PipelineModelMemo> memos = pipelineModelMemoRepository.findByPipelineModelId(pipelineModel.getId());
 		List<PipelineModelResponse.MemoDto> modelMemoList = memos.stream()
 				.map(PipelineModelResponse.MemoDto::fromEntity)
 				.toList();
@@ -354,7 +354,7 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 		PipelineModelMemo memo = requestDto.toEntity(user, pipelineModel);
 		pipelineModelMemoRepository.save(memo);
 
-		List<PipelineModelMemo> memos = pipelineModelMemoRepository.findByPipelineModelIdOrder(pipelineModel.getId());
+		List<PipelineModelMemo> memos = pipelineModelMemoRepository.findByPipelineModelId(pipelineModel.getId());
 		List<PipelineModelResponse.MemoDto> modelMemoList = memos.stream()
 				.map(PipelineModelResponse.MemoDto::fromEntity)
 				.toList();
