@@ -1,29 +1,75 @@
-import React, { useEffect, ChangeEvent } from "react";
+import React, { useEffect, ChangeEvent, useState } from "react";
 import { Textarea } from "@headlessui/react";
 import clsx from "clsx";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { useMemoStore } from "@src/stores/memoStore";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import { usePipe } from "@src/components/context/PipeContext";
+import { getApiClient } from "@src/stores/apiClient";
 
 interface PipeMemoProps {
-  pipes?: number;
   building: string;
   floor: number;
+  updatedAt: string;
   onViewChange: () => void;
 }
 
 export const PipeMemo: React.FC<PipeMemoProps> = (props) => {
-  const { memo, setMemo, memoList, getPipeMemo, postMemo } = useMemoStore();
-  const { pipes, building, floor, onViewChange } = props;
+  const { memo, setMemo, memoList, setMemoList } = useMemoStore();
+  const { building, floor, updatedAt, onViewChange } = props;
+  const { selectedPipeId } = usePipe();
+  const [pipeName, setPipeName] = useState<string>("");
+
+  // 파이프 이름 및 메모 리스트 조회
+  const getPipeInfo = async (pipeId: number) => {
+    const apiClient = getApiClient();
+    try {
+      const res = await apiClient({
+        method: "get",
+        url: `/api/pipelines/pipes/${pipeId}`,
+      });
+      console.log(res.data.header.httpStatusCode, res.data.header.message);
+      console.log(res.data.body);
+      const { pipeName, memoList } = res.data.body;
+      setPipeName(pipeName);
+      setMemo(memoList);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  // 파이프 메모 생성 및 결함 체크
+  const createPipeMemoAndDefect = async (
+    pipeId: number,
+    memo: string,
+    hasDefect: boolean
+  ) => {
+    const apiClient = getApiClient();
+    try {
+      const res = await apiClient({
+        method: "post",
+        url: `/api/pipelines/pipes/${pipeId}`,
+        data: {
+          memo: memo,
+          hasDefect: hasDefect,
+        },
+      });
+      console.log(res.data.header.httpStatusCode, res.data.header.message);
+      console.log(res.data.body);
+      setMemoList(res.data.body.memoList);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   // memoList renderer
   useEffect(() => {
-    // getPipeMemo(pipes.pipeId);
-  }, [pipes]);
+    getPipeInfo(selectedPipeId);
+  }, [selectedPipeId]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter") {
       e.preventDefault();
+      createPipeMemoAndDefect(selectedPipeId, memo, false);
       // postMemo(pipeId, memo);
       setMemo("");
     }
@@ -62,7 +108,9 @@ export const PipeMemo: React.FC<PipeMemoProps> = (props) => {
         <div className="flex flex-col w-full h-full gap-7">
           {/* header */}
           <div className="flex flex-col items-center w-full">
-            <h2 className="text-[30px] font-bold">{modelName}</h2>
+            <h2 className="text-[30px] font-bold">
+              {pipeName ? pipeName : ""}
+            </h2>
             <p className="text-[20px]">
               {building} {floor > 0 ? `${floor}층` : `지하 ${-floor}층`}
             </p>
@@ -86,29 +134,26 @@ export const PipeMemo: React.FC<PipeMemoProps> = (props) => {
             {/* 메모 조회창 */}
             <ul className="max-h-[330px] mt-4 space-y-4 overflow-auto">
               {memoList &&
-                memoList
-                  .slice()
-                  .reverse()
-                  .map((item, idx) => (
-                    <li
-                      key={idx}
-                      className="flex justify-between w-full gap-1 px-1 bg-gray-700"
-                    >
-                      <div className="flex flex-col gap-1">
-                        <div className="text-[17px]">{item.memo}</div>
-                        <div className="flex gap-2 text-[15px]">
-                          <p>{item.writer.userName}</p>
-                          <p className="text-gray-500">
-                            {formatMemoDate(new Date(item.createdAt))}
-                          </p>
-                        </div>
+                memoList.slice().map((item, idx) => (
+                  <li
+                    key={idx}
+                    className="flex justify-between w-full gap-1 px-1 bg-gray-700"
+                  >
+                    <div className="flex flex-col gap-1">
+                      <div className="text-[17px]">{item.memo}</div>
+                      <div className="flex gap-2 text-[15px]">
+                        <p>{item.writer.userName}</p>
+                        <p className="text-gray-500">
+                          {formatMemoDate(new Date(item.createdAt))}
+                        </p>
                       </div>
-                      <DeleteForeverIcon
-                        onClick={() => console.log("삭제할거지롱 포실")}
-                        className="self-end h-full text-gray-500 hover:text-primary-200"
-                      />
-                    </li>
-                  ))}
+                    </div>
+                    <DeleteForeverIcon
+                      onClick={() => console.log("삭제할거지롱 포실")}
+                      className="self-end h-full text-gray-500 hover:text-primary-200"
+                    />
+                  </li>
+                ))}
             </ul>
           </div>
         </div>

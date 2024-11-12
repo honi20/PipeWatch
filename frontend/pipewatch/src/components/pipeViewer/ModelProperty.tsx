@@ -1,5 +1,5 @@
 import React, { useEffect, useState, ChangeEvent } from "react";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { PipeMaterialListbox } from "./listbox/PipeMaterialListbox";
 import { Input, Button } from "@headlessui/react";
 import clsx from "clsx";
@@ -88,12 +88,11 @@ export const ModelProperty: React.FC<ModelPropertyProps> = (props) => {
     <div className="w-[400px] h-[680px] flex flex-col bg-block rounded-[30px] px-[50px] py-[30px] text-white justify-between items-center gap-5">
       <div className="flex flex-col w-full h-full">
         {/* navigate */}
-        <div
-          className="flex justify-end cursor-pointer hover:text-primary-200"
-          onClick={onViewChange}
-        >
-          <p>메모</p>
-          <ChevronRightIcon />
+        <div className="flex justify-start cursor-pointer hover:text-primary-200">
+          <div className="flex" onClick={onViewChange}>
+            <ChevronLeftIcon />
+            <p>메모</p>
+          </div>
         </div>
         <div className="flex flex-col w-full h-full gap-7">
           {/* header */}

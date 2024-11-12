@@ -5,7 +5,8 @@ import { ThreeEvent, useLoader } from "@react-three/fiber";
 import { CameraControls } from "@react-three/drei";
 import * as THREE from "three";
 import { PipelineType } from "@src/components/pipeViewer/PipeType";
-
+import { useSelectView } from "@src/components/context/SelectViewContext";
+import { usePipe } from "@src/components/context/PipeContext";
 export const PipeModel: React.FC<{
   gltfUrl: string;
   onModelLoad: (scene: THREE.Object3D) => void;
@@ -21,8 +22,9 @@ export const PipeModel: React.FC<{
   setIsTotalView,
   pipelines,
 }) => {
+  const { setSelectView } = useSelectView();
   // selectedPipe
-  const [selectedPipe, setSelectedPipe] = useState<number>();
+  const { setSelectedPipeId } = usePipe();
   // gltf loader
   const model = useLoader(GLTFLoader, gltfUrl, (loader) => {
     const dracoLoader = new DRACOLoader();
@@ -79,7 +81,7 @@ export const PipeModel: React.FC<{
   };
 
   // camera control
-  const handleClick = async(originalMesh: THREE.Mesh) => {
+  const handleClick = async (originalMesh: THREE.Mesh) => {
     model.scene.traverse((child) => {
       if (child instanceof THREE.Mesh) {
         if (child.name !== originalMesh.name) {
@@ -112,40 +114,43 @@ export const PipeModel: React.FC<{
       const filteredPipe = pipelines[0].pipes.filter(
         (item) => item.pipeUuid === originalMesh.name
       );
-      console.log(filteredPipe);
-      setSelectedPipe(filteredPipe[0].pipeId);
+      // 파이프 ID 변경하기
+      setSelectedPipeId(filteredPipe[0].pipeId);
     }
     // 파이프 메모 뷰 띄우기
+    setSelectView("PIPE_MEMO");
   };
-  
+
   return (
-    <group position={[0, 0, 0]}>
-      {Object.entries(meshesByGroup).map(([groupName, meshes], index) => {
-        return (
-          <group key={index} name={groupName} scale={[1.5, 1.5, 1.5]}>
-            {meshes.map(({ originalMesh, segmentName }, i) => {
-              return (
-                <mesh
-                  key={i}
-                  name={segmentName}
-                  geometry={originalMesh.geometry}
-                  material={originalMesh.material}
-                  position={originalMesh.position}
-                  rotation={originalMesh.rotation}
-                  scale={originalMesh.scale}
-                  onPointerOver={() => handlePointerOver(originalMesh)}
-                  onPointerOut={() => handlePointerOut(originalMesh)}
-                  onPointerDown={(e: ThreeEvent<PointerEvent>) => {
-                    e.stopPropagation();
-                    handlePointerDown(groupName);
-                  }}
-                  onClick={() => handleClick(originalMesh)}
-                />
-              );
-            })}
-          </group>
-        );
-      })}
-    </group>
+    <>
+      <group position={[0, 0, 0]}>
+        {Object.entries(meshesByGroup).map(([groupName, meshes], index) => {
+          return (
+            <group key={index} name={groupName} scale={[1.5, 1.5, 1.5]}>
+              {meshes.map(({ originalMesh, segmentName }, i) => {
+                return (
+                  <mesh
+                    key={i}
+                    name={segmentName}
+                    geometry={originalMesh.geometry}
+                    material={originalMesh.material}
+                    position={originalMesh.position}
+                    rotation={originalMesh.rotation}
+                    scale={originalMesh.scale}
+                    onPointerOver={() => handlePointerOver(originalMesh)}
+                    onPointerOut={() => handlePointerOut(originalMesh)}
+                    onPointerDown={(e: ThreeEvent<PointerEvent>) => {
+                      e.stopPropagation();
+                      handlePointerDown(groupName);
+                    }}
+                    onClick={() => handleClick(originalMesh)}
+                  />
+                );
+              })}
+            </group>
+          );
+        })}
+      </group>
+    </>
   );
 };

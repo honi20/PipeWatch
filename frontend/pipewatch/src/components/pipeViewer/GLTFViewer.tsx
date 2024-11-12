@@ -1,7 +1,5 @@
-import React, { useRef, useState, useEffect } from "react";
-import { Canvas, useThree } from "@react-three/fiber";
-import * as THREE from "three";
-import { PipeModel } from "@src/components/pipeViewer/renderer/PipeModel";
+import React, { useRef, useState } from "react";
+import { Canvas } from "@react-three/fiber";
 import { CameraControls } from "@react-three/drei";
 import {
   ModelDetailType,
@@ -10,6 +8,8 @@ import {
 import { SceneContent } from "@src/components/pipeViewer/SceneContent";
 import { ModelMemo } from "@src/components/pipeViewer/ModelMemo";
 import { ModelProperty } from "@src/components/pipeViewer/ModelProperty";
+import { useSelectView } from "../context/SelectViewContext";
+import { PipeMemo } from "@src/components/pipeViewer/PipeMemo";
 
 interface GLTFViewerProps {
   gltfUrl: string;
@@ -19,11 +19,15 @@ interface GLTFViewerProps {
 }
 
 const GLTFViewer: React.FC<GLTFViewerProps> = (props) => {
-  const [selectView, setSelectView] = useState<string | null>("MEMO");
+  const { selectView, setSelectView } = useSelectView();
   const { gltfUrl, pipelines, modelId, modelDetail } = props;
   const cameraControlsRef = useRef<CameraControls | null>(null);
   const [isTotalView, setIsTotalView] = useState<boolean>(true);
-
+  
+  const handleTotalViewButton = () => {
+    setIsTotalView(true);
+    setSelectView("MODEL_MEMO");
+  };
   return (
     <div className="relative w-full h-full">
       <Canvas style={{ height: "100vh" }}>
@@ -40,13 +44,13 @@ const GLTFViewer: React.FC<GLTFViewerProps> = (props) => {
       </Canvas>
       <button
         className="sticky z-10 transform -translate-x-1/2 -translate-y-10 bottom-10 left-1/2"
-        onClick={() => setIsTotalView(true)}
+        onClick={handleTotalViewButton}
       >
         전체 뷰 보기 버튼
       </button>
       <div className="absolute z-10 top-10 right-10">
         {modelDetail &&
-          (selectView === "MEMO" ? (
+          (selectView === "MODEL_MEMO" ? (
             <ModelMemo
               modelId={modelId}
               modelName={modelDetail!.name}
@@ -55,13 +59,20 @@ const GLTFViewer: React.FC<GLTFViewerProps> = (props) => {
               updatedAt={modelDetail!.updatedAt}
               onViewChange={() => setSelectView("PROPERTY")}
             />
+          ) : selectView === "PROPERTY" ? (
+            <ModelProperty
+              pipelines={modelDetail!.pipelines}
+              building={modelDetail!.building}
+              floor={modelDetail!.floor}
+              onViewChange={() => setSelectView("MODEL_MEMO")}
+            />
           ) : (
-            selectView === "PROPERTY" && (
-              <ModelProperty
-                pipelines={modelDetail!.pipelines}
+            selectView === "PIPE_MEMO" && (
+              <PipeMemo
                 building={modelDetail!.building}
                 floor={modelDetail!.floor}
-                onViewChange={() => setSelectView("MEMO")}
+                updatedAt={modelDetail!.updatedAt}
+                onViewChange={() => setSelectView("MODEL_MEMO")}
               />
             )
           ))}

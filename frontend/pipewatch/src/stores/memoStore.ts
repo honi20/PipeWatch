@@ -7,6 +7,7 @@ interface MemoState {
   memoList: MemoType[] | null;
   setMemo: (memo: string) => void;
   getMemoList: (modelId: number) => Promise<void>;
+  setMemoList: (memoList: MemoType[] | null) => void;
   postMemo: (modelId: number, memo: string) => Promise<void>;
   getPipeMemo: (pipeId: number) => Promise<void>;
   postPipeMemo: (pipeId: number, memo: string) => Promise<void>;
@@ -17,6 +18,7 @@ export const useMemoStore = create<MemoState>((set, get) => ({
   memoList: null,
 
   setMemo: (memo) => set({ memo }),
+  setMemoList: (memoList) => set({ memoList }),
 
   getMemoList: async (modelId) => {
     const apiClient = getApiClient();
@@ -76,7 +78,8 @@ export const useMemoStore = create<MemoState>((set, get) => ({
       });
       console.log(res.data.header.httpStatusCode, res.data.header.message);
       // 메모 저장
-      await get().getMemoList(pipeId);
+      // await get().getMemoList(pipeId);
+      set({ memoList: res.data.body.memoList });
     } catch (err) {
       console.log(err);
     }

@@ -3,6 +3,8 @@ import GLTFViewer from "@src/components/pipeViewer/GLTFViewer";
 import "./viewer.css";
 import { getApiClient } from "@src/stores/apiClient";
 import { ModelDetailType } from "@src/components/pipeViewer/PipeType";
+import { PipeProvider } from "@src/components/context/PipeContext";
+import { SelectViewProvider } from "@src/components/context/SelectViewContext";
 
 interface ModelDetailViewProps {
   modelId: number;
@@ -36,14 +38,18 @@ export const ModelDetailView: React.FC<ModelDetailViewProps> = ({
 
   return (
     <div className="w-full h-full">
-      {modelDetail && (
-        <GLTFViewer
-          gltfUrl={modelDetail.modelingUrl}
-          pipelines={modelDetail.pipelines}
-          modelId={modelId}
-          modelDetail={modelDetail}
-        />
-      )}
+      <SelectViewProvider>
+        <PipeProvider>
+          {modelDetail && (
+            <GLTFViewer
+              gltfUrl={modelDetail.modelingUrl}
+              pipelines={modelDetail.pipelines}
+              modelId={modelId}
+              modelDetail={modelDetail}
+            />
+          )}
+        </PipeProvider>
+      </SelectViewProvider>
     </div>
   );
 };
