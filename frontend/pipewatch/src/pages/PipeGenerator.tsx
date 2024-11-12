@@ -53,7 +53,7 @@ export const PipeGenerator = () => {
       key: "rendering",
       icon: ViewInArIcon,
       component: <Rendering />,
-      path: "/pipe-generator/rendering",
+      path: "/pipe-generator/rendering/:modelId",
     },
     {
       key: "completed",
@@ -63,12 +63,23 @@ export const PipeGenerator = () => {
     },
   ];
 
-  const activeIndex = menus.findIndex(
-    (menu) => menu.path === location.pathname
-  );
+  // const activeIndex = menus.findIndex(
+  //   (menu) => menu.path === location.pathname
+  // );
+
+  const activeIndex = menus.findIndex((menu) => {
+    const menuPath = menu.path.replace(/:modelId/, "");
+    return location.pathname.startsWith(menuPath);
+  });
+
+  // const handleTabClick = (path: string) => {
+  //   navigate(path);
+  // };
 
   const handleTabClick = (path: string) => {
-    navigate(path);
+    const modelId = "12345";
+    const finalPath = path.replace(":modelId", modelId);
+    navigate(finalPath);
   };
 
   return (

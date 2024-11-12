@@ -1,6 +1,6 @@
-import { Suspense, useRef, useEffect, useState } from "react";
+import { Suspense, useRef, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 import { Leva } from "leva";
 import { Loader } from "@react-three/drei";
@@ -13,12 +13,10 @@ export const Rendering = () => {
 
   const testRenderingRef = useRef<{ takeScreenshot: () => void }>(null);
 
-  // modelId: Input Data Page에서 POST 요청 후 navigate state로 받아옴
-  const [modelId, setModelId] = useState("");
-  const location = useLocation();
+  const { modelId } = useParams<string>();
 
   useEffect(() => {
-    setModelId(location.state.modelId);
+    console.log(modelId);
   }, []);
 
   // 저장 버튼 Click Action
@@ -42,7 +40,11 @@ export const Rendering = () => {
 
       <div className="w-full h-[400px]">
         <Suspense fallback={<Loader />}>
-          <TestRendering ref={testRenderingRef} modelId={modelId} />
+          {modelId ? (
+            <TestRendering ref={testRenderingRef} modelId={modelId} />
+          ) : (
+            <div>model 없음</div>
+          )}
           <Leva collapsed />
         </Suspense>
       </div>

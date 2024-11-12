@@ -120,7 +120,7 @@ export const InputData = () => {
       console.log("input Data: ", res.data.header.message);
 
       // 모델 렌더링 페이지로 이동
-      navigate("/pipe-generator/rendering", { state: { modelId: modelId } });
+      navigate(`/pipe-generator/rendering/${modelId}`);
     } catch (err) {
       console.log(err);
     }
