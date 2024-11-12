@@ -1,14 +1,9 @@
-import axios from "axios";
+import { baseInstance, getApiClient } from "@src/stores/apiClient";
 
-import { getApiClient } from "@src/stores/apiClient";
-
+import { Button, Input } from "@headlessui/react";
+import { ChangeEvent, FocusEvent, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
-import { Input, Button } from "@headlessui/react";
-import { useState, ChangeEvent, FocusEvent } from "react";
-import Config from "@src/constants/Config";
-
-const API_URL = Config.API_URL;
 
 const LoginCard = () => {
   const { t } = useTranslation();
@@ -34,7 +29,7 @@ const LoginCard = () => {
 
   const login = async (email: string, password: string) => {
     try {
-      const res = await axios.post(`${API_URL}/api/auth/signin`, {
+      const res = await baseInstance.post("/api/auth/signin", {
         email,
         password,
       });

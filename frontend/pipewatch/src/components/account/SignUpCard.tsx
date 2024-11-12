@@ -1,19 +1,15 @@
-import axios from "axios";
-
-import { useState, ChangeEvent } from "react";
-import { useTranslation, Trans } from "react-i18next";
+import { ChangeEvent, useState } from "react";
+import { Trans, useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 
-import { Input, Button } from "@headlessui/react";
+import { Button, Input } from "@headlessui/react";
 
 import { CompanyListBox } from "@components/account/SignUp/CompanyListbox";
 import { CompanyType } from "@src/components/account/SignUp/inputType";
 
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
-import Config from "@src/constants/Config";
-
-const API_URL = Config.API_URL;
+import { baseInstance } from "@src/stores/apiClient";
 
 interface FormState {
   email: string;
@@ -27,8 +23,8 @@ interface FormState {
 }
 
 const verifyEmail = (email: string) => {
-  axios
-    .post(`${API_URL}/api/auth/send-email-code`, email)
+  baseInstance
+    .post("/api/auth/send-email-code", email)
     .then((res) => {
       console.log(res.data.body);
     })
@@ -99,8 +95,8 @@ const SignUpCard = () => {
   };
 
   const verifyEmailCode = (email: string, verifyCode: number) => {
-    axios
-      .post(`${API_URL}/api/auth/verify-email-code`, { email, verifyCode })
+    baseInstance
+      .post("/api/auth/verify-email-code", { email, verifyCode })
       .then((res) => {
         console.log(res.data.body);
         setIsEmailVerified(true);
@@ -131,8 +127,8 @@ const SignUpCard = () => {
     Object.values(formState).every((value) => value !== "");
 
   const confirmSignUp = (formState: FormState) => {
-    axios
-      .post(`${API_URL}/api/auth`, formState)
+    baseInstance
+      .post("/api/auth", formState)
       .then((res) => {
         console.log("회원가입 성공: ", res.data.body);
         navigate("/account/auth/completed", {
