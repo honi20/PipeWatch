@@ -15,7 +15,7 @@ else:
 
 from fastapi import FastAPI
 from pydantic import BaseModel
-from typing import List, Tuple
+from typing import List
 from PIL import Image
 import pyrender
 import numpy as np
@@ -49,9 +49,10 @@ BASE_WORK_DIR = os.getenv("BASE_WORK_DIR")
 
 app = FastAPI()
 
+# 파이프 모델 생성 요청
 class CreatePipelineModelRequest(BaseModel):
     modelUuid: str
-    coords: List[List[Tuple[float, float]]]
+    coords: List[List[List[float]]]
     radius: float = 1
 
 # 파이프라인 모델 생성 api
@@ -60,8 +61,11 @@ def create_pipeline_model(data: CreatePipelineModelRequest):
     work_dir = os.path.join(BASE_WORK_DIR, data.modelUuid)
     os.makedirs(work_dir, exist_ok=True)
 
+    # 파이프 분류
+    pipelines = gather_pipes(data.coords)
+
     # 파일 생성
-    stl_paths = create_stl_files(data.coords, data.radius, work_dir)
+    stl_paths = create_stl_files(pipelines, data.radius, work_dir)
     gltf_path = os.path.join(work_dir, f"origin_Pipeline_{data.modelUuid}.gltf")
     compressed_gltf_path = create_gltf(stl_paths, data.modelUuid, work_dir, gltf_path)
 
@@ -81,39 +85,81 @@ def create_pipeline_model(data: CreatePipelineModelRequest):
     shutil.rmtree(work_dir)
 
     # 결과 전송
-    send_data(data.userUuid, pipeModel_URL, thumbnail_URL)
+    send_data(data.modelUuid, pipeModel_URL, thumbnail_URL)
 
     return {"pipeModel_URL": pipeModel_URL, "thumbnail_URL": thumbnail_URL}
 
-def create_stl_files(coords, radius, work_dir):
-    stl_paths = []
+# 파이프 분류 함수
+def gather_pipes(request_coords: List[List[List[float]]]):
+    pipelines = []
 
-    for i, pipeline_coords in enumerate(coords):
-        pipeline_name = f"PipeObj_{i + 1}"
-        stl_paths.extend(create_pipeline(pipeline_coords, radius, pipeline_name, work_dir))
+    for coord_pair in request_coords:
+        coord1, coord2 = coord_pair[0], coord_pair[1]
+        coord1_connected_pipeline = None
+        coord2_connected_pipeline = None
 
-    return stl_paths
+        for pipeline in pipelines:
+            if coord1 == pipeline[0]:
+                coord1_connected_pipeline = pipeline
+            elif coord1 == pipeline[-1]:
+                coord1_connected_pipeline = pipeline
+
+            if coord2 == pipeline[0]:
+                coord2_connected_pipeline = pipeline
+            elif coord2 == pipeline[-1]:
+                coord2_connected_pipeline = pipeline
+
+            if coord1_connected_pipeline and coord2_connected_pipeline:
+                break
+
+        if coord1_connected_pipeline and coord2_connected_pipeline:
+            if coord1_connected_pipeline[-1] == coord1:
+                coord1_connected_pipeline.extend(
+                coord2_connected_pipeline if coord2_connected_pipeline[0] == coord2 else coord2_connected_pipeline[::-1]
+            )
+            elif coord1_connected_pipeline[0] == coord1:
+                coord1_connected_pipeline[:0] = (
+                coord2_connected_pipeline if coord2_connected_pipeline[-1] == coord2 else coord2_connected_pipeline[::-1]
+            )
+            pipelines.remove(coord2_connected_pipeline)
+
+        elif coord1_connected_pipeline:
+            if coord1_connected_pipeline[-1] == coord1:
+                coord1_connected_pipeline.append(coord2)
+            elif coord1_connected_pipeline[0] == coord1:
+                coord1_connected_pipeline.insert(0, coord2)
+
+        elif coord2_connected_pipeline:
+            if coord2_connected_pipeline[-1] == coord2:
+                coord2_connected_pipeline.append(coord1)
+            elif coord2_connected_pipeline[0] == coord2:
+                coord2_connected_pipeline.insert(0, coord1)
+
+        else:
+            pipelines.append([coord1, coord2])
+
+    return pipelines
 
 # 파이프라인 생성 함수
-def create_pipeline(coords, radius, pipeline_name, work_dir):
+def create_pipeline(coords, radius, pipeline_name, work_dir, segment_index):
     stl_paths = []
-    start_point = coords[0]
-    end_point = coords[1]    
-    segment_index = 1
+    start_coord = coords[0]
+    end_coord = coords[1]
 
     for index in range(2, len(coords)):
-        if check_collinear(start_point, end_point, coords[index]):
-            end_point = coords[index]
+        if check_collinear(start_coord, end_coord, coords[index]):
+            end_coord = coords[index]
         else:
-            create_cylinder(start_point, end_point, radius, f"{pipeline_name}_Segment_{segment_index}", work_dir, stl_paths)
-            create_connector(end_point, radius, f"{pipeline_name}_Connector_{segment_index}", work_dir, stl_paths)
-            start_point = end_point
-            end_point = coords[index]
+            create_cylinder(start_coord, end_coord, radius, f"{pipeline_name}_Segment_{segment_index}", work_dir, stl_paths)
+            create_connector(end_coord, radius, f"{pipeline_name}_Connector_{segment_index}", work_dir, stl_paths)
+            start_coord = end_coord
+            end_coord = coords[index]
             segment_index += 1
 
-    create_cylinder(start_point, end_point, radius, f"{pipeline_name}_Segment_{segment_index}", work_dir, stl_paths)
+    create_cylinder(start_coord, end_coord, radius, f"{pipeline_name}_Segment_{segment_index}", work_dir, stl_paths)
+    segment_index += 1
 
-    return stl_paths
+    return stl_paths, segment_index
 
 # 직선 판단 함수
 def check_collinear(p1, p2, p3):
@@ -186,6 +232,18 @@ def create_connector(center, radius, name, work_dir, stl_paths):
     connector_path = os.path.join(work_dir, f"{name}.stl")
     connector.val().exportStl(connector_path)
     stl_paths.append(connector_path)
+
+# STL 파일 생성
+def create_stl_files(coords, radius, work_dir):
+    stl_paths = []
+    segment_index = 1
+
+    for i, pipeline_coords in enumerate(coords):
+        pipeline_name = "PipeObj_1"
+        new_stl_paths, segment_index = create_pipeline(pipeline_coords, radius, pipeline_name, work_dir, segment_index)
+        stl_paths.extend(new_stl_paths)
+
+    return stl_paths
 
 # GLTF 생성 함수
 def create_gltf(stl_paths, modelUuid, work_dir, gltf_path):
@@ -263,11 +321,11 @@ def upload_S3(file_path, S3_key):
     return S3_URL
 
 # 결과 전송 함수
-def send_data(user_uuid: str, model_url: str, preview_img_url: str) -> dict:
+def send_data(model_uuid: str, model_url: str, preview_img_url: str) -> dict:
     target_url = "https://api.pipewatch.co.kr/api/models/modeling"
     
     payload = {
-        "userUuid": user_uuid,
+        "modelUuid": model_uuid,
         "modelUrl": model_url,
         "previewImgUrl": preview_img_url
     }
