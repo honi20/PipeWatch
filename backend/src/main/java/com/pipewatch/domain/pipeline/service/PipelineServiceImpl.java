@@ -4,6 +4,8 @@ import com.pipewatch.domain.pipeline.model.dto.PipelineRequest;
 import com.pipewatch.domain.pipeline.model.dto.PipelineResponse;
 import com.pipewatch.domain.pipeline.model.entity.*;
 import com.pipewatch.domain.pipeline.repository.*;
+import com.pipewatch.domain.pipelineModel.model.entity.PipelineModel;
+import com.pipewatch.domain.pipelineModel.repository.PipelineModelRepository;
 import com.pipewatch.domain.user.model.entity.Role;
 import com.pipewatch.domain.user.model.entity.User;
 import com.pipewatch.domain.user.repository.UserRepository;
@@ -28,6 +30,7 @@ public class PipelineServiceImpl implements PipelineService {
 	private final PipeMemoRepository pipeMemoRepository;
 	private final PipelineMaterialRepository pipelineMaterialRepository;
 	private final PipelinePropertyRepository pipelinePropertyRepository;
+	private final PipelineModelRepository pipelineModelRepository;
 
 	@Override
 	public PipelineResponse.DetailDto getPipelineDetail(Long userId, Long pipelineId) {
@@ -54,6 +57,15 @@ public class PipelineServiceImpl implements PipelineService {
 
 		Pipeline pipeline = pipelineRepository.findById(pipelineId)
 				.orElseThrow(() -> new BaseException(PIPELINE_NOT_FOUND));
+
+		// 모델의 단일 파이프라면, 모델명도 수정
+		List<Pipeline> pipelines = pipelineRepository.findByPipelineModelId(pipeline.getPipelineModel().getId());
+
+		if (pipelines.size() == 1) {
+			PipelineModel model = pipelines.get(0).getPipelineModel();
+			model.updateName(requestDto.getName());
+			pipelineModelRepository.save(model);
+		}
 
 		pipeline.updateName(requestDto.getName());
 		pipelineRepository.save(pipeline);

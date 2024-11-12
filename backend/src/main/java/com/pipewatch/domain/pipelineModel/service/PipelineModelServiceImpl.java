@@ -253,6 +253,16 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 		validateEnterprise(user, pipelineModel.getEnterprise());
 
 		pipelineModel.updateName(requestDto.getName());
+
+		// 만약 속한 파이프라인이 1개라면, 해당 파이프라인 이름도 변경
+		List<Pipeline> pipelines = pipelineRepository.findByPipelineModelId(pipelineModel.getId());
+
+		if (pipelines != null && pipelines.size() == 1) {
+			Pipeline pipeline = pipelines.getFirst();
+			pipeline.updateName(requestDto.getName());
+			pipelineRepository.save(pipeline);
+		}
+
 		pipelineModelRepository.save(pipelineModel);
 	}
 
@@ -445,7 +455,7 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 			// 파이프 라인 저장
 			if (relatedPipeline == null) {
 				relatedPipeline = Pipeline.builder()
-						.name("PipeLine_" + pipelineNumber)
+						.name(pipelineModel.getName())
 						.pipelineModel(pipelineModel)
 						.property(null)
 						.build();
