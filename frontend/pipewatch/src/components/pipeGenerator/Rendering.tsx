@@ -7,6 +7,8 @@ import { Loader } from "@react-three/drei";
 import TestRendering from "@components/pipeGenerator/TestRendering";
 
 import { IconButton } from "@components/common/IconButton";
+import ViewInArIcon from "@mui/icons-material/ViewInAr";
+
 import { getApiClient } from "@src/stores/apiClient";
 
 type urlType = {
@@ -65,7 +67,10 @@ export const Rendering = () => {
               modelId={modelId}
             />
           ) : (
-            <div>model 생성중</div>
+            <div className="flex flex-col items-center justify-center w-full h-full text-[24px] gap-4">
+              <ViewInArIcon sx={{ fontSize: "50px" }} />
+              <p>model 생성중</p>
+            </div>
           )}
           <Leva collapsed />
         </Suspense>
