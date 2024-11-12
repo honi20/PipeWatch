@@ -3,24 +3,37 @@ import { Textarea } from "@headlessui/react";
 import clsx from "clsx";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { useMemoStore } from "@src/stores/memoStore";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { usePipe } from "@src/components/context/PipeContext";
 import { getApiClient } from "@src/stores/apiClient";
-import { MemoType } from "@src/stores/memoStore";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 
 interface PipeMemoProps {
+  modelName: string;
   building: string;
   floor: number;
   updatedAt: string;
   onViewChange: () => void;
+  setIsTotalView: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const PipeMemo: React.FC<PipeMemoProps> = (props) => {
   const { memo, setMemo, memoList, setMemoList } = useMemoStore();
-  const { building, floor, updatedAt, onViewChange } = props;
+  const {
+    modelName,
+    building,
+    floor,
+    updatedAt,
+    onViewChange,
+    setIsTotalView,
+  } = props;
   const { selectedPipeId } = usePipe();
   const [pipeName, setPipeName] = useState<string>("");
 
+  // MODEL_MEMO 및 TOTEL_VIEW로 전환
+  const handleTotalView = () => {
+    setIsTotalView(true);
+    onViewChange();
+  };
   // 파이프 이름 및 메모 리스트 조회
   const getPipeInfo = async (pipeId: number) => {
     const apiClient = getApiClient();
@@ -79,6 +92,7 @@ export const PipeMemo: React.FC<PipeMemoProps> = (props) => {
       console.log(err);
     }
   };
+
   // memoList renderer
   useEffect(() => {
     getPipeInfo(selectedPipeId);
@@ -116,12 +130,11 @@ export const PipeMemo: React.FC<PipeMemoProps> = (props) => {
     <div className="w-[400px] h-[680px] flex flex-col bg-block rounded-[30px] px-[50px] py-[30px] text-white justify-between items-center gap-5">
       <div className="flex flex-col w-full h-full">
         {/* navigate */}
-        <div
-          className="flex justify-start cursor-pointer hover:text-primary-200"
-          onClick={onViewChange}
-        >
-          <ChevronLeftIcon />
-          <p>속성</p>
+        <div className="flex justify-start cursor-pointer hover:text-primary-200">
+          <div className="flex" onClick={handleTotalView}>
+            <ChevronLeftIcon />
+            <p>{modelName}</p>
+          </div>
         </div>
         <div className="flex flex-col w-full h-full gap-7">
           {/* header */}
@@ -133,7 +146,9 @@ export const PipeMemo: React.FC<PipeMemoProps> = (props) => {
               {building} {floor > 0 ? `${floor}층` : `지하 ${-floor}층`}
             </p>
           </div>
-
+          <div className="flex flex-col w-full">
+            <h3 className="text-[20px] font-bold self-start px-1">결함 체크</h3>
+          </div>
           {/* 메모 input */}
           <div className="flex flex-col w-full">
             <h3 className="text-[20px] font-bold self-start px-1">메모</h3>

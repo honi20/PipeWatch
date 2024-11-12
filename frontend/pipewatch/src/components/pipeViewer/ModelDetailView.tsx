@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import GLTFViewer from "@src/components/pipeViewer/GLTFViewer";
 import "./viewer.css";
 import { getApiClient } from "@src/stores/apiClient";
-import { ModelDetailType } from "@src/components/pipeViewer/PipeType";
+import { ModelDetailType } from "./Type/PipeType";
 import { PipeProvider } from "@src/components/context/PipeContext";
 import { SelectViewProvider } from "@src/components/context/SelectViewContext";
 

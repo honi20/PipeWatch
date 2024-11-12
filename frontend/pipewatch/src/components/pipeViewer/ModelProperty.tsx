@@ -3,23 +3,23 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { PipeMaterialListbox } from "./listbox/PipeMaterialListbox";
 import { Input, Button } from "@headlessui/react";
 import clsx from "clsx";
-import { PipelineType } from "@src/components/pipeViewer/PipeType";
+import { PipelineType } from "./Type/PipeType";
 import { getApiClient } from "@src/stores/apiClient";
-import { PropertyType } from "@src/components/pipeViewer/PipeType";
+import { PropertyType } from "./Type/PipeType";
 import { FluidMaterialListbox } from "@src/components/pipeViewer/listbox/FluidMaterialListbox";
+import { MaterialListType } from "@src/components/pipeViewer/Type/MaterialType";
 
 interface ModelPropertyProps {
   pipelines: PipelineType[];
+  modelName: string;
   onViewChange: () => void;
   building: string;
   floor: number;
 }
 
 export const ModelProperty: React.FC<ModelPropertyProps> = (props) => {
-  const { pipelines, onViewChange, building, floor } = props;
+  const { pipelines, modelName, onViewChange, building, floor } = props;
   const [pipelineProperty, setPipelineProperty] = useState<PropertyType>();
-  const [pipelineName, setPipelineName] = useState<string>();
-  const [pipelineUpdatedAt, setPipelineUpdatedAt] = useState<string>();
   const [pipeMaterial, setPipeMaterial] = useState<string>(
     pipelineProperty ? pipelineProperty.pipeMaterial : "-"
   );
@@ -35,7 +35,27 @@ export const ModelProperty: React.FC<ModelPropertyProps> = (props) => {
   const [fluidFlowRate, setFluidFlowRate] = useState<number>(
     pipelineProperty ? pipelineProperty.velocity : 0
   );
+  const [pipeMaterialList, setPipeMaterialList] = useState<MaterialListType>();
+  const [fluidMaterialList, setFluidMaterialList] =
+    useState<MaterialListType>();
 
+  // fetchMaterial 리스트조회
+  const fetchMaterial = async () => {
+    const apiClient = getApiClient();
+    try {
+      const res = await apiClient({
+        method: "get",
+        url: "/api/pipelines/materials",
+      });
+      console.log(res.data.header.httpStatusCode, res.data.header.message);
+      console.log(res.data.body);
+      const materialList = res.data.body;
+      setFluidMaterialList(materialList[0]);
+      setPipeMaterialList(materialList[1]);
+    } catch (err) {
+      console.log(err);
+    }
+  };
   // pipelineId 상세조회
   const getPipelineDetail = async () => {
     const apiClient = getApiClient();
@@ -46,13 +66,18 @@ export const ModelProperty: React.FC<ModelPropertyProps> = (props) => {
       });
       console.log(res.data.header.httpStatusCode, res.data.header.message);
       console.log(res.data.body);
-      setPipelineName(res.data.body.name);
       setPipelineProperty(res.data.body.property);
-      setPipelineUpdatedAt(res.data.body.updatedAt);
     } catch (err) {
       console.log(err);
     }
   };
+
+  useEffect(() => {
+    if (!pipeMaterialList || !fluidMaterial) {
+      fetchMaterial();
+    }
+  }, []);
+
   useEffect(() => {
     getPipelineDetail();
   }, [pipelines]);
@@ -63,7 +88,7 @@ export const ModelProperty: React.FC<ModelPropertyProps> = (props) => {
       setPipeOuterDiameter(pipelineProperty!.outerDiameter);
     }
   }, [pipelineProperty]);
-  
+
   // input이 바뀌었을때 true
   const [isChanged, setIsChanged] = useState(false);
 
@@ -98,7 +123,7 @@ export const ModelProperty: React.FC<ModelPropertyProps> = (props) => {
         <div className="flex flex-col w-full h-full gap-7">
           {/* header */}
           <div className="flex flex-col items-center w-full">
-            <h2 className="text-[30px] font-bold">{pipelineName}</h2>
+            <h2 className="text-[30px] font-bold">{modelName}</h2>
             <p className="text-[20px]">
               {building} {floor > 0 ? floor : `지하 ${-floor}`}층
             </p>
@@ -118,10 +143,13 @@ export const ModelProperty: React.FC<ModelPropertyProps> = (props) => {
               </h3>
               <div className="flex items-center justify-between w-full px-1">
                 <div className="w-[100px] px-1">재질</div>
-                <PipeMaterialListbox
-                  value={pipeMaterial}
-                  onChange={setPipeMaterial}
-                />
+                {pipeMaterialList && (
+                  <PipeMaterialListbox
+                    pipeMaterialList={pipeMaterialList.materials}
+                    value={pipeMaterial}
+                    onChange={setPipeMaterial}
+                  />
+                )}
               </div>
               <div className="flex items-center justify-between w-full px-1">
                 <div className="w-[100px] px-1">Outer Diameter</div>

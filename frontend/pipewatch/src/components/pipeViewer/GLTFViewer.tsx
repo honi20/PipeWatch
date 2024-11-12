@@ -1,10 +1,7 @@
 import React, { useRef, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { CameraControls } from "@react-three/drei";
-import {
-  ModelDetailType,
-  PipelineType,
-} from "@src/components/pipeViewer/PipeType";
+import { ModelDetailType, PipelineType } from "./Type/PipeType";
 import { SceneContent } from "@src/components/pipeViewer/SceneContent";
 import { ModelMemo } from "@src/components/pipeViewer/ModelMemo";
 import { ModelProperty } from "@src/components/pipeViewer/ModelProperty";
@@ -23,7 +20,7 @@ const GLTFViewer: React.FC<GLTFViewerProps> = (props) => {
   const { gltfUrl, pipelines, modelId, modelDetail } = props;
   const cameraControlsRef = useRef<CameraControls | null>(null);
   const [isTotalView, setIsTotalView] = useState<boolean>(true);
-  
+
   const handleTotalViewButton = () => {
     setIsTotalView(true);
     setSelectView("MODEL_MEMO");
@@ -61,6 +58,7 @@ const GLTFViewer: React.FC<GLTFViewerProps> = (props) => {
             />
           ) : selectView === "PROPERTY" ? (
             <ModelProperty
+              modelName={modelDetail!.name}
               pipelines={modelDetail!.pipelines}
               building={modelDetail!.building}
               floor={modelDetail!.floor}
@@ -69,10 +67,12 @@ const GLTFViewer: React.FC<GLTFViewerProps> = (props) => {
           ) : (
             selectView === "PIPE_MEMO" && (
               <PipeMemo
+                modelName={modelDetail!.name}
                 building={modelDetail!.building}
                 floor={modelDetail!.floor}
                 updatedAt={modelDetail!.updatedAt}
                 onViewChange={() => setSelectView("MODEL_MEMO")}
+                setIsTotalView={setIsTotalView}
               />
             )
           ))}

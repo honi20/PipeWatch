@@ -6,7 +6,7 @@ import {
 } from "@headlessui/react";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import clsx from "clsx";
-import { FloorListboxProps } from "@src/components/pipeViewer/PipeType";
+import { FloorListboxProps } from "../Type/PipeType";
 
 export const FloorListbox: React.FC<FloorListboxProps> = ({
   onFloorChange,

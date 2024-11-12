@@ -4,7 +4,7 @@ import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader";
 import { ThreeEvent, useLoader } from "@react-three/fiber";
 import { CameraControls } from "@react-three/drei";
 import * as THREE from "three";
-import { PipelineType } from "@src/components/pipeViewer/PipeType";
+import { PipelineType } from "../Type/PipeType";
 import { useSelectView } from "@src/components/context/SelectViewContext";
 import { usePipe } from "@src/components/context/PipeContext";
 export const PipeModel: React.FC<{

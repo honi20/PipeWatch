@@ -3,7 +3,7 @@ import { useThree } from "@react-three/fiber";
 import * as THREE from "three";
 import { PipeModel } from "@src/components/pipeViewer/renderer/PipeModel";
 import { CameraControls } from "@react-three/drei";
-import { PipelineType } from "@src/components/pipeViewer/PipeType";
+import { PipelineType } from "./Type/PipeType";
 
 export const SceneContent: React.FC<{
   gltfUrl: string;

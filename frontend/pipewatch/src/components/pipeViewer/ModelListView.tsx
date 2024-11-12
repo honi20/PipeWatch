@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import SelectPipeModelIcon from "@assets/icons/select_pipe_model.png";
-import { ModelsType, BuildingType } from "@components/pipeViewer/PipeType";
+import { ModelsType, BuildingType } from "./Type/PipeType";
 import { BuildingListbox } from "@components/pipeViewer/listbox/BuildingListbox";
 import "./viewer.css";
 import { FloorListbox } from "./listbox/FloorListbox";
@@ -17,13 +17,14 @@ export const ModelListView: React.FC<ModelListViewProps> = ({ models }) => {
   const [selectedFloor, setSelectedFloor] = useState<number | null>(null);
   const [buildingList, setBuildingList] = useState<BuildingType[]>([]);
   const [floorList, setFloorList] = useState<number[]>([]);
+
   // 건물 및 층수 조회 함수
   const getBuildingFloors = async () => {
     const apiClient = getApiClient();
     try {
       const res = await apiClient({
         method: "get",
-        url: "/api/enterprises/floors",
+        url: "/api/enterprises/buildings/floors",
       });
       console.log(res.data.header.httpStatusCode, res.data.header.message);
       console.log(res.data.body);
