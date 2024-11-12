@@ -6,33 +6,27 @@ import {
 } from "@headlessui/react";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import clsx from "clsx";
-import { useState } from "react";
-
-interface FluidMaterialType {
-  id: number;
-  material: string;
-}
+import { useState, useEffect } from "react";
+import { MaterialType } from "@src/components/pipeViewer/Type/MaterialType";
 
 interface FluidMaterialListboxProps {
   value: string;
+  fluidMaterialList?: MaterialType[];
   onChange: (material: string) => void;
 }
 
 export const FluidMaterialListbox: React.FC<FluidMaterialListboxProps> = ({
+  fluidMaterialList,
   value,
   onChange,
 }) => {
-  const FluidMaterialList: FluidMaterialType[] = [
-    { id: 0, material: "-" },
-    { id: 1, material: "water" },
-    { id: 2, material: "vapor" },
-    { id: 3, material: "oil" },
-  ];
+  // 초기 선택된 재질 설정
+  const [selected, setSelected] = useState<string>(value || "-");
+  const language = localStorage.getItem("language");
 
-  // 이미 선택된 Fluid material로 들어가야함.
-  const [selected, setSelected] = useState<string>(
-    value || FluidMaterialList[0].material
-  );
+  useEffect(() => {
+    setSelected(value || "-");
+  }, [value]);
 
   const handleChange = (material: string) => {
     setSelected(material);
@@ -61,18 +55,21 @@ export const FluidMaterialListbox: React.FC<FluidMaterialListboxProps> = ({
           transition
           className={clsx(
             "w-[var(--button-width)] rounded-md border border-gray-800 bg-white dark:bg-black p-1 [--anchor-gap:var(--spacing-1)] focus:outline-none",
-            "transition duration-100 ease-in data-[leave]:data-[closed]:opacity-0"
+            "transition duration-100 ease-in data-[leave]:data-[closed]:opacity-0 z-10"
           )}
         >
-          {FluidMaterialList.map((item, idx) => (
-            <ListboxOption
-              key={idx}
-              value={item.material}
-              className="group flex cursor-default items-center gap-2 rounded-lg py-1.5 px-3 select-none data-[focus]:bg-white/10"
-            >
-              <div className="dark:text-white text-sm/6">{item.material}</div>
-            </ListboxOption>
-          ))}
+          {fluidMaterialList &&
+            fluidMaterialList.map((item, idx) => (
+              <ListboxOption
+                key={idx}
+                value={language === "ko" ? item.koreanName : item.englishName}
+                className="group flex cursor-default items-center gap-2 rounded-lg py-1.5 px-3 select-none data-[focus]:bg-white/10"
+              >
+                <div className="dark:text-white text-sm/6">
+                  {language === "ko" ? item.koreanName : item.englishName}
+                </div>
+              </ListboxOption>
+            ))}
         </ListboxOptions>
       </Listbox>
     </div>

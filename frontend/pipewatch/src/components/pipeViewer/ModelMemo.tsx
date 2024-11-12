@@ -3,8 +3,8 @@ import { Textarea } from "@headlessui/react";
 import clsx from "clsx";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { useMemoStore } from "@src/stores/memoStore";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 interface PipeMemoProps {
   modelId: number;
   modelName: string;
@@ -15,7 +15,8 @@ interface PipeMemoProps {
 }
 
 export const ModelMemo: React.FC<PipeMemoProps> = (props) => {
-  const { memo, setMemo, memoList, getMemoList, postMemo } = useMemoStore();
+  const { memo, setMemo, memoList, getMemoList, postMemo, deleteMemo } =
+    useMemoStore();
   const { modelId, modelName, building, floor, updatedAt, onViewChange } =
     props;
 
@@ -55,12 +56,11 @@ export const ModelMemo: React.FC<PipeMemoProps> = (props) => {
     <div className="w-[400px] h-[680px] flex flex-col bg-block rounded-[30px] px-[50px] py-[30px] text-white justify-between items-center gap-5">
       <div className="flex flex-col w-full h-full">
         {/* navigate */}
-        <div
-          className="flex justify-start cursor-pointer hover:text-primary-200"
-          onClick={onViewChange}
-        >
-          <ChevronLeftIcon />
-          <p>속성</p>
+        <div className="flex justify-end cursor-pointer hover:text-primary-200">
+          <div className="flex" onClick={onViewChange}>
+            <p>속성</p>
+            <ChevronRightIcon />
+          </div>
         </div>
         <div className="flex flex-col w-full h-full gap-7">
           {/* header */}
@@ -88,30 +88,30 @@ export const ModelMemo: React.FC<PipeMemoProps> = (props) => {
 
             {/* 메모 조회창 */}
             <ul className="max-h-[330px] mt-4 space-y-4 overflow-auto">
-              {memoList &&
-                memoList
-                  .slice()
-                  .reverse()
-                  .map((item, idx) => (
-                    <li
-                      key={idx}
-                      className="flex justify-between w-full gap-1 px-1 bg-gray-700"
-                    >
-                      <div className="flex flex-col gap-1">
-                        <div className="text-[17px]">{item.memo}</div>
-                        <div className="flex gap-2 text-[15px]">
-                          <p>{item.writer.userName}</p>
-                          <p className="text-gray-500">
-                            {formatMemoDate(new Date(item.createdAt))}
-                          </p>
-                        </div>
+              {Array.isArray(memoList) && memoList.length > 0 ? (
+                memoList.map((item, idx) => (
+                  <li
+                    key={idx}
+                    className="flex justify-between w-full gap-1 px-1 bg-gray-700"
+                  >
+                    <div className="flex flex-col gap-1">
+                      <div className="text-[17px]">{item.memo}</div>
+                      <div className="flex gap-2 text-[15px]">
+                        <p>{item.writer.userName}</p>
+                        <p className="text-gray-500">
+                          {formatMemoDate(new Date(item.createdAt))}
+                        </p>
                       </div>
-                      <DeleteForeverIcon
-                        onClick={() => console.log("삭제할거지롱 포실")}
-                        className="self-end h-full text-gray-500 hover:text-primary-200"
-                      />
-                    </li>
-                  ))}
+                    </div>
+                    <DeleteForeverIcon
+                      onClick={() => deleteMemo(item.memoId)}
+                      className="self-end h-full text-gray-500 hover:text-primary-200"
+                    />
+                  </li>
+                ))
+              ) : (
+                <></>
+              )}
             </ul>
           </div>
         </div>

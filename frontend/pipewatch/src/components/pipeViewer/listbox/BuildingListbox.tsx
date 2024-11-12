@@ -7,7 +7,7 @@ import {
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import clsx from "clsx";
 import { useState } from "react";
-import { BuildingListboxProps } from "@src/components/pipeViewer/PipeType";
+import { BuildingListboxProps } from "../Type/PipeType";
 
 export const BuildingListbox = ({
   onBuildingChange,

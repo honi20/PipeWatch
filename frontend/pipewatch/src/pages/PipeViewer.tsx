@@ -3,7 +3,7 @@ import { getApiClient } from "@src/stores/apiClient";
 import { ModelListView } from "@src/components/pipeViewer/ModelListView";
 import NoAccessImage from "@assets/images/status/no_access.png";
 import NoPipeModelImage from "@assets/images/status/no_pipe_model.png";
-import { ModelsType } from "@src/components/pipeViewer/PipeType";
+import { ModelsType } from "../components/pipeViewer/Type/PipeType";
 import { useState, useEffect } from "react";
 
 export const PipeViewer = () => {
@@ -32,7 +32,7 @@ export const PipeViewer = () => {
       console.log("모델리스트 없음");
       getModelList();
     }
-  }, [models]);
+  }, []);
 
   // 임시 계정명
   const tempUserRole: string = "admin";

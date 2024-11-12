@@ -1,12 +1,3 @@
-export interface MemoType {
-  memo: string;
-  writer: {
-    userUuid: string;
-    userName: string;
-  };
-  createdAt: string;
-}
-
 export interface ModelsType {
   modelId: number;
   building: string;
@@ -56,7 +47,7 @@ export interface ModelDetailType {
   };
 }
 export interface PropertyType {
-  pipeMaterial: string;
+  pipeMaterialId: number;
   outerDiameter: number;
   innerDiameter: number;
   fluidMaterial: string;

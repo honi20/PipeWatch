@@ -1,13 +1,24 @@
 import { create } from "zustand";
 import { getApiClient } from "@src/stores/apiClient";
-import { MemoType } from "@src/components/pipeViewer/PipeType";
+
+export interface MemoType {
+  memo: string;
+  memoId: number;
+  writer: {
+    userUuid: string;
+    userName: string;
+  };
+  createdAt: string;
+}
 
 interface MemoState {
   memo: string;
   memoList: MemoType[] | null;
   setMemo: (memo: string) => void;
   getMemoList: (modelId: number) => Promise<void>;
+  setMemoList: (memoList: MemoType[] | null) => void;
   postMemo: (modelId: number, memo: string) => Promise<void>;
+  deleteMemo: (memoId: number) => Promise<void>;
 }
 
 export const useMemoStore = create<MemoState>((set, get) => ({
@@ -15,15 +26,17 @@ export const useMemoStore = create<MemoState>((set, get) => ({
   memoList: null,
 
   setMemo: (memo) => set({ memo }),
+  setMemoList: (memoList) => set({ memoList }),
 
   getMemoList: async (modelId) => {
     const apiClient = getApiClient();
     try {
       const res = await apiClient({
         method: "get",
-        url: `/api/models/memos/${modelId}`,
+        url: `/api/models/${modelId}/memos`,
       });
       console.log(res.data.header.httpStatusCode, res.data.header.message);
+      console.log(res.data.body);
       set({ memoList: res.data.body.memoList });
     } catch (err) {
       console.log(err);
@@ -35,7 +48,7 @@ export const useMemoStore = create<MemoState>((set, get) => ({
     try {
       const res = await apiClient({
         method: "post",
-        url: `/api/models/memos/${modelId}`,
+        url: `/api/models/${modelId}/memos`,
         data: {
           memo: memo,
         },
@@ -43,6 +56,23 @@ export const useMemoStore = create<MemoState>((set, get) => ({
       console.log(res.data.header.httpStatusCode, res.data.header.message);
       // 메모 저장
       await get().getMemoList(modelId);
+    } catch (err) {
+      console.log(err);
+    }
+  },
+
+  deleteMemo: async (memoId: number) => {
+    const apiClient = getApiClient();
+    try {
+      const res = await apiClient({
+        method: "delete",
+        url: `/api/models/memos/${memoId}`,
+      });
+      console.log(res);
+      const updatedMemoList = get().memoList
+        ? get().memoList.filter((item) => item.memoId !== memoId)
+        : [];
+      set({ memoList: updatedMemoList });
     } catch (err) {
       console.log(err);
     }
