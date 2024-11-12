@@ -1,3 +1,14 @@
+declare global {
+  interface Window {
+    _env_: {
+      VITE_URL: string;
+      VITE_LOGIN_URL: string;
+      VITE_LOCAL_LOGIN_URL: string;
+      VITE_NODE_ENV: string;
+    };
+  }
+}
+
 const Config = {
   API_URL: window._env_ ? window._env_.VITE_URL : import.meta.env.VITE_URL,
   PRODUCT_LOGIN_URL: window._env_
