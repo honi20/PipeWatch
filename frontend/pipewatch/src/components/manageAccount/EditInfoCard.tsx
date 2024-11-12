@@ -72,6 +72,7 @@ const EditInfoCard = () => {
     const value = e.target.value;
     setEmpClass(value);
   };
+
   const handleDepartmentChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setDepartment(value);
