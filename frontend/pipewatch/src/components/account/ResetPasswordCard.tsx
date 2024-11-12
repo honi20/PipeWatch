@@ -62,7 +62,7 @@ const ResetPasswordCard = () => {
 
   const confirmResetPassword = (pwdUuid: string, newPassword: string) => {
     baseInstance
-      .post("/api/auth/reset-pwd", {
+      .post("/api/auth/password-reset", {
         pwdUuid: pwdUuid,
         newPassword: newPassword,
       })

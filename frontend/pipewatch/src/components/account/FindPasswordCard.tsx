@@ -44,7 +44,7 @@ export const FindPasswordCard = () => {
 
   const confirmFindPassword = (name: string, email: string) => {
     baseInstance
-      .post("/api/auth/send-pwd-reset", {
+      .post("/api/auth/password-reset/request", {
         name: name,
         email: email,
       })

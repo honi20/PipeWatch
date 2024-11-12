@@ -30,7 +30,7 @@ const EditInfoCard = () => {
 
   const getUserInfo = async () => {
     try {
-      const res = await apiClient.get(`/api/users/mypage`);
+      const res = await apiClient.get(`/api/users/profile`);
       console.log("userInfo: ", res.data.body);
       setUserInfo(res.data.body);
     } catch (err) {
@@ -40,7 +40,7 @@ const EditInfoCard = () => {
 
   const updateUserInfo = async (department: string, empClass: string) => {
     try {
-      const res = await apiClient.put(`/api/users/mypage`, {
+      const res = await apiClient.put(`/api/users/profile`, {
         department: department,
         empClass: empClass,
       });

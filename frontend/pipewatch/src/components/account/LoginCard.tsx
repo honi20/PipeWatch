@@ -12,7 +12,7 @@ const LoginCard = () => {
   const saveUserInfo = async () => {
     const apiClient = getApiClient();
     try {
-      const res = await apiClient.get("/api/users/mypage");
+      const res = await apiClient.get("/api/users/profile");
       const userInfo = res.data.body;
       console.log("userInfo in LoginCard: ", userInfo);
 
@@ -29,7 +29,7 @@ const LoginCard = () => {
 
   const login = async (email: string, password: string) => {
     try {
-      const res = await baseInstance.post("/api/auth/signin", {
+      const res = await baseInstance.post("/api/auth/login", {
         email,
         password,
       });

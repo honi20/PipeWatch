@@ -24,7 +24,7 @@ export const VerificationTable: React.FC<TableProps> = ({ data }) => {
 
   const handleVerification = async (newRole: string, uuid: string) => {
     try {
-      const res = await apiClient.patch(`/api/management`, {
+      const res = await apiClient.patch(`/api/employees/role`, {
         userUuid: uuid,
         newRole: newRole,
       });
