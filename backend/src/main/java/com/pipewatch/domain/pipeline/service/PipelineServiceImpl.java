@@ -61,7 +61,7 @@ public class PipelineServiceImpl implements PipelineService {
 		// 모델의 단일 파이프라면, 모델명도 수정
 		List<Pipeline> pipelines = pipelineRepository.findByPipelineModelId(pipeline.getPipelineModel().getId());
 
-		if (pipelines.size() == 1) {
+		if (pipelines != null && pipelines.size() == 1) {
 			PipelineModel model = pipelines.get(0).getPipelineModel();
 			model.updateName(requestDto.getName());
 			pipelineModelRepository.save(model);
