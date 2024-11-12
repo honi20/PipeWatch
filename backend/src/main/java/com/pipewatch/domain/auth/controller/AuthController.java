@@ -20,14 +20,14 @@ import static com.pipewatch.global.statusCode.SuccessCode.*;
 public class AuthController implements AuthApiSwagger {
 	private final AuthService authService;
 
-	@PostMapping("/send-email-code")
+	@PostMapping("/email-code/send")
 	public ResponseEntity<?> emailCodeSend(@RequestBody AuthRequest.EmailCodeSendDto requestDto) throws NoSuchAlgorithmException {
 		authService.sendEmailCode(requestDto);
 
 		return new ResponseEntity<>(ResponseDto.success(EMAIL_CODE_SEND_OK, null), HttpStatus.OK);
 	}
 
-	@PostMapping("/verify-email-code")
+	@PostMapping("/email-code/verify")
 	public ResponseEntity<?> emailCodeVerify(@RequestBody AuthRequest.EmailCodeVerifyDto requestDto) {
 		authService.verifyEmailCode(requestDto);
 
@@ -48,7 +48,7 @@ public class AuthController implements AuthApiSwagger {
 		return new ResponseEntity<>(ResponseDto.success(ENTERPRISE_CREATED, null), HttpStatus.CREATED);
 	}
 
-	@PostMapping("/signin")
+	@PostMapping("/login")
 	public ResponseEntity<?> signin(@RequestBody AuthRequest.SigninDto requestDto) {
 		AuthResponse.AccessTokenDto responseDto = authService.signin(requestDto);
 
@@ -62,14 +62,14 @@ public class AuthController implements AuthApiSwagger {
 		return new ResponseEntity<>(ResponseDto.success(LOGOUT_OK, null), HttpStatus.OK);
 	}
 
-	@PostMapping("/send-pwd-reset")
+	@PostMapping("/password-reset/request")
 	public ResponseEntity<?> passwordResetEmailSend(@RequestBody AuthRequest.EmailPwdSendDto requestDto) {
 		authService.sendPasswordResetEmail(requestDto);
 
 		return new ResponseEntity<>(ResponseDto.success(PASSWORD_RESET_EMAIL_SEND, null), HttpStatus.OK);
 	}
 
-	@PostMapping("/reset-pwd")
+	@PostMapping("/password-reset")
 	public ResponseEntity<?> passwordReset(@RequestBody AuthRequest.PasswordResetDto requestDto) {
 		authService.resetPassword(requestDto);
 

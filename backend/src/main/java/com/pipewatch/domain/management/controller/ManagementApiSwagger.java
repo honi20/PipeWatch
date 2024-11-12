@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Tag(name = "Management API", description = "Management API Document")
 public interface ManagementApiSwagger {
-	@GetMapping("/waiting-list")
+	@GetMapping("/waiting")
 	@Operation(summary = "승인 대기 리스트 조회", description = "기업에 승인 요청 중인 유저 리스트 조회")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "승인 대기 리스트 조회 성공", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -74,7 +74,7 @@ public interface ManagementApiSwagger {
 	})
 	ResponseEntity<?> employeeList(@AuthenticationPrincipal Long userId);
 
-	@PatchMapping
+	@PatchMapping("/role")
 	@Operation(summary = "접근 권한 수정", description = "직원의 권한(EMPLOYEE/ADMIN) 수정")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "접근 권한 수정 성공", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,

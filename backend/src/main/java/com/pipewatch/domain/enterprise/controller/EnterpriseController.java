@@ -19,14 +19,14 @@ import static com.pipewatch.global.statusCode.SuccessCode.*;
 public class EnterpriseController implements EnterpriseApiSwagger {
 	private final EnterpriseService enterpriseService;
 
-	@GetMapping
+	@GetMapping("/detail")
 	public ResponseEntity<?> enterpriseDetail(@AuthenticationPrincipal Long userId) {
 		EnterpriseResponse.DetailDto responseDto = enterpriseService.getEnterpriseDetail(userId);
 
 		return new ResponseEntity<>(ResponseDto.success(ENTERPRISE_DETAIL_OK, responseDto), HttpStatus.OK);
 	}
 
-	@GetMapping("/list")
+	@GetMapping
 	public ResponseEntity<?> enterpriseList() {
 		EnterpriseResponse.ListDto responseDto = enterpriseService.getEnterpriseList();
 
@@ -40,7 +40,7 @@ public class EnterpriseController implements EnterpriseApiSwagger {
 		return new ResponseEntity<>(ResponseDto.success(BUILDING_LIST_OK, responseDto), HttpStatus.OK);
 	}
 
-	@GetMapping("/floors")
+	@GetMapping("/buildings/floors")
 	public ResponseEntity<?> buildingAndFloorList(@AuthenticationPrincipal Long userId) {
 		EnterpriseResponse.BuildingAndFloorListDto responseDto = enterpriseService.getBuildingAndFloorList(userId);
 

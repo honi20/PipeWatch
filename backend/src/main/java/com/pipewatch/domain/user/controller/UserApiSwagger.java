@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "User API", description = "User API Document")
 public interface UserApiSwagger {
-	@GetMapping("/mypage")
+	@GetMapping("/profile")
 	@Operation(summary = "마이페이지 조회")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "마이페이지 조회 성공", content = {
@@ -56,7 +56,7 @@ public interface UserApiSwagger {
 	})
 	ResponseEntity<?> myPage(@AuthenticationPrincipal Long userId);
 
-	@PutMapping("/mypage")
+	@PutMapping("/profile")
 	@Operation(summary = "개인정보 수정")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "개인정보 수정 성공", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -68,7 +68,7 @@ public interface UserApiSwagger {
 	})
 	ResponseEntity<?> mypageModify(@AuthenticationPrincipal Long userId, @RequestBody UserRequest.MyPageModifyDto requestDto);
 
-	@PatchMapping("/modify-pwd")
+	@PatchMapping("/password")
 	@Operation(summary = "비밀번호 수정")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "비밀번호 수정 성공", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -80,7 +80,7 @@ public interface UserApiSwagger {
 	})
 	ResponseEntity<?> passwordModify(@AuthenticationPrincipal Long userId, @RequestBody UserRequest.PasswordModifyDto requestDto);
 
-	@PatchMapping("/request")
+	@PatchMapping("/role-request")
 	@Operation(summary = "기업 승인 재요청")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "기업 승인 재요청 성공", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -89,7 +89,7 @@ public interface UserApiSwagger {
 	})
 	ResponseEntity<?> requestAssign(@AuthenticationPrincipal Long userId);
 
-	@DeleteMapping("/withdraw")
+	@DeleteMapping
 	@Operation(summary = "회원 탈퇴")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "204", description = "회원 탈퇴 성공", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,

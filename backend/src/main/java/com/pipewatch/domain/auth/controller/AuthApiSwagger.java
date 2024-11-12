@@ -18,7 +18,7 @@ import java.security.NoSuchAlgorithmException;
 
 @Tag(name = "Auth API", description = "Auth API Document")
 public interface AuthApiSwagger {
-	@PostMapping("/send-email-code")
+	@PostMapping("/email-code/send")
 	@Operation(summary = "메일 인증번호 전송")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "메일 인증코드 전송 성공", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -31,7 +31,7 @@ public interface AuthApiSwagger {
 	ResponseEntity<?> emailCodeSend(@RequestBody AuthRequest.EmailCodeSendDto requestDto
 	) throws NoSuchAlgorithmException;
 
-	@PostMapping("/verify-email-code")
+	@PostMapping("/email-code/verify")
 	@Operation(summary = "메일 인증번호 확인")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "메일 인증코드 확인 성공", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -46,7 +46,7 @@ public interface AuthApiSwagger {
 	})
 	ResponseEntity<?> emailCodeVerify(@RequestBody AuthRequest.EmailCodeVerifyDto requestDto);
 
-	@PostMapping
+	@PostMapping("/register")
 	@Operation(summary = "회원가입", description = "gmail/naver은 ssafy 기업 메일이라고 가정")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "201", description = "회원가입 성공", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -64,7 +64,7 @@ public interface AuthApiSwagger {
 	})
 	ResponseEntity<?> signup(@RequestBody AuthRequest.SignupDto requestDto);
 
-	@PostMapping("/enterprise")
+	@PostMapping("/register/enterprise")
 	@Operation(summary = "기업 가입", description = "gmail/naver은 ssafy 기업 메일이라고 가정")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "201", description = "기업 등록 성공", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -76,7 +76,7 @@ public interface AuthApiSwagger {
 	})
 	ResponseEntity<?> enterpriseAdd(@RequestBody AuthRequest.EnterpriseRegistDto requestDto) throws NoSuchAlgorithmException;
 
-	@PostMapping("/signin")
+	@PostMapping("/login")
 	@Operation(summary = "로그인")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "로그인 성공", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -100,7 +100,7 @@ public interface AuthApiSwagger {
 	})
 	ResponseEntity<?> logout(@AuthenticationPrincipal Long userId);
 
-	@PostMapping("/send-pwd-reset")
+	@PostMapping("/password-reset/request")
 	@Operation(summary = "비밀번호 재설정 메일 전송")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "비밀번호 재설정 메일 전송 성공", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -112,7 +112,7 @@ public interface AuthApiSwagger {
 	})
 	ResponseEntity<?> passwordResetEmailSend(@RequestBody AuthRequest.EmailPwdSendDto requestDto);
 
-	@PostMapping("/reset-pwd")
+	@PostMapping("/password-reset")
 	@Operation(summary = "비밀번호 재설정")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "비밀번호 재설정 성공", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,

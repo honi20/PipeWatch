@@ -18,35 +18,35 @@ import static com.pipewatch.global.statusCode.SuccessCode.*;
 public class UserController implements UserApiSwagger {
 	private final UserService userService;
 
-	@GetMapping("/mypage")
+	@GetMapping("/profile")
 	public ResponseEntity<?> myPage(@AuthenticationPrincipal Long userId) {
 		UserResponse.MyPageDto responseDto = userService.getUserDetail(userId);
 
 		return new ResponseEntity<>(ResponseDto.success(MYPAGE_DETAIL_OK, responseDto), HttpStatus.OK);
 	}
 
-	@PutMapping("/mypage")
+	@PutMapping("/profile")
 	public ResponseEntity<?> mypageModify(@AuthenticationPrincipal Long userId, @RequestBody UserRequest.MyPageModifyDto requestDto) {
 		userService.modifyUserDetail(userId, requestDto);
 
 		return new ResponseEntity<>(ResponseDto.success(MYPAGE_MODIFIED_OK, null), HttpStatus.OK);
 	}
 
-	@PatchMapping("/modify-pwd")
+	@PatchMapping("/password")
 	public ResponseEntity<?> passwordModify(@AuthenticationPrincipal Long userId, @RequestBody UserRequest.PasswordModifyDto requestDto) {
 		userService.modifyPassword(userId, requestDto);
 
 		return new ResponseEntity<>(ResponseDto.success(PASSWORD_MODIFIED_OK, null), HttpStatus.OK);
 	}
 
-	@PatchMapping("/request")
+	@PatchMapping("/role-request")
 	public ResponseEntity<?> requestAssign(@AuthenticationPrincipal Long userId) {
 		userService.modifyUserState(userId);
 
 		return new ResponseEntity<>(ResponseDto.success(ROLE_ASSIGN_REQUEST_OK, null), HttpStatus.OK);
 	}
 
-	@DeleteMapping("/withdraw")
+	@DeleteMapping
 	public ResponseEntity<?> withdraw(@AuthenticationPrincipal Long userId, @RequestBody UserRequest.WithdrawDto requestDto) {
 		userService.deleteUser(userId, requestDto);
 
