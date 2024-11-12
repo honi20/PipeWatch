@@ -22,10 +22,10 @@ export const createApiClient = (accessToken: string | null) => {
   });
 };
 
-const getAccessToken = () => localStorage.getItem("accessToken");
+const getAccessToken = () => sessionStorage.getItem("accessToken");
 const setAccessToken = (token: string) =>
-  localStorage.setItem("accessToken", token);
-const clearAccessToken = () => localStorage.removeItem("accessToken");
+  sessionStorage.setItem("accessToken", token);
+const clearAccessToken = () => sessionStorage.removeItem("accessToken");
 
 export const getApiClient = () => {
   const accessToken: string | null = getAccessToken();

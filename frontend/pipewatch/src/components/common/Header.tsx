@@ -1,5 +1,5 @@
 import { NavLink, Link, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import {
   Button,
@@ -26,16 +26,6 @@ type Props = {
   handleTheme: () => void;
   currentTheme: string;
 };
-
-interface Employees {
-  uuid: string;
-  name: string;
-  email: string;
-  empNo: number;
-  department: string;
-  empClass: string;
-  role: string;
-}
 
 // 로컬스토리지에 저장하기
 const saveLanguageToStorage = (language: string) => {
@@ -76,15 +66,15 @@ export const Header = ({ handleTheme, currentTheme }: Props) => {
   console.log("login상태: ", isLogin);
 
   useEffect(() => {
-    const isLoggedIn = !!localStorage.getItem("accessToken");
+    const isLoggedIn = !!sessionStorage.getItem("accessToken");
     console.log("Header: 로그인 상태 확인 ", isLoggedIn);
     setLogin(isLoggedIn);
 
-    const role = localStorage.getItem("role") || "UNAUTHORIZED";
+    const role = sessionStorage.getItem("role") || "UNAUTHORIZED";
     setRole(role);
-    const name = localStorage.getItem("name") || "";
+    const name = sessionStorage.getItem("name") || "";
     setName(name);
-    const state = localStorage.getItem("userState") || "";
+    const state = sessionStorage.getItem("userState") || "";
     setUserState(state);
     console.log("useEffect 실행");
   }, []);
@@ -105,27 +95,34 @@ export const Header = ({ handleTheme, currentTheme }: Props) => {
       console.error("로그아웃 API 호출 실패", err);
     } finally {
       // 로그아웃 처리
-      localStorage.removeItem("accessToken");
-      localStorage.removeItem("role");
-      localStorage.removeItem("name");
-      localStorage.removeItem("userState");
-      localStorage.removeItem("enterpriseName");
+      sessionStorage.removeItem("accessToken");
+      sessionStorage.removeItem("role");
+      sessionStorage.removeItem("name");
+      sessionStorage.removeItem("userState");
+      sessionStorage.removeItem("enterpriseName");
 
       window.location.href = "/";
     }
   };
 
-  const temp_employees: Employees[] = [
-    {
-      uuid: "1604b772-adc0-4212-8a90-81186c57f598",
-      name: "테스트",
-      email: "test@paori.com",
-      empNo: 1243242,
-      department: "IT사업부",
-      empClass: "팀장",
-      role: "USER",
-    },
-  ];
+  const [waitingList, setWaitingList] = useState([]);
+
+  const getWaitingList = async () => {
+    try {
+      const res = await apiClient.get(`/api/employees/waiting`);
+
+      console.log("Waiting Employees Data: ", res.data.body.employees);
+      setWaitingList(res.data.body.employees);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    if (role === "ENTERPRISE") {
+      getWaitingList();
+    }
+  }, []);
 
   const { t, i18n } = useTranslation();
   const handleLanguage = (language: string) => {
@@ -248,19 +245,6 @@ export const Header = ({ handleTheme, currentTheme }: Props) => {
           >
             {t("header.subMenu.contact")}
           </NavLink>
-
-          <NavLink
-            className={({ isActive }) =>
-              `p-3 pb-2 hover:text-primary-200 ${
-                isActive
-                  ? "text-primary-200 border-solid border-b-2 border-b-primary-200"
-                  : ""
-              }`
-            }
-            to="/enterprise"
-          >
-            임시 Enterprise
-          </NavLink>
         </div>
 
         <div className="flex items-center gap-4">
@@ -329,7 +313,7 @@ export const Header = ({ handleTheme, currentTheme }: Props) => {
                 {role === "ENTERPRISE" ? (
                   // 기업 계정
                   <div className="flex items-center justify-center px-2 rounded-[30px] text-[14px] bg-warn">
-                    {temp_employees && temp_employees.length}
+                    {waitingList && waitingList.length}
                   </div>
                 ) : (
                   // 사원 계정(관리자/일반)

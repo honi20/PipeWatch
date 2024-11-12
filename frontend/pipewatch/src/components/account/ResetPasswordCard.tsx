@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { Button, Input } from "@headlessui/react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useState, ChangeEvent, FocusEvent } from "react";
 
 import { baseInstance } from "@src/stores/apiClient";
@@ -9,6 +9,7 @@ const ResetPasswordCard = () => {
   const { t } = useTranslation();
 
   const location = useLocation();
+  const navigate = useNavigate();
 
   const passwordPattern =
     /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
@@ -61,12 +62,13 @@ const ResetPasswordCard = () => {
 
   const confirmResetPassword = (pwdUuid: string, newPassword: string) => {
     baseInstance
-      .post("/api/auth/reset-pwd", {
+      .post("/api/auth/password-reset", {
         pwdUuid: pwdUuid,
         newPassword: newPassword,
       })
       .then((res) => {
         console.log("비밀번호 재설정 완료: ", res);
+        navigate("/account/auth/reset-pw-completed");
       })
       .catch((err) => {
         console.log(err);

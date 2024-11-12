@@ -11,6 +11,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { getApiClient } from "@src/stores/apiClient";
+import { statusStore } from "@src/stores/statusStore";
 
 type Role = {
   id: number;
@@ -23,6 +24,7 @@ type Props = {
 };
 
 export const RoleListbox = ({ currentRole, uuid }: Props) => {
+  const { setIsSuccess } = statusStore();
   const apiClient = getApiClient();
 
   const { t, i18n } = useTranslation();
@@ -43,11 +45,12 @@ export const RoleListbox = ({ currentRole, uuid }: Props) => {
 
   const handleRoleUpdate = async (newRole: string, uuid: string) => {
     try {
-      const res = await apiClient.patch(`/api/management`, {
+      const res = await apiClient.patch(`/api/employees/role`, {
         userUuid: uuid,
         newRole: newRole,
       });
       console.log("권한 업데이트 성공:", res.data);
+      setIsSuccess(true);
       window.location.reload();
     } catch (err) {
       console.log(err);

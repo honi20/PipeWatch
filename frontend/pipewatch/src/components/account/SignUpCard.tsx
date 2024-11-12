@@ -24,7 +24,7 @@ interface FormState {
 
 const verifyEmail = (email: string) => {
   baseInstance
-    .post("/api/auth/send-email-code", email)
+    .post("/api/auth/email-code/send", email)
     .then((res) => {
       console.log(res.data.body);
     })
@@ -94,9 +94,9 @@ const SignUpCard = () => {
     }
   };
 
-  const verifyEmailCode = (email: string, verifyCode: number) => {
+  const verifyEmailCode = (email: string, verifyCode: string) => {
     baseInstance
-      .post("/api/auth/verify-email-code", { email, verifyCode })
+      .post("/api/auth/email-code/verify", { email, verifyCode })
       .then((res) => {
         console.log(res.data.body);
         setIsEmailVerified(true);

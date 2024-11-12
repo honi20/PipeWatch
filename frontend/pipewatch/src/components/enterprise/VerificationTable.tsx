@@ -24,12 +24,13 @@ export const VerificationTable: React.FC<TableProps> = ({ data }) => {
 
   const handleVerification = async (newRole: string, uuid: string) => {
     try {
-      const res = await apiClient.patch(`/api/management`, {
+      const res = await apiClient.patch(`/api/employees/role`, {
         userUuid: uuid,
         newRole: newRole,
       });
 
       console.log("권한 변경 완료: ", res.data);
+      window.location.reload();
     } catch (err) {
       console.log(err);
     }

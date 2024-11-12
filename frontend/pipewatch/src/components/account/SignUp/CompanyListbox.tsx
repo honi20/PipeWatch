@@ -1,5 +1,3 @@
-import axios from "axios";
-
 import {
   Listbox,
   ListboxButton,
@@ -15,10 +13,12 @@ import {
 } from "@src/components/account/SignUp/inputType";
 import Config from "@src/constants/Config";
 
+import { baseInstance } from "@src/stores/apiClient";
+
 const API_URL = Config.API_URL;
 
 const getCompanyList = (): Promise<CompanyType[]> => {
-  return axios
+  return baseInstance
     .get(`${API_URL}/api/enterprises/list`)
     .then((res) => {
       console.log("기업 리스트 조회: ", res.data.body.enterprises);
