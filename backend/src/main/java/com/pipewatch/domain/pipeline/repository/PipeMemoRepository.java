@@ -10,6 +10,6 @@ import java.util.List;
 public interface PipeMemoRepository extends JpaRepository<PipeMemo, Long> {
 	List<PipeMemo> findByPipeIdOrderByUpdatedAtDesc(Long pipeId);
 
-	@Query("SELECT pm FROM PipeMemo pm WHERE pm.pipe.id IN :pipeIds")
+	@Query("SELECT pm FROM PipeMemo pm WHERE pm.pipe.id IN :pipeIds ORDER BY pm.updatedAt DESC")
 	List<PipeMemo> findByAllPipeId(@Param("pipeIds") List<Long> pipeIds);
 }

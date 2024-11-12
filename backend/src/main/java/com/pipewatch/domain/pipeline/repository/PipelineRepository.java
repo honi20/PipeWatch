@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface PipelineRepository extends JpaRepository<Pipeline, Long> {
 	List<Pipeline> findByPipelineModelIdOrderByUpdatedAtDesc(Long modelId);
+
+	List<Pipeline> findByPipelineModelId(Long id);
 }
