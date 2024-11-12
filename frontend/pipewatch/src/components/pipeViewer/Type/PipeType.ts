@@ -47,7 +47,7 @@ export interface ModelDetailType {
   };
 }
 export interface PropertyType {
-  pipeMaterial: string;
+  pipeMaterialId: number;
   outerDiameter: number;
   innerDiameter: number;
   fluidMaterial: string;

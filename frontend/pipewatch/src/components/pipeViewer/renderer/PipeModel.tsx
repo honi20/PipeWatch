@@ -36,6 +36,7 @@ export const PipeModel: React.FC<{
   const ControlTotalView = () => {
     if (model.scene && isTotalView) {
       onModelLoad(model.scene);
+      console.log(model);
       setIsTotalView(false);
     }
   };
@@ -43,7 +44,6 @@ export const PipeModel: React.FC<{
   // 카메라 제어를 위한 model 전달
   useEffect(() => {
     ControlTotalView();
-    console.log("test중");
   }, [model, isTotalView]);
 
   // 각 mesh의 이름에 따라 그룹화
@@ -104,13 +104,19 @@ export const PipeModel: React.FC<{
       });
     }
 
-    console.log(`Clicked on: ${originalMesh.name}`);
+    console.log(`Clicked on: ${originalMesh.name}`, originalMesh);
+
     (originalMesh.material as THREE.MeshStandardMaterial).color.set("#a6bdfc");
     setClickedSegment(originalMesh.name);
 
     // 클릭된 mesh와 같은 이름의 파이프ID 찾아서 -> 메모 리스트 요청
-    console.log("pipelines");
+    // groupName 추출
+    // const groupName = originalMesh.name.split("_")[0];
+
     if (pipelines) {
+      console.log(pipelines);
+      // 추후 pipelineId 가져와서 반영하기
+      // const selectedPipeline = pipelines.filter((item)=>item.pipelineId === pipelineId)
       const filteredPipe = pipelines[0].pipes.filter(
         (item) => item.pipeUuid === originalMesh.name
       );

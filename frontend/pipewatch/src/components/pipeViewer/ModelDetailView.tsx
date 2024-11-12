@@ -13,7 +13,6 @@ interface ModelDetailViewProps {
 export const ModelDetailView: React.FC<ModelDetailViewProps> = ({
   modelId,
 }) => {
-  // const [cardFlipClass, setCardFlipClass] = useState("");
   const [modelDetail, setModelDetail] = useState<ModelDetailType>();
 
   // model 상세 정보 조회해야함

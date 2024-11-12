@@ -58,6 +58,7 @@ const GLTFViewer: React.FC<GLTFViewerProps> = (props) => {
             />
           ) : selectView === "PROPERTY" ? (
             <ModelProperty
+              modelId={modelId}
               modelName={modelDetail!.name}
               pipelines={modelDetail!.pipelines}
               building={modelDetail!.building}

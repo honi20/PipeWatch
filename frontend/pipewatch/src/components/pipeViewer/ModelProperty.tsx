@@ -10,6 +10,7 @@ import { FluidMaterialListbox } from "@src/components/pipeViewer/listbox/FluidMa
 import { MaterialListType } from "@src/components/pipeViewer/Type/MaterialType";
 
 interface ModelPropertyProps {
+  modelId: number;
   pipelines: PipelineType[];
   modelName: string;
   onViewChange: () => void;
@@ -18,10 +19,11 @@ interface ModelPropertyProps {
 }
 
 export const ModelProperty: React.FC<ModelPropertyProps> = (props) => {
-  const { pipelines, modelName, onViewChange, building, floor } = props;
+  const { modelId, pipelines, modelName, onViewChange, building, floor } =
+    props;
   const [pipelineProperty, setPipelineProperty] = useState<PropertyType>();
-  const [pipeMaterial, setPipeMaterial] = useState<string>(
-    pipelineProperty ? pipelineProperty.pipeMaterial : "-"
+  const [pipeMaterialId, setPipeMaterialId] = useState<number>(
+    pipelineProperty ? pipelineProperty.pipeMaterialId : 0
   );
   const [pipeOuterDiameter, setPipeOuterDiameter] = useState<number>(
     pipelineProperty ? pipelineProperty.outerDiameter : 0
@@ -73,18 +75,24 @@ export const ModelProperty: React.FC<ModelPropertyProps> = (props) => {
   };
 
   useEffect(() => {
-    if (!pipeMaterialList || !fluidMaterial) {
+    // pipeMaterialList와 fluidMaterialList가 없는 경우에만 fetch
+    if (!pipeMaterialList && !fluidMaterialList) {
       fetchMaterial();
     }
-  }, []);
+  }, [pipeMaterialList, fluidMaterialList]);
 
   useEffect(() => {
     getPipelineDetail();
-  }, [pipelines]);
+    setPipeMaterialId(0); // 기본값 설정
+    setPipeOuterDiameter(0); // 초기값으로 0 설정
+    setPipeInnerDiameter(0); // 초기값으로 0 설정
+    setFluidMaterial("-"); // 기본값 설정
+    setFluidFlowRate(0);
+  }, [pipelines, modelId]);
 
   useEffect(() => {
     if (pipelineProperty) {
-      setPipeMaterial(pipelineProperty!.pipeMaterial);
+      setPipeMaterialId(pipelineProperty!.pipeMaterialId);
       setPipeOuterDiameter(pipelineProperty!.outerDiameter);
     }
   }, [pipelineProperty]);
@@ -96,20 +104,36 @@ export const ModelProperty: React.FC<ModelPropertyProps> = (props) => {
   useEffect(() => {
     if (pipelineProperty) {
       setIsChanged(
-        pipeMaterial !== pipelineProperty.pipeMaterial ||
+        pipeMaterialId !== pipelineProperty.pipeMaterialId ||
           pipeOuterDiameter !== pipelineProperty.outerDiameter ||
           pipeInnerDiameter !== pipelineProperty.innerDiameter ||
+          fluidMaterial !== pipelineProperty.fluidMaterial ||
           fluidFlowRate !== pipelineProperty.velocity
       );
+    } else {
+      setIsChanged(
+        pipeMaterialId !== 0 || // 기본값 설정
+          pipeOuterDiameter !== 0 || // 초기값으로 0 설정
+          pipeInnerDiameter !== 0 || // 초기값으로 0 설정
+          fluidMaterial !== "-" || // 기본값 설정
+          fluidFlowRate !== 0
+      ); // 초기값으로 0 설정
     }
   }, [
-    pipeMaterial,
+    pipeMaterialId,
     pipeOuterDiameter,
     pipeInnerDiameter,
+    fluidMaterial,
     fluidFlowRate,
     pipelineProperty,
   ]);
 
+  const handleChangeButton = () => {
+    const data = {
+      pipeMaterialId: 1,
+    };
+    console.log("test");
+  };
   return (
     <div className="w-[400px] h-[680px] flex flex-col bg-block rounded-[30px] px-[50px] py-[30px] text-white justify-between items-center gap-5">
       <div className="flex flex-col w-full h-full">
@@ -141,17 +165,15 @@ export const ModelProperty: React.FC<ModelPropertyProps> = (props) => {
               <h3 className="text-[20px] font-bold self-start px-1">
                 파이프 속성
               </h3>
-              <div className="flex items-center justify-between w-full px-1">
+              <div className="flex items-center justify-between w-full gap-2 px-1">
                 <div className="w-[100px] px-1">재질</div>
-                {pipeMaterialList && (
-                  <PipeMaterialListbox
-                    pipeMaterialList={pipeMaterialList.materials}
-                    value={pipeMaterial}
-                    onChange={setPipeMaterial}
-                  />
-                )}
+                <PipeMaterialListbox
+                  pipeMaterialList={pipeMaterialList?.materials}
+                  value={pipeMaterialId}
+                  onChange={setPipeMaterialId}
+                />
               </div>
-              <div className="flex items-center justify-between w-full px-1">
+              <div className="flex items-center justify-between w-full gap-2 px-1">
                 <div className="w-[100px] px-1">Outer Diameter</div>
                 <div className="relative w-full">
                   <Input
@@ -171,7 +193,7 @@ export const ModelProperty: React.FC<ModelPropertyProps> = (props) => {
                   </span>
                 </div>
               </div>
-              <div className="flex items-center justify-between w-full px-1">
+              <div className="flex items-center justify-between w-full gap-2 px-1">
                 <div className="w-[100px] px-1">Inner Diameter</div>
                 <div className="relative w-full">
                   <Input
@@ -184,7 +206,7 @@ export const ModelProperty: React.FC<ModelPropertyProps> = (props) => {
                       "block w-full pl-5 pr-10 rounded-md border-none bg-black/40 py-2 px-3 text-sm/6 text-white",
                       "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25"
                     )}
-                    style={{ paddingRight: "3rem" }} // 단위 공간 확보
+                    style={{ paddingRight: "3rem" }}
                   />
                   <span className="absolute text-sm text-gray-800 transform -translate-y-1/2 pointer-events-none right-3 top-1/2">
                     mm
@@ -198,14 +220,15 @@ export const ModelProperty: React.FC<ModelPropertyProps> = (props) => {
               <h3 className="text-[20px] font-bold self-start px-1">
                 유체 속성
               </h3>
-              <div className="flex items-center justify-between w-full px-1">
+              <div className="flex items-center justify-between w-full gap-2 px-1">
                 <div className="w-[100px] px-1">재질</div>
                 <FluidMaterialListbox
+                  fluidMaterialList={fluidMaterialList?.materials}
                   value={fluidMaterial}
                   onChange={setFluidMaterial}
                 />
               </div>
-              <div className="flex items-center justify-between w-full px-1">
+              <div className="flex items-center justify-between w-full gap-2 px-1">
                 <div className="w-[100px] px-1">Flow Rate</div>
                 <div className="relative w-full">
                   <Input
@@ -218,7 +241,7 @@ export const ModelProperty: React.FC<ModelPropertyProps> = (props) => {
                       "block w-full pl-5 pr-10 rounded-md border-none bg-black/40 py-2 px-3 text-sm/6 text-white",
                       "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25"
                     )}
-                    style={{ paddingRight: "3rem" }} // 단위 공간 확보
+                    style={{ paddingRight: "3rem" }}
                   />
                   <span className="absolute text-sm text-gray-800 transform -translate-y-1/2 pointer-events-none right-3 top-1/2">
                     m<sup>3</sup>/s
@@ -233,6 +256,7 @@ export const ModelProperty: React.FC<ModelPropertyProps> = (props) => {
                   : "bg-button-background cursor-not-allowed"
               }`}
               disabled={!isChanged}
+              onClick={handleChangeButton}
             >
               속성 변경
             </Button>

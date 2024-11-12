@@ -10,9 +10,9 @@ import clsx from "clsx";
 import { useState, useEffect } from "react";
 
 interface PipeMaterialListboxProps {
-  value: string;
-  pipeMaterialList: MaterialType[];
-  onChange: (material: string) => void;
+  value: number;
+  pipeMaterialList?: MaterialType[];
+  onChange: (materialId: number) => void;
 }
 
 export const PipeMaterialListbox: React.FC<PipeMaterialListboxProps> = ({
@@ -21,21 +21,22 @@ export const PipeMaterialListbox: React.FC<PipeMaterialListboxProps> = ({
   onChange,
 }) => {
   // 초기 선택된 재질 설정
-  console.log(pipeMaterialList);
-  const [selected, setSelected] = useState<string>(value || "-");
+  const [selected, setSelected] = useState<number>(value || 0);
   const language = localStorage.getItem("language");
-  console.log(language);
-
-  const handleChange = (material: string) => {
-    setSelected(material); // selected를 문자열로 업데이트
-    onChange(material); // onChange에 문자열 전달
-  };
 
   useEffect(() => {
-    if (pipeMaterialList && pipeMaterialList.length > 0) {
-      setSelected(value || pipeMaterialList[0].koreanName); // 첫 번째 항목을 초기값으로 설정
+    setSelected(value || 0);
+  }, [value]);
+
+  const handleChange = (materialId: number) => {
+    const material = pipeMaterialList?.find(
+      (item) => item.materialId === materialId
+    );
+    if (material) {
+      setSelected(0);
+      onChange(materialId); // materialId를 전달
     }
-  }, [pipeMaterialList, value]);
+  };
 
   return (
     <div className="max-w-[250px] w-full">
@@ -66,11 +67,11 @@ export const PipeMaterialListbox: React.FC<PipeMaterialListboxProps> = ({
             pipeMaterialList.map((item, idx) => (
               <ListboxOption
                 key={idx}
-                value={item.koreanName} // 여기서 item 전체 객체를 전달
+                value={item.materialId}
                 className="group flex cursor-default items-center gap-2 rounded-lg py-1.5 px-3 select-none data-[focus]:bg-white/10"
               >
                 <div className="dark:text-white text-sm/6">
-                  {item.koreanName}
+                  {language === "ko" ? item.koreanName : item.englishName}
                 </div>
               </ListboxOption>
             ))}

@@ -15,7 +15,8 @@ interface PipeMemoProps {
 }
 
 export const ModelMemo: React.FC<PipeMemoProps> = (props) => {
-  const { memo, setMemo, memoList, getMemoList, postMemo } = useMemoStore();
+  const { memo, setMemo, memoList, getMemoList, postMemo, deleteMemo } =
+    useMemoStore();
   const { modelId, modelName, building, floor, updatedAt, onViewChange } =
     props;
 
@@ -103,7 +104,7 @@ export const ModelMemo: React.FC<PipeMemoProps> = (props) => {
                       </div>
                     </div>
                     <DeleteForeverIcon
-                      onClick={() => console.log("삭제할거지롱 포실")}
+                      onClick={() => deleteMemo(item.memoId)}
                       className="self-end h-full text-gray-500 hover:text-primary-200"
                     />
                   </li>
