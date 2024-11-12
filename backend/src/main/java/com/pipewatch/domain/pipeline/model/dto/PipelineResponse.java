@@ -24,7 +24,7 @@ public class PipelineResponse {
 			return DetailDto.builder()
 					.name(pipeline.getName())
 					.property(pipeline.getProperty() == null ? null : PropertyDto.fromEntity(pipeline.getProperty()))
-					.updatedAt(convertToDateFormat(pipeline.getUpdated_at()))
+					.updatedAt(convertToDateFormat(pipeline.getUpdatedAt()))
 					.build();
 		}
 	}
@@ -116,7 +116,7 @@ public class PipelineResponse {
 					.memoId(memo.getId())
 					.memo(memo.getMemo())
 					.writer(new Creator(memo.getUser().getUuid(), memo.getUser().getName()))
-					.createdAt(convertToDateFormat(memo.getCreated_at()))
+					.createdAt(convertToDateFormat(memo.getCreatedAt()))
 					.build();
 		}
 	}

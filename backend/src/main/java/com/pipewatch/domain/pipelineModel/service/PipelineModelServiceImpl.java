@@ -31,7 +31,6 @@ import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -68,9 +67,7 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 				.orElseThrow(() -> new BaseException(USER_NOT_FOUND));
 
 		// 관리자 및 기업만 가능
-		if (user.getRole() == Role.USER || user.getRole() == Role.EMPLOYEE) {
-			throw new BaseException(FORBIDDEN_USER_ROLE);
-		}
+		validateUserRole(user, List.of(Role.USER, Role.EMPLOYEE));
 
 		// 파일 적합성 확인
 		if (imageFile.isEmpty() || Objects.isNull(imageFile.getOriginalFilename())) {
@@ -109,9 +106,7 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 				.orElseThrow(() -> new BaseException(USER_NOT_FOUND));
 
 		// 관리자 및 기업만 가능
-		if (user.getRole() == Role.USER || user.getRole() == Role.EMPLOYEE) {
-			throw new BaseException(FORBIDDEN_USER_ROLE);
-		}
+		validateUserRole(user, List.of(Role.USER, Role.EMPLOYEE));
 
 		Enterprise enterprise = getEnterprise(user);
 
@@ -173,8 +168,8 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 		PipelineModel pipelineModel = pipelineModelRepository.findById(modelId)
 				.orElseThrow(() -> new BaseException(PIPELINE_MODEL_NOT_FOUND));
 
-		// 기업이나 관리자 유저만 가능
-		if (user.getRole() == Role.USER || user.getRole() == Role.EMPLOYEE) {
+		// 생성자만 초기 설정 가능
+		if (pipelineModel.getUser().getId() != user.getId()) {
 			throw new BaseException(FORBIDDEN_USER_ROLE);
 		}
 
@@ -205,9 +200,7 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new BaseException(USER_NOT_FOUND));
 
-		if (user.getRole() == Role.USER) {
-			throw new BaseException(FORBIDDEN_USER_ROLE);
-		}
+		validateUserRole(user, List.of(Role.USER));
 
 		// 기업 정보 가져오기
 		Enterprise enterprise = getEnterprise(user);
@@ -228,13 +221,14 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new BaseException(USER_NOT_FOUND));
 
-		if (user.getRole() == Role.USER) {
-			throw new BaseException(FORBIDDEN_USER_ROLE);
-		}
+		validateUserRole(user, List.of(Role.USER));
 
 		// Model
 		PipelineModel model = pipelineModelRepository.findById(modelId)
 				.orElseThrow(() -> new BaseException(PIPELINE_MODEL_NOT_FOUND));
+
+		// 해당 기업에 속하는 유저만 조회 가능
+		validateEnterprise(user, model.getEnterprise());
 
 		// Pipelines Uuid
 		List<Pipe> pipes = pipelineModelCustomRepository.findPipeByModel(modelId);
@@ -253,9 +247,10 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 				.orElseThrow(() -> new BaseException(PIPELINE_MODEL_NOT_FOUND));
 
 		// 기업이나 관리자 유저만 가능
-		if (user.getRole() == Role.USER || user.getRole() == Role.EMPLOYEE) {
-			throw new BaseException(FORBIDDEN_USER_ROLE);
-		}
+		validateUserRole(user, List.of(Role.USER, Role.EMPLOYEE));
+
+		// 해당 기업에 속하는 유저만 수정 가능
+		validateEnterprise(user, pipelineModel.getEnterprise());
 
 		pipelineModel.updateName(requestDto.getName());
 		pipelineModelRepository.save(pipelineModel);
@@ -270,12 +265,8 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 		PipelineModel pipelineModel = pipelineModelRepository.findById(modelId)
 				.orElseThrow(() -> new BaseException(PIPELINE_MODEL_NOT_FOUND));
 
-		// 기업이나 관리자 유저만 가능
-		if (user.getRole() == Role.USER || user.getRole() == Role.EMPLOYEE) {
-			throw new BaseException(FORBIDDEN_USER_ROLE);
-		}
-
-		if (pipelineModel.getUser().getId() != userId) {
+		// 생성자만 수정 가능
+		if (pipelineModel.getUser().getId() != user.getId()) {
 			throw new BaseException(FORBIDDEN_USER_ROLE);
 		}
 
@@ -297,12 +288,13 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 				.orElseThrow(() -> new BaseException(PIPELINE_MODEL_NOT_FOUND));
 
 		// 기업이나 관리자 유저만 가능
-		if (user.getRole() == Role.USER || user.getRole() == Role.EMPLOYEE) {
-			throw new BaseException(FORBIDDEN_USER_ROLE);
-		}
+		validateUserRole(user, List.of(Role.USER, Role.EMPLOYEE));
+
+		// 해당 기업에 속하는 유저만 수정 가능
+		validateEnterprise(user, pipelineModel.getEnterprise());
 
 		// pipeline 삭제
-		List<Pipeline> pipelines = pipelineRepository.findByPipelineModelId(modelId);
+		List<Pipeline> pipelines = pipelineRepository.findByPipelineModelIdOrderByUpdatedAtDesc(modelId);
 		pipelineRepository.deleteAll(pipelines);
 		// s3 데이터 삭제
 		s3Service.fileDelete(pipelineModel.getModelingUrl(), "models/");
@@ -315,16 +307,14 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new BaseException(USER_NOT_FOUND));
 
-		if (user.getRole() == Role.USER) {
-			throw new BaseException(FORBIDDEN_USER_ROLE);
-		}
+		// 기업이나 관리자 유저만 가능
+		validateUserRole(user, List.of(Role.USER));
 
 		PipelineModel pipelineModel = pipelineModelRepository.findById(modelId)
 				.orElseThrow(() -> new BaseException(PIPELINE_MODEL_NOT_FOUND));
 
-		if (pipelineModel == null) {
-			throw new BaseException(PIPELINE_MODEL_NOT_FOUND);
-		}
+		// 해당 기업에 속하는 유저만 수정 가능
+		validateEnterprise(user, pipelineModel.getEnterprise());
 
 		List<PipelineModelMemo> memos = pipelineModelMemoRepository.findByPipelineModelIdOrder(pipelineModel.getId());
 		List<PipelineModelResponse.MemoDto> modelMemoList = memos.stream()
@@ -343,16 +333,13 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 				.orElseThrow(() -> new BaseException(USER_NOT_FOUND));
 
 		// 기업이나 관리자 유저만 가능
-		if (user.getRole() == Role.USER || user.getRole() == Role.EMPLOYEE) {
-			throw new BaseException(FORBIDDEN_USER_ROLE);
-		}
+		validateUserRole(user, List.of(Role.USER, Role.EMPLOYEE));
 
 		PipelineModel pipelineModel = pipelineModelRepository.findById(modelId)
 				.orElseThrow(() -> new BaseException(PIPELINE_MODEL_NOT_FOUND));
 
-		if (pipelineModel == null) {
-			throw new BaseException(PIPELINE_MODEL_NOT_FOUND);
-		}
+		// 해당 기업에 속하는 유저만 수정 가능
+		validateEnterprise(user, pipelineModel.getEnterprise());
 
 		PipelineModelMemo memo = requestDto.toEntity(user, pipelineModel);
 		pipelineModelMemoRepository.save(memo);
@@ -377,7 +364,7 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 				.orElseThrow(() -> new BaseException(PIPELINE_MODEL_MEMO_NOT_FOUND));
 
 		// 작성자만 삭제 가능
-		if (userId != memo.getUser().getId()) {
+		if (user.getId() != memo.getUser().getId()) {
 			throw new BaseException(FORBIDDEN_USER_ROLE);
 		}
 
@@ -482,6 +469,22 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 					.build();
 
 			pipeRepository.save(pipe);
+		}
+	}
+
+	// 허용 안되는 Role 제공
+	private void validateUserRole(User user, List<Role> roles) {
+		for (Role role : roles) {
+			if (user.getRole() == role) {
+				throw new BaseException(FORBIDDEN_USER_ROLE);
+			}
+		}
+	}
+
+	// 유저가 해당 기업에 속한는지 확인
+	private void validateEnterprise(User user, Enterprise enterprise) {
+		if (getEnterprise(user).getId() != enterprise.getId()) {
+			throw new BaseException(FORBIDDEN_USER_ROLE);
 		}
 	}
 

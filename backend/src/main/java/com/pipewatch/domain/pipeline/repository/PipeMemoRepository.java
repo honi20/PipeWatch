@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface PipeMemoRepository extends JpaRepository<PipeMemo, Long> {
-	List<PipeMemo> findByPipeId(Long pipeId);
+	List<PipeMemo> findByPipeIdOrderByUpdatedAtDesc(Long pipeId);
 
 	@Query("SELECT pm FROM PipeMemo pm WHERE pm.pipe.id IN :pipeIds")
 	List<PipeMemo> findByAllPipeId(@Param("pipeIds") List<Long> pipeIds);

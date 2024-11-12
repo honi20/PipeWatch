@@ -25,7 +25,8 @@ public class PipelineModelCustomRepositoryImpl implements PipelineModelCustomRep
 	public List<PipelineModel> findAllByBuildingAndFloor(Enterprise enterprise, String building, Integer floor) {
 		JPAQuery<PipelineModel> query = queryFactory.selectFrom(pipelineModel)
 				.leftJoin(buildingAndFloor).on(buildingAndFloor.eq(pipelineModel.buildingAndFloor))
-				.where(pipelineModel.enterprise.eq(enterprise));
+				.where(pipelineModel.enterprise.eq(enterprise))
+				.orderBy(pipelineModel.updatedAt.desc());
 
 		if (building != null) {
 			query.where(buildingAndFloor.name.eq(building));
@@ -42,6 +43,7 @@ public class PipelineModelCustomRepositoryImpl implements PipelineModelCustomRep
 		return queryFactory.selectFrom(pipe)
 				.leftJoin(pipeline).on(pipeline.eq(pipe.pipeline))
 				.where(pipeline.pipelineModel.id.eq(modelId))
+				.orderBy(pipe.id.asc())
 				.fetch();
 	}
 }
