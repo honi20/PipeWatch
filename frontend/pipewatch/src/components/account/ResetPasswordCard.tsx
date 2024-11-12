@@ -1,11 +1,14 @@
 import { useTranslation } from "react-i18next";
 import { Button, Input } from "@headlessui/react";
-import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { useState, ChangeEvent, FocusEvent } from "react";
+
+import { baseInstance } from "@src/stores/apiClient";
 
 const ResetPasswordCard = () => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
+
+  const location = useLocation();
 
   const passwordPattern =
     /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
@@ -52,6 +55,24 @@ const ResetPasswordCard = () => {
   const isFormValid =
     Object.values(passwordData).every((val) => val !== "") &&
     Object.values(passwordErrors).every((error) => !error);
+
+  const queryParams = new URLSearchParams(location.search);
+  const pwdUuid = queryParams.get("pwdUuid");
+
+  const confirmResetPassword = (pwdUuid: string, newPassword: string) => {
+    baseInstance
+      .post("/api/auth/reset-pwd", {
+        pwdUuid: pwdUuid,
+        newPassword: newPassword,
+      })
+      .then((res) => {
+        console.log("비밀번호 재설정 완료: ", res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    return <></>;
+  };
 
   return (
     <div className="w-[500px] flex flex-col bg-block rounded-[30px] p-[50px] gap-[40px] text-white">
@@ -117,7 +138,9 @@ const ResetPasswordCard = () => {
                 : "bg-gray-800 cursor-not-allowed"
             }
           `}
-          onClick={() => navigate("/account/auth/reset-pw-completed")}
+          onClick={() =>
+            confirmResetPassword(pwdUuid || "", passwordData.newPassword)
+          }
           disabled={!isFormValid}
         >
           {t("account.resetPassword.title")}

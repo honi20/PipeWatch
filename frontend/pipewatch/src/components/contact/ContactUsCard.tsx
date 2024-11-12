@@ -22,6 +22,8 @@ import {
 import clsx from "clsx";
 import { useNavigate } from "react-router-dom";
 
+import { baseInstance } from "@src/stores/apiClient";
+
 const ContactUsCard = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -122,6 +124,38 @@ const ContactUsCard = () => {
     contactEmail !== "" &&
     contactPhoneNumber !== "";
 
+  console.log(
+    companyName,
+    selectedIndustry?.name,
+    contactEmail,
+    contactPhoneNumber
+  );
+
+  const confirmEnterpriseSignUp = (
+    companyName: string,
+    industry: string,
+    managerEmail: string,
+    managerPhoneNumber: string
+  ) => {
+    baseInstance
+      .post("/api/auth/enterprise", {
+        name: companyName,
+        industry: industry,
+        managerEmail: managerEmail,
+        managerPhoneNumber: managerPhoneNumber,
+      })
+      .then((res) => {
+        console.log("기업가입 성공: ", res);
+        navigate("/contact/completed", {
+          state: { companyName: companyName },
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    return <></>;
+  };
+
   return (
     <div className="w-[500px] flex flex-col bg-block rounded-[30px] p-[50px] gap-[40px] text-white">
       {/* header */}
@@ -143,10 +177,12 @@ const ContactUsCard = () => {
           <Input
             type="text"
             value={companyName}
-            onChange={(e) =>
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
               handleChange(e, setCompanyName, setShowCompanyNameError)
             }
-            onBlur={(e) => handleBlur(e, setShowCompanyNameError)}
+            onBlur={(e: FocusEvent<HTMLInputElement>) =>
+              handleBlur(e, setShowCompanyNameError)
+            }
             className="h-[56px] w-full px-5 text-gray-500 rounded-[5px]"
             placeholder={t("contact.card.companyName")}
             required
@@ -206,7 +242,7 @@ const ContactUsCard = () => {
           <Input
             type="text"
             value={contactEmail}
-            onChange={(e) =>
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
               handleChange(
                 e,
                 setContactEmail,
@@ -214,7 +250,7 @@ const ContactUsCard = () => {
                 emailPattern
               )
             }
-            onBlur={(e) =>
+            onBlur={(e: FocusEvent<HTMLInputElement>) =>
               handleBlur(e, setShowContactEmailError, emailPattern)
             }
             className="h-[56px] w-full px-5 text-gray-500 rounded-[5px]"
@@ -233,7 +269,7 @@ const ContactUsCard = () => {
           <Input
             type="tel"
             value={contactPhoneNumber}
-            onChange={(e) =>
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
               handleChange(
                 e,
                 setContactPhoneNumber,
@@ -241,7 +277,7 @@ const ContactUsCard = () => {
                 phonePattern
               )
             }
-            onBlur={(e) =>
+            onBlur={(e: FocusEvent<HTMLInputElement>) =>
               handleBlur(e, setShowContactPhoneNumberError, phonePattern)
             }
             className="h-[56px] w-full px-5 text-gray-500 rounded-[5px]"
@@ -265,7 +301,14 @@ const ContactUsCard = () => {
             : "bg-button-background cursor-not-allowed"
         }`}
         disabled={!isFormValid}
-        onClick={() => navigate("./completed")}
+        onClick={() =>
+          confirmEnterpriseSignUp(
+            companyName,
+            selectedIndustry?.name || "",
+            contactEmail,
+            contactPhoneNumber
+          )
+        }
       >
         {t("contact.card.button")}
       </Button>

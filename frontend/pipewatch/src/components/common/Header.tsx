@@ -109,6 +109,7 @@ export const Header = ({ handleTheme, currentTheme }: Props) => {
       localStorage.removeItem("role");
       localStorage.removeItem("name");
       localStorage.removeItem("userState");
+      localStorage.removeItem("enterpriseName");
 
       window.location.href = "/";
     }
