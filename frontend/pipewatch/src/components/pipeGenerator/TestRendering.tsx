@@ -10,35 +10,35 @@ import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader";
 import { getApiClient } from "@src/stores/apiClient";
 
 interface TestRenderingProps {
+  gltfUrl: string;
   modelId: string;
 }
 
-// GLTF 모델 경로
-const gltfUrl = "/assets/models/PipeLine.gltf";
-
-const Model: React.FC = () => {
-  // gltf 파일 가져오기
-  const gltf = useLoader(GLTFLoader, gltfUrl, (loader) => {
-    const dracoLoader = new DRACOLoader();
-    dracoLoader.setDecoderPath("https://www.gstatic.com/draco/v1/decoders/");
-    (loader as GLTFLoader).setDRACOLoader(dracoLoader);
-  });
-
-  // Shadow, Material 설정
-  gltf.scene.traverse((child) => {
-    if ((child as THREE.Mesh).isMesh) {
-      const mesh = child as THREE.Mesh;
-      mesh.receiveShadow = true;
-      mesh.castShadow = true;
-    }
-  });
-
-  // 모델 보여주기
-  return <primitive object={gltf.scene} />;
-};
-
 const TestRendering = forwardRef<unknown, TestRenderingProps>(
-  ({ modelId }, ref) => {
+  ({ gltfUrl, modelId }, ref) => {
+    const Model: React.FC = () => {
+      // gltf 파일 가져오기
+      const gltf = useLoader(GLTFLoader, gltfUrl, (loader) => {
+        const dracoLoader = new DRACOLoader();
+        dracoLoader.setDecoderPath(
+          "https://www.gstatic.com/draco/v1/decoders/"
+        );
+        (loader as GLTFLoader).setDRACOLoader(dracoLoader);
+      });
+
+      // Shadow, Material 설정
+      gltf.scene.traverse((child) => {
+        if ((child as THREE.Mesh).isMesh) {
+          const mesh = child as THREE.Mesh;
+          mesh.receiveShadow = true;
+          mesh.castShadow = true;
+        }
+      });
+
+      // 모델 보여주기
+      return <primitive object={gltf.scene} />;
+    };
+
     const navigate = useNavigate();
 
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -73,7 +73,7 @@ const TestRendering = forwardRef<unknown, TestRenderingProps>(
         try {
           const apiClient = getApiClient();
           const response = await apiClient.patch(
-            `/api/models/thumbnail/${modelId}`,
+            `/api/models/${modelId}/thumbnail`,
             formData,
             {
               headers: {

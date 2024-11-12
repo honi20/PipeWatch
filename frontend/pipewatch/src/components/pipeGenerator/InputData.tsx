@@ -111,7 +111,7 @@ export const InputData = () => {
   // 저장 버튼 Click Action
   const handleSave = async (modelId: string) => {
     try {
-      const res = await apiClient.patch(`/api/models/init/${modelId}`, {
+      const res = await apiClient.patch(`/api/models/${modelId}/init`, {
         name: pipelineName,
         building: selectedLocation?.name,
         floor: floorNum,
@@ -120,7 +120,7 @@ export const InputData = () => {
       console.log("input Data: ", res.data.header.message);
 
       // 모델 렌더링 페이지로 이동
-      navigate("/pipe-generator/rendering", { state: { modelId: modelId } });
+      navigate(`/pipe-generator/rendering/${modelId}`);
     } catch (err) {
       console.log(err);
     }

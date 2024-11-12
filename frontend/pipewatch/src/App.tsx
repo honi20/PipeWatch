@@ -70,7 +70,11 @@ function App() {
                 path="/pipe-generator/input-data"
                 element={<InputData />}
               />
-              <Route path="/pipe-generator/rendering" element={<Rendering />} />
+              {/* <Route path="/pipe-generator/rendering" element={<Rendering />} /> */}
+              <Route
+                path="/pipe-generator/rendering/:modelId"
+                element={<Rendering />}
+              />
               <Route path="/pipe-generator/completed" element={<Completed />} />
             </Route>
 
