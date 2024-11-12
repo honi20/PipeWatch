@@ -6,6 +6,7 @@ import { useMemoStore } from "@src/stores/memoStore";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { usePipe } from "@src/components/context/PipeContext";
 import { getApiClient } from "@src/stores/apiClient";
+import { MemoType } from "@src/stores/memoStore";
 
 interface PipeMemoProps {
   building: string;
@@ -32,7 +33,7 @@ export const PipeMemo: React.FC<PipeMemoProps> = (props) => {
       console.log(res.data.body);
       const { pipeName, memoList } = res.data.body;
       setPipeName(pipeName);
-      setMemo(memoList);
+      setMemoList(memoList);
     } catch (err) {
       console.log(err);
     }
@@ -61,6 +62,23 @@ export const PipeMemo: React.FC<PipeMemoProps> = (props) => {
     }
   };
 
+  // 파이프 메모 삭제
+  const deletePipeMemo = async (memoId: number) => {
+    const apiClient = getApiClient();
+    try {
+      const res = await apiClient({
+        method: "delete",
+        url: `/api/pipelines/pipes/${memoId}`,
+      });
+      console.log(res);
+      const updateList = memoList
+        ? memoList.filter((item) => item.memoId !== memoId)
+        : [];
+      setMemoList(updateList);
+    } catch (err) {
+      console.log(err);
+    }
+  };
   // memoList renderer
   useEffect(() => {
     getPipeInfo(selectedPipeId);
@@ -133,8 +151,8 @@ export const PipeMemo: React.FC<PipeMemoProps> = (props) => {
 
             {/* 메모 조회창 */}
             <ul className="max-h-[330px] mt-4 space-y-4 overflow-auto">
-              {memoList &&
-                memoList.slice().map((item, idx) => (
+              {Array.isArray(memoList) && memoList.length > 0 ? (
+                memoList.map((item, idx) => (
                   <li
                     key={idx}
                     className="flex justify-between w-full gap-1 px-1 bg-gray-700"
@@ -149,11 +167,14 @@ export const PipeMemo: React.FC<PipeMemoProps> = (props) => {
                       </div>
                     </div>
                     <DeleteForeverIcon
-                      onClick={() => console.log("삭제할거지롱 포실")}
+                      onClick={() => deletePipeMemo(item.memoId)}
                       className="self-end h-full text-gray-500 hover:text-primary-200"
                     />
                   </li>
-                ))}
+                ))
+              ) : (
+                <></>
+              )}
             </ul>
           </div>
         </div>

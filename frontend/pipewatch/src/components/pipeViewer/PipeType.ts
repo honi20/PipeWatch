@@ -1,12 +1,3 @@
-export interface MemoType {
-  memo: string;
-  writer: {
-    userUuid: string;
-    userName: string;
-  };
-  createdAt: string;
-}
-
 export interface ModelsType {
   modelId: number;
   building: string;

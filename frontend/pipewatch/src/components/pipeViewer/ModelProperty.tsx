@@ -63,6 +63,7 @@ export const ModelProperty: React.FC<ModelPropertyProps> = (props) => {
       setPipeOuterDiameter(pipelineProperty!.outerDiameter);
     }
   }, [pipelineProperty]);
+  
   // input이 바뀌었을때 true
   const [isChanged, setIsChanged] = useState(false);
 

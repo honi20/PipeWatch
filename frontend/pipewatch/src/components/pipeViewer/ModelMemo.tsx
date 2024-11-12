@@ -87,30 +87,30 @@ export const ModelMemo: React.FC<PipeMemoProps> = (props) => {
 
             {/* 메모 조회창 */}
             <ul className="max-h-[330px] mt-4 space-y-4 overflow-auto">
-              {memoList &&
-                memoList
-                  .slice()
-                  .reverse()
-                  .map((item, idx) => (
-                    <li
-                      key={idx}
-                      className="flex justify-between w-full gap-1 px-1 bg-gray-700"
-                    >
-                      <div className="flex flex-col gap-1">
-                        <div className="text-[17px]">{item.memo}</div>
-                        <div className="flex gap-2 text-[15px]">
-                          <p>{item.writer.userName}</p>
-                          <p className="text-gray-500">
-                            {formatMemoDate(new Date(item.createdAt))}
-                          </p>
-                        </div>
+              {Array.isArray(memoList) && memoList.length > 0 ? (
+                memoList.map((item, idx) => (
+                  <li
+                    key={idx}
+                    className="flex justify-between w-full gap-1 px-1 bg-gray-700"
+                  >
+                    <div className="flex flex-col gap-1">
+                      <div className="text-[17px]">{item.memo}</div>
+                      <div className="flex gap-2 text-[15px]">
+                        <p>{item.writer.userName}</p>
+                        <p className="text-gray-500">
+                          {formatMemoDate(new Date(item.createdAt))}
+                        </p>
                       </div>
-                      <DeleteForeverIcon
-                        onClick={() => console.log("삭제할거지롱 포실")}
-                        className="self-end h-full text-gray-500 hover:text-primary-200"
-                      />
-                    </li>
-                  ))}
+                    </div>
+                    <DeleteForeverIcon
+                      onClick={() => console.log("삭제할거지롱 포실")}
+                      className="self-end h-full text-gray-500 hover:text-primary-200"
+                    />
+                  </li>
+                ))
+              ) : (
+                <></>
+              )}
             </ul>
           </div>
         </div>
