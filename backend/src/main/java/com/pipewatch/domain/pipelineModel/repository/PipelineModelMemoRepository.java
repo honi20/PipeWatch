@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface PipelineModelMemoRepository extends JpaRepository<PipelineModelMemo, Long> {
-	@Query("select pmm from PipelineModelMemo pmm where pmm.pipelineModelMemo.id = :modelId order by pmm.created_at")
+	@Query("select pmm from PipelineModelMemo pmm where pmm.pipelineModelMemo.id = :modelId order by pmm.updatedAt")
 	List<PipelineModelMemo> findByPipelineModelIdOrder(Long modelId);
 }

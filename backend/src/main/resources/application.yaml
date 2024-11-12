@@ -5,7 +5,8 @@ server:
 spring:
   application:
     name: pipewatch
-
+  main:
+    allow-bean-definition-overriding: true
   datasource:
     url: ${DATASOURCE_URL}
     username: ${DATASOURCE_USERNAME}
@@ -19,6 +20,10 @@ spring:
     properties:
       hibernate:
         globally_quoted_identifiers: true
+#    defer-datasource-initialization: true
+#  sql:
+#    init:
+      mode: always
   data:
     redis:
       host: ${REDIS_HOST}

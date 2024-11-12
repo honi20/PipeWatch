@@ -60,7 +60,59 @@ public interface PipelineApiSwagger {
 	@Operation(summary = "파이프 속성 리스트 조회")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "파이프 속성 리스트 조회 성공", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-					examples = {@ExampleObject(value = "{\"header\":{\"httpStatusCode\": 200, \"message\": \"단일 파이프라인 속성 리스트 조회에 성공했습니다.\"},\n\"body\": null}")}
+					examples = {@ExampleObject(value = "{\"header\":{\"httpStatusCode\": 200, \"message\": \"단일 파이프라인 속성 리스트 조회에 성공했습니다.\"}," +
+							"\"body\": [\n" +
+							"    {\n" +
+							"      \"type\": \"PIPE\",\n" +
+							"      \"materials\": [\n" +
+							"        {\n" +
+							"          \"materialId\": 1,\n" +
+							"          \"koreanName\": \"알루미늄\",\n" +
+							"          \"englishName\": \"Aluminum\"\n" +
+							"        },\n" +
+							"        {\n" +
+							"          \"materialId\": 2,\n" +
+							"          \"koreanName\": \"철\",\n" +
+							"          \"englishName\": \"Steel\"\n" +
+							"        },\n" +
+							"        {\n" +
+							"          \"materialId\": 3,\n" +
+							"          \"koreanName\": \"스테인리스\",\n" +
+							"          \"englishName\": \"Stainless Steel\"\n" +
+							"        }\n" +
+							"      ]\n" +
+							"    },\n" +
+							"    {\n" +
+							"      \"type\": \"FLUID\",\n" +
+							"      \"materials\": [\n" +
+							"        {\n" +
+							"          \"materialId\": 4,\n" +
+							"          \"koreanName\": \"수증기\",\n" +
+							"          \"englishName\": \"Steam\"\n" +
+							"        },\n" +
+							"        {\n" +
+							"          \"materialId\": 5,\n" +
+							"          \"koreanName\": \"공기\",\n" +
+							"          \"englishName\": \"Air\"\n" +
+							"        },\n" +
+							"        {\n" +
+							"          \"materialId\": 6,\n" +
+							"          \"koreanName\": \"물\",\n" +
+							"          \"englishName\": \"Water\"\n" +
+							"        },\n" +
+							"        {\n" +
+							"          \"materialId\": 7,\n" +
+							"          \"koreanName\": \"기름\",\n" +
+							"          \"englishName\": \"Oil\"\n" +
+							"        },\n" +
+							"        {\n" +
+							"          \"materialId\": 8,\n" +
+							"          \"koreanName\": \"증기\",\n" +
+							"          \"englishName\": \"Vapor\"\n" +
+							"        }\n" +
+							"      ]\n" +
+							"    }\n" +
+							"  ]}")}
 			))
 	})
 	ResponseEntity<?> pipeMaterialList();
@@ -101,7 +153,7 @@ public interface PipelineApiSwagger {
 							"          {\n" +
 							"            \"memoId\": 1,\n" +
 							"            \"memo\": \"파이프에 결함 존재\",\n" +
-							"            \"creator\": {\n" +
+							"            \"writer\": {\n" +
 							"              \"userUuid\": \"ssafy12\",\n" +
 							"              \"userName\": \"김싸피\"\n" +
 							"            },\n" +
@@ -110,7 +162,7 @@ public interface PipelineApiSwagger {
 							"          {\n" +
 							"            \"memoId\": 4,\n" +
 							"            \"memo\": \"파이프1 확인 완료\",\n" +
-							"            \"creator\": {\n" +
+							"            \"writer\": {\n" +
 							"              \"userUuid\": \"ssafy12\",\n" +
 							"              \"userName\": \"김싸피\"\n" +
 							"            },\n" +
@@ -125,7 +177,7 @@ public interface PipelineApiSwagger {
 							"          {\n" +
 							"            \"memoId\": 2,\n" +
 							"            \"memo\": \"파이프2에 결함 존재\",\n" +
-							"            \"creator\": {\n" +
+							"            \"writer\": {\n" +
 							"              \"userUuid\": \"ssafy12\",\n" +
 							"              \"userName\": \"김싸피\"\n" +
 							"            },\n" +
@@ -140,7 +192,7 @@ public interface PipelineApiSwagger {
 							"          {\n" +
 							"            \"memoId\": 3,\n" +
 							"            \"memo\": \"파이프4 확인 완료\",\n" +
-							"            \"creator\": {\n" +
+							"            \"writer\": {\n" +
 							"              \"userUuid\": \"ssafy12\",\n" +
 							"              \"userName\": \"김싸피\"\n" +
 							"            },\n" +
@@ -169,7 +221,7 @@ public interface PipelineApiSwagger {
 							"      {\n" +
 							"        \"memoId\": 1,\n" +
 							"        \"memo\": \"파이프에 결함 존재\",\n" +
-							"        \"creator\": {\n" +
+							"        \"writer\": {\n" +
 							"          \"userUuid\": \"ssafy12\",\n" +
 							"          \"userName\": \"김싸피\"\n" +
 							"        },\n" +
@@ -178,7 +230,7 @@ public interface PipelineApiSwagger {
 							"      {\n" +
 							"        \"memoId\": 4,\n" +
 							"        \"memo\": \"파이프1 확인 완료\",\n" +
-							"        \"creator\": {\n" +
+							"        \"writer\": {\n" +
 							"          \"userUuid\": \"ssafy12\",\n" +
 							"          \"userName\": \"김싸피\"\n" +
 							"        },\n" +

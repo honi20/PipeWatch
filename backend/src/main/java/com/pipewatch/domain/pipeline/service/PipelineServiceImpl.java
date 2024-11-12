@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import static com.pipewatch.global.statusCode.ErrorCode.*;
@@ -36,9 +35,7 @@ public class PipelineServiceImpl implements PipelineService {
 				.orElseThrow(() -> new BaseException(USER_NOT_FOUND));
 
 		// 기업 관계자만 조회 가능
-		if (user.getRole() == Role.USER) {
-			throw new BaseException(FORBIDDEN_USER_ROLE);
-		}
+		validateUserRole(user, List.of(Role.USER));
 
 		Pipeline pipeline = pipelineRepository.findById(pipelineId)
 				.orElseThrow(() -> new BaseException(PIPELINE_NOT_FOUND));
@@ -53,9 +50,7 @@ public class PipelineServiceImpl implements PipelineService {
 				.orElseThrow(() -> new BaseException(USER_NOT_FOUND));
 
 		// 관리자만 수정 가능
-		if (user.getRole() == Role.USER || user.getRole() == Role.EMPLOYEE) {
-			throw new BaseException(FORBIDDEN_USER_ROLE);
-		}
+		validateUserRole(user, List.of(Role.USER, Role.EMPLOYEE));
 
 		Pipeline pipeline = pipelineRepository.findById(pipelineId)
 				.orElseThrow(() -> new BaseException(PIPELINE_NOT_FOUND));
@@ -93,9 +88,7 @@ public class PipelineServiceImpl implements PipelineService {
 				.orElseThrow(() -> new BaseException(USER_NOT_FOUND));
 
 		// 관리자만 수정 가능
-		if (user.getRole() == Role.USER || user.getRole() == Role.EMPLOYEE) {
-			throw new BaseException(FORBIDDEN_USER_ROLE);
-		}
+		validateUserRole(user, List.of(Role.USER, Role.EMPLOYEE));
 
 		Pipeline pipeline = pipelineRepository.findById(pipelineId)
 				.orElseThrow(() -> new BaseException(PIPELINE_NOT_FOUND));
@@ -141,9 +134,7 @@ public class PipelineServiceImpl implements PipelineService {
 				.orElseThrow(() -> new BaseException(USER_NOT_FOUND));
 
 		// 관리자만 수정 가능
-		if (user.getRole() == Role.USER || user.getRole() == Role.EMPLOYEE) {
-			throw new BaseException(FORBIDDEN_USER_ROLE);
-		}
+		validateUserRole(user, List.of(Role.USER, Role.EMPLOYEE));
 
 		Pipe pipe = pipeRepository.findById(pipeId)
 				.orElseThrow(() -> new BaseException(PIPE_NOT_FOUND));
@@ -152,7 +143,7 @@ public class PipelineServiceImpl implements PipelineService {
 
 		pipeMemoRepository.save(memo);
 
-		List<PipeMemo> memos = pipeMemoRepository.findByPipeId(pipeId);
+		List<PipeMemo> memos = pipeMemoRepository.findByPipeIdOrderByUpdatedAtDesc(pipeId);
 
 		List<PipelineResponse.MemoDto> memoList = memos.stream()
 				.map(PipelineResponse.MemoDto::fromEntity).toList();
@@ -169,9 +160,7 @@ public class PipelineServiceImpl implements PipelineService {
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new BaseException(USER_NOT_FOUND));
 
-		if (user.getRole() == Role.USER) {
-			throw new BaseException(FORBIDDEN_USER_ROLE);
-		}
+		validateUserRole(user, List.of(Role.USER));
 
 		List<Long> pipeIds = pipeRepository.findIdByPipelineId(pipelineId);
 
@@ -202,14 +191,12 @@ public class PipelineServiceImpl implements PipelineService {
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new BaseException(USER_NOT_FOUND));
 
-		if (user.getRole() == Role.USER) {
-			throw new BaseException(FORBIDDEN_USER_ROLE);
-		}
+		validateUserRole(user, List.of(Role.USER));
 
 		Pipe pipe = pipeRepository.findById(pipeId)
 				.orElseThrow(() -> new BaseException(PIPE_NOT_FOUND));
 
-		List<PipeMemo> memos = pipeMemoRepository.findByPipeId(pipeId);
+		List<PipeMemo> memos = pipeMemoRepository.findByPipeIdOrderByUpdatedAtDesc(pipeId);
 
 		List<PipelineResponse.MemoDto> memoList = memos.stream()
 				.map(PipelineResponse.MemoDto::fromEntity).toList();
@@ -233,5 +220,14 @@ public class PipelineServiceImpl implements PipelineService {
 		}
 
 		pipeMemoRepository.delete(memo);
+	}
+
+	// 허용 안되는 Role 제공
+	private void validateUserRole(User user, List<Role> roles) {
+		for (Role role : roles) {
+			if (user.getRole() == role) {
+				throw new BaseException(FORBIDDEN_USER_ROLE);
+			}
+		}
 	}
 }

@@ -19,11 +19,40 @@ import java.io.IOException;
 
 @Tag(name = "Pipeline Model API", description = "Pipeline Model API Document")
 public interface PipelineModelApiSwagger {
+	@PostMapping(value = "/upload-img", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+	@Operation(summary = "Image File 업로드")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "201", description = "Image File 업로드 성공", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+					examples = {@ExampleObject(value = "{\"header\":{\"httpStatusCode\": 201, \"message\": \"이미지 파일 업로드에 성공했습니다. 파이프라인 모델이 생성될 예정입니다.\"},\n\"body\": {\"modelId\": 1}}")}
+			)),
+			@ApiResponse(responseCode = "400", description = "Image File 업로드 실패", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+					examples = {
+							@ExampleObject(name = "빈 파일", value = "{\"header\":{\"httpStatusCode\": 400, \"message\": \"파일 업로드에 실패하였습니다.\"},\n\"body\": null}"),
+							@ExampleObject(name = "적절하지 않은 파일 확장자", value = "{\"header\":{\"httpStatusCode\": 400, \"message\": \"적절하지 않은 파일 확장자입니다.\"},\n\"body\": null}"),
+							@ExampleObject(name = "파이프가 존재하지 않는 이미지", value = "{\"header\":{\"httpStatusCode\": 400, \"message\": \"적절하지 않은 이미지 파일 형식입니다. 이미지에서 발견된 파이프가 존재하지 않습니다.\"},\n\"body\": null}")
+					}
+			)),
+			@ApiResponse(responseCode = "403", description = "Image File 업로드 실패 - 기업 및 관리자 유저만 생성 가능", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+					examples = {@ExampleObject(value = "{\"header\":{\"httpStatusCode\": 403, \"message\": \"접근 권한이 없는 유저입니다.\"},\n\"body\": null}")}
+			))
+	})
+	ResponseEntity<?> imageUpload(@AuthenticationPrincipal Long userId, @RequestPart(value = "file") MultipartFile file) throws IOException, ParseException;
+
 	@PostMapping(value = "/upload-file", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
 	@Operation(summary = "GLTF File 업로드")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "201", description = "GLTF File 업로드 성공", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
 					examples = {@ExampleObject(value = "{\"header\":{\"httpStatusCode\": 201, \"message\": \"GLTF 파일 업로드에 성공했습니다. 파이프라인 모델이 생성되었습니다.\"},\n\"body\": {\"modelId\": 1}}")}
+			)),
+			@ApiResponse(responseCode = "400", description = "GLTF File 업로드 실패", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+					examples = {
+							@ExampleObject(name = "빈 파일", value = "{\"header\":{\"httpStatusCode\": 400, \"message\": \"파일 업로드에 실패하였습니다.\"},\n\"body\": null}"),
+							@ExampleObject(name = "적절하지 않은 파일 확장자", value = "{\"header\":{\"httpStatusCode\": 400, \"message\": \"적절하지 않은 파일 확장자입니다.\"},\n\"body\": null}"),
+							@ExampleObject(name = "파이프 객체 name이 존재하지 않는 파일", value = "{\"header\":{\"httpStatusCode\": 400, \"message\": \"적절하지 않은 파일 형식입니다. meshes 리스트에 각 객체의 name이 존재해야 합니다.\"},\n\"body\": null}")
+					}
+			)),
+			@ApiResponse(responseCode = "403", description = "GLTF File 업로드 실패 - 기업 및 관리자 유저만 생성 가능", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+					examples = {@ExampleObject(value = "{\"header\":{\"httpStatusCode\": 403, \"message\": \"접근 권한이 없는 유저입니다.\"},\n\"body\": null}")}
 			))
 	})
 	ResponseEntity<?> fileUpload(@AuthenticationPrincipal Long userId, @RequestPart(value = "file") MultipartFile file) throws IOException, ParseException;

@@ -37,6 +37,7 @@ public enum SuccessCode {
 
 	// Pipeline model
 	MODEL_LIST_OK(HttpStatus.OK.value(), "모델 리스트 조회에 성공했습니다."),
+	IMAGE_UPLOAD_AND_MODEL_CREATED(HttpStatus.CREATED.value(), "이미지 파일 업로드에 성공했습니다. 파이프라인 모델이 생성될 예정입니다."),
 	FILE_UPLOAD_AND_MODEL_CREATED(HttpStatus.CREATED.value(), "GLTF 파일 업로드에 성공했습니다. 파이프라인 모델이 생성되었습니다."),
 	MODEL_INIT_OK(HttpStatus.OK.value(), "모델 초기 정보 설정에 성공했습니다."),
 	MODEL_MODIFIED_OK(HttpStatus.OK.value(), "모델 정보 수정에 성공했습니다."),

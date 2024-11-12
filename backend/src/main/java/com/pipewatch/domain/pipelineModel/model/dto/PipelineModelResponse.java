@@ -1,12 +1,10 @@
 package com.pipewatch.domain.pipelineModel.model.dto;
 
 import com.pipewatch.domain.pipeline.model.entity.Pipe;
-import com.pipewatch.domain.pipeline.model.entity.Pipeline;
 import com.pipewatch.domain.pipelineModel.model.entity.PipelineModel;
 import com.pipewatch.domain.pipelineModel.model.entity.PipelineModelMemo;
 import lombok.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.pipewatch.global.format.DateFormatter.convertToDateFormat;
@@ -41,7 +39,7 @@ public class PipelineModelResponse {
 					.previewUrl(model.getPreviewImgUrl())
 					.building(model.getBuildingAndFloor() == null ? null : model.getBuildingAndFloor().getName())
 					.floor(model.getBuildingAndFloor() == null ? null : model.getBuildingAndFloor().getFloor())
-					.updatedAt(convertToDateFormat(model.getUpdated_at()))
+					.updatedAt(convertToDateFormat(model.getUpdatedAt()))
 					.build();
 		}
 	}
@@ -86,7 +84,7 @@ public class PipelineModelResponse {
 					.building(model.getBuildingAndFloor() == null ? null : model.getBuildingAndFloor().getName())
 					.floor(model.getBuildingAndFloor() == null ? null : model.getBuildingAndFloor().getFloor())
 					.isCompleted(model.getIsCompleted())
-					.updatedAt(convertToDateFormat(model.getUpdated_at()))
+					.updatedAt(convertToDateFormat(model.getUpdatedAt()))
 					.pipelines(pipelines)
 					.creator(new Creator(model.getUser().getUuid(), model.getUser().getName()))
 					.build();
@@ -138,7 +136,7 @@ public class PipelineModelResponse {
 					.memoId(memo.getId())
 					.memo(memo.getMemo())
 					.writer(new Creator(memo.getUser().getUuid(), memo.getUser().getName()))
-					.createdAt(convertToDateFormat(memo.getCreated_at()))
+					.createdAt(convertToDateFormat(memo.getCreatedAt()))
 					.build();
 		}
 	}
