@@ -1,7 +1,7 @@
 import { baseInstance, getApiClient } from "@src/stores/apiClient";
 
 import { Button, Input } from "@headlessui/react";
-import { ChangeEvent, FocusEvent, useState } from "react";
+import { ChangeEvent, FocusEvent, KeyboardEvent, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -80,6 +80,11 @@ const LoginCard = () => {
     setShowPasswordError(!validatePassword(e.target.value));
   };
 
+  // Enter 눌렀을 때 접속
+  const handleEnterKeyPressed = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && isFormValid) login(email, password);
+  };
+
   // 로그인 버튼 활성화
   const isFormValid: boolean =
     !showEmailError && !showPasswordError && email !== "" && password !== "";
@@ -104,6 +109,7 @@ const LoginCard = () => {
             aria-describedby={showEmailError ? "emailError" : undefined}
             className="h-[56px] w-full px-5 text-gray-500 rounded-[5px]"
             placeholder={t("account.email")}
+            onKeyDown={handleEnterKeyPressed}
             required
           />
           {showEmailError && (
@@ -124,6 +130,7 @@ const LoginCard = () => {
             aria-describedby={showPasswordError ? "passwordError" : undefined}
             className="h-[56px] w-full px-5 text-gray-500 rounded-[5px] peer"
             placeholder={t("account.password")}
+            onKeyDown={handleEnterKeyPressed}
             required
           />
           {showPasswordError && (
