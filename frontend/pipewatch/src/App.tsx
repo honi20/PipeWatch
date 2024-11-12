@@ -16,6 +16,7 @@ import { TermsAndPolicy } from "@pages/TermsAndPolicy";
 import { Auth } from "@pages/account/Auth";
 import { LoginPage } from "@pages/account/LoginPage";
 import { FindPassword } from "@pages/account/FindPassword";
+import { FindPasswordPending } from "@pages/account/FindPasswordPending";
 import { SignUpPage } from "@pages/account/SignUpPage";
 import { ResetPasswordPage } from "@pages/account/ResetPasswordPage";
 import { CompletedResetPassword } from "@pages/account/CompletedResetPassword";
@@ -98,6 +99,10 @@ function App() {
             <Route path="/account/auth" element={<Auth />}>
               <Route path="/account/auth/login" element={<LoginPage />} />
               <Route path="/account/auth/find-pw" element={<FindPassword />} />
+              <Route
+                path="/account/auth/find-pw/pending"
+                element={<FindPasswordPending />}
+              />
               <Route path="/account/auth/sign-up" element={<SignUpPage />} />
               <Route
                 path="/account/auth/reset-pw"

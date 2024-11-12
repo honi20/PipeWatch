@@ -1,10 +1,14 @@
 import { useTranslation, Trans } from "react-i18next";
 import { Input, Button } from "@headlessui/react";
 import { useState, ChangeEvent, FocusEvent } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+
+import { baseInstance } from "@src/stores/apiClient";
 
 export const FindPasswordCard = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [showNameError, setShowNameError] = useState(false);
@@ -37,6 +41,24 @@ export const FindPasswordCard = () => {
   // 버튼 활성화
   const isFormValid: boolean =
     !showNameError && !showEmailError && name !== "" && email !== "";
+
+  const confirmFindPassword = (name: string, email: string) => {
+    baseInstance
+      .post("/api/auth/send-pwd-reset", {
+        name: name,
+        email: email,
+      })
+      .then((res) => {
+        console.log("비밀번호 변경 메일 전송됨: ", res);
+        navigate("/account/auth/find-pw/pending", {
+          state: { email: email },
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    return <></>;
+  };
 
   return (
     <div className="w-[500px] flex flex-col bg-block rounded-[30px] p-[50px] gap-[40px] text-white">
@@ -106,6 +128,7 @@ export const FindPasswordCard = () => {
             : "bg-button-background cursor-not-allowed"
         }`}
         disabled={!isFormValid}
+        onClick={() => confirmFindPassword(name, email)}
       >
         {t("account.sendPasswordResetEmail")}
       </Button>
