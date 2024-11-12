@@ -9,7 +9,13 @@ import { useTranslation } from "react-i18next";
 
 import { getApiClient } from "@src/stores/apiClient";
 
+import { StatusBar } from "@components/common/StatusBar";
+
+import { statusStore } from "@src/stores/statusStore";
+
 export const EmpView = () => {
+  const { isSuccess } = statusStore();
+
   const [employeeList, setEmployeeList] = useState([]);
   const [tempEmployeeList, setTempEmployeeList] = useState([]);
 
@@ -19,7 +25,7 @@ export const EmpView = () => {
 
   const getEmployeeList = async () => {
     try {
-      const res = await apiClient.get(`/api/management`);
+      const res = await apiClient.get(`/api/employees`);
 
       console.log("Current Employees Data: ", res.data.body.employees);
       setEmployeeList(res.data.body.employees);
@@ -38,7 +44,7 @@ export const EmpView = () => {
 
   const searchEmployee = async (keyword: string) => {
     try {
-      const res = await apiClient.get(`/api/management/search`, {
+      const res = await apiClient.get(`/api/employees/search`, {
         params: { keyword: keyword },
       });
       console.log("검색 성공: ", res.data.body.employees);
@@ -54,6 +60,15 @@ export const EmpView = () => {
 
   return (
     <div className="flex flex-col gap-6">
+      {isSuccess && (
+        <StatusBar
+          // text={t("pipeGenerator.takePhoto.connectRCCar.statusMessages.failed")}
+          text={"변경 완료"}
+          icon={""}
+          // icon={<CancelIcon sx={{ fontSize: "20px" }} />}
+          color={"bg-success"}
+        />
+      )}
       <div>
         <h2 className="font-bold text-[32px]">{t("enterprise.view.title")}</h2>
         <div className="">{t("enterprise.view.instruction")}</div>
