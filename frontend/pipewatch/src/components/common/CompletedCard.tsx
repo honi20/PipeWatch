@@ -9,7 +9,8 @@ export const CompletedCard = () => {
   let content;
 
   if (pathname === "/contact/completed") {
-    const variable = "기업명"; // 추후 기업명 넣을 예정
+    const variable = location.state.companyName;
+    // const variable = "기업명"; // 추후 기업명 넣을 예정
     const messages = t("verification.enterprise", {
       variable,
       returnObjects: true,
