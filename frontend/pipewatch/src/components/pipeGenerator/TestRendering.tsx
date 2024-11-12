@@ -73,7 +73,7 @@ const TestRendering = forwardRef<unknown, TestRenderingProps>(
         try {
           const apiClient = getApiClient();
           const response = await apiClient.patch(
-            `/api/models/thumbnail/${modelId}`,
+            `/api/models/${modelId}/thumbnail`,
             formData,
             {
               headers: {

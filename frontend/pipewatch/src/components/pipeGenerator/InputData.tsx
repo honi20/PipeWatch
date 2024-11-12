@@ -111,7 +111,7 @@ export const InputData = () => {
   // 저장 버튼 Click Action
   const handleSave = async (modelId: string) => {
     try {
-      const res = await apiClient.patch(`/api/models/init/${modelId}`, {
+      const res = await apiClient.patch(`/api/models/${modelId}/init`, {
         name: pipelineName,
         building: selectedLocation?.name,
         floor: floorNum,
