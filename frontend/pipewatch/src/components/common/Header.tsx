@@ -66,15 +66,15 @@ export const Header = ({ handleTheme, currentTheme }: Props) => {
   console.log("login상태: ", isLogin);
 
   useEffect(() => {
-    const isLoggedIn = !!localStorage.getItem("accessToken");
+    const isLoggedIn = !!sessionStorage.getItem("accessToken");
     console.log("Header: 로그인 상태 확인 ", isLoggedIn);
     setLogin(isLoggedIn);
 
-    const role = localStorage.getItem("role") || "UNAUTHORIZED";
+    const role = sessionStorage.getItem("role") || "UNAUTHORIZED";
     setRole(role);
-    const name = localStorage.getItem("name") || "";
+    const name = sessionStorage.getItem("name") || "";
     setName(name);
-    const state = localStorage.getItem("userState") || "";
+    const state = sessionStorage.getItem("userState") || "";
     setUserState(state);
     console.log("useEffect 실행");
   }, []);
@@ -95,11 +95,11 @@ export const Header = ({ handleTheme, currentTheme }: Props) => {
       console.error("로그아웃 API 호출 실패", err);
     } finally {
       // 로그아웃 처리
-      localStorage.removeItem("accessToken");
-      localStorage.removeItem("role");
-      localStorage.removeItem("name");
-      localStorage.removeItem("userState");
-      localStorage.removeItem("enterpriseName");
+      sessionStorage.removeItem("accessToken");
+      sessionStorage.removeItem("role");
+      sessionStorage.removeItem("name");
+      sessionStorage.removeItem("userState");
+      sessionStorage.removeItem("enterpriseName");
 
       window.location.href = "/";
     }

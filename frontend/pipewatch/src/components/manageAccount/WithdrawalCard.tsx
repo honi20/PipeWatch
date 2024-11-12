@@ -33,7 +33,7 @@ const WithdrawalCard = () => {
         data: { password: password },
       });
       console.log("탈퇴 성공 status: ", res.status);
-      localStorage.setItem("userState", "INACTIVE");
+      sessionStorage.setItem("userState", "INACTIVE");
       navigate("/account/manage/withdrawal/completed");
     } catch (err: unknown) {
       if (err instanceof AxiosError && err.response?.status === 403) {

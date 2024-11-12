@@ -22,7 +22,7 @@ export const PipeGenerator = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const role = localStorage.getItem("role");
+  const role = sessionStorage.getItem("role");
 
   useEffect(() => {
     if (location.pathname === "/pipe-generator") {

@@ -4,7 +4,7 @@ import { Outlet } from "react-router-dom";
 import { AccessBlocked } from "@src/components/common/AccessBlocked";
 
 export const Enterprise = () => {
-  const role = localStorage.getItem("role");
+  const role = sessionStorage.getItem("role");
 
   return (
     <div className="flex">

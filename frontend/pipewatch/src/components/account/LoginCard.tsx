@@ -16,10 +16,10 @@ const LoginCard = () => {
       const userInfo = res.data.body;
       console.log("userInfo in LoginCard: ", userInfo);
 
-      localStorage.setItem("role", userInfo.role);
-      localStorage.setItem("name", userInfo.name);
-      localStorage.setItem("userState", userInfo.state);
-      localStorage.setItem("enterpriseName", userInfo.enterpriseName);
+      sessionStorage.setItem("role", userInfo.role);
+      sessionStorage.setItem("name", userInfo.name);
+      sessionStorage.setItem("userState", userInfo.state);
+      sessionStorage.setItem("enterpriseName", userInfo.enterpriseName);
     } catch (err) {
       console.error("UserInfo 저장 실패", err);
 
@@ -34,7 +34,7 @@ const LoginCard = () => {
         password,
       });
 
-      await localStorage.setItem("accessToken", res.data.body.accessToken);
+      await sessionStorage.setItem("accessToken", res.data.body.accessToken);
 
       await saveUserInfo();
 

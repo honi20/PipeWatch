@@ -20,7 +20,7 @@ export const ReVerifyModal = ({ isOpen, onClose }: ManageCookiesProps) => {
 
   const [isRequested, setIsRequested] = useState(false);
 
-  const enterpriseName = localStorage.getItem("enterpriseName");
+  const enterpriseName = sessionStorage.getItem("enterpriseName");
 
   const apiClient = getApiClient();
   const roleRequest = async () => {
