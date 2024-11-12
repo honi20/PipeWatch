@@ -1,12 +1,11 @@
 import { useTranslation } from "react-i18next";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { Button } from "@headlessui/react";
 
 export const CompletedManageAccount = () => {
   const { t } = useTranslation();
 
   const { action } = useParams();
-  const navigate = useNavigate();
 
   const titles = {
     "edit-info": `${t("manageAccount.editInfo.complete")}`,
@@ -27,7 +26,7 @@ export const CompletedManageAccount = () => {
           className="flex items-center justify-center h-[56px] w-full px-[30px] text-white rounded-[20px] 
            bg-button-background hover:bg-button-background/80
              "
-          onClick={() => navigate("/")}
+          onClick={() => (window.location.href = "/")}
         >
           {t("manageAccount.goToHomepage")}
         </Button>

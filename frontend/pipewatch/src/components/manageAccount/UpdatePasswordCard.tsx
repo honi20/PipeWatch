@@ -18,7 +18,7 @@ const UpdatePasswordCard = () => {
         newPassword: newPassword,
       });
       console.log("비밀번호 수정 성공: ", res.data.header.message);
-      navigate("/account/manage");
+      navigate("/account/manage/update-pw/completed");
     } catch (err) {
       console.log(err);
     }

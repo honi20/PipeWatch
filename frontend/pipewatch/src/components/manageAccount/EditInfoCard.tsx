@@ -46,6 +46,7 @@ const EditInfoCard = () => {
       });
       console.log("회원정보 수정 성공: ", res.data.header.message);
       window.location.reload();
+      navigate("/account/manage/edit-info/completed");
     } catch (err) {
       console.log(err);
     }
