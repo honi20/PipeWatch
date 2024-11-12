@@ -15,12 +15,12 @@ import java.util.List;
 import static com.pipewatch.global.statusCode.SuccessCode.*;
 
 @RestController
-@RequestMapping("${api_prefix}/management")
+@RequestMapping("${api_prefix}/employees")
 @RequiredArgsConstructor
 public class ManagementController implements ManagementApiSwagger {
 	private final ManagementService managementService;
 
-	@GetMapping("/waiting-list")
+	@GetMapping("/waiting")
 	public ResponseEntity<?> waitingEmployeeList(@AuthenticationPrincipal Long userId) {
 		ManagementResponse.EmployeeWaitingListDto responseDto = managementService.getWaitingEmployeeList(userId);
 
@@ -34,7 +34,7 @@ public class ManagementController implements ManagementApiSwagger {
 		return new ResponseEntity<>(ResponseDto.success(EMPLOYEE_LIST_OK, responseDto), HttpStatus.OK);
 	}
 
-	@PatchMapping
+	@PatchMapping("/role")
 	public ResponseEntity<?> userRollModify(@AuthenticationPrincipal Long userId, @RequestBody ManagementRequest.AccessModifyDto requestDto) {
 		managementService.modifyUserRoll(userId, requestDto);
 

@@ -66,7 +66,7 @@ public interface PipelineModelApiSwagger {
 	})
 	ResponseEntity<?> modelingCreate(@RequestBody PipelineModelRequest.ModelingDto requestDto) throws IOException, ParseException;
 
-	@PatchMapping("/init/{modelId}")
+	@PatchMapping("/{modelId}/init")
 	@Operation(summary = "파이프라인 모델 초기 정보 설정", description = "모델 생성 시 입력되는 초기 정보 (모델명, 건물, 층)")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "파이프라인 모델 초기 정보 설정 성공", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -214,7 +214,7 @@ public interface PipelineModelApiSwagger {
 			@Schema(description = "Model ID", example = "1")
 			@PathVariable Long modelId, @RequestBody PipelineModelRequest.ModifyDto requestDto);
 
-	@PatchMapping("/thumbnail/{modelId}")
+	@PatchMapping("/{modelId}/thumbnail")
 	@Operation(summary = "파이프라인 모델 썸네일 이미지 수정")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "파이프라인 모델 썸네일 이미지 수정 성공", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -237,7 +237,7 @@ public interface PipelineModelApiSwagger {
 								  @PathVariable Long modelId);
 
 
-	@GetMapping("/memos/{modelId}")
+	@GetMapping("/{modelId}/memos")
 	@Operation(summary = "파이프라인 모델 메모 리스트")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "파이프라인 모델 메모 리스트 조회 성공", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -268,7 +268,7 @@ public interface PipelineModelApiSwagger {
 	})
 	ResponseEntity<?> modelMemoList(@AuthenticationPrincipal Long userId, @PathVariable Long modelId);
 
-	@PostMapping("/memos/{modelId}")
+	@PostMapping("/{modelId}/memos")
 	@Operation(summary = "파이프라인 모델 메모 생성")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "201", description = "파이프라인 모델 메모 생성 성공", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,

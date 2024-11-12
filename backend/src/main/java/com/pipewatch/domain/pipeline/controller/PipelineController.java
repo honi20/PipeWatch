@@ -35,7 +35,7 @@ public class PipelineController implements PipelineApiSwagger {
 		return new ResponseEntity<>(ResponseDto.success(PIPELINE_MODIFIED_OK, null), HttpStatus.OK);
 	}
 
-	@GetMapping("/property")
+	@GetMapping("/materials")
 	public ResponseEntity<?> pipeMaterialList() {
 		List<PipelineResponse.MaterialListDto> responseDto = pipelineService.getPipeMaterialList();
 
@@ -49,18 +49,18 @@ public class PipelineController implements PipelineApiSwagger {
 		return new ResponseEntity<>(ResponseDto.success(PIPELINE_PROPERTY_MODIFIED_OK, null), HttpStatus.OK);
 	}
 
-	@PostMapping("/pipes/{pipeId}")
-	public ResponseEntity<?> pipeMemoCreate(@AuthenticationPrincipal Long userId, @PathVariable Long pipeId, PipelineRequest.CreateMemoDto requestDto) {
-		PipelineResponse.MemoListDto responseDto = pipelineService.createPipeMemo(userId, pipeId, requestDto);
-
-		return new ResponseEntity<>(ResponseDto.success(PIPE_MEMO_CREATED, responseDto), HttpStatus.CREATED);
-	}
-
 	@GetMapping("/{pipelineId}/memo")
 	public ResponseEntity<?> pipelineMemoList(@AuthenticationPrincipal Long userId, @PathVariable Long pipelineId) {
 		PipelineResponse.PipelineMemoListDto responseDto = pipelineService.getPipelineMemoList(userId, pipelineId);
 
 		return new ResponseEntity<>(ResponseDto.success(PIPE_MEMO_LIST_OK, responseDto), HttpStatus.OK);
+	}
+
+	@PostMapping("/pipes/{pipeId}")
+	public ResponseEntity<?> pipeMemoCreate(@AuthenticationPrincipal Long userId, @PathVariable Long pipeId, PipelineRequest.CreateMemoDto requestDto) {
+		PipelineResponse.MemoListDto responseDto = pipelineService.createPipeMemo(userId, pipeId, requestDto);
+
+		return new ResponseEntity<>(ResponseDto.success(PIPE_MEMO_CREATED, responseDto), HttpStatus.CREATED);
 	}
 
 	@GetMapping("/pipes/{pipeId}")

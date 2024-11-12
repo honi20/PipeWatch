@@ -44,7 +44,7 @@ public class PipelineModelController implements PipelineModelApiSwagger {
 		return new ResponseEntity<>(ResponseDto.success(PIPELINE_MODELING_CREATED, responseDto), HttpStatus.CREATED);
 	}
 
-	@PatchMapping("/init/{modelId}")
+	@PatchMapping("/{modelId}/init")
 	public ResponseEntity<?> modelInit(@AuthenticationPrincipal Long userId, @PathVariable Long modelId, @RequestBody PipelineModelRequest.InitDto requestDto) throws IOException, ParseException {
 		pipelineModelService.initModel(userId, modelId, requestDto);
 
@@ -72,7 +72,7 @@ public class PipelineModelController implements PipelineModelApiSwagger {
 		return new ResponseEntity<>(ResponseDto.success(MODEL_MODIFIED_OK, null), HttpStatus.OK);
 	}
 
-	@PatchMapping(value = "/thumbnail/{modelId}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+	@PatchMapping(value = "/{modelId}/thumbnail", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
 	public ResponseEntity<?> modelThumbnailModify(@AuthenticationPrincipal Long userId, @PathVariable Long modelId, @RequestPart(value = "file") MultipartFile file) throws IOException {
 		pipelineModelService.modifyThumbnailModel(userId, modelId, file);
 
@@ -86,14 +86,14 @@ public class PipelineModelController implements PipelineModelApiSwagger {
 		return new ResponseEntity<>(ResponseDto.success(MODEL_DELETED, null), HttpStatus.NO_CONTENT);
 	}
 
-	@GetMapping("/memos/{modelId}")
+	@GetMapping("/{modelId}/memos")
 	public ResponseEntity<?> modelMemoList(@AuthenticationPrincipal Long userId, @PathVariable Long modelId) {
 		PipelineModelResponse.MemoListDto responseDto = pipelineModelService.getModelMemoList(userId, modelId);
 
 		return new ResponseEntity<>(ResponseDto.success(MODEL_MEMO_LIST_OK, responseDto), HttpStatus.OK);
 	}
 
-	@PostMapping("/memos/{modelId}")
+	@PostMapping("/{modelId}/memos")
 	public ResponseEntity<?> modelMemoCreate(@AuthenticationPrincipal Long userId, @PathVariable Long modelId, @RequestBody PipelineModelRequest.MemoDto requestDto) {
 		PipelineModelResponse.MemoListDto responseDto = pipelineModelService.createModelMemo(userId, modelId, requestDto);
 
