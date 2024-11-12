@@ -46,7 +46,7 @@ public interface AuthApiSwagger {
 	})
 	ResponseEntity<?> emailCodeVerify(@RequestBody AuthRequest.EmailCodeVerifyDto requestDto);
 
-	@PostMapping("/register")
+	@PostMapping
 	@Operation(summary = "회원가입", description = "gmail/naver은 ssafy 기업 메일이라고 가정")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "201", description = "회원가입 성공", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -64,7 +64,7 @@ public interface AuthApiSwagger {
 	})
 	ResponseEntity<?> signup(@RequestBody AuthRequest.SignupDto requestDto);
 
-	@PostMapping("/register/enterprise")
+	@PostMapping("/enterprise")
 	@Operation(summary = "기업 가입", description = "gmail/naver은 ssafy 기업 메일이라고 가정")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "201", description = "기업 등록 성공", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
