@@ -77,7 +77,7 @@ export const PipeGenerator = () => {
   // };
 
   const handleTabClick = (path: string) => {
-    const modelId = "12345";
+    const modelId = "1";
     const finalPath = path.replace(":modelId", modelId);
     navigate(finalPath);
   };
