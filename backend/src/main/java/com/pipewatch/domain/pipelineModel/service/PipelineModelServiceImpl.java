@@ -234,7 +234,12 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 		List<Pipe> pipes = pipelineModelCustomRepository.findPipeByModel(modelId);
 		List<PipelineModelResponse.PipelineDto> pipelines = getPipelineDto(pipes);
 
-		return PipelineModelResponse.DetailDto.fromEntity(model, pipelines);
+		List<Long> defectPipeIds = pipes.stream()
+				.filter(Pipe::getHasDefect)
+				.map(Pipe::getId)
+				.toList();
+
+		return PipelineModelResponse.DetailDto.fromEntity(model, defectPipeIds, pipelines);
 	}
 
 	@Override
