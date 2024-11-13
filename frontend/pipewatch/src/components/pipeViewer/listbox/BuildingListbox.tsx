@@ -44,7 +44,9 @@ export const BuildingListbox = ({
               "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25"
             )}
           >
-            {selected}
+            {selected === "building" || selected === "장소"
+              ? t("PipeViewer.ModelProperty.listbox.place")
+              : selected}
             <ExpandMoreIcon
               sx={{ color: "#5E5E5E" }}
               className="pl-1 transition-transform duration-200 group size-6"
