@@ -15,6 +15,7 @@ export const ModelNameInput: React.FC<NameInputProps> = ({
   useEffect(() => {
     setModelName(currentName);
   }, [currentName]);
+
   // 파이프라인 모델 이름 수정 API
   interface updateNameType {
     name: string;

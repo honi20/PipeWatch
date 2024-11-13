@@ -84,6 +84,7 @@ function App() {
             </Route>
 
             <Route path="/enterprise" element={<Enterprise />}>
+              <Route index element={<EmpVerification />} />
               <Route path="verification" element={<EmpVerification />} />
               <Route path="view" element={<EmpView />} />
             </Route>
