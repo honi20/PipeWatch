@@ -4,6 +4,7 @@ import { Button, Input } from "@headlessui/react";
 import { ChangeEvent, FocusEvent, KeyboardEvent, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
+import { BarLoader, PuffLoader } from "react-spinners";
 
 const LoginCard = () => {
   const { t } = useTranslation();
@@ -29,6 +30,7 @@ const LoginCard = () => {
 
   const login = async (email: string, password: string) => {
     try {
+      setIsPending(true);
       const res = await baseInstance.post("/api/auth/login", {
         email,
         password,
@@ -43,6 +45,8 @@ const LoginCard = () => {
       console.log("로그인 완료");
     } catch (err) {
       console.error("로그인 실패", err);
+    } finally {
+      setIsPending(false);
     }
   };
 
@@ -50,6 +54,7 @@ const LoginCard = () => {
   const [password, setPassword] = useState("");
   const [showEmailError, setShowEmailError] = useState(false);
   const [showPasswordError, setShowPasswordError] = useState(false);
+  const [isPending, setIsPending] = useState<boolean>(false);
 
   const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   const passwordPattern =
@@ -144,17 +149,23 @@ const LoginCard = () => {
       {/* button */}
       {/* 로그인 성공 -> 메인화면으로 돌아감 */}
       {/* 로그인 실패 -> 실패 배너 생성 */}
-      <Button
-        className={`h-[56px] w-full text-white rounded-lg ${
-          isFormValid
-            ? "bg-primary-500"
-            : "bg-button-background cursor-not-allowed"
-        }`}
-        disabled={!isFormValid}
-        onClick={() => (isFormValid ? login(email, password) : null)}
-      >
-        {t("account.login")}
-      </Button>
+      <div className="flex items-center justify-center">
+        {isPending ? (
+          <PuffLoader color="#FFFFFF" />
+        ) : (
+          <Button
+            className={`h-[56px] w-full text-white rounded-lg ${
+              isFormValid
+                ? "bg-primary-500"
+                : "bg-button-background cursor-not-allowed"
+            }`}
+            disabled={!isFormValid}
+            onClick={() => (isFormValid ? login(email, password) : null)}
+          >
+            {t("account.login")}
+          </Button>
+        )}
+      </div>
 
       {/* footer */}
       <div className="flex justify-center gap-2">
