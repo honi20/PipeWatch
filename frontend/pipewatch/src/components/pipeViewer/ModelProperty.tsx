@@ -7,7 +7,10 @@ import { PipelineType } from "./Type/PipeType";
 import { getApiClient } from "@src/stores/apiClient";
 import { PropertyType, UpdatePropertyType } from "./Type/PipeType";
 import { FluidMaterialListbox } from "@src/components/pipeViewer/listbox/FluidMaterialListbox";
-import { MaterialListType } from "@src/components/pipeViewer/Type/MaterialType";
+import {
+  MaterialType,
+  MaterialListType,
+} from "@src/components/pipeViewer/Type/MaterialType";
 
 interface ModelPropertyProps {
   modelId: number;
@@ -27,9 +30,8 @@ export const ModelProperty: React.FC<ModelPropertyProps> = (props) => {
   const [pipeInnerDiameter, setPipeInnerDiameter] = useState<number>(0);
   const [fluidMaterialId, setFluidMaterialId] = useState<number>(4);
   const [fluidFlowRate, setFluidFlowRate] = useState<number>(0);
-  const [pipeMaterialList, setPipeMaterialList] = useState<MaterialListType>();
-  const [fluidMaterialList, setFluidMaterialList] =
-    useState<MaterialListType>();
+  const [pipeMaterialList, setPipeMaterialList] = useState<MaterialType[]>();
+  const [fluidMaterialList, setFluidMaterialList] = useState<MaterialType[]>();
 
   // fetchMaterial 리스트조회
   const fetchMaterial = async () => {
@@ -55,11 +57,13 @@ export const ModelProperty: React.FC<ModelPropertyProps> = (props) => {
         .flatMap((item: MaterialListType) => item.materials);
       setPipeMaterialList(pipeMaterialList);
       setFluidMaterialList(fluidMaterialList);
+      console.log(pipeMaterialList, fluidMaterialList);
     } catch (err) {
       console.log(pipeMaterialList);
       console.log(err);
     }
   };
+
   // pipelineId 상세조회
   const getPipelineDetail = async () => {
     const apiClient = getApiClient();
@@ -98,6 +102,8 @@ export const ModelProperty: React.FC<ModelPropertyProps> = (props) => {
       setPipeInnerDiameter(0); // 기본값 설정
       setFluidMaterialId(4); // 기본값 설정
       setFluidFlowRate(0); // 기본값 설정
+      // pipelineProperty가 null인 경우 isChanged를 true로 변경
+      setIsChanged(true);
     } else {
       // pipelineProperty가 로드된 후에 isChanged를 false로 초기화
       setIsChanged(false);
@@ -192,7 +198,7 @@ export const ModelProperty: React.FC<ModelPropertyProps> = (props) => {
                 <div className="flex items-center justify-between w-full gap-2 px-1">
                   <div className="w-[100px] px-1">재질</div>
                   <PipeMaterialListbox
-                    pipeMaterialList={pipeMaterialList?.materials}
+                    pipeMaterialList={pipeMaterialList}
                     value={pipeMaterialId ? pipeMaterialId : 1}
                     onChange={setPipeMaterialId}
                   />
@@ -247,7 +253,7 @@ export const ModelProperty: React.FC<ModelPropertyProps> = (props) => {
                 <div className="flex items-center justify-between w-full gap-2 px-1">
                   <div className="w-[100px] px-1">재질</div>
                   <FluidMaterialListbox
-                    fluidMaterialList={fluidMaterialList?.materials}
+                    fluidMaterialList={fluidMaterialList}
                     value={fluidMaterialId}
                     onChange={setFluidMaterialId}
                   />

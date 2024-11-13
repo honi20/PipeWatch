@@ -1,8 +1,8 @@
-import React, { useEffect } from "react";
-import { useThree } from "@react-three/fiber";
-import * as THREE from "three";
-import { PipeModel } from "@src/components/pipeViewer/renderer/PipeModel";
 import { CameraControls } from "@react-three/drei";
+import { useThree } from "@react-three/fiber";
+import { PipeModel } from "@src/components/pipeViewer/renderer/PipeModel";
+import React, { useEffect } from "react";
+import * as THREE from "three";
 import { PipelineType } from "./Type/PipeType";
 
 export const SceneContent: React.FC<{
@@ -39,7 +39,7 @@ export const SceneContent: React.FC<{
       console.log(vector);
       if (cameraControlsRef.current) {
         // cameraControlsRef를 사용하여 카메라 위치와 타겟을 설정
-        cameraControlsRef.current.setPosition(vector[0], vector[1], 50);
+        cameraControlsRef.current.setPosition(vector[0], vector[1], 30);
         cameraControlsRef.current.setTarget(vector[0], vector[1], vector[2]);
         cameraControlsRef.current.update(delta);
       }
@@ -81,14 +81,14 @@ export const SceneContent: React.FC<{
         ref={cameraControlsRef}
         enabled={true}
         dollyToCursor={true}
-        minDistance={5}
-        maxDistance={50}
+        minDistance={10}
+        maxDistance={30}
         minPolarAngle={0}
         maxPolarAngle={Math.PI}
         dampingFactor={0.25}
       />
-      <axesHelper args={[10]} />
-      <gridHelper />
+      {/* <axesHelper args={[10]} /> */}
+      {/* <gridHelper /> */}
     </>
   );
 };

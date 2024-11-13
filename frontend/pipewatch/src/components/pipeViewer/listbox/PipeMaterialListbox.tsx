@@ -22,12 +22,12 @@ export const PipeMaterialListbox: React.FC<PipeMaterialListboxProps> = ({
 }) => {
   // 초기 선택된 재질 설정
   const [selected, setSelected] = useState<number>(value || 1);
-  console.log(value, selected, pipeMaterialList);
+
 
   // value가 변경될 때마다 selected 값을 업데이트
   useEffect(() => {
     setSelected(value || 1);
-  }, [value]);
+  }, [pipeMaterialList, value]);
 
   // materialId 선택 변경될 경우
   const handleChange = (materialId: number) => {
@@ -35,8 +35,8 @@ export const PipeMaterialListbox: React.FC<PipeMaterialListboxProps> = ({
       (item) => item.materialId === materialId
     );
     if (material) {
-      setSelected(materialId);
-      onChange(materialId);
+      setSelected(materialId); // 선택된 materialId 업데이트
+      onChange(materialId); // 부모 컴포넌트로 선택된 materialId 전달
     }
   };
 
@@ -67,7 +67,7 @@ export const PipeMaterialListbox: React.FC<PipeMaterialListboxProps> = ({
             />
           </ListboxButton>
         </div>
-        {pipeMaterialList && pipeMaterialList.length > 0 && (
+        {pipeMaterialList && pipeMaterialList?.length > 0 && (
           <ListboxOptions
             anchor="bottom"
             transition

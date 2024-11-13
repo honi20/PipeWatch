@@ -22,20 +22,11 @@ export const FluidMaterialListbox: React.FC<FluidMaterialListboxProps> = ({
 }) => {
   // 초기 선택된 재질 설정
   const [selected, setSelected] = useState<number>(value || 4);
-  const [language, setLanguage] = useState<string>(
-    localStorage.getItem("language") || "kr"
-  );
-
-  // language를 localStorage에서 초기화
-  useEffect(() => {
-    const savedLanguage = localStorage.getItem("language") || "kr";
-    setLanguage(savedLanguage);
-  }, []);
 
   // value가 변경될 때마다 selected 값을 업데이트
   useEffect(() => {
     setSelected(value || 4);
-  }, [value]);
+  }, [value, fluidMaterialList]);
 
   // materialId 선택 변경될 경우
   const handleChange = (materialId: number) => {
@@ -58,18 +49,17 @@ export const FluidMaterialListbox: React.FC<FluidMaterialListboxProps> = ({
               "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25"
             )}
           >
-            {fluidMaterialList &&
+            {fluidMaterialList && fluidMaterialList.length > 0 ? (
               fluidMaterialList
                 .filter((item) => item.materialId === selected)
                 .map((filteredItem) => (
                   <div key={filteredItem.materialId}>
-                    <p>
-                      {language === "ko"
-                        ? filteredItem.koreanName
-                        : filteredItem.englishName}
-                    </p>
+                    <p>{filteredItem.koreanName}</p>
                   </div>
-                ))}
+                ))
+            ) : (
+              <p>-</p> // 재질이 없을 때 기본 메시지
+            )}
             <ExpandMoreIcon
               sx={{ color: "#5E5E5E" }}
               className="absolute transition-transform duration-200 group size-6 right-3"
@@ -92,7 +82,7 @@ export const FluidMaterialListbox: React.FC<FluidMaterialListboxProps> = ({
                 className="group flex cursor-default items-center gap-2 rounded-lg py-1.5 px-3 select-none data-[focus]:bg-white/10"
               >
                 <div className="dark:text-white text-sm/6">
-                  {language === "ko" ? item.koreanName : item.englishName}
+                  {item.koreanName}
                 </div>
               </ListboxOption>
             ))}
