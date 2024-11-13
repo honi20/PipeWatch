@@ -9,9 +9,9 @@ from typing import List
 import cadquery as cq
 import math
 from PIL import Image
-from main import NODE_PATH, GLTF_PIPELINE_PATH, S3_client, S3_BUCKET_NAME, AWS_REGION, BASE_WORK_DIR
 import shutil
 
+from config import AWS_REGION, BASE_WORK_DIR, GLTF_PIPELINE_PATH, NODE_PATH, S3_BUCKET_NAME, S3_client
 
 # 파이프 모델 생성 요청
 class CreateModelRequest(BaseModel):
@@ -66,6 +66,42 @@ def find_intersections(point1, point2, x_min, y_min, x_max, y_max):
     # 필요한 교차점이 두 개를 넘으면 앞의 두 개만 반환
     return intersections[:2] if len(intersections) >= 2 else (None, None)
 
+# 모델 생성 함수
+def create_model(coords, modelUuid):
+    work_dir = os.path.join(BASE_WORK_DIR, modelUuid)
+    os.makedirs(work_dir, exist_ok=True)
+
+    # 파이프 분류
+    pipelines = segment_pipelines(coords)
+
+    # HACK:
+    # 임시 반지름 설정
+    radius = 0.5
+
+    # 파일 생성
+    stl_paths = create_stl_files(pipelines, radius, work_dir)
+    gltf_path = os.path.join(work_dir, f"origin_Pipeline_{modelUuid}.gltf")
+    compressed_gltf_path = create_gltf(modelUuid, stl_paths, gltf_path, work_dir)
+
+    # gltf S3 업로드
+    model_key = f"models/PipeLine_{modelUuid}.gltf"
+    pipeModel_URL = upload_S3(compressed_gltf_path, model_key)
+
+    # 썸네일 생성
+    thumbnail_path = os.path.join(work_dir, f"Thumbnail_{modelUuid}.png")
+    create_thumbnail(gltf_path, thumbnail_path)
+
+    # 썸네일 S3 업로드
+    thumbnail_key = f"thumbnails/Thumbnail_{modelUuid}.png"
+    thumbnail_URL = upload_S3(thumbnail_path, thumbnail_key)
+
+    # 작업 폴더 삭제
+    shutil.rmtree(work_dir)
+
+    # 결과 전송
+    BE_response = send_data(modelUuid, pipeModel_URL, thumbnail_URL)
+
+    return {"BE_response": BE_response}
 
 # 파이프 분류 함수
 def segment_pipelines(request_coords: List[List[List[float]]]):
@@ -338,35 +374,3 @@ def send_data(model_uuid: str, model_url: str, preview_img_url: str) -> dict:
             "message": "결과 전송 실패",
             "error": BE_response.text
         }
-
-def create_model(data, modelUuid):
-    work_dir = os.path.join(BASE_WORK_DIR, data.modelUuid)
-    os.makedirs(work_dir, exist_ok=True)
-
-    # 파이프 분류
-    pipelines = segment_pipelines(data.coords)
-
-    # 파일 생성
-    stl_paths = create_stl_files(pipelines, data.radius, work_dir)
-    gltf_path = os.path.join(work_dir, f"origin_Pipeline_{data.modelUuid}.gltf")
-    compressed_gltf_path = create_gltf(data.modelUuid, stl_paths, gltf_path, work_dir)
-
-    # gltf S3 업로드
-    model_key = f"models/PipeLine_{data.modelUuid}.gltf"
-    pipeModel_URL = upload_S3(compressed_gltf_path, model_key)
-
-    # 썸네일 생성
-    thumbnail_path = os.path.join(work_dir, f"Thumbnail_{data.modelUuid}.png")
-    create_thumbnail(gltf_path, thumbnail_path)
-
-    # 썸네일 S3 업로드
-    thumbnail_key = f"thumbnails/Thumbnail_{data.modelUuid}.png"
-    thumbnail_URL = upload_S3(thumbnail_path, thumbnail_key)
-
-    # 작업 폴더 삭제
-    shutil.rmtree(work_dir)
-
-    # 결과 전송
-    BE_response = send_data(data.modelUuid, pipeModel_URL, thumbnail_URL)
-
-    return {"BE_response": BE_response, "pipeModel_URL": pipeModel_URL, "thumbnail_URL": thumbnail_URL}
