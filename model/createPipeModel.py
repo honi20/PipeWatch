@@ -13,20 +13,21 @@ else:
     host=os.getenv("SERVER_HOST")
     port=os.getenv("SERVER_PORT")
 
-from fastapi import FastAPI
-from pydantic import BaseModel
-from typing import List
-from PIL import Image
-import pyrender
-import numpy as np
-import subprocess
-import cadquery as cq
-import trimesh
 import math
-import boto3
-import uvicorn
-import requests
 import shutil
+import subprocess
+from typing import List
+
+import boto3
+import cadquery as cq
+import numpy as np
+import pyrender
+import requests
+import trimesh
+import uvicorn
+from fastapi import FastAPI
+from PIL import Image
+from pydantic import BaseModel
 
 # S3 환경 변수
 AWS_REGION = os.getenv("S3_REGION_NAME")
