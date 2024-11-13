@@ -19,7 +19,7 @@ const API_URL = Config.API_URL;
 
 const getCompanyList = (): Promise<CompanyType[]> => {
   return baseInstance
-    .get(`${API_URL}/api/enterprises/list`)
+    .get(`${API_URL}/api/enterprises`)
     .then((res) => {
       console.log("기업 리스트 조회: ", res.data.body.enterprises);
       return res.data.body.enterprises;
