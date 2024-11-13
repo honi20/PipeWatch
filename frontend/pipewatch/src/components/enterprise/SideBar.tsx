@@ -4,7 +4,8 @@ import { useTranslation } from "react-i18next";
 
 export const SideBar = () => {
   const [activeSection, setActiveSection] = useState<number | null>(null);
-  const enterpriseName = "개굴전자"; // 기업명 넣을 예정
+
+  const enterpriseName = localStorage.getItem("enterpriseName");
   const navigate = useNavigate();
   const location = useLocation();
   const { t } = useTranslation();

@@ -63,7 +63,7 @@ export const EmpView = () => {
       {isSuccess && (
         <StatusBar
           // text={t("pipeGenerator.takePhoto.connectRCCar.statusMessages.failed")}
-          text={"변경 완료"}
+          text={t("enterprise.view.status.updateComplete")}
           icon={""}
           // icon={<CancelIcon sx={{ fontSize: "20px" }} />}
           color={"bg-success"}
@@ -82,13 +82,13 @@ export const EmpView = () => {
         />
         <EnterpriseButton
           handleClick={() => searchEmployee(searchKeyword)}
-          text={"검색"}
+          text={t("enterprise.view.buttons.search.label")}
           color={"dark:bg-block bg-gray-500"}
           hoverColor={"hover:dark:bg-block/80 hover:bg-gray-500/80"}
         />
         <EnterpriseButton
           handleClick={() => setEmployeeList(tempEmployeeList)}
-          text={"전체 사원 조회"}
+          text={t("enterprise.view.buttons.search.viewAllEmployees")}
           color={"dark:bg-primary-500 bg-primary-200"}
           hoverColor={"hover:dark:bg-primary-500/80 hover:bg-primary-200/80"}
         />

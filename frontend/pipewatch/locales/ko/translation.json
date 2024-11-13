@@ -18,7 +18,7 @@
     "userRoles": {
       "admin": "관리자",
       "employee": "일반 사원",
-      "pending": "인증중"
+      "pending": "사원 인증중"
     },
     "accessError": {
       "noCompany": "등록된 기업이 없습니다. 기업 인증 상태를 확인해주세요.",
@@ -382,7 +382,14 @@
       "buttons": {
         "staff": "일반",
         "admin": "관리자",
-        "update": "변경"
+        "update": "변경",
+        "search": {
+          "label": "검색",
+          "viewAllEmployees": "전체 사원 조회"
+        }
+      },
+      "status": {
+        "updateComplete": "변경 완료"
       }
     }
   }

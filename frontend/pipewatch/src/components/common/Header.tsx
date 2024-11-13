@@ -310,7 +310,11 @@ export const Header = ({ handleTheme, currentTheme }: Props) => {
                 onClick={handleRoleNavigation}
               >
                 <div>{name}</div>
-                {role === "ENTERPRISE" ? (
+                {userState === "PENDING" ? (
+                  <div className="px-2 py-1 rounded-[30px] text-[12px] text-white bg-gray-800 dark:bg-gray-500">
+                    {t("header.userRoles.pending")}
+                  </div>
+                ) : role === "ENTERPRISE" ? (
                   // 기업 계정
                   <div className="flex items-center justify-center px-2 rounded-[30px] text-[14px] bg-warn">
                     {waitingList && waitingList.length}

@@ -18,7 +18,7 @@
     "userRoles": {
       "admin": "Admin",
       "employee": "Employee",
-      "pending": "Pending"
+      "pending": "Verifying"
     },
     "accessError": {
       "noCompany": "No registered company found. Please check the company verification status.",
@@ -382,7 +382,11 @@
       "buttons": {
         "staff": "Employee",
         "admin": "Administrator",
-        "update": "Update"
+        "update": "Update",
+        "search": {
+          "label": "Search",
+          "viewAllEmployees": "View All"
+        }
       }
     }
   }
