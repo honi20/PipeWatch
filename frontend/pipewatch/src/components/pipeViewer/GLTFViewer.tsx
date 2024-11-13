@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import React, { useRef, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { CameraControls } from "@react-three/drei";
@@ -16,6 +17,7 @@ interface GLTFViewerProps {
 }
 
 const GLTFViewer: React.FC<GLTFViewerProps> = (props) => {
+  const { t } = useTranslation();
   const { selectView, setSelectView } = useSelectView();
   const { gltfUrl, pipelines, modelId, modelDetail } = props;
   const cameraControlsRef = useRef<CameraControls | null>(null);
@@ -43,7 +45,7 @@ const GLTFViewer: React.FC<GLTFViewerProps> = (props) => {
         className="sticky z-10 transform -translate-x-1/2 -translate-y-10 bottom-10 left-1/2"
         onClick={handleTotalViewButton}
       >
-        전체 뷰 보기 버튼
+        {t("PipeViewer.GLTFViewer.viewFullModel")}
       </button>
       <div className="absolute z-10 top-10 right-10">
         {modelDetail &&

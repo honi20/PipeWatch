@@ -1,4 +1,4 @@
-// import { useTranslation } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import { getApiClient } from "@src/stores/apiClient";
 import { ModelListView } from "@src/components/pipeViewer/ModelListView";
 import NoAccessImage from "@assets/images/status/no_access.png";
@@ -7,8 +7,7 @@ import { ModelsType } from "../components/pipeViewer/Type/PipeType";
 import { useState, useEffect } from "react";
 
 export const PipeViewer = () => {
-  // const { t } = useTranslation();
-  // const apiClient = getApiClient();
+  const { t } = useTranslation();
   const [models, setModels] = useState<ModelsType[]>([]);
 
   // modelList 조회 함수
@@ -29,7 +28,6 @@ export const PipeViewer = () => {
 
   useEffect(() => {
     if (!models || models.length === 0) {
-      console.log("모델리스트 없음");
       getModelList();
     }
   }, []);
@@ -41,8 +39,9 @@ export const PipeViewer = () => {
 
   return (
     <div className="">
-      {/* <h2 className="font-bold text-[40px]">{t("pipeViewer.title")}</h2> */}
-      <h2 className="font-bold text-[40px] mx-6">파이프 모델 조회</h2>
+      <h2 className="font-bold text-[40px] mx-6">
+        {t("PipeViewer.readPipeModel")}
+      </h2>
 
       <div className="flex items-center justify-center my-4 h-fit">
         {isAdmin ? (
@@ -55,13 +54,13 @@ export const PipeViewer = () => {
                   <img src={NoPipeModelImage} width="350px" alt="No Model" />
                   <div className="flex flex-col justify-center">
                     <div className="text-center font-bold text-[40px]">
-                      등록된 파이프 모델이 없습니다.
+                      {t("pipeViewr.noPipeModel")}
                     </div>
                     <a
                       href="/pipe-generator"
                       className="text-center text-[20px] text-gray-500 hover:text-gray-200 underline"
                     >
-                      먼저 파이프 모델을 생성하세요.
+                      {t("PipeViewer.noPipeModelDescription")}
                     </a>
                   </div>
                 </>
@@ -70,13 +69,13 @@ export const PipeViewer = () => {
                   <img src={NoAccessImage} width="350px" alt="No Access" />
                   <div className="flex flex-col justify-center">
                     <div className="text-center font-bold text-[40px]">
-                      접근 권한이 없습니다.
+                      {t("PipeViewer.noAccess")}
                     </div>
                     <a
                       href="/"
                       className="text-center text-[20px] text-gray-500 hover:text-gray-200 underline"
                     >
-                      기업 인증 상태를 확인하세요.
+                      {t("PipeViewer.noAccessDescription")}
                     </a>
                   </div>
                 </>

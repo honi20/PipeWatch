@@ -409,5 +409,17 @@
         }
       }
     }
+  },
+  "PipeViewer": {
+    "readPipeModel": "Manage Pipe Model",
+    "noPipeModel": "No registered pipe model.",
+    "noPipeModelDescription": "Please create a pipe model first.",
+    "noAccess": "No access permission.",
+    "ModelListView": {
+      "selectModel": "Select Pipe Model."
+    },
+    "GLTFViewer": {
+      "viewFullModel": "View Full Model"
+    }
   }
 }
