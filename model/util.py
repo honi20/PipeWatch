@@ -1,54 +1,17 @@
 import os
-from dotenv import load_dotenv
-
-# 환경 변수 주입
-load_dotenv()
-
-# 개발 환경에 따른 변수 주입
-if os.getenv("ENVIRONMENT") == "dev":
-    host=os.getenv("LOCAL_HOST")
-    port=os.getenv("LOCAL_PORT")
-else:
-    os.environ['PYOPENGL_PLATFORM'] = 'osmesa'
-    host=os.getenv("SERVER_HOST")
-    port=os.getenv("SERVER_PORT")
-
-import math
-import shutil
-import subprocess
-from typing import List
-
-import boto3
-import cadquery as cq
 import numpy as np
+from pydantic import BaseModel
 import pyrender
 import requests
 import trimesh
-import uvicorn
-from fastapi import FastAPI
+import subprocess
+from typing import List
+import cadquery as cq
+import math
 from PIL import Image
-from pydantic import BaseModel
+from main import NODE_PATH, GLTF_PIPELINE_PATH, S3_client, S3_BUCKET_NAME, AWS_REGION, BASE_WORK_DIR
+import shutil
 
-# S3 환경 변수
-AWS_REGION = os.getenv("S3_REGION_NAME")
-AWS_ACCESS_KEY_ID = os.getenv("S3_PUBLIC_ACCESS_KEY")
-AWS_SECRET_ACCESS_KEY = os.getenv("S3_PRIVATE_ACCESS_KEY")
-S3_BUCKET_NAME = os.getenv("S3_BUCKET_NAME")
-
-# S3 클라이언트 생성
-S3_client = boto3.client(
-    "s3",
-    aws_access_key_id=AWS_ACCESS_KEY_ID,
-    aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
-    region_name=AWS_REGION
- )
-
-app = FastAPI()
-
-# 경로 설정
-NODE_PATH = os.getenv("NODE_PATH")
-GLTF_PIPELINE_PATH = os.getenv("GLTF_PIPELINE_PATH")
-BASE_WORK_DIR = os.getenv("BASE_WORK_DIR")
 
 # 파이프 모델 생성 요청
 class CreateModelRequest(BaseModel):
@@ -56,39 +19,53 @@ class CreateModelRequest(BaseModel):
     coords: List[List[List[float]]]
     radius: float = 1
 
-# 파이프라인 모델 생성 api
-@app.post("/pipelineModel")
-def create_model(data: CreateModelRequest):
-    work_dir = os.path.join(BASE_WORK_DIR, data.modelUuid)
-    os.makedirs(work_dir, exist_ok=True)
+def convert_numpy_types(obj):
+    if isinstance(obj, np.generic):
+        return obj.item()
+    elif isinstance(obj, list):
+        return [convert_numpy_types(item) for item in obj]
+    elif isinstance(obj, dict):
+        return {key: convert_numpy_types(value) for key, value in obj.items()}
+    return obj
 
-    # 파이프 분류
-    pipelines = segment_pipelines(data.coords)
+def find_intersections(point1, point2, x_min, y_min, x_max, y_max):
+    intersections = []
 
-    # 파일 생성
-    stl_paths = create_stl_files(pipelines, data.radius, work_dir)
-    gltf_path = os.path.join(work_dir, f"origin_Pipeline_{data.modelUuid}.gltf")
-    compressed_gltf_path = create_gltf(data.modelUuid, stl_paths, gltf_path, work_dir)
+    # 직선의 기울기와 y절편 계산
+    dx, dy = point2[0] - point1[0], point2[1] - point1[1]
 
-    # gltf S3 업로드
-    model_key = f"models/PipeLine_{data.modelUuid}.gltf"
-    pipeModel_URL = upload_S3(compressed_gltf_path, model_key)
+    # 수직선인 경우 (dx == 0)
+    if dx != 0:
+        slope = dy / dx
+        intercept = point1[1] - slope * point1[0]
 
-    # 썸네일 생성
-    thumbnail_path = os.path.join(work_dir, f"Thumbnail_{data.modelUuid}.png")
-    create_thumbnail(gltf_path, thumbnail_path)
+        # 사각형의 왼쪽 변과의 교차점 (x = x_min)
+        y_left = slope * x_min + intercept
+        if y_min <= y_left <= y_max:
+            intersections.append((x_min, int(y_left)))
 
-    # 썸네일 S3 업로드
-    thumbnail_key = f"thumbnails/Thumbnail_{data.modelUuid}.png"
-    thumbnail_URL = upload_S3(thumbnail_path, thumbnail_key)
+        # 사각형의 오른쪽 변과의 교차점 (x = x_max)
+        y_right = slope * x_max + intercept
+        if y_min <= y_right <= y_max:
+            intersections.append((x_max, int(y_right)))
 
-    # 작업 폴더 삭제
-    shutil.rmtree(work_dir)
+    # 수평선인 경우 (dy == 0)
+    if dy != 0:
+        # 사각형의 상단 변과의 교차점 (y = y_min)
+        if dx != 0:
+            x_top = (y_min - intercept) / slope
+            if x_min <= x_top <= x_max:
+                intersections.append((int(x_top), y_min))
 
-    # 결과 전송
-    BE_response = send_data(data.modelUuid, pipeModel_URL, thumbnail_URL)
+        # 사각형의 하단 변과의 교차점 (y = y_max)
+        if dx != 0:
+            x_bottom = (y_max - intercept) / slope
+            if x_min <= x_bottom <= x_max:
+                intersections.append((int(x_bottom), y_max))
 
-    return {"BE_response": BE_response, "pipeModel_URL": pipeModel_URL, "thumbnail_URL": thumbnail_URL}
+    # 필요한 교차점이 두 개를 넘으면 앞의 두 개만 반환
+    return intersections[:2] if len(intersections) >= 2 else (None, None)
+
 
 # 파이프 분류 함수
 def segment_pipelines(request_coords: List[List[List[float]]]):
@@ -98,7 +75,7 @@ def segment_pipelines(request_coords: List[List[List[float]]]):
         pipe_coord1, pipe_coord2 = coord_pair[0], coord_pair[1]
         pipe_coord1_connected_pipeline = None
         pipe_coord2_connected_pipeline = None
-        
+
         # 파이프 연결 가능 여부 조회
         for pipeline in pipelines:
             if pipe_coord1 == pipeline[0] or pipe_coord1 == pipeline[-1]:
@@ -114,13 +91,13 @@ def segment_pipelines(request_coords: List[List[List[float]]]):
         if pipe_coord1_connected_pipeline and pipe_coord2_connected_pipeline:
             if pipe_coord1_connected_pipeline[-1] == pipe_coord1:
                 pipe_coord1_connected_pipeline.extend(
-                pipe_coord2_connected_pipeline if pipe_coord2_connected_pipeline[0] == pipe_coord2 else pipe_coord2_connected_pipeline[::-1]
-            )
+                    pipe_coord2_connected_pipeline if pipe_coord2_connected_pipeline[0] == pipe_coord2 else pipe_coord2_connected_pipeline[::-1]
+                )
             elif pipe_coord1_connected_pipeline[0] == pipe_coord1:
                 pipe_coord1_connected_pipeline[:0] = (
-                pipe_coord2_connected_pipeline if pipe_coord2_connected_pipeline[-1] == pipe_coord2 else pipe_coord2_connected_pipeline[::-1]
-            )
-                
+                    pipe_coord2_connected_pipeline if pipe_coord2_connected_pipeline[-1] == pipe_coord2 else pipe_coord2_connected_pipeline[::-1]
+                )
+
             pipelines.remove(pipe_coord2_connected_pipeline)
 
         # 새 파이프가 한 파이프라인에 속할 시
@@ -135,7 +112,7 @@ def segment_pipelines(request_coords: List[List[List[float]]]):
                 pipe_coord2_connected_pipeline.append(pipe_coord1)
             elif pipe_coord2_connected_pipeline[0] == pipe_coord2:
                 pipe_coord2_connected_pipeline.insert(0, pipe_coord1)
-                
+
         # 새 파이프가 새로운 파이프라인 형성 시
         else:
             pipelines.append([pipe_coord1, pipe_coord2])
@@ -166,7 +143,7 @@ def create_pipeline(pipeline_coords, radius, pipeline_name, work_dir, segment_in
         else:
             create_cylinder(start_coord, end_coord, radius, f"{pipeline_name}_Segment_{segment_index}", work_dir, stl_paths)
             create_connector(end_coord, radius, f"{pipeline_name}_Connector_{segment_index}", work_dir, stl_paths)
-            
+
             start_coord = end_coord
             end_coord = pipeline_coords[index]
             segment_index += 1
@@ -272,7 +249,7 @@ def create_gltf(modelUuid, stl_paths, gltf_path, work_dir):
     # 압축 GLTF 파일 생성
     compressed_gltf_path = os.path.join(work_dir, f"PipeLine_{modelUuid}.gltf")
     compress_gltf(gltf_path, compressed_gltf_path)
-    
+
     return compressed_gltf_path
 
 # draco 압축 함수
@@ -281,18 +258,18 @@ def compress_gltf(input_path, output_path):
         [NODE_PATH, GLTF_PIPELINE_PATH, "-i", input_path, "-o", output_path, "-d", "--draco.compressMesh"],
         check=True, capture_output=True, text=True
     )
-    
+
 # 썸네일 생성 함수
 def create_thumbnail(gltf_path, thumbnail_path):
     # gltf 디렉토리 설정
     scene = trimesh.load(gltf_path, resolver=trimesh.resolvers.FilePathResolver(os.path.dirname(gltf_path)))
-    
+
     # Trimesh 씬을 Pyrender 씬으로 변환
     pyrender_scene = pyrender.Scene()
     for geometry in scene.geometry.values():
         mesh = pyrender.Mesh.from_trimesh(geometry)
         pyrender_scene.add(mesh)
-    
+
     # 범위 계산
     bounds = scene.bounds
     min_bound, max_bound = bounds[0], bounds[1]
@@ -307,11 +284,11 @@ def create_thumbnail(gltf_path, thumbnail_path):
         [0.0, 0.0, 1.0, center[2] + camera_distance],
         [0.0, 0.0, 0.0, 1.0],
     ])
-    
+
     # 카메라 설정
     camera = pyrender.PerspectiveCamera(yfov=np.pi / 3.0)
     pyrender_scene.add(camera, pose=camera_pose)
-    
+
     # 조명 설정
     light = pyrender.DirectionalLight(color=np.ones(3), intensity=2.0)
     pyrender_scene.add(light, pose=camera_pose)
@@ -319,7 +296,7 @@ def create_thumbnail(gltf_path, thumbnail_path):
     # 씬 렌더링
     r = pyrender.OffscreenRenderer(640, 480)
     color, _ = r.render(pyrender_scene)
-    
+
     # 이미지 저장
     image = Image.fromarray(color)
     image.save(thumbnail_path)
@@ -328,13 +305,13 @@ def create_thumbnail(gltf_path, thumbnail_path):
 def upload_S3(file_path, S3_key):
     S3_client.upload_file(file_path, S3_BUCKET_NAME, S3_key)
     S3_URL = f"https://{S3_BUCKET_NAME}.s3.{AWS_REGION}.amazonaws.com/{S3_key}"
-    
+
     return S3_URL
 
 # 결과 전송 함수
 def send_data(model_uuid: str, model_url: str, preview_img_url: str) -> dict:
     target_url = "https://api.pipewatch.co.kr/api/models/modeling"
-    
+
     # NOTE:
     # BE 변수명 변경 시 동일하게 변경 필요
     payload = {
@@ -362,8 +339,34 @@ def send_data(model_uuid: str, model_url: str, preview_img_url: str) -> dict:
             "error": BE_response.text
         }
 
-if __name__ == "__main__":
-    uvicorn.run(app, host=host, port=int(port))
+def create_model(data, modelUuid):
+    work_dir = os.path.join(BASE_WORK_DIR, data.modelUuid)
+    os.makedirs(work_dir, exist_ok=True)
 
-# NOTE:
-# 포트 오류 -> Stop-Process -Name python -Force
+    # 파이프 분류
+    pipelines = segment_pipelines(data.coords)
+
+    # 파일 생성
+    stl_paths = create_stl_files(pipelines, data.radius, work_dir)
+    gltf_path = os.path.join(work_dir, f"origin_Pipeline_{data.modelUuid}.gltf")
+    compressed_gltf_path = create_gltf(data.modelUuid, stl_paths, gltf_path, work_dir)
+
+    # gltf S3 업로드
+    model_key = f"models/PipeLine_{data.modelUuid}.gltf"
+    pipeModel_URL = upload_S3(compressed_gltf_path, model_key)
+
+    # 썸네일 생성
+    thumbnail_path = os.path.join(work_dir, f"Thumbnail_{data.modelUuid}.png")
+    create_thumbnail(gltf_path, thumbnail_path)
+
+    # 썸네일 S3 업로드
+    thumbnail_key = f"thumbnails/Thumbnail_{data.modelUuid}.png"
+    thumbnail_URL = upload_S3(thumbnail_path, thumbnail_key)
+
+    # 작업 폴더 삭제
+    shutil.rmtree(work_dir)
+
+    # 결과 전송
+    BE_response = send_data(data.modelUuid, pipeModel_URL, thumbnail_URL)
+
+    return {"BE_response": BE_response, "pipeModel_URL": pipeModel_URL, "thumbnail_URL": thumbnail_URL}
