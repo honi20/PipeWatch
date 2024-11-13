@@ -258,6 +258,14 @@ def create_gltf(modelUuid, stl_paths, gltf_path, work_dir):
         mesh.metadata['name'] = os.path.splitext(os.path.basename(stl_path))[0]
         scene.add_geometry(mesh)
 
+    # 중앙값 계산
+    min_bound, max_bound = scene.bounds
+    center = (min_bound + max_bound) / 2
+
+    # 씬의 중앙을 원점으로 조정
+    for geometry in scene.geometry.values():
+        geometry.apply_translation(-center)
+
     # GLTF 파일 생성
     scene.export(gltf_path, file_type='gltf')
 
