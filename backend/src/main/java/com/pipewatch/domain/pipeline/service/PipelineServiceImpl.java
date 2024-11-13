@@ -158,6 +158,7 @@ public class PipelineServiceImpl implements PipelineService {
 		return PipelineResponse.MemoListDto.builder()
 				.pipeId(pipe.getId())
 				.pipeName(pipe.getName())
+				.hasDefect(pipe.getHasDefect())
 				.memoList(memoList)
 				.build();
 	}
@@ -184,6 +185,7 @@ public class PipelineServiceImpl implements PipelineService {
 				.map(entry -> PipelineResponse.MemoListDto.builder()
 						.pipeId(entry.getKey().getId())
 						.pipeName(entry.getKey().getName())
+						.hasDefect(entry.getKey().getHasDefect())
 						.memoList(entry.getValue())
 						.build())
 				.toList();
@@ -211,6 +213,7 @@ public class PipelineServiceImpl implements PipelineService {
 		return PipelineResponse.MemoListDto.builder()
 				.pipeId(pipe.getId())
 				.pipeName(pipe.getName())
+				.hasDefect(pipe.getHasDefect())
 				.memoList(memoList)
 				.build();
 	}
@@ -227,6 +230,16 @@ public class PipelineServiceImpl implements PipelineService {
 		}
 
 		pipeMemoRepository.delete(memo);
+	}
+
+	@Override
+	@Transactional
+	public void modifyPipeDefect(Long userId, Long pipeId) {
+		Pipe pipe = pipeRepository.findById(pipeId)
+				.orElseThrow(() -> new BaseException(PIPE_NOT_FOUND));
+
+		pipe.updateHasDefect(!pipe.getHasDefect());
+		pipeRepository.save(pipe);
 	}
 
 	// 허용 안되는 Role 제공

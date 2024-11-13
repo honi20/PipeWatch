@@ -21,4 +21,6 @@ public interface PipelineService {
 	PipelineResponse.MemoListDto getPipeMemoList(Long userId, Long pipeId);
 
 	void deletePipeMemo(Long userId, Long memoId);
+
+	void modifyPipeDefect(Long userId, Long pipeId);
 }

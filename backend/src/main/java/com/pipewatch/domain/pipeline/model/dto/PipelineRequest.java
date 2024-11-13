@@ -45,12 +45,10 @@ public class PipelineRequest {
 	@AllArgsConstructor
 	public static class CreateMemoDto {
 		private String memo;
-		private Boolean hasDefect;
 
 		public PipeMemo toEntity(User user, Pipe pipe) {
 			return PipeMemo.builder()
 					.memo(this.memo)
-					.hasDefect(this.hasDefect)
 					.user(user)
 					.pipe(pipe)
 					.build();

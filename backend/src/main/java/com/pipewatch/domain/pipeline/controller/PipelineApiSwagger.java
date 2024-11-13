@@ -184,4 +184,13 @@ public interface PipelineApiSwagger {
 	ResponseEntity<?> pipeMemoDelete(@AuthenticationPrincipal Long userId,
 									 @Schema(description = "메모 ID", example = "1")
 									 @PathVariable Long memoId);
+
+	@PatchMapping("/pipes/{pipeId}/defect")
+	@Operation(summary = "객체 파이프 결함 정보 수정")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "객체 파이프 결함 정보 수정 성공", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+					examples = {@ExampleObject(value = "{\"header\":{\"httpStatusCode\": 200, \"message\": \"객체 파이프 결함 정보 수정에 성공했습니다.\"},\n\"body\": null}")}
+			))
+	})
+	ResponseEntity<?> pipeDefectModify(@AuthenticationPrincipal Long userId, @PathVariable Long pipeId);
 }

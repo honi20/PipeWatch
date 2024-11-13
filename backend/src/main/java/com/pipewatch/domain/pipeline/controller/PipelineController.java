@@ -70,4 +70,10 @@ public class PipelineController implements PipelineApiSwagger {
 		return new ResponseEntity<>(ResponseDto.success(PIPE_MEMO_DELETED, null), HttpStatus.NO_CONTENT);
 	}
 
+	@PatchMapping("/pipes/{pipeId}/defect")
+	public ResponseEntity<?> pipeDefectModify(@AuthenticationPrincipal Long userId, @PathVariable Long pipeId) {
+		pipelineService.modifyPipeDefect(userId, pipeId);
+
+		return new ResponseEntity<>(ResponseDto.success(PIPE_DEFECT_MODIFIED_OK, null), HttpStatus.OK);
+	}
 }
