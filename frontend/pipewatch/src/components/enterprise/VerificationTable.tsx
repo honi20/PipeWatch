@@ -63,7 +63,7 @@ export const VerificationTable: React.FC<TableProps> = ({ data }) => {
         </thead>
         <tbody className="text-center text-black dark:text-white">
           {data.map((item) => (
-            <tr key={item.id} className="">
+            <tr key={item.uuid} className="">
               <td className="py-3 px-5  border-t text-[15px]">{item.name}</td>
               <td className=" px-5 border-t text-[15px] break-all">
                 {item.email}
