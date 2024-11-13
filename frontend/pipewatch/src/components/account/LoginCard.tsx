@@ -4,7 +4,7 @@ import { Button, Input } from "@headlessui/react";
 import { ChangeEvent, FocusEvent, KeyboardEvent, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
-import { BarLoader, PuffLoader } from "react-spinners";
+import { PuffLoader } from "react-spinners";
 
 const LoginCard = () => {
   const { t } = useTranslation();
