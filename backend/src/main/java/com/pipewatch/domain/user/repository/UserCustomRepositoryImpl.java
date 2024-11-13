@@ -37,6 +37,7 @@ public class UserCustomRepositoryImpl implements UserCustomRepository {
 				))
 				.from(user)
 				.leftJoin(employeeInfo).on(user.id.eq(employeeInfo.user.id))
+				.leftJoin(employeeInfo.enterprise, enterprise)
 				.where(user.id.eq(userId))
 				.fetchOne();
 	}
