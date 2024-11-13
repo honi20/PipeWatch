@@ -165,99 +165,94 @@ export const ModelProperty: React.FC<ModelPropertyProps> = (props) => {
             </p>
           </div>
           <div className="flex flex-col items-center w-full h-full gap-5">
-            {/* 결함 탐지 */}
-            <div className="flex flex-col w-full">
-              <h3 className="text-[20px] font-bold self-start px-1">
-                결함 확인
-              </h3>
-            </div>
-
-            {/* 파이프 속성 */}
-            <div className="flex flex-col w-full gap-4">
-              <h3 className="text-[20px] font-bold self-start px-1">
-                파이프 속성
-              </h3>
-              <div className="flex items-center justify-between w-full gap-2 px-1">
-                <div className="w-[100px] px-1">재질</div>
-                <PipeMaterialListbox
-                  pipeMaterialList={pipeMaterialList?.materials}
-                  value={pipeMaterialId}
-                  onChange={setPipeMaterialId}
-                />
-              </div>
-              <div className="flex items-center justify-between w-full gap-2 px-1">
-                <div className="w-[100px] px-1">Outer Diameter</div>
-                <div className="relative w-full">
-                  <Input
-                    type="number"
-                    value={pipeOuterDiameter}
-                    onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                      setPipeOuterDiameter(Number(e.target.value))
-                    }
-                    className={clsx(
-                      "block w-full pl-5 pr-10 rounded-md border-none bg-black/40 py-2 px-3 text-sm/6 text-white",
-                      "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25"
-                    )}
-                    style={{ paddingRight: "3rem" }} // 단위 공간 확보
+            <div>
+              {/* 파이프 속성 */}
+              <div className="flex flex-col w-full gap-4">
+                <h3 className="text-[20px] font-bold self-start px-1">
+                  파이프 속성
+                </h3>
+                <div className="flex items-center justify-between w-full gap-2 px-1">
+                  <div className="w-[100px] px-1">재질</div>
+                  <PipeMaterialListbox
+                    pipeMaterialList={pipeMaterialList?.materials}
+                    value={pipeMaterialId}
+                    onChange={setPipeMaterialId}
                   />
-                  <span className="absolute text-sm text-gray-800 transform -translate-y-1/2 pointer-events-none right-3 top-1/2">
-                    mm
-                  </span>
+                </div>
+                <div className="flex items-center justify-between w-full gap-2 px-1">
+                  <div className="w-[100px] px-1">Outer Diameter</div>
+                  <div className="relative w-full">
+                    <Input
+                      type="number"
+                      value={pipeOuterDiameter}
+                      onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                        setPipeOuterDiameter(Number(e.target.value))
+                      }
+                      className={clsx(
+                        "block w-full pl-5 pr-10 rounded-md border-none bg-black/40 py-2 px-3 text-sm/6 text-white",
+                        "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25"
+                      )}
+                      style={{ paddingRight: "3rem" }} // 단위 공간 확보
+                    />
+                    <span className="absolute text-sm text-gray-800 transform -translate-y-1/2 pointer-events-none right-3 top-1/2">
+                      mm
+                    </span>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between w-full gap-2 px-1">
+                  <div className="w-[100px] px-1">Inner Diameter</div>
+                  <div className="relative w-full">
+                    <Input
+                      type="number"
+                      value={pipeInnerDiameter}
+                      onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                        setPipeInnerDiameter(Number(e.target.value))
+                      }
+                      className={clsx(
+                        "block w-full pl-5 pr-10 rounded-md border-none bg-black/40 py-2 px-3 text-sm/6 text-white",
+                        "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25"
+                      )}
+                      style={{ paddingRight: "3rem" }}
+                    />
+                    <span className="absolute text-sm text-gray-800 transform -translate-y-1/2 pointer-events-none right-3 top-1/2">
+                      mm
+                    </span>
+                  </div>
                 </div>
               </div>
-              <div className="flex items-center justify-between w-full gap-2 px-1">
-                <div className="w-[100px] px-1">Inner Diameter</div>
-                <div className="relative w-full">
-                  <Input
-                    type="number"
-                    value={pipeInnerDiameter}
-                    onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                      setPipeInnerDiameter(Number(e.target.value))
-                    }
-                    className={clsx(
-                      "block w-full pl-5 pr-10 rounded-md border-none bg-black/40 py-2 px-3 text-sm/6 text-white",
-                      "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25"
-                    )}
-                    style={{ paddingRight: "3rem" }}
-                  />
-                  <span className="absolute text-sm text-gray-800 transform -translate-y-1/2 pointer-events-none right-3 top-1/2">
-                    mm
-                  </span>
-                </div>
-              </div>
-            </div>
 
-            {/* 유체 속성 */}
-            <div className="flex flex-col w-full gap-4">
-              <h3 className="text-[20px] font-bold self-start px-1">
-                유체 속성
-              </h3>
-              <div className="flex items-center justify-between w-full gap-2 px-1">
-                <div className="w-[100px] px-1">재질</div>
-                <FluidMaterialListbox
-                  fluidMaterialList={fluidMaterialList?.materials}
-                  value={fluidMaterialId}
-                  onChange={setFluidMaterialId}
-                />
-              </div>
-              <div className="flex items-center justify-between w-full gap-2 px-1">
-                <div className="w-[100px] px-1">Flow Rate</div>
-                <div className="relative w-full">
-                  <Input
-                    type="number"
-                    value={fluidFlowRate}
-                    onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                      setFluidFlowRate(Number(e.target.value))
-                    }
-                    className={clsx(
-                      "block w-full pl-5 pr-10 rounded-md border-none bg-black/40 py-2 px-3 text-sm/6 text-white",
-                      "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25"
-                    )}
-                    style={{ paddingRight: "3rem" }}
+              {/* 유체 속성 */}
+              <div className="flex flex-col w-full gap-4">
+                <h3 className="text-[20px] font-bold self-start px-1">
+                  유체 속성
+                </h3>
+                <div className="flex items-center justify-between w-full gap-2 px-1">
+                  <div className="w-[100px] px-1">재질</div>
+                  <FluidMaterialListbox
+                    fluidMaterialList={fluidMaterialList?.materials}
+                    value={fluidMaterialId}
+                    onChange={setFluidMaterialId}
                   />
-                  <span className="absolute text-sm text-gray-800 transform -translate-y-1/2 pointer-events-none right-3 top-1/2">
-                    m<sup>3</sup>/s
-                  </span>
+                </div>
+                <div className="flex items-center justify-between w-full gap-2 px-1">
+                  <div className="w-[100px] px-1">Flow Rate</div>
+                  <div className="relative w-full">
+                    <Input
+                      type="number"
+                      value={fluidFlowRate}
+                      onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                        setFluidFlowRate(Number(e.target.value))
+                      }
+                      className={clsx(
+                        "block w-full pl-5 pr-10 rounded-md border-none bg-black/40 py-2 px-3 text-sm/6 text-white",
+                        "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25"
+                      )}
+                      style={{ paddingRight: "3rem" }}
+                    />
+                    <span className="absolute text-sm text-gray-800 transform -translate-y-1/2 pointer-events-none right-3 top-1/2">
+                      m<sup>3</sup>/s
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>

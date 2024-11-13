@@ -75,8 +75,9 @@ export const getApiClient = () => {
         console.log(
           `error status: ${error.response?.status}, httpStatus: ${error.response?.data?.httpStatus}`
         );
-        clearAccessToken();
-        window.location.href = "/account/auth/login";
+
+        // clearAccessToken();
+        // window.location.href = "/account/auth/login";
       }
 
       if (error.response?.status === 400) {

@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useThree } from "@react-three/fiber";
 import * as THREE from "three";
 import { PipeModel } from "@src/components/pipeViewer/renderer/PipeModel";
-import { CameraControls, OrbitControls } from "@react-three/drei";
+import { CameraControls } from "@react-three/drei";
 import { PipelineType } from "./Type/PipeType";
 
 export const SceneContent: React.FC<{
@@ -41,9 +41,7 @@ export const SceneContent: React.FC<{
         // cameraControlsRef를 사용하여 카메라 위치와 타겟을 설정
         cameraControlsRef.current.setPosition(vector[0], vector[1], 50);
         cameraControlsRef.current.setTarget(vector[0], vector[1], vector[2]);
-
         cameraControlsRef.current.update(delta);
-        console.log("카메라 조정 중", cameraControlsRef.current);
       }
     } else {
       if (cameraControlsRef.current) {
@@ -53,11 +51,8 @@ export const SceneContent: React.FC<{
         const center = new THREE.Vector3();
         box.getCenter(center);
 
-        // 모델을 보기 위한 적절한 거리 계산
-        // console.log(camera);
+        // 모델 전체뷰를 보기 위한 거리 계산
         const maxDim = Math.max(size.x, size.y, size.z);
-        // const fov = camera.fov * (Math.PI / 180);
-        // const cameraZ = Math.abs(maxDim / (2 * Math.tan(fov / 2))) * 1.5;
 
         // 카메라 위치 설정 (cameraControlsRef를 통해 제어)
         if (cameraControlsRef.current) {

@@ -1,11 +1,12 @@
-import React, { useEffect, ChangeEvent } from "react";
-import { Textarea } from "@headlessui/react";
+import React, { useEffect, ChangeEvent, useState } from "react";
+import { Textarea, Checkbox } from "@headlessui/react";
 import clsx from "clsx";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { useMemoStore } from "@src/stores/memoStore";
-
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { ModelNameInput } from "@src/components/pipeViewer/input/ModelNameInput";
+import CheckIcon from "@mui/icons-material/Check";
+
 interface PipeMemoProps {
   modelId: number;
   modelName: string;
@@ -20,12 +21,16 @@ export const ModelMemo: React.FC<PipeMemoProps> = (props) => {
     useMemoStore();
   const { modelId, modelName, building, floor, updatedAt, onViewChange } =
     props;
+  const [enabled, setEnabled] = useState(false);
 
   // memoList renderer
   useEffect(() => {
     getMemoList(modelId);
   }, [modelId]);
 
+
+  // useEffect 사용 -> enabled == true일 경우 결함 있는 파이프 체크
+  
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter") {
       e.preventDefault();
@@ -70,6 +75,21 @@ export const ModelMemo: React.FC<PipeMemoProps> = (props) => {
             <p className="text-[20px]">
               {building} {floor > 0 ? `${floor}층` : `지하 ${-floor}층`}
             </p>
+          </div>
+          {/* 결함 탐지 */}
+          <div className="flex items-center w-full gap-2">
+            <h3 className="text-[20px] font-bold self-start px-1">
+              결함 파이프 조회
+            </h3>
+            <Checkbox
+              checked={enabled}
+              onChange={setEnabled}
+              className="p-1 rounded-md group size-8 bg-black/60 ring-1 ring-white/15 ring-inset "
+            >
+              {enabled && (
+                <CheckIcon className="hidden size-4 fill-black group-data-[checked]:block" />
+              )}
+            </Checkbox>
           </div>
 
           {/* 메모 input */}

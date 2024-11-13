@@ -29,7 +29,7 @@ export const PipeMemo: React.FC<PipeMemoProps> = (props) => {
   } = props;
   const { selectedPipeId } = usePipe();
   const [pipeName, setPipeName] = useState<string>("");
-  const [enabled, setEnabled] = useState(false);
+  const [checked, setChecked] = useState(false);
 
   // MODEL_MEMO 및 TOTEL_VIEW로 전환
   const handleTotalView = () => {
@@ -53,12 +53,21 @@ export const PipeMemo: React.FC<PipeMemoProps> = (props) => {
       console.log(err);
     }
   };
-  // 파이프 메모 생성 및 결함 체크
-  const createPipeMemoAndDefect = async (
-    pipeId: number,
-    memo: string,
-    hasDefect: boolean
-  ) => {
+  // 파이프 결함 체크
+  const checkPipeDefection = async (pipeId: number) => {
+    const apiClient = getApiClient();
+    try {
+      const res = await apiClient({
+        method: "patch",
+        url: `/api/pipelines/pipes/${pipeId}/defect`,
+      });
+      console.log(res.data.header.httpStatusCode, res.data.header.message);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  // 파이프 메모 생성
+  const createPipeMemo = async (pipeId: number, memo: string) => {
     const apiClient = getApiClient();
     try {
       const res = await apiClient({
@@ -66,7 +75,6 @@ export const PipeMemo: React.FC<PipeMemoProps> = (props) => {
         url: `/api/pipelines/pipes/${pipeId}`,
         data: {
           memo: memo,
-          hasDefect: hasDefect,
         },
       });
       // 결함 여부 받아서 렌더링 해야햄
@@ -104,7 +112,7 @@ export const PipeMemo: React.FC<PipeMemoProps> = (props) => {
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter") {
       e.preventDefault();
-      createPipeMemoAndDefect(selectedPipeId, memo, enabled);
+      createPipeMemo(selectedPipeId, memo);
       // postMemo(pipeId, memo);
       setMemo("");
     }
@@ -152,11 +160,14 @@ export const PipeMemo: React.FC<PipeMemoProps> = (props) => {
           <div className="flex items-center w-full gap-2">
             <h3 className="text-[20px] font-bold self-start px-1">결함 체크</h3>
             <Checkbox
-              checked={enabled}
-              onChange={setEnabled}
+              checked={checked}
+              onChange={(isChecked: boolean) => {
+                setChecked(isChecked);
+                checkPipeDefection(selectedPipeId);
+              }}
               className="p-1 rounded-md group size-8 bg-black/60 ring-1 ring-white/15 ring-inset "
             >
-              {enabled && (
+              {checked && (
                 <CheckIcon className="hidden size-4 fill-black group-data-[checked]:block" />
               )}
             </Checkbox>
