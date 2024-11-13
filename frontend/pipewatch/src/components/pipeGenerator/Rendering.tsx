@@ -69,7 +69,7 @@ export const Rendering = () => {
           ) : (
             <div className="flex flex-col items-center justify-center w-full h-full text-[24px] gap-4">
               <ViewInArIcon sx={{ fontSize: "50px" }} />
-              <p>모델을 준비하고 있습니다.</p>
+              {t("pipeGenerator.rendering.instructions.preparing")}
             </div>
           )}
           <Leva collapsed />

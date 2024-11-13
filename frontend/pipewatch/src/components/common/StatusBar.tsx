@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 
 interface Props {
-  text: string;
+  text: ReactNode;
   color: string;
   icon?: ReactNode;
 }

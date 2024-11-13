@@ -5,7 +5,7 @@ import {
   DialogTitle,
 } from "@headlessui/react";
 import { IconButton } from "@components/common/IconButton";
-import { useTranslation } from "react-i18next";
+import { useTranslation, Trans } from "react-i18next";
 import { useState } from "react";
 
 import { getApiClient } from "@src/stores/apiClient";
@@ -40,14 +40,14 @@ export const ReVerifyModal = ({ isOpen, onClose }: ManageCookiesProps) => {
           {isRequested ? (
             <>
               <DialogTitle className="text-[20px] my-[10px]">
-                {/* {t("footer.manageCookies.description")} */}
-                재인증 신청이 완료되었습니다.
+                {t(
+                  "manageAccount.reverificationRequest.reverificationComplete"
+                )}
               </DialogTitle>
               <div className="flex justify-center">
                 <IconButton
                   handleClick={onClose}
-                  // text={t("footer.manageCookies.buttonDeny")}
-                  text={"닫기"}
+                  text={t("manageAccount.reverificationRequest.close")}
                   color={"bg-gray-500"}
                   hoverColor={"hover:bg-gray-500/80"}
                 />
@@ -56,25 +56,27 @@ export const ReVerifyModal = ({ isOpen, onClose }: ManageCookiesProps) => {
           ) : (
             <>
               <DialogTitle className="font-bold text-[24px]">
-                {/* {t("footer.manageCookies.title")} */}
-                기업 재인증 신청
+                {t("manageAccount.reverificationRequest.title")}
               </DialogTitle>
               <Description className="text-[18px]">
-                {/* {t("footer.manageCookies.description")} */}
-                <b>{enterpriseName}</b>의 기업 재인증 신청을 요청합니다.
+                <Trans
+                  i18nKey="manageAccount.reverificationRequest.reverificationMessage"
+                  values={{ enterpriseName }}
+                  components={{ b: <b /> }}
+                />
               </Description>
               <div className="flex justify-center gap-4">
                 <IconButton
                   handleClick={onClose}
-                  // text={t("footer.manageCookies.buttonDeny")}
-                  text={"취소"}
+                  text={t("manageAccount.reverificationRequest.cancel")}
                   color={"bg-gray-500"}
                   hoverColor={"hover:bg-gray-500/80"}
                 />
                 <IconButton
                   handleClick={() => roleRequest()}
-                  // text={t("footer.manageCookies.buttonAccept")}
-                  text={"재인증 신청"}
+                  text={t(
+                    "manageAccount.reverificationRequest.submitReverification"
+                  )}
                   color={"bg-primary-500"}
                   hoverColor={"hover:bg-primary-500/80"}
                 />

@@ -310,7 +310,11 @@ export const Header = ({ handleTheme, currentTheme }: Props) => {
                 onClick={handleRoleNavigation}
               >
                 <div>{name}</div>
-                {role === "ENTERPRISE" ? (
+                {userState === "PENDING" ? (
+                  <div className="px-2 py-1 rounded-[30px] text-[12px] text-white bg-gray-800 dark:bg-gray-500">
+                    {t("header.userRoles.pending")}
+                  </div>
+                ) : role === "ENTERPRISE" ? (
                   // 기업 계정
                   <div className="flex items-center justify-center px-2 rounded-[30px] text-[14px] bg-warn">
                     {waitingList && waitingList.length}
@@ -321,7 +325,9 @@ export const Header = ({ handleTheme, currentTheme }: Props) => {
                     id="badge"
                     className="px-2 py-1 rounded-[30px] text-[12px] text-white bg-block dark:text-black dark:bg-white"
                   >
-                    {role === "ADMIN" ? "관리자" : "사원"}
+                    {role === "ADMIN"
+                      ? t("header.userRoles.admin")
+                      : t("header.userRoles.employee")}
                   </div>
                 )}
               </div>
@@ -332,8 +338,7 @@ export const Header = ({ handleTheme, currentTheme }: Props) => {
                   logout();
                 }}
               >
-                로그아웃
-                {/* {t("header.login")} */}
+                {t("header.logout")}
               </Button>
             </div>
           ) : (
@@ -348,12 +353,15 @@ export const Header = ({ handleTheme, currentTheme }: Props) => {
       </div>
       {userState === "PENDING" && (
         <StatusBar
-          // text={t("pipeGenerator.takePhoto.connectRCCar.statusMessages.failed")}
           text={
-            "등록된 기업이 없습니다. 기업 인증 상태를 확인해주세요. 내 기업 보기"
+            <>
+              {t("header.accessError.noCompany")}
+              <a href="/account/manage" className="text-white underline">
+                {t("header.accessError.moveForReverification")}
+              </a>
+            </>
           }
           icon={""}
-          // icon={<CancelIcon sx={{ fontSize: "20px" }} />}
           color={"bg-warn"}
         />
       )}

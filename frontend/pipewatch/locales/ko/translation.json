@@ -1,6 +1,8 @@
 {
   "error": {
-    "access": "잘못된 접근입니다."
+    "access": "잘못된 접근입니다.",
+    "accessBlocked": "접근 권한이 없습니다.",
+    "toHome": "홈으로"
   },
   "header": {
     "lang": "한국어",
@@ -13,7 +15,17 @@
       "pipeGenerator": "파이프 생성",
       "contact": "문의하기"
     },
-    "login": "로그인"
+    "login": "로그인",
+    "logout": "로그아웃",
+    "userRoles": {
+      "admin": "관리자",
+      "employee": "사원",
+      "pending": "사원 인증중"
+    },
+    "accessError": {
+      "noCompany": "등록된 기업이 없습니다. 기업 인증 상태를 확인해주세요.",
+      "moveForReverification": "재인증을 위해 이동"
+    }
   },
   "footer": {
     "paoriTeam": "2024 팀 파오리",
@@ -29,7 +41,24 @@
   "home": {
     "greeting1": "PipeWatch로",
     "greeting2": "당신의 작업 효율을 높여보세요.",
-    "signUp": "회원가입"
+    "signUp": "회원가입",
+    "introduction": {
+      "create": "파이프 모델 생성하기",
+      "viewPage": "모델 조회 페이지로 이동",
+      "uploadData": {
+        "title": "가장 편리한 데이터 업로드",
+        "description": "파이프 데이터를 업로드하고\n자동화된 세그멘테이션 기술을\n경험해보세요."
+      },
+      "managePipes": {
+        "title": "건물별 파이프 통합 관리",
+        "description": "각 건물, 층, 구간 별 파이프를 한 곳에서 관리하세요.\n파이프의 속성을 실시간으로 수정하고, 메모를 남길 수도 있습니다."
+      },
+      "tabs": {
+        "allPipe": "전체 파이프 모델",
+        "individualPipe": "개별 파이프 모델",
+        "memo": "메모 작성"
+      }
+    }
   },
   "account": {
     "login": "로그인",
@@ -69,6 +98,7 @@
     "dashboard": {
       "title": "계정 관리",
       "editInfo": "개인정보 수정",
+      "reverificationRequest": "기업 재인증 신청",
       "updatePassword": "비밀번호 수정",
       "withdrawal": "회원 탈퇴",
       "inquiry": "1:1 문의"
@@ -83,6 +113,14 @@
       "position": "직책",
       "editPersonalInfo": "개인정보 수정",
       "complete": "개인정보 수정이 완료되었습니다."
+    },
+    "reverificationRequest": {
+      "title": "기업 재인증 신청",
+      "reverificationMessage": "<b>{{enterpriseName}}</b>의 기업 재인증 신청을 요청합니다.",
+      "cancel": "취소",
+      "submitReverification": "재인증 신청",
+      "reverificationComplete": "재인증 신청이 완료되었습니다.",
+      "close": "닫기"
     },
     "updatePassword": {
       "currentPassword": "기존 비밀번호",
@@ -148,34 +186,40 @@
   "aboutTeam": {
     "description": "더 나은 기술의 혁신, TEAM PAORI와 함께합니다.",
     "member1": {
-      "name": "서경덕 | 팀장, BE",
+      "name": "서경덕",
+      "role": "팀장 | BE",
       "email": "zoo54245424@gmail.com",
-      "description": "3D 모델 렌더링(Blender)"
+      "description": "좌표 데이터 전처리\n3D 모델링 구현"
     },
     "member2": {
-      "name": "최예헌 | BE",
+      "name": "최예헌",
+      "role": "BE",
       "email": "1594cyh@gmail.com",
       "description": "역할 설명"
     },
     "member3": {
-      "name": "고민혁 | AI",
+      "name": "고민혁",
+      "role": "AI",
       "email": "rhalsgur0086@gmail.comI",
-      "description": "역할 설명"
+      "description": "딥러닝 모델 학습 및 학습 데이터 전/후 처리"
     },
     "member4": {
-      "name": "성철민 | Infra",
+      "name": "성철민",
+      "role": "Infra",
       "email": "tjdcjfals@gmail.com",
       "description": "역할 설명"
     },
     "member5": {
-      "name": "박주연 | FE, UX/UI Design",
+      "name": "박주연",
+      "role": "FE, UX/UI Design",
       "email": "krozv.code@gmail.com",
-      "description": "역할 설명"
+      "description": "파이프 모델 렌더링 및 조회 구현\nUX/UI 설계, 디자인"
     },
     "member6": {
-      "name": "장지현 | UX/UI Design, FE",
+      "name": "장지현",
+      "role": "UX/UI Design, FE",
       "email": "jjhoneyyyy@gmail.com",
-      "description": "역할 설명"
+      "description": "UX/UI 설계, 디자인\n계정 관리\n모델 생성 과정 데이터 처리"
     }
   },
   "pipeGenerator": {
@@ -272,6 +316,7 @@
         "pipelineName": "파이프라인 이름",
         "location": "장소",
         "select": "선택",
+        "input": "직접 입력",
         "floorInfo": "층 정보",
         "ground": "지상",
         "underground": "지하",
@@ -282,6 +327,7 @@
     "rendering": {
       "title": "모델 렌더링 안내",
       "instructions": {
+        "preparing": "모델을 준비하고 있습니다.",
         "completed": {
           "message": "모델 렌더링이 완료되었습니다.",
           "previewAndSave": "아래 미리보기를 확인하고 저장 버튼을 눌러 저장하세요."
@@ -356,7 +402,14 @@
       "buttons": {
         "staff": "일반",
         "admin": "관리자",
-        "update": "변경"
+        "update": "변경",
+        "search": {
+          "label": "검색",
+          "viewAllEmployees": "전체 사원 조회"
+        }
+      },
+      "status": {
+        "updateComplete": "변경 완료"
       }
     }
   }

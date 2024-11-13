@@ -1,6 +1,8 @@
 {
   "error": {
-    "access": "Unauthorized Access."
+    "access": "Unauthorized Access.",
+    "accessBlocked": "Access Denied",
+    "toHome": "Home"
   },
   "header": {
     "lang": "Eng",
@@ -13,7 +15,17 @@
       "pipeGenerator": "Pipe Generator",
       "contact": "Contact"
     },
-    "login": "Login"
+    "login": "Login",
+    "logout": "Logout",
+    "userRoles": {
+      "admin": "Admin",
+      "employee": "Employee",
+      "pending": "Verifying"
+    },
+    "accessError": {
+      "noCompany": "No registered company found. Please check the company verification status.",
+      "moveForReverification": "Proceed to Reverification"
+    }
   },
   "footer": {
     "paoriTeam": "2024 Paori, Team",
@@ -29,7 +41,24 @@
   "home": {
     "greeting1": "Boost your Efficiency",
     "greeting2": "with PipeWatch.",
-    "signUp": "Sign Up"
+    "signUp": "Sign Up",
+    "introduction": {
+      "create": "Create Pipe Model",
+      "viewPage": "Go to Model View Page",
+      "uploadData": {
+        "title": "The Most Convenient Data Upload",
+        "description": "Upload pipe data\nand experience automated segmentation technology."
+      },
+      "managePipes": {
+        "title": "Integrated Pipe Management by Building",
+        "description": "Manage pipes by building, floor, and section in one place.\nEdit pipe attributes in real time and leave notes."
+      },
+      "tabs": {
+        "allPipe": "All Pipe Models",
+        "individualPipe": "Individual Pipe Models",
+        "memo": "Write a Note"
+      }
+    }
   },
   "account": {
     "login": "Login",
@@ -69,6 +98,7 @@
     "dashboard": {
       "title": "Account Management",
       "editInfo": "Edit Personal Information",
+      "reverificationRequest": "Request Company Reverification",
       "updatePassword": "Update Password",
       "withdrawal": "WithDrawal",
       "inquiry": "1:1 Inquiry"
@@ -83,6 +113,14 @@
       "position": "Position",
       "editPersonalInfo": "Edit Personal Information",
       "complete": "Your personal information has been successfully updated."
+    },
+    "reverificationRequest": {
+      "title": "Request Company Reverification",
+      "reverificationMessage": "Request company reverification for <b>{{enterpriseName}}</b>.",
+      "cancel": "Cancel",
+      "submitReverification": "Submit Reverification",
+      "reverificationComplete": "Reverification Request Completed.",
+      "close": "Close"
     },
     "updatePassword": {
       "currentPassword": "Current Password",
@@ -148,34 +186,40 @@
   "aboutTeam": {
     "description": "Innovating with Better Technology, Together with TEAM PAORI.",
     "member1": {
-      "name": "Kyeong-Deok Seo | Team Lead, BE",
+      "name": "Kyeong-Deok Seo",
+      "role": "Team Lead, BE",
       "email": "zoo54245424@gmail.com",
-      "description": "3D Model Rendering (Blender)"
+      "description": "Coordinate Data Preprocessing\n3D Modeling Implementation"
     },
     "member2": {
-      "name": "Ye-Heon Choi | BE",
+      "name": "Ye-Heon Choi",
+      "role": "BE",
       "email": "1594cyh@gmail.com",
       "description": "Role Description"
     },
     "member3": {
-      "name": "Min-Hyeok Ko | AI",
-      "email": "rhalsgur0086@gmail.comI",
-      "description": "Role Description"
+      "name": "Min-Hyeok Ko",
+      "role": "AI",
+      "email": "rhalsgur0086@gmail.com",
+      "description": "Deep Learning Model Training,\nPre- and Post-processing of Training Data"
     },
     "member4": {
-      "name": "Cheol-Min Seong | Infra",
+      "name": "Cheol-Min Seong",
+      "role": "Infra",
       "email": "tjdcjfals@gmail.com",
       "description": "Role Description"
     },
     "member5": {
-      "name": "Ju-Yeon Park | FE, UX/UI Design",
+      "name": "Ju-Yeon Park",
+      "role": "FE, UX/UI Design",
       "email": "krozv.code@gmail.com",
-      "description": "Role Description"
+      "description": "Pipe Model Rendering and Viewing\nUX/UI Design and Planning"
     },
     "member6": {
-      "name": "Ji-Hyeon Jang | UX/UI Design, FE",
+      "name": "Ji-Hyeon Jang",
+      "role": "UX/UI Design, FE",
       "email": "jjhoneyyyy@gmail.com",
-      "description": "Role Description"
+      "description": "UX/UI Design and Planning\nAccount Management\nModel Creation Data Processing"
     }
   },
   "pipeGenerator": {
@@ -272,6 +316,7 @@
         "pipelineName": "Pipeline Name",
         "location": "Location",
         "select": "select location",
+        "input": "Enter Manually",
         "floorInfo": "Floor Information",
         "ground": "G",
         "underground": "UG",
@@ -282,6 +327,7 @@
     "rendering": {
       "title": "Model Rendering Guide",
       "instructions": {
+        "preparing": "Preparing Model Rendering",
         "completed": {
           "message": "Model rendering is complete.",
           "previewAndSave": "Check the preview below and press the save button to save."
@@ -356,7 +402,11 @@
       "buttons": {
         "staff": "Employee",
         "admin": "Administrator",
-        "update": "Update"
+        "update": "Update",
+        "search": {
+          "label": "Search",
+          "viewAllEmployees": "View All"
+        }
       }
     }
   }
