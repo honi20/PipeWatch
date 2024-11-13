@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useCallback, useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -10,6 +10,7 @@ import { CompanyType } from "@src/components/account/SignUp/inputType";
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
 import { baseInstance } from "@src/stores/apiClient";
+import { BeatLoader } from "react-spinners";
 
 interface FormState {
   email: string;
@@ -22,18 +23,6 @@ interface FormState {
   verifyCode: string;
 }
 
-const verifyEmail = (email: string) => {
-  baseInstance
-    .post("/api/auth/email-code/send", email)
-    .then((res) => {
-      console.log(res.data.body);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-  return <></>;
-};
-
 const SignUpCard = () => {
   const [emailVeriCode, setEmailVeriCode] = useState("");
   const [isEmailVerified, setIsEmailVerified] = useState(false);
@@ -43,6 +32,10 @@ const SignUpCard = () => {
   const [showPasswordError, setPasswordError] = useState(false);
   const [showConfirmPasswordError, setConfirmPasswordError] = useState(false);
   const [passwordMatchError, setPasswordMatchError] = useState(false);
+
+  const [emailErrorText, setEmailErrorText] = useState<string>("");
+
+  const [isEmailChecked, setIsEmailChecked] = useState<boolean>(false);
 
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -57,6 +50,32 @@ const SignUpCard = () => {
     empClass: "",
     verifyCode: "",
   };
+
+  const verifyEmail = useCallback(
+    (email: string) => {
+      setIsEmailChecked(true);
+      setEmailError(false);
+
+      baseInstance
+        .post("/api/auth/email-code/send", email)
+        .then((res) => {
+          console.log(res.data.body);
+        })
+        .catch((err) => {
+          const status = err.status;
+
+          if (status === 403) {
+            setEmailErrorText(t("account.emailError"));
+          } else if (status === 409) {
+            setEmailErrorText(t("account.duplicateEmail"));
+          }
+          console.log(err);
+          setIsEmailChecked(false);
+          setEmailError(true);
+        });
+    },
+    [t]
+  );
 
   const [formState, setFormState] = useState(initialFormState);
 
@@ -81,6 +100,7 @@ const SignUpCard = () => {
 
     if (name === "email") {
       setEmailError(value !== "" && !validateEmail(value));
+      setEmailErrorText(t("account.emailError"));
     }
     if (name === "password") {
       setPasswordError(value !== "" && !validatePassword(value));
@@ -166,19 +186,23 @@ const SignUpCard = () => {
           />
           <Button
             className={`h-[56px] w-[120px] px-6 py-2 flex items-center justify-center text-white rounded-[20px] ${
-              showEmailError
+              isEmailChecked
                 ? "bg-gray-800 "
                 : "bg-primary-500 hover:bg-primary-500/80"
             } `}
             onClick={() => !showEmailError && verifyEmail(formState.email)}
-            disabled={showEmailError}
+            disabled={isEmailChecked}
           >
-            {t("account.requestVerification")}
+            {isEmailChecked ? (
+              <BeatLoader size={8} color="#FFFFFF" />
+            ) : (
+              t("account.requestVerification")
+            )}
           </Button>
         </div>
         {showEmailError && (
           <span className="w-full px-2 whitespace-normal text-warn break-keep">
-            {t("account.emailError")}
+            {emailErrorText}
           </span>
         )}
 
