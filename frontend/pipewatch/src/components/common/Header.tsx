@@ -43,9 +43,8 @@ export const Header = ({ handleTheme, currentTheme }: Props) => {
         break;
       case "EMPLOYEE":
       case "ADMIN":
-        navigate("/account/manage");
-        break;
       case "USER":
+        navigate("/account/manage");
         break;
       default:
         console.log("Unknown role");
