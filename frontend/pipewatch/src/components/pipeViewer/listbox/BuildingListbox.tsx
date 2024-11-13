@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import {
   Listbox,
   ListboxButton,
@@ -13,18 +14,25 @@ export const BuildingListbox = ({
   onBuildingChange,
   buildingList,
 }: BuildingListboxProps) => {
-  const enhancedBuildingList = [{ building: "장소" }, ...buildingList];
+  const { t } = useTranslation();
+  const enhancedBuildingList = [
+    { building: t("PipeViewer.ModelProperty.listbox.place") },
+    ...buildingList,
+  ];
 
   // 장소 클릭한 함수
   const handleChange = (building: string) => {
     setSelected(building);
-    if (building === "장소") {
+    if (building === t("PipeViewer.ModelProperty.listbox.place")) {
       onBuildingChange(null);
     } else {
       onBuildingChange(building);
     }
   };
-  const [selected, setSelected] = useState<string>("장소");
+
+  const [selected, setSelected] = useState<string>(
+    t("PipeViewer.ModelProperty.listbox.place")
+  );
 
   return (
     <div className="w-[150px] pb-5">
@@ -32,7 +40,7 @@ export const BuildingListbox = ({
         <div className="relative">
           <ListboxButton
             className={clsx(
-              "relative w-full rounded-lg bg-white dark:bg-white/5 py-1.5 px-3 flex justify-between text-left text-sm/6 text-black dark:text-white",
+              "relative w-full rounded-lg bg-white dark:bg-white/5 py-1.5 px-3 flex justify-between text-left text-sm/6 text-black dark:text-white truncate",
               "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25"
             )}
           >
@@ -57,7 +65,9 @@ export const BuildingListbox = ({
               value={item.building}
               className="group flex cursor-default items-center gap-2 rounded-lg py-1.5 px-3 select-none data-[focus]:bg-white/10"
             >
-              <div className="dark:text-white text-sm/6">{item.building}</div>
+              <div className="w-full overflow-hidden truncate dark:text-white text-sm/6 whitespace-nowrap">
+                {item.building}
+              </div>
             </ListboxOption>
           ))}
         </ListboxOptions>

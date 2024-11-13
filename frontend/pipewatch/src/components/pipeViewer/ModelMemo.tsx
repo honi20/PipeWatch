@@ -148,7 +148,6 @@ export const ModelMemo: React.FC<PipeMemoProps> = (props) => {
         {/* modified date */}
         <div className="flex items-center justify-between w-full gap-3">
           <div className="text-[20px]">
-            {" "}
             {t("PipeViewer.ModelMemo.modifiedDate")}
           </div>
           <div className="items-center justify-center flex-1 py-1 text-center px-auto rounded-2xl bg-black/60">

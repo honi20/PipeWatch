@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import React, { useEffect, useState, ChangeEvent } from "react";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { PipeMaterialListbox } from "./listbox/PipeMaterialListbox";
@@ -7,6 +8,7 @@ import { PipelineType } from "./Type/PipeType";
 import { getApiClient } from "@src/stores/apiClient";
 import { PropertyType, UpdatePropertyType } from "./Type/PipeType";
 import { FluidMaterialListbox } from "@src/components/pipeViewer/listbox/FluidMaterialListbox";
+import { ModelNameInput } from "@src/components/pipeViewer/input/ModelNameInput";
 import {
   MaterialType,
   MaterialListType,
@@ -22,6 +24,7 @@ interface ModelPropertyProps {
 }
 
 export const ModelProperty: React.FC<ModelPropertyProps> = (props) => {
+  const { t } = useTranslation();
   const { modelId, modelName, pipelines, onViewChange, building, floor } =
     props;
   const [pipelineProperty, setPipelineProperty] = useState<PropertyType>();
@@ -177,15 +180,20 @@ export const ModelProperty: React.FC<ModelPropertyProps> = (props) => {
         <div className="flex justify-start cursor-pointer hover:text-primary-200">
           <div className="flex" onClick={onViewChange}>
             <ChevronLeftIcon />
-            <p>메모</p>
+            <p>{t("PipeViewer.ModelProperty.memoLabel")}</p>
           </div>
         </div>
         <div className="flex flex-col w-full h-full gap-7">
           {/* header */}
           <div className="flex flex-col items-center w-full">
-            <h2 className="text-[30px] font-bold">{modelName}</h2>
+            <ModelNameInput modelId={modelId} currentName={modelName} />
             <p className="text-[20px]">
-              {building} {floor > 0 ? floor : `지하 ${-floor}`}층
+              {building}{" "}
+              {floor > 0
+                ? `${floor}${t("PipeViewer.ModelProperty.floorLabel")}`
+                : `${t("PipeViewer.ModelProperty.basementLabel")} ${-floor}${t(
+                    "PipeViewer.ModelProperty.floorLabel"
+                  )}`}
             </p>
           </div>
           <div className="flex flex-col items-center justify-between w-full h-full gap-5">
@@ -193,10 +201,12 @@ export const ModelProperty: React.FC<ModelPropertyProps> = (props) => {
               {/* 파이프 속성 */}
               <div className="flex flex-col w-full gap-4">
                 <h3 className="text-[20px] font-bold self-start px-1">
-                  파이프 속성
+                  {t("PipeViewer.ModelProperty.pipeProperty")}
                 </h3>
                 <div className="flex items-center justify-between w-full gap-2 px-1">
-                  <div className="w-[100px] px-1">재질</div>
+                  <div className="w-[100px] px-1">
+                    {t("PipeViewer.ModelProperty.materialLabel")}
+                  </div>
                   <PipeMaterialListbox
                     pipeMaterialList={pipeMaterialList}
                     value={pipeMaterialId ? pipeMaterialId : 1}
@@ -204,7 +214,9 @@ export const ModelProperty: React.FC<ModelPropertyProps> = (props) => {
                   />
                 </div>
                 <div className="flex items-center justify-between w-full gap-2 px-1">
-                  <div className="w-[100px] px-1">Outer Diameter</div>
+                  <div className="w-[100px] px-1">
+                    {t("PipeViewer.ModelProperty.outerDiameter")}
+                  </div>
                   <div className="relative w-full">
                     <Input
                       type="number"
@@ -224,7 +236,9 @@ export const ModelProperty: React.FC<ModelPropertyProps> = (props) => {
                   </div>
                 </div>
                 <div className="flex items-center justify-between w-full gap-2 px-1">
-                  <div className="w-[100px] px-1">Inner Diameter</div>
+                  <div className="w-[100px] px-1">
+                    {t("PipeViewer.ModelProperty.innerDiameter")}
+                  </div>
                   <div className="relative w-full">
                     <Input
                       type="number"
@@ -248,10 +262,12 @@ export const ModelProperty: React.FC<ModelPropertyProps> = (props) => {
               {/* 유체 속성 */}
               <div className="flex flex-col w-full gap-4">
                 <h3 className="text-[20px] font-bold self-start px-1">
-                  유체 속성
+                  {t("PipeViewer.ModelProperty.fluidProperty")}
                 </h3>
                 <div className="flex items-center justify-between w-full gap-2 px-1">
-                  <div className="w-[100px] px-1">재질</div>
+                  <div className="w-[100px] px-1">
+                    {t("PipeViewer.ModelProperty.materialLabel")}
+                  </div>
                   <FluidMaterialListbox
                     fluidMaterialList={fluidMaterialList}
                     value={fluidMaterialId}
@@ -259,7 +275,9 @@ export const ModelProperty: React.FC<ModelPropertyProps> = (props) => {
                   />
                 </div>
                 <div className="flex items-center justify-between w-full gap-2 px-1">
-                  <div className="w-[100px] px-1">Flow Rate</div>
+                  <div className="w-[100px] px-1">
+                    {t("PipeViewer.ModelProperty.fluidFlowRate")}
+                  </div>
                   <div className="relative w-full">
                     <Input
                       type="number"
@@ -289,7 +307,7 @@ export const ModelProperty: React.FC<ModelPropertyProps> = (props) => {
               disabled={!isChanged}
               onClick={handleChangeButton}
             >
-              속성 변경
+              {t("PipeViewer.ModelProperty.changed")}
             </Button>
           </div>
         </div>

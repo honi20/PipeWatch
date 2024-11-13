@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import {
   Listbox,
   ListboxButton,
@@ -20,9 +21,9 @@ export const PipeMaterialListbox: React.FC<PipeMaterialListboxProps> = ({
   value,
   onChange,
 }) => {
+  const { t } = useTranslation();
   // 초기 선택된 재질 설정
   const [selected, setSelected] = useState<number>(value || 1);
-
 
   // value가 변경될 때마다 selected 값을 업데이트
   useEffect(() => {
@@ -55,7 +56,11 @@ export const PipeMaterialListbox: React.FC<PipeMaterialListboxProps> = ({
                 .filter((item) => item.materialId === selected)
                 .map((filteredItem) => (
                   <div key={filteredItem.materialId}>
-                    <p>{filteredItem.koreanName}</p>
+                    <p>
+                      {t(
+                        `PipeViewer.ModelProperty.pipeMaterialList.${filteredItem.materialId}`
+                      )}
+                    </p>
                   </div>
                 ))
             ) : (
@@ -83,7 +88,9 @@ export const PipeMaterialListbox: React.FC<PipeMaterialListboxProps> = ({
                 className="group flex cursor-default items-center gap-2 rounded-lg py-1.5 px-3 select-none data-[focus]:bg-white/10"
               >
                 <div className="dark:text-white text-sm/6">
-                  {item.koreanName}
+                  {t(
+                    `PipeViewer.ModelProperty.pipeMaterialList.${item.materialId}`
+                  )}
                 </div>
               </ListboxOption>
             ))}

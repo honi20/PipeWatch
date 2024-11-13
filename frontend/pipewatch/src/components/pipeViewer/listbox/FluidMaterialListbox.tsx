@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import {
   Listbox,
   ListboxButton,
@@ -20,6 +21,7 @@ export const FluidMaterialListbox: React.FC<FluidMaterialListboxProps> = ({
   value,
   onChange,
 }) => {
+  const { t } = useTranslation();
   // 초기 선택된 재질 설정
   const [selected, setSelected] = useState<number>(value || 4);
 
@@ -54,7 +56,11 @@ export const FluidMaterialListbox: React.FC<FluidMaterialListboxProps> = ({
                 .filter((item) => item.materialId === selected)
                 .map((filteredItem) => (
                   <div key={filteredItem.materialId}>
-                    <p>{filteredItem.koreanName}</p>
+                    <p>
+                      {t(
+                        `PipeViewer.ModelProperty.fluidMaterialList.${filteredItem.materialId}`
+                      )}
+                    </p>
                   </div>
                 ))
             ) : (
@@ -82,7 +88,9 @@ export const FluidMaterialListbox: React.FC<FluidMaterialListboxProps> = ({
                 className="group flex cursor-default items-center gap-2 rounded-lg py-1.5 px-3 select-none data-[focus]:bg-white/10"
               >
                 <div className="dark:text-white text-sm/6">
-                  {item.koreanName}
+                  {t(
+                    `PipeViewer.ModelProperty.fluidMaterialList.${item.materialId}`
+                  )}
                 </div>
               </ListboxOption>
             ))}

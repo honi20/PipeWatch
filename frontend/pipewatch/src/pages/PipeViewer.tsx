@@ -54,7 +54,7 @@ export const PipeViewer = () => {
                   <img src={NoPipeModelImage} width="350px" alt="No Model" />
                   <div className="flex flex-col justify-center">
                     <div className="text-center font-bold text-[40px]">
-                      {t("pipeViewer.noPipeModel")}
+                      {t("PipeViewer.noPipeModel")}
                     </div>
                     <a
                       href="/pipe-generator"
