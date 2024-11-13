@@ -13,7 +13,17 @@
       "pipeGenerator": "Pipe Generator",
       "contact": "Contact"
     },
-    "login": "Login"
+    "login": "Login",
+    "logout": "Logout",
+    "userRoles": {
+      "admin": "Admin",
+      "employee": "Employee",
+      "pending": "Pending"
+    },
+    "accessError": {
+      "noCompany": "No registered company found. Please check the company verification status.",
+      "moveForReverification": "Proceed to Reverification"
+    }
   },
   "footer": {
     "paoriTeam": "2024 Paori, Team",
@@ -29,7 +39,24 @@
   "home": {
     "greeting1": "Boost your Efficiency",
     "greeting2": "with PipeWatch.",
-    "signUp": "Sign Up"
+    "signUp": "Sign Up",
+    "introduction": {
+      "create": "Create Pipe Model",
+      "viewPage": "Go to Model View Page",
+      "uploadData": {
+        "title": "The Most Convenient Data Upload",
+        "description": "Upload pipe data\nand experience automated segmentation technology."
+      },
+      "managePipes": {
+        "title": "Integrated Pipe Management by Building",
+        "description": "Manage pipes by building, floor, and section in one place.\nEdit pipe attributes in real time and leave notes."
+      },
+      "tabs": {
+        "allPipe": "All Pipe Models",
+        "individualPipe": "Individual Pipe Models",
+        "memo": "Write a Note"
+      }
+    }
   },
   "account": {
     "login": "Login",

@@ -16,16 +16,20 @@ import Manage3 from "@assets/images/home/manage_3.png";
 
 import { useUserStore } from "@src/stores/userStore";
 
-const tabs = [
-  { icon: "🍅", label: "전체 파이프 모델", url: Manage1 },
-  { icon: "🥬", label: "개별 파이프 모델", url: Manage2 },
-  { icon: "🧀", label: "메모 작성", url: Manage3 },
-];
-
 export const Home = () => {
   const { t } = useTranslation();
-  const [selectedTab, setSelectedTab] = useState(tabs[0]);
 
+  const tabs = [
+    { icon: "🍅", label: t("home.introduction.tabs.allPipe"), url: Manage1 },
+    {
+      icon: "🥬",
+      label: t("home.introduction.tabs.individualPipe"),
+      url: Manage2,
+    },
+    { icon: "🧀", label: t("home.introduction.tabs.memo"), url: Manage3 },
+  ];
+
+  const [selectedTab, setSelectedTab] = useState(tabs[0]);
   const { isLogin, role } = useUserStore();
 
   const animation_variants_image1 = {
@@ -55,8 +59,7 @@ export const Home = () => {
             <div className="my-6">
               <Link className="" to="/pipe-generator">
                 <Button className="flex items-center gap-2 px-6 py-3 border-black border-solid border-[1px] rounded-lg text-[24px] bg-transparent dark:bg-white dark:text-black hover:text-primary-500">
-                  {/* {t("header.subMenu.pipeGenerator")} */}
-                  파이프 모델 생성하기
+                  {t("home.introduction.create")}
                   <DoubleArrowIcon sx={{ fontSize: "30px" }} />
                 </Button>
               </Link>
@@ -65,8 +68,7 @@ export const Home = () => {
             <div className="my-6">
               <Link className="" to="/pipe-generator">
                 <Button className="flex items-center gap-2 px-6 py-3 border-black border-solid border-[1px] rounded-lg text-[24px] bg-transparent dark:bg-white dark:text-black hover:text-primary-500">
-                  {/* {t("header.subMenu.pipeGenerator")} */}
-                  파이프 모델 생성하기
+                  {t("home.introduction.viewPage")}
                   <DoubleArrowIcon sx={{ fontSize: "30px" }} />
                 </Button>
               </Link>
@@ -105,10 +107,12 @@ export const Home = () => {
 
       <div className="flex my-[100px] w-full justify-center gap-[100px] ">
         <div className="text-left">
-          <div className="font-bold text-[50px]">가장 편리한 데이터 업로드</div>
-          <div className="text-[24px]">파이프 데이터를 업로드하고</div>
-          <div className="text-[24px]">자동화된 세그멘테이션 기술을</div>
-          <div className="text-[24px]">경험해보세요.</div>
+          <div className="font-bold text-[50px]">
+            {t("home.introduction.uploadData.title")}
+          </div>
+          <div className="text-[24px] whitespace-pre-line">
+            {t("home.introduction.uploadData.description")}
+          </div>
         </div>
 
         <div className="wrap">
@@ -163,12 +167,12 @@ export const Home = () => {
           }}
         >
           <div className="flex flex-col items-center">
-            <div className="font-bold text-[50px]">건물별 파이프 통합 관리</div>
-            <div className="text-[24px]">
-              각 건물, 층, 구간 별 파이프를 한 곳에서 관리하세요.
+            <div className="font-bold text-[50px]">
+              {" "}
+              {t("home.introduction.managePipes.title")}
             </div>
-            <div className="text-[24px]">
-              파이프의 속성을 실시간으로 수정하고, 메모를 남길 수도 있습니다.
+            <div className="text-[24px] text-center whitespace-pre-line">
+              {t("home.introduction.managePipes.description")}
             </div>
           </div>
         </motion.div>

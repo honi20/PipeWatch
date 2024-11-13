@@ -13,7 +13,17 @@
       "pipeGenerator": "파이프 생성",
       "contact": "문의하기"
     },
-    "login": "로그인"
+    "login": "로그인",
+    "logout": "로그아웃",
+    "userRoles": {
+      "admin": "관리자",
+      "employee": "일반 사원",
+      "pending": "인증중"
+    },
+    "accessError": {
+      "noCompany": "등록된 기업이 없습니다. 기업 인증 상태를 확인해주세요.",
+      "moveForReverification": "재인증을 위해 이동"
+    }
   },
   "footer": {
     "paoriTeam": "2024 팀 파오리",
@@ -29,7 +39,24 @@
   "home": {
     "greeting1": "PipeWatch로",
     "greeting2": "당신의 작업 효율을 높여보세요.",
-    "signUp": "회원가입"
+    "signUp": "회원가입",
+    "introduction": {
+      "create": "파이프 모델 생성하기",
+      "viewPage": "모델 조회 페이지로 이동",
+      "uploadData": {
+        "title": "가장 편리한 데이터 업로드",
+        "description": "파이프 데이터를 업로드하고\n자동화된 세그멘테이션 기술을\n경험해보세요."
+      },
+      "managePipes": {
+        "title": "건물별 파이프 통합 관리",
+        "description": "각 건물, 층, 구간 별 파이프를 한 곳에서 관리하세요.\n파이프의 속성을 실시간으로 수정하고, 메모를 남길 수도 있습니다."
+      },
+      "tabs": {
+        "allPipe": "전체 파이프 모델",
+        "individualPipe": "개별 파이프 모델",
+        "memo": "메모 작성"
+      }
+    }
   },
   "account": {
     "login": "로그인",
