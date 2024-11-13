@@ -46,10 +46,30 @@ export interface ModelDetailType {
     userUuid: string;
   };
 }
+interface PipeMaterialType {
+  materialId: number;
+  koreanName: string;
+  englishName: string;
+}
+
+interface FluidMaterialType {
+  materialId: number;
+  koreanName: string;
+  englishName: string;
+}
+
 export interface PropertyType {
+  pipeMaterial: PipeMaterialType;
+  outerDiameter: number;
+  innerDiameter: number;
+  fluidMaterial: FluidMaterialType;
+  velocity: number;
+}
+
+export interface UpdatePropertyType {
   pipeMaterialId: number;
   outerDiameter: number;
   innerDiameter: number;
-  fluidMaterial: string;
+  fluidMaterialId: number;
   velocity: number;
 }

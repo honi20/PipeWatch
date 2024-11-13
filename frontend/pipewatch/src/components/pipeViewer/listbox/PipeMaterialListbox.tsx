@@ -8,7 +8,6 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { MaterialType } from "@src/components/pipeViewer/Type/MaterialType";
 import clsx from "clsx";
 import { useState, useEffect } from "react";
-import { l } from "vite/dist/node/types.d-aGj9QkWt";
 
 interface PipeMaterialListboxProps {
   value: number;
@@ -22,26 +21,29 @@ export const PipeMaterialListbox: React.FC<PipeMaterialListboxProps> = ({
   onChange,
 }) => {
   // 초기 선택된 재질 설정
-  const [selected, setSelected] = useState<number>(value || 0);
+  const [selected, setSelected] = useState<number>(value || 1);
   const [language, setLanguage] = useState<string>(
     localStorage.getItem("language") || "kr"
   );
 
+  // language를 localStorage에서 초기화
   useEffect(() => {
     const savedLanguage = localStorage.getItem("language") || "kr";
     setLanguage(savedLanguage);
-  }, [language]);
+  }, []);
 
+  // value가 변경될 때마다 selected 값을 업데이트
   useEffect(() => {
-    setSelected(value || 0);
+    setSelected(value || 1);
   }, [value]);
 
+  // materialId 선택 변경될 경우
   const handleChange = (materialId: number) => {
     const material = pipeMaterialList?.find(
       (item) => item.materialId === materialId
     );
     if (material) {
-      setSelected(0);
+      setSelected(materialId);
       onChange(materialId);
     }
   };
