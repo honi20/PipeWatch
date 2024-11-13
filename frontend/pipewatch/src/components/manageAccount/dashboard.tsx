@@ -24,13 +24,15 @@ const Dashboard = () => {
       </div>
 
       <div className="flex flex-col gap-[20px]">
-        <Button
-          className={`flex items-center h-[56px] w-full px-[30px] text-white rounded-lg bg-button-background`}
-          onClick={() => navigate("/account/manage/edit-info")}
-        >
-          <ChevronRightIcon />
-          {t("manageAccount.dashboard.editInfo")}
-        </Button>
+        {role !== "USER" && (
+          <Button
+            className={`flex items-center h-[56px] w-full px-[30px] text-white rounded-lg bg-button-background`}
+            onClick={() => navigate("/account/manage/edit-info")}
+          >
+            <ChevronRightIcon />
+            {t("manageAccount.dashboard.editInfo")}
+          </Button>
+        )}
 
         {/* 현재 user의 Role = 'USER' && state = 'ACTIVE'일 때 => 기업 인증 거부된 상태 */}
         {role === "USER" && userState === "ACTIVE " && (

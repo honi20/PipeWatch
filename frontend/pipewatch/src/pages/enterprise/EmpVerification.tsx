@@ -7,6 +7,7 @@ import { getApiClient } from "@src/stores/apiClient";
 
 export const EmpVerification = () => {
   const [waitingList, setWaitingList] = useState([]);
+  const [isEmpty, setIsEmpty] = useState(false);
 
   const { t } = useTranslation();
 
@@ -17,6 +18,9 @@ export const EmpVerification = () => {
       const res = await apiClient.get(`/api/employees/waiting`);
 
       console.log("Waiting Employees Data: ", res.data.body.employees);
+      if (res.data.body.employees.length === 0) {
+        setIsEmpty(true);
+      }
       setWaitingList(res.data.body.employees);
     } catch (err) {
       console.log(err);
@@ -24,18 +28,8 @@ export const EmpVerification = () => {
   };
 
   useEffect(() => {
-    if (waitingList.length === 0) {
-      getWaitingList();
-      console.log("test1");
-    }
+    getWaitingList();
   }, []);
-
-  useEffect(() => {
-    if (waitingList.length === 0) {
-      console.log("test2");
-      // 없음 값.
-    }
-  }, [waitingList]);
 
   return (
     <div className="flex flex-col gap-10">
@@ -46,12 +40,7 @@ export const EmpVerification = () => {
         <div className="">{t("enterprise.verification.instruction")}</div>
       </div>
 
-      <VerificationTable data={waitingList} />
-      {/* {waitingList.length > 0 ? (
-        <VerificationTable data={waitingList} />
-      ) : (
-        <div>데이터 없음</div>
-      )} */}
+      <VerificationTable data={waitingList} isEmpty={isEmpty} />
     </div>
   );
 };

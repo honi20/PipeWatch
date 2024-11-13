@@ -21,6 +21,7 @@ const UpdatePasswordCard = () => {
       navigate("/account/manage/update-pw/completed");
     } catch (err) {
       console.log(err);
+      setCurrentPasswordError(true);
     }
   };
 
@@ -32,12 +33,14 @@ const UpdatePasswordCard = () => {
     newPassword: "",
     checkNewPassword: "",
   });
+
   const [passwordErrors, setPasswordErrors] = useState({
-    currentPasswordError: false,
     newPasswordError: false,
     passwordMismatchError: false,
     checkNewPasswordError: false,
   });
+
+  const [currentPasswordError, setCurrentPasswordError] = useState(false);
 
   // 핸들러 함수
   const handlePasswordChange = (field: string, value: string) => {
@@ -87,7 +90,7 @@ const UpdatePasswordCard = () => {
           placeholder={t("manageAccount.updatePassword.currentPassword")}
           required
         />
-        {passwordErrors.currentPasswordError && (
+        {currentPasswordError && (
           <span className="w-full px-2 text-[14px] whitespace-normal text-warn break-keep">
             {t("manageAccount.updatePassword.passwordMismatchError")}
           </span>

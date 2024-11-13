@@ -143,7 +143,8 @@
         "탈퇴 후에는 동일한 이메일로 재가입이 제한될 수 있습니다.",
         "회원 탈퇴를 완료한 후에도 법적 의무에 따라 일부 정보는 일정 기간 동안 보관될 수 있습니다."
       ],
-      "complete": "회원 탈퇴가 정상적으로 처리되었습니다."
+      "complete": "회원 탈퇴가 정상적으로 처리되었습니다.",
+      "passwordMismatchError": "비밀번호가 일치하지 않습니다. 다시 확인해주세요."
     }
   },
   "verification": {
@@ -201,13 +202,13 @@
       "name": "고민혁",
       "role": "AI",
       "email": "rhalsgur0086@gmail.comI",
-      "description": "딥러닝 모델 학습 및 학습 데이터 전/후 처리"
+      "description": "딥러닝 모델 학습\n학습 데이터 전/후 처리"
     },
     "member4": {
       "name": "성철민",
       "role": "Infra",
       "email": "tjdcjfals@gmail.com",
-      "description": "역할 설명"
+      "description": "쿠버네티스 환경 구축\nCI/CD Pipeline 구축\n데이터 라벨링\nUCC 감독"
     },
     "member5": {
       "name": "박주연",
@@ -293,7 +294,10 @@
       "directUpload": {
         "instructions": {
           "uploadModel": "파이프 3D 모델 파일을 업로드 해주세요.",
-          "Format": "형식"
+          "Format": "업로드 가능 형식",
+          "imageFileMessage": "(이미지 파일을 업로드하시면, 모델 렌더링 프로세스가 실행되어 추가 처리 시간이 소요될 수 있습니다.)",
+          "allowedFileTypes": "GLTF 또는 IMG 파일(.gltf, .png, .jpg, .jpeg)만 업로드 가능합니다.",
+          "noFile": "파일 없음"
         },
         "uploadBox": {
           "selectFile": "파일 선택",
@@ -393,7 +397,8 @@
       "buttons": {
         "approve": "승인",
         "reject": "거부"
-      }
+      },
+      "noData": "현재 인증 신청 중인 사원이 없습니다."
     },
     "view": {
       "sidebarTitle": "조회/변경",

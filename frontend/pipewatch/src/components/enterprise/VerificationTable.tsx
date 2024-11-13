@@ -15,9 +15,10 @@ interface VerificationData {
 
 interface TableProps {
   data: VerificationData[];
+  isEmpty: boolean;
 }
 
-export const VerificationTable: React.FC<TableProps> = ({ data }) => {
+export const VerificationTable: React.FC<TableProps> = ({ data, isEmpty }) => {
   const { t } = useTranslation();
 
   const apiClient = getApiClient();
@@ -95,6 +96,11 @@ export const VerificationTable: React.FC<TableProps> = ({ data }) => {
           ))}
         </tbody>
       </table>
+      {isEmpty && (
+        <div className="flex items-center justify-center w-full h-[600px]">
+          {t("enterprise.verification.noData")}
+        </div>
+      )}
     </div>
   );
 };

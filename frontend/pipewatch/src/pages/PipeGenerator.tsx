@@ -2,14 +2,14 @@ import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
 
-import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
+// import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
 import DriveFolderUploadIcon from "@mui/icons-material/DriveFolderUpload";
 import KeyboardIcon from "@mui/icons-material/Keyboard";
 import ViewInArIcon from "@mui/icons-material/ViewInAr";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
 import { useNavigate, useLocation } from "react-router-dom";
-import { TakePhoto } from "@components/pipeGenerator/TakePhoto";
+// import { TakePhoto } from "@components/pipeGenerator/TakePhoto";
 import { UploadModel } from "@components/pipeGenerator/UploadModel";
 import { InputData } from "@components/pipeGenerator/InputData";
 import { Rendering } from "@components/pipeGenerator/Rendering";
@@ -26,17 +26,17 @@ export const PipeGenerator = () => {
 
   useEffect(() => {
     if (location.pathname === "/pipe-generator") {
-      navigate("/pipe-generator/take-photo", { replace: true });
+      navigate("/pipe-generator/upload-model", { replace: true });
     }
   }, [location.pathname, navigate]);
 
   const menus = [
-    {
-      key: "takePhoto",
-      icon: PhotoCameraIcon,
-      component: <TakePhoto />,
-      path: "/pipe-generator/take-photo",
-    },
+    // {
+    //   key: "takePhoto",
+    //   icon: PhotoCameraIcon,
+    //   component: <TakePhoto />,
+    //   path: "/pipe-generator/take-photo",
+    // },
     {
       key: "uploadModel",
       icon: DriveFolderUploadIcon,
@@ -98,7 +98,7 @@ export const PipeGenerator = () => {
           <div className="flex items-center justify-center h-[640px] my-10 ">
             <TabGroup
               selectedIndex={activeIndex}
-              onChange={(index) => handleTabClick(menus[index].path)}
+              // onChange={(index) => handleTabClick(menus[index].path)}
               className="flex h-full rounded-lg shadow-lg shadow-gray-500 dark:shadow-none"
             >
               <TabList className="flex flex-col w-[300px] bg-block p-8 rounded-s-lg">
@@ -112,7 +112,7 @@ export const PipeGenerator = () => {
                     <Tab
                       key={menu.key}
                       id={index.toString()}
-                      className="flex gap-2 items-center p-5 text-[16px] text-left text-gray-500 focus:outline-none rounded-xl bg-block data-[selected]:bg-white data-[selected]:text-gray-800 data-[hover]:bg-white/5 data-[selected]:data-[hover]:bg-gray-200"
+                      className="flex gap-2 items-center p-5 text-[16px] text-left text-gray-500 cursor-default focus:outline-none rounded-xl bg-block data-[selected]:bg-white data-[selected]:text-gray-800"
                     >
                       <IconComponent className="w-5 h-5" />
                       {t(`pipeGenerator.menus.${menu.key}`)}

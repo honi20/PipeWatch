@@ -143,7 +143,8 @@
         "Re-registration with the same email may be restricted after deletion.",
         "Some information may be retained for a period of time in accordance with legal obligations, even after account deletion."
       ],
-      "complete": "Your account has been successfully deleted."
+      "complete": "Your account has been successfully deleted.",
+      "passwordMismatchError": "The passwords do not match. Please check again."
     }
   },
   "verification": {
@@ -201,13 +202,13 @@
       "name": "Min-Hyeok Ko",
       "role": "AI",
       "email": "rhalsgur0086@gmail.com",
-      "description": "Deep Learning Model Training,\nPre- and Post-processing of Training Data"
+      "description": "Deep Learning Model Training\nPre- and Post-processing of Training Data"
     },
     "member4": {
       "name": "Cheol-Min Seong",
       "role": "Infra",
       "email": "tjdcjfals@gmail.com",
-      "description": "Role Description"
+      "description": "Setting up a Kubernetes Environment\nBuilding a CI/CD Pipeline\nData Labeling\nUCC Director"
     },
     "member5": {
       "name": "Ju-Yeon Park",
@@ -293,7 +294,10 @@
       "directUpload": {
         "instructions": {
           "uploadModel": "Please upload the 3D model file of the pipe.",
-          "Format": "Format"
+          "Format": "Allowed Upload Formats",
+          "imageFileMessage": "(Uploading an image file will initiate the model rendering process, which may take additional time.)",
+          "allowedFileTypes": "Only GLTF or IMG files (.gltf, .png, .jpg, .jpeg) can be uploaded.",
+          "noFile": "No File"
         },
         "uploadBox": {
           "selectFile": "Select File",
@@ -393,7 +397,8 @@
       "buttons": {
         "approve": "Approve",
         "reject": "Reject"
-      }
+      },
+      "noData": "There are no employees currently pending verification."
     },
     "view": {
       "sidebarTitle": "View/Update",
