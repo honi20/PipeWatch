@@ -145,26 +145,18 @@ public interface PipelineApiSwagger {
 			@ApiResponse(responseCode = "200", description = "객체 파이프 메모 리스트 조회 성공", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
 					examples = {@ExampleObject(value = "{\"header\":{\"httpStatusCode\": 200, \"message\": \"파이프 메모 리스트 조회에 성공했습니다.\"}," +
 							"\"body\": {\n" +
-							"    \"pipeId\": 13,\n" +
+							"    \"pipeId\": 1,\n" +
 							"    \"pipeName\": \"Pipe_1\",\n" +
+							"    \"hasDefect\": true,\n" +
 							"    \"memoList\": [\n" +
 							"      {\n" +
 							"        \"memoId\": 1,\n" +
-							"        \"memo\": \"파이프에 결함 존재\",\n" +
+							"        \"memo\": \"hi\",\n" +
 							"        \"writer\": {\n" +
-							"          \"userUuid\": \"ssafy12\",\n" +
-							"          \"userName\": \"김싸피\"\n" +
+							"          \"userUuid\": \"2585bc38-54d9-4f81-9e81-22a6f565b2b2\",\n" +
+							"          \"userName\": \"dd\"\n" +
 							"        },\n" +
-							"        \"createdAt\": \"2024-11-06 15:50:23\"\n" +
-							"      },\n" +
-							"      {\n" +
-							"        \"memoId\": 4,\n" +
-							"        \"memo\": \"파이프1 확인 완료\",\n" +
-							"        \"writer\": {\n" +
-							"          \"userUuid\": \"ssafy12\",\n" +
-							"          \"userName\": \"김싸피\"\n" +
-							"        },\n" +
-							"        \"createdAt\": \"2024-11-06 16:07:02\"\n" +
+							"        \"createdAt\": \"2024-11-13 14:49:27\"\n" +
 							"      }\n" +
 							"    ]\n" +
 							"  }}")}
