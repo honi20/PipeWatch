@@ -43,12 +43,12 @@ S3_client = boto3.client(
     region_name=AWS_REGION
  )
 
+app = FastAPI()
+
 # 경로 설정
 NODE_PATH = os.getenv("NODE_PATH")
 GLTF_PIPELINE_PATH = os.getenv("GLTF_PIPELINE_PATH")
 BASE_WORK_DIR = os.getenv("BASE_WORK_DIR")
-
-app = FastAPI()
 
 # 파이프 모델 생성 요청
 class CreatePipelineModelRequest(BaseModel):
@@ -140,6 +140,18 @@ def gather_pipes(request_coords: List[List[List[float]]]):
             pipelines.append([coord1, coord2])
 
     return pipelines
+
+# STL 파일 생성
+def create_stl_files(coords, radius, work_dir):
+    stl_paths = []
+    segment_index = 1
+
+    for i, pipeline_coords in enumerate(coords):
+        pipeline_name = "PipeObj_1"
+        new_stl_paths, segment_index = create_pipeline(pipeline_coords, radius, pipeline_name, work_dir, segment_index)
+        stl_paths.extend(new_stl_paths)
+
+    return stl_paths
 
 # 파이프라인 생성 함수
 def create_pipeline(coords, radius, pipeline_name, work_dir, segment_index):
@@ -234,18 +246,6 @@ def create_connector(center, radius, name, work_dir, stl_paths):
     connector.val().exportStl(connector_path)
     stl_paths.append(connector_path)
 
-# STL 파일 생성
-def create_stl_files(coords, radius, work_dir):
-    stl_paths = []
-    segment_index = 1
-
-    for i, pipeline_coords in enumerate(coords):
-        pipeline_name = "PipeObj_1"
-        new_stl_paths, segment_index = create_pipeline(pipeline_coords, radius, pipeline_name, work_dir, segment_index)
-        stl_paths.extend(new_stl_paths)
-
-    return stl_paths
-
 # GLTF 생성 함수
 def create_gltf(stl_paths, modelUuid, work_dir, gltf_path):
     scene = trimesh.Scene()
@@ -325,27 +325,31 @@ def upload_S3(file_path, S3_key):
 def send_data(model_uuid: str, model_url: str, preview_img_url: str) -> dict:
     target_url = "https://api.pipewatch.co.kr/api/models/modeling"
     
+    # NOTE:
+    # BE 변수명 변경 시 동일하게 변경 필요
     payload = {
         "modelUuid": model_uuid,
         "modelUrl": model_url,
         "previewImgUrl": preview_img_url
     }
 
-    response = requests.post(target_url, json=payload)
+    requests.post(target_url, json=payload)
 
-    if response.status_code == 201:
-        return {
-            "status": "성공",
-            "message": "결과 전송 완료",
-            "pipeModel_URL": model_url,
-            "thumbnail_URL": preview_img_url
-        }
-    else:
-        return {
-            "status": "실패",
-            "message": "결과 전송 실패",
-            "error": response.text
-        }
+    # NOTE:
+    # 디버깅 필요 시 해제 후 사용할 것
+    # if response.status_code == 201:
+    #     return {
+    #         "status": "성공",
+    #         "message": "결과 전송 완료",
+    #         "pipeModel_URL": model_url,
+    #         "thumbnail_URL": preview_img_url
+    #     }
+    # else:
+    #     return {
+    #         "status": "실패",
+    #         "message": "결과 전송 실패",
+    #         "error": response.text
+    #     }
 
 if __name__ == "__main__":
     uvicorn.run(app, host=host, port=int(port))
