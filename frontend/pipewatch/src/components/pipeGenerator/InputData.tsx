@@ -1,4 +1,4 @@
-import { useState, useMemo, ChangeEvent, useEffect } from "react";
+import { useState, ChangeEvent, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { IconButton } from "@components/common/IconButton";
 import clsx from "clsx";
@@ -29,38 +29,40 @@ export const InputData = () => {
 
   const [newLocation, setNewLocation] = useState("");
 
-  const [selectedLocation, setSelectedLocation] = useState<Location | null>();
+  const [selectedLocation, setSelectedLocation] = useState<string | null>(
+    "선택"
+  );
+
+  const apiClient = getApiClient();
 
   // modelId: Upload Page에서 POST 요청 후 navigate state로 받아옴
   const [modelId, setModelId] = useState("");
   const location = useLocation();
 
-  useEffect(() => {
-    setModelId(location.state.modelId);
-  }, []);
+  const [locationList, setLocationList] = useState<string[]>([]);
 
-  type Location = {
-    id: number;
-    name: string;
+  const getBuildingList = async () => {
+    try {
+      const res = await apiClient.get(`/api/enterprises/buildings`);
+      console.log("빌딩 리스트: ", res.data.body);
+
+      const updatedList = [...res.data.body.buildings, "직접 입력"];
+      setLocationList(updatedList);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
-  // 임시 장소 리스트
-  const locationList: Location[] = useMemo(
-    () => [
-      { id: 1, name: "역삼 멀티캠퍼스" },
-      { id: 2, name: "메가박스 서울숲점" },
-      { id: 3, name: "경덕이네 집" },
-      { id: 4, name: "해피해피주연하우스" },
-      { id: 10000, name: "직접 입력" },
-    ],
-    []
-  );
+  useEffect(() => {
+    setModelId(location.state.modelId);
+    getBuildingList();
+  }, []);
 
   const filteredLocation =
     query === ""
       ? locationList
       : locationList.filter((location) => {
-          return location.name.toLowerCase().includes(query.toLowerCase());
+          return location.toLowerCase().includes(query.toLowerCase());
         });
 
   const updateFloorInfo = (groundInfo: string) => {
@@ -97,30 +99,29 @@ export const InputData = () => {
   // 버튼 활성화
   const isFormValid: boolean =
     pipelineName !== "" &&
-    selectedLocation?.name !== "" &&
-    !(selectedLocation?.name === "직접 입력" && !newLocation) &&
+    selectedLocation !== "" &&
+    !(selectedLocation === "직접 입력" && !newLocation) &&
     groundInfo !== "" &&
     !!floorNum &&
     !isFloorNumInvalid &&
     !(query === "" && !selectedLocation);
 
-  const apiClient = getApiClient();
-
-  console.log(pipelineName, selectedLocation?.name, floorNum);
+  console.log(pipelineName, selectedLocation, newLocation, floorNum);
 
   // 저장 버튼 Click Action
   const handleSave = async (modelId: string) => {
     try {
-      const res = await apiClient.patch(`/api/models/init/${modelId}`, {
+      const res = await apiClient.patch(`/api/models/${modelId}/init`, {
         name: pipelineName,
-        building: selectedLocation?.name,
+        building:
+          selectedLocation === "직접 입력" ? newLocation : selectedLocation,
         floor: floorNum,
       });
 
       console.log("input Data: ", res.data.header.message);
 
       // 모델 렌더링 페이지로 이동
-      navigate("/pipe-generator/rendering", { state: { modelId: modelId } });
+      navigate(`/pipe-generator/rendering/${modelId}`);
     } catch (err) {
       console.log(err);
     }
@@ -168,7 +169,7 @@ export const InputData = () => {
                 <div className="relative flex-[4] h-full">
                   <ComboboxInput
                     aria-label="location"
-                    displayValue={(location: Location) => location?.name}
+                    displayValue={(location: string) => location}
                     onChange={(event) => setQuery(event.target.value)}
                     placeholder={`${t(
                       "pipeGenerator.inputData.formData.select"
@@ -187,20 +188,20 @@ export const InputData = () => {
                     "transition duration-100 ease-in data-[leave]:data-[closed]:opacity-0"
                   )}
                 >
-                  {filteredLocation.map((location) => (
+                  {filteredLocation.map((location, index) => (
                     <ComboboxOption
-                      key={location.id}
+                      key={index}
                       value={location}
                       className="group flex cursor-default items-center gap-2 rounded-lg py-3 px-3 select-none data-[focus]:bg-gray-500/20"
                     >
-                      {location.name}
+                      {location}
                     </ComboboxOption>
                   ))}
                 </ComboboxOptions>
               </Combobox>
             </div>
 
-            {selectedLocation?.name === "직접 입력" && (
+            {selectedLocation && selectedLocation === "직접 입력" && (
               <div className="flex items-center w-full h-full">
                 <div className="flex-[2]" />
                 <div className="relative flex-[4] h-full">
@@ -245,7 +246,6 @@ export const InputData = () => {
               <div className="relative w-full flex flex-[2]">
                 <Input
                   type="text"
-                  // onChange={(e) => setFloorNum(e.target.value)}
                   onChange={handleFloorNumChange}
                   className={`focus:outline-success h-full w-full px-5 py-[12px] border-black bg-white rounded-[5px] ${
                     isFloorNumInvalid && "border-solid border-2 border-warn"

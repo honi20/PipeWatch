@@ -11,7 +11,7 @@ const LOGIN =
 export const createApiClient = (accessToken: string | null) => {
   if (!accessToken && window.location.href !== LOGIN) {
     console.error("createApiClient: accessToken이 제공되지 않았습니다.");
-    // window.location.href = LOGIN; // Enterprise Contact 테스트중
+    window.location.href = LOGIN;
   }
 
   return axios.create({
@@ -30,7 +30,7 @@ const clearAccessToken = () => sessionStorage.removeItem("accessToken");
 export const getApiClient = () => {
   const accessToken: string | null = getAccessToken();
   if (accessToken) {
-    console.log("getApiClient: accessToken이 존재합니다.");
+    // console.log("getApiClient: accessToken이 존재합니다.");
   }
   const apiClient = createApiClient(accessToken);
 
