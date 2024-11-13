@@ -98,21 +98,19 @@ def gather_pipes(request_coords: List[List[List[float]]]):
         coord1, coord2 = coord_pair[0], coord_pair[1]
         coord1_connected_pipeline = None
         coord2_connected_pipeline = None
-
+        
+        # 파이프 연결 가능 여부 조회
         for pipeline in pipelines:
-            if coord1 == pipeline[0]:
-                coord1_connected_pipeline = pipeline
-            elif coord1 == pipeline[-1]:
+            if coord1 == pipeline[0] or coord1 == pipeline[-1]:
                 coord1_connected_pipeline = pipeline
 
-            if coord2 == pipeline[0]:
-                coord2_connected_pipeline = pipeline
-            elif coord2 == pipeline[-1]:
+            if coord2 == pipeline[0] or coord2 == pipeline[-1]:
                 coord2_connected_pipeline = pipeline
 
             if coord1_connected_pipeline and coord2_connected_pipeline:
                 break
 
+        # 새 파이프가 두 파이프라인 연결 시
         if coord1_connected_pipeline and coord2_connected_pipeline:
             if coord1_connected_pipeline[-1] == coord1:
                 coord1_connected_pipeline.extend(
@@ -122,8 +120,10 @@ def gather_pipes(request_coords: List[List[List[float]]]):
                 coord1_connected_pipeline[:0] = (
                 coord2_connected_pipeline if coord2_connected_pipeline[-1] == coord2 else coord2_connected_pipeline[::-1]
             )
+                
             pipelines.remove(coord2_connected_pipeline)
 
+        # 새 파이프가 한 파이프라인에 속할 시
         elif coord1_connected_pipeline:
             if coord1_connected_pipeline[-1] == coord1:
                 coord1_connected_pipeline.append(coord2)
@@ -135,7 +135,8 @@ def gather_pipes(request_coords: List[List[List[float]]]):
                 coord2_connected_pipeline.append(coord1)
             elif coord2_connected_pipeline[0] == coord2:
                 coord2_connected_pipeline.insert(0, coord1)
-
+                
+        # 새 파이프가 새로운 파이프라인 형성 시
         else:
             pipelines.append([coord1, coord2])
 
@@ -165,6 +166,7 @@ def create_pipeline(coords, radius, pipeline_name, work_dir, segment_index):
         else:
             create_cylinder(start_coord, end_coord, radius, f"{pipeline_name}_Segment_{segment_index}", work_dir, stl_paths)
             create_connector(end_coord, radius, f"{pipeline_name}_Connector_{segment_index}", work_dir, stl_paths)
+            
             start_coord = end_coord
             end_coord = coords[index]
             segment_index += 1
