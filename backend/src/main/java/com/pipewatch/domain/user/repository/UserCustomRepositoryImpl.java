@@ -37,7 +37,6 @@ public class UserCustomRepositoryImpl implements UserCustomRepository {
 				))
 				.from(user)
 				.leftJoin(employeeInfo).on(user.id.eq(employeeInfo.user.id))
-				.leftJoin(employeeInfo.enterprise, enterprise)
 				.where(user.id.eq(userId))
 				.fetchOne();
 	}
@@ -46,8 +45,8 @@ public class UserCustomRepositoryImpl implements UserCustomRepository {
 		return Expressions.cases()
 				.when(user.role.eq(Role.ENTERPRISE))
 				.then(user.name)
-				.when(user.role.eq(Role.EMPLOYEE))
-				.then(enterprise.name)
+				.when(user.role.eq(Role.ADMIN).or(user.role.eq(Role.EMPLOYEE)))
+				.then(employeeInfo.enterprise.name)
 				.otherwise((String) null);
 	}
 }
