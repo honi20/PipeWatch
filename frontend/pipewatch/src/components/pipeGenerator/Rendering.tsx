@@ -69,7 +69,7 @@ export const Rendering = () => {
           ) : (
             <div className="flex flex-col items-center justify-center w-full h-full text-[24px] gap-4">
               <ViewInArIcon sx={{ fontSize: "50px" }} />
-              <p>model 생성중</p>
+              <p>모델을 준비하고 있습니다.</p>
             </div>
           )}
           <Leva collapsed />

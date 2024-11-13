@@ -29,7 +29,9 @@ export const InputData = () => {
 
   const [newLocation, setNewLocation] = useState("");
 
-  const [selectedLocation, setSelectedLocation] = useState<string | null>();
+  const [selectedLocation, setSelectedLocation] = useState<string | null>(
+    "선택"
+  );
 
   const apiClient = getApiClient();
 
@@ -104,14 +106,15 @@ export const InputData = () => {
     !isFloorNumInvalid &&
     !(query === "" && !selectedLocation);
 
-  console.log(pipelineName, selectedLocation, floorNum);
+  console.log(pipelineName, selectedLocation, newLocation, floorNum);
 
   // 저장 버튼 Click Action
   const handleSave = async (modelId: string) => {
     try {
       const res = await apiClient.patch(`/api/models/${modelId}/init`, {
         name: pipelineName,
-        building: selectedLocation,
+        building:
+          selectedLocation === "직접 입력" ? newLocation : selectedLocation,
         floor: floorNum,
       });
 
@@ -243,7 +246,6 @@ export const InputData = () => {
               <div className="relative w-full flex flex-[2]">
                 <Input
                   type="text"
-                  // onChange={(e) => setFloorNum(e.target.value)}
                   onChange={handleFloorNumChange}
                   className={`focus:outline-success h-full w-full px-5 py-[12px] border-black bg-white rounded-[5px] ${
                     isFloorNumInvalid && "border-solid border-2 border-warn"
