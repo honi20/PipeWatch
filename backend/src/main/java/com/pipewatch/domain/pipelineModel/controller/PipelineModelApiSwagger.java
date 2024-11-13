@@ -121,79 +121,65 @@ public interface PipelineModelApiSwagger {
 					examples = {@ExampleObject(value = "{\"header\":{\"httpStatusCode\": 200, \"message\": \"모델 상세 조회에 성공했습니다.\"}," +
 							"\"body\": {\n" +
 							"    \"name\": \"Pipeline Model\",\n" +
-							"    \"modelingUrl\": \"https://pipewatch-bucket.s3.ap-northeast-2.amazonaws.com/models/PipeLine_7d521f29-814d-4077-b3a6-04a425bd64bf.gltf\",\n" +
-							"    \"building\": \"역삼 멀티캠퍼스\",\n" +
-							"    \"floor\": 11,\n" +
+							"    \"modelingUrl\": \"https://pipewatch-bucket.s3.ap-northeast-2.amazonaws.com/models/PipeLine_07002f47-aaaa-4fa8-ad2e-b6d68769ec47.gltf\",\n" +
+							"    \"building\": null,\n" +
+							"    \"floor\": null,\n" +
 							"    \"isCompleted\": true,\n" +
-							"    \"updatedAt\": \"2024-11-06 13:20:53\",\n" +
+							"    \"updatedAt\": \"2024-11-13 14:42:49\",\n" +
+							"    \"defectList\": [\n" +
+							"      1,\n" +
+							"      2\n" +
+							"    ],\n" +
 							"    \"pipelines\": [\n" +
 							"      {\n" +
-							"        \"pipelineId\": 25,\n" +
+							"        \"pipelineId\": 1,\n" +
 							"        \"pipes\": [\n" +
 							"          {\n" +
-							"            \"pipeId\": 96,\n" +
-							"            \"pipeUuid\": \"PipeObj_1_Segment_1\"\n" +
+							"            \"pipeId\": 1,\n" +
+							"            \"pipeUuid\": \"PipeObj_1_seg_1\"\n" +
 							"          },\n" +
 							"          {\n" +
-							"            \"pipeId\": 97,\n" +
-							"            \"pipeUuid\": \"PipeObj_1_Segment_2\"\n" +
+							"            \"pipeId\": 2,\n" +
+							"            \"pipeUuid\": \"PipeObj_1_seg_1_Flange_1\"\n" +
 							"          },\n" +
 							"          {\n" +
-							"            \"pipeId\": 98,\n" +
-							"            \"pipeUuid\": \"PipeObj_1_Segment_3\"\n" +
+							"            \"pipeId\": 3,\n" +
+							"            \"pipeUuid\": \"PipeObj_1_seg_1_Flange_2\"\n" +
 							"          },\n" +
 							"          {\n" +
-							"            \"pipeId\": 99,\n" +
-							"            \"pipeUuid\": \"PipeObj_1_Segment_4\"\n" +
+							"            \"pipeId\": 4,\n" +
+							"            \"pipeUuid\": \"PipeObj_1_connector_1\"\n" +
 							"          },\n" +
 							"          {\n" +
-							"            \"pipeId\": 100,\n" +
-							"            \"pipeUuid\": \"PipeObj_1_Segment_5\"\n" +
+							"            \"pipeId\": 5,\n" +
+							"            \"pipeUuid\": \"PipeObj_1_seg_2\"\n" +
 							"          },\n" +
 							"          {\n" +
-							"            \"pipeId\": 101,\n" +
-							"            \"pipeUuid\": \"PipeObj_1_Segment_6\"\n" +
-							"          }\n" +
-							"        ]\n" +
-							"      },\n" +
-							"      {\n" +
-							"        \"pipelineId\": 26,\n" +
-							"        \"pipes\": [\n" +
-							"          {\n" +
-							"            \"pipeId\": 102,\n" +
-							"            \"pipeUuid\": \"PipeObj_2_Segment_1\"\n" +
+							"            \"pipeId\": 6,\n" +
+							"            \"pipeUuid\": \"PipeObj_1_seg_2_Flange_1\"\n" +
 							"          },\n" +
 							"          {\n" +
-							"            \"pipeId\": 103,\n" +
-							"            \"pipeUuid\": \"PipeObj_2_Connector_1\"\n" +
+							"            \"pipeId\": 7,\n" +
+							"            \"pipeUuid\": \"PipeObj_1_seg_2_Flange_2\"\n" +
 							"          },\n" +
 							"          {\n" +
-							"            \"pipeId\": 104,\n" +
-							"            \"pipeUuid\": \"PipeObj_2_Segment_2\"\n" +
+							"            \"pipeId\": 8,\n" +
+							"            \"pipeUuid\": \"PipeObj_1_connector_2\"\n" +
 							"          },\n" +
 							"          {\n" +
-							"            \"pipeId\": 105,\n" +
-							"            \"pipeUuid\": \"PipeObj_2_Segment_3\"\n" +
-							"          }\n" +
-							"        ]\n" +
-							"      },\n" +
-							"      {\n" +
-							"        \"pipelineId\": 27,\n" +
-							"        \"pipes\": [\n" +
-							"          {\n" +
-							"            \"pipeId\": 106,\n" +
-							"            \"pipeUuid\": \"PipeObj_3_Segment_1\"\n" +
+							"            \"pipeId\": 9,\n" +
+							"            \"pipeUuid\": \"PipeObj_1_seg_3\"\n" +
 							"          },\n" +
 							"          {\n" +
-							"            \"pipeId\": 107,\n" +
-							"            \"pipeUuid\": \"PipeObj_3_Segment_2\"\n" +
+							"            \"pipeId\": 10,\n" +
+							"            \"pipeUuid\": \"PipeObj_1_seg_3_Flange_1\"\n" +
 							"          }\n" +
 							"        ]\n" +
 							"      }\n" +
 							"    ],\n" +
 							"    \"creator\": {\n" +
-							"      \"userUuid\": \"ssafy12\",\n" +
-							"      \"userName\": \"김싸피\"\n" +
+							"      \"userUuid\": \"2585bc38-54d9-4f81-9e81-22a6f565b2b2\",\n" +
+							"      \"userName\": \"dd\"\n" +
 							"    }\n" +
 							"  }}")}
 			))
