@@ -116,7 +116,6 @@ export const PipeModel: React.FC<{
     // const groupName = originalMesh.name.split("_")[0];
 
     if (pipelines) {
-      console.log(pipelines);
       // 추후 pipelineId 가져와서 반영하기
       // const selectedPipeline = pipelines.filter((item)=>item.pipelineId === pipelineId)
       const filteredPipe = pipelines[0].pipes.filter(

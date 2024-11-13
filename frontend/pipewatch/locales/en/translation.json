@@ -412,7 +412,67 @@
           "label": "Search",
           "viewAllEmployees": "View All"
         }
+      },
+      "status": {
+        "updateComplete": "Update Complete"
       }
+    }
+  },
+  "PipeViewer": {
+    "readPipeModel": "Manage Pipe Model",
+    "noPipeModel": "No registered pipe model.",
+    "noPipeModelDescription": "Please create a pipe model first.",
+    "noAccess": "No access permission.",
+    "noAccessDescription": "Please check your corporate certification status.",
+    "ModelListView": {
+      "selectModel": "Select Pipe Model."
+    },
+    "GLTFViewer": {
+      "viewFullModel": "View Full Model"
+    },
+    "ModelMemo": {
+      "property": "Property",
+      "viewDefectivePipe": "View Defective Pipe",
+      "floorLabel": "F",
+      "basementLabel": "B",
+      "memoLabel": "Memo",
+      "modifiedDate": "Modified Date"
+    },
+    "ModelProperty": {
+      "memoLabel": "Memo",
+      "floorLabel": "F",
+      "basementLabel": "B",
+      "pipeProperty": "Pipe Properties",
+      "materialLabel": "Material",
+      "outerDiameter": "Outer Diameter",
+      "innerDiameter": "Inner Diameter",
+      "fluidProperty": "Fluid Properties",
+      "fluidFlowRate": "Flow Rate",
+      "changed": "Changed Properties",
+      "pipeMaterialList": {
+        "1": "Aluminum",
+        "2": "Steel",
+        "3": "Stainless Steel"
+      },
+      "fluidMaterialList": {
+        "4": "Steam",
+        "5": "Air",
+        "6": "Water",
+        "7": "Oil",
+        "8": "Vapor"
+      },
+      "listbox": {
+        "place": "building",
+        "floorLabel": "F",
+        "basementLabel": "B"
+      }
+    },
+    "PipeMemo": {
+      "floorLabel": "F",
+      "basementLabel": "B",
+      "checkDefect": "Check Defection",
+      "memoLabel": "Memo",
+      "modifiedDate": "Modified Date"
     }
   }
 }

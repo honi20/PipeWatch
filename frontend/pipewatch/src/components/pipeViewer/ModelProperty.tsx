@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import React, { useEffect, useState, ChangeEvent } from "react";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { PipeMaterialListbox } from "./listbox/PipeMaterialListbox";
@@ -7,7 +8,11 @@ import { PipelineType } from "./Type/PipeType";
 import { getApiClient } from "@src/stores/apiClient";
 import { PropertyType, UpdatePropertyType } from "./Type/PipeType";
 import { FluidMaterialListbox } from "@src/components/pipeViewer/listbox/FluidMaterialListbox";
-import { MaterialListType } from "@src/components/pipeViewer/Type/MaterialType";
+import { ModelNameInput } from "@src/components/pipeViewer/input/ModelNameInput";
+import {
+  MaterialType,
+  MaterialListType,
+} from "@src/components/pipeViewer/Type/MaterialType";
 
 interface ModelPropertyProps {
   modelId: number;
@@ -19,18 +24,17 @@ interface ModelPropertyProps {
 }
 
 export const ModelProperty: React.FC<ModelPropertyProps> = (props) => {
+  const { t } = useTranslation();
   const { modelId, modelName, pipelines, onViewChange, building, floor } =
     props;
-  // const [modelName, setModelName] = useState<string>();
   const [pipelineProperty, setPipelineProperty] = useState<PropertyType>();
   const [pipeMaterialId, setPipeMaterialId] = useState<number>(1);
   const [pipeOuterDiameter, setPipeOuterDiameter] = useState<number>(0);
   const [pipeInnerDiameter, setPipeInnerDiameter] = useState<number>(0);
   const [fluidMaterialId, setFluidMaterialId] = useState<number>(4);
   const [fluidFlowRate, setFluidFlowRate] = useState<number>(0);
-  const [pipeMaterialList, setPipeMaterialList] = useState<MaterialListType>();
-  const [fluidMaterialList, setFluidMaterialList] =
-    useState<MaterialListType>();
+  const [pipeMaterialList, setPipeMaterialList] = useState<MaterialType[]>();
+  const [fluidMaterialList, setFluidMaterialList] = useState<MaterialType[]>();
 
   // fetchMaterial 리스트조회
   const fetchMaterial = async () => {
@@ -42,13 +46,27 @@ export const ModelProperty: React.FC<ModelPropertyProps> = (props) => {
       });
       console.log(res.data.header.httpStatusCode, res.data.header.message);
       console.log(res.data.body);
+
       const materialList = res.data.body;
-      setFluidMaterialList(materialList[0]);
-      setPipeMaterialList(materialList[1]);
+
+      // pipeMaterialList 필터링
+      const pipeMaterialList = materialList
+        .filter((item: MaterialListType) => item.type === "PIPE")
+        .flatMap((item: MaterialListType) => item.materials);
+
+      // fluidMaterialList 필터링
+      const fluidMaterialList = materialList
+        .filter((item: MaterialListType) => item.type === "FLUID")
+        .flatMap((item: MaterialListType) => item.materials);
+      setPipeMaterialList(pipeMaterialList);
+      setFluidMaterialList(fluidMaterialList);
+      console.log(pipeMaterialList, fluidMaterialList);
     } catch (err) {
+      console.log(pipeMaterialList);
       console.log(err);
     }
   };
+
   // pipelineId 상세조회
   const getPipelineDetail = async () => {
     const apiClient = getApiClient();
@@ -59,15 +77,22 @@ export const ModelProperty: React.FC<ModelPropertyProps> = (props) => {
       });
       console.log(res.data.header.httpStatusCode, res.data.header.message);
       console.log(res.data.body);
-      // setModelName(res.data.body.name);
-      const property = res.data.body.property;
-      setPipelineProperty(property);
 
-      setPipeMaterialId(property.pipeMaterial.materialId);
-      setPipeOuterDiameter(property.outerDiameter);
-      setPipeInnerDiameter(property.innerDiameter);
-      setFluidMaterialId(property.fluidMaterial.materialId);
-      setFluidFlowRate(property.velocity);
+      if (res.data.body.property) {
+        const property = res.data.body.property;
+        setPipelineProperty(property);
+        setPipeMaterialId(property.pipeMaterial.materialId);
+        setPipeOuterDiameter(property.outerDiameter);
+        setPipeInnerDiameter(property.innerDiameter);
+        setFluidMaterialId(property.fluidMaterial.materialId);
+        setFluidFlowRate(property.velocity);
+      } else {
+        setPipeMaterialId(1); // 기본값 설정
+        setPipeOuterDiameter(0); // 기본값 설정
+        setPipeInnerDiameter(0); // 기본값 설정
+        setFluidMaterialId(4); // 기본값 설정
+        setFluidFlowRate(0);
+      }
     } catch (err) {
       console.log(err);
     }
@@ -80,6 +105,8 @@ export const ModelProperty: React.FC<ModelPropertyProps> = (props) => {
       setPipeInnerDiameter(0); // 기본값 설정
       setFluidMaterialId(4); // 기본값 설정
       setFluidFlowRate(0); // 기본값 설정
+      // pipelineProperty가 null인 경우 isChanged를 true로 변경
+      setIsChanged(true);
     } else {
       // pipelineProperty가 로드된 후에 isChanged를 false로 초기화
       setIsChanged(false);
@@ -88,10 +115,10 @@ export const ModelProperty: React.FC<ModelPropertyProps> = (props) => {
 
   useEffect(() => {
     // pipeMaterialList와 fluidMaterialList가 없는 경우에만 fetch
-    if (!pipeMaterialList && !fluidMaterialList) {
+    if (!pipeMaterialList || !fluidMaterialList) {
       fetchMaterial();
     }
-  }, [pipeMaterialList, fluidMaterialList]);
+  }, []);
 
   useEffect(() => {
     getPipelineDetail();
@@ -153,111 +180,121 @@ export const ModelProperty: React.FC<ModelPropertyProps> = (props) => {
         <div className="flex justify-start cursor-pointer hover:text-primary-200">
           <div className="flex" onClick={onViewChange}>
             <ChevronLeftIcon />
-            <p>메모</p>
+            <p>{t("PipeViewer.ModelProperty.memoLabel")}</p>
           </div>
         </div>
         <div className="flex flex-col w-full h-full gap-7">
           {/* header */}
           <div className="flex flex-col items-center w-full">
-            <h2 className="text-[30px] font-bold">{modelName}</h2>
+            <ModelNameInput modelId={modelId} currentName={modelName} />
             <p className="text-[20px]">
-              {building} {floor > 0 ? floor : `지하 ${-floor}`}층
+              {building}{" "}
+              {floor > 0
+                ? `${floor}${t("PipeViewer.ModelProperty.floorLabel")}`
+                : `${t("PipeViewer.ModelProperty.basementLabel")} ${-floor}${t(
+                    "PipeViewer.ModelProperty.floorLabel"
+                  )}`}
             </p>
           </div>
-          <div className="flex flex-col items-center w-full h-full gap-5">
-            {/* 결함 탐지 */}
-            <div className="flex flex-col w-full">
-              <h3 className="text-[20px] font-bold self-start px-1">
-                결함 확인
-              </h3>
-            </div>
-
-            {/* 파이프 속성 */}
-            <div className="flex flex-col w-full gap-4">
-              <h3 className="text-[20px] font-bold self-start px-1">
-                파이프 속성
-              </h3>
-              <div className="flex items-center justify-between w-full gap-2 px-1">
-                <div className="w-[100px] px-1">재질</div>
-                <PipeMaterialListbox
-                  pipeMaterialList={pipeMaterialList?.materials}
-                  value={pipeMaterialId}
-                  onChange={setPipeMaterialId}
-                />
-              </div>
-              <div className="flex items-center justify-between w-full gap-2 px-1">
-                <div className="w-[100px] px-1">Outer Diameter</div>
-                <div className="relative w-full">
-                  <Input
-                    type="number"
-                    value={pipeOuterDiameter}
-                    onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                      setPipeOuterDiameter(Number(e.target.value))
-                    }
-                    className={clsx(
-                      "block w-full pl-5 pr-10 rounded-md border-none bg-black/40 py-2 px-3 text-sm/6 text-white",
-                      "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25"
-                    )}
-                    style={{ paddingRight: "3rem" }} // 단위 공간 확보
+          <div className="flex flex-col items-center justify-between w-full h-full gap-5">
+            <div className="flex flex-col items-center gap-10">
+              {/* 파이프 속성 */}
+              <div className="flex flex-col w-full gap-4">
+                <h3 className="text-[20px] font-bold self-start px-1">
+                  {t("PipeViewer.ModelProperty.pipeProperty")}
+                </h3>
+                <div className="flex items-center justify-between w-full gap-2 px-1">
+                  <div className="w-[100px] px-1">
+                    {t("PipeViewer.ModelProperty.materialLabel")}
+                  </div>
+                  <PipeMaterialListbox
+                    pipeMaterialList={pipeMaterialList}
+                    value={pipeMaterialId ? pipeMaterialId : 1}
+                    onChange={setPipeMaterialId}
                   />
-                  <span className="absolute text-sm text-gray-800 transform -translate-y-1/2 pointer-events-none right-3 top-1/2">
-                    mm
-                  </span>
+                </div>
+                <div className="flex items-center justify-between w-full gap-2 px-1">
+                  <div className="w-[100px] px-1">
+                    {t("PipeViewer.ModelProperty.outerDiameter")}
+                  </div>
+                  <div className="relative w-full">
+                    <Input
+                      type="number"
+                      value={pipeOuterDiameter}
+                      onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                        setPipeOuterDiameter(Number(e.target.value))
+                      }
+                      className={clsx(
+                        "block w-full pl-5 pr-10 rounded-md border-none bg-black/40 py-2 px-3 text-sm/6 text-white",
+                        "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25"
+                      )}
+                      style={{ paddingRight: "3rem" }} // 단위 공간 확보
+                    />
+                    <span className="absolute text-sm text-gray-800 transform -translate-y-1/2 pointer-events-none right-3 top-1/2">
+                      mm
+                    </span>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between w-full gap-2 px-1">
+                  <div className="w-[100px] px-1">
+                    {t("PipeViewer.ModelProperty.innerDiameter")}
+                  </div>
+                  <div className="relative w-full">
+                    <Input
+                      type="number"
+                      value={pipeInnerDiameter}
+                      onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                        setPipeInnerDiameter(Number(e.target.value))
+                      }
+                      className={clsx(
+                        "block w-full pl-5 pr-10 rounded-md border-none bg-black/40 py-2 px-3 text-sm/6 text-white",
+                        "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25"
+                      )}
+                      style={{ paddingRight: "3rem" }}
+                    />
+                    <span className="absolute text-sm text-gray-800 transform -translate-y-1/2 pointer-events-none right-3 top-1/2">
+                      mm
+                    </span>
+                  </div>
                 </div>
               </div>
-              <div className="flex items-center justify-between w-full gap-2 px-1">
-                <div className="w-[100px] px-1">Inner Diameter</div>
-                <div className="relative w-full">
-                  <Input
-                    type="number"
-                    value={pipeInnerDiameter}
-                    onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                      setPipeInnerDiameter(Number(e.target.value))
-                    }
-                    className={clsx(
-                      "block w-full pl-5 pr-10 rounded-md border-none bg-black/40 py-2 px-3 text-sm/6 text-white",
-                      "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25"
-                    )}
-                    style={{ paddingRight: "3rem" }}
-                  />
-                  <span className="absolute text-sm text-gray-800 transform -translate-y-1/2 pointer-events-none right-3 top-1/2">
-                    mm
-                  </span>
-                </div>
-              </div>
-            </div>
 
-            {/* 유체 속성 */}
-            <div className="flex flex-col w-full gap-4">
-              <h3 className="text-[20px] font-bold self-start px-1">
-                유체 속성
-              </h3>
-              <div className="flex items-center justify-between w-full gap-2 px-1">
-                <div className="w-[100px] px-1">재질</div>
-                <FluidMaterialListbox
-                  fluidMaterialList={fluidMaterialList?.materials}
-                  value={fluidMaterialId}
-                  onChange={setFluidMaterialId}
-                />
-              </div>
-              <div className="flex items-center justify-between w-full gap-2 px-1">
-                <div className="w-[100px] px-1">Flow Rate</div>
-                <div className="relative w-full">
-                  <Input
-                    type="number"
-                    value={fluidFlowRate}
-                    onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                      setFluidFlowRate(Number(e.target.value))
-                    }
-                    className={clsx(
-                      "block w-full pl-5 pr-10 rounded-md border-none bg-black/40 py-2 px-3 text-sm/6 text-white",
-                      "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25"
-                    )}
-                    style={{ paddingRight: "3rem" }}
+              {/* 유체 속성 */}
+              <div className="flex flex-col w-full gap-4">
+                <h3 className="text-[20px] font-bold self-start px-1">
+                  {t("PipeViewer.ModelProperty.fluidProperty")}
+                </h3>
+                <div className="flex items-center justify-between w-full gap-2 px-1">
+                  <div className="w-[100px] px-1">
+                    {t("PipeViewer.ModelProperty.materialLabel")}
+                  </div>
+                  <FluidMaterialListbox
+                    fluidMaterialList={fluidMaterialList}
+                    value={fluidMaterialId}
+                    onChange={setFluidMaterialId}
                   />
-                  <span className="absolute text-sm text-gray-800 transform -translate-y-1/2 pointer-events-none right-3 top-1/2">
-                    m<sup>3</sup>/s
-                  </span>
+                </div>
+                <div className="flex items-center justify-between w-full gap-2 px-1">
+                  <div className="w-[100px] px-1">
+                    {t("PipeViewer.ModelProperty.fluidFlowRate")}
+                  </div>
+                  <div className="relative w-full">
+                    <Input
+                      type="number"
+                      value={fluidFlowRate}
+                      onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                        setFluidFlowRate(Number(e.target.value))
+                      }
+                      className={clsx(
+                        "block w-full pl-5 pr-10 rounded-md border-none bg-black/40 py-2 px-3 text-sm/6 text-white",
+                        "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25"
+                      )}
+                      style={{ paddingRight: "3rem" }}
+                    />
+                    <span className="absolute text-sm text-gray-800 transform -translate-y-1/2 pointer-events-none right-3 top-1/2">
+                      m<sup>3</sup>/s
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -270,7 +307,7 @@ export const ModelProperty: React.FC<ModelPropertyProps> = (props) => {
               disabled={!isChanged}
               onClick={handleChangeButton}
             >
-              속성 변경
+              {t("PipeViewer.ModelProperty.changed")}
             </Button>
           </div>
         </div>

@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { useState, useEffect } from "react";
 import SelectPipeModelIcon from "@assets/icons/select_pipe_model.png";
 import { ModelsType, BuildingType } from "./Type/PipeType";
@@ -14,6 +15,7 @@ interface ModelListViewProps {
 }
 
 export const ModelListView: React.FC<ModelListViewProps> = ({ models }) => {
+  const { t } = useTranslation();
   const [selectModel, setSelectModel] = useState<ModelsType | null>(null);
   const [selectedBuilding, setSelectedBuilding] = useState<string | null>(null);
   const [selectedFloor, setSelectedFloor] = useState<number | null>(null);
@@ -126,7 +128,7 @@ export const ModelListView: React.FC<ModelListViewProps> = ({ models }) => {
           <div className="flex items-center gap-2 h-svh">
             <img src={SelectPipeModelIcon} width={"60px"} />
             <p className="text-[30px] text-gray-800 font-bold">
-              파이프 모델을 선택하세요.
+              {t("PipeViewer.ModelListView.selectModel")}
             </p>
           </div>
         )}

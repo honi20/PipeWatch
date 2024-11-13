@@ -417,5 +417,62 @@
         "updateComplete": "변경 완료"
       }
     }
+  },
+  "PipeViewer": {
+    "readPipeModel": "파이프 모델 조회",
+    "noPipeModel": "등록된 파이프 모델이 없습니다.",
+    "noPipeModelDescription": "먼저 파이프 모델을 생성하세요.",
+    "noAccess": "접근 권한이 없습니다.",
+    "noAccessDescription": "기업 인증 상태를 확인하세요.",
+    "ModelListView": {
+      "selectModel": "파이프 모델을 선택하세요."
+    },
+    "GLTFViewer": {
+      "viewFullModel": "전체 모델 보기"
+    },
+    "ModelMemo": {
+      "property": "속성",
+      "viewDefectivePipe": "결함 파이프 조회",
+      "floorLabel": "층",
+      "basementLabel": "지하",
+      "memoLabel": "메모",
+      "modifiedDate": "수정일"
+    },
+    "ModelProperty": {
+      "memoLabel": "메모",
+      "floorLabel": "층",
+      "basementLabel": "지하",
+      "pipeProperty": "파이프 속성",
+      "materialLabel": "재질",
+      "outerDiameter": "외경",
+      "innerDiameter": "내경",
+      "fluidProperty": "유체 속성",
+      "fluidFlowRate": "유속",
+      "changed": "속성 변경",
+      "pipeMaterialList": {
+        "1": "알루미늄",
+        "2": "철",
+        "3": "스테인리스"
+      },
+      "fluidMaterialList": {
+        "4": "수증기",
+        "5": "공기",
+        "6": "물",
+        "7": "기름",
+        "8": "증기"
+      },
+      "listbox": {
+        "place": "장소",
+        "floorLabel": "층",
+        "basementLabel": "지하"
+      }
+    },
+    "PipeMemo":{
+      "floorLabel": "층",
+      "basementLabel": "지하",
+      "checkDefect": "결함 체크",
+      "memoLabel": "메모",
+      "modifiedDate": "수정일"
+    }
   }
 }

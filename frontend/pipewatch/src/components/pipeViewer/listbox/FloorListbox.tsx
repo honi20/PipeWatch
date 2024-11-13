@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import {
   Listbox,
   ListboxButton,
@@ -13,6 +14,7 @@ export const FloorListbox: React.FC<FloorListboxProps> = ({
   floorList,
   selectedFloor,
 }) => {
+  const { t } = useTranslation();
   const handleChange = (floor: number) => {
     onFloorChange(floor);
   };
@@ -28,9 +30,15 @@ export const FloorListbox: React.FC<FloorListboxProps> = ({
             )}
           >
             {selectedFloor !== null
-              ? selectedFloor < 0
-                ? `지하 ${-selectedFloor}층`
-                : `${selectedFloor}층`
+              ? selectedFloor > 0
+                ? `${selectedFloor}${t(
+                    "PipeViewer.ModelProperty.listbox.floorLabel"
+                  )}`
+                : `${t(
+                    "PipeViewer.ModelProperty.listbox.basementLabel"
+                  )} ${-selectedFloor}${t(
+                    "PipeViewer.ModelProperty.listbox.floorLabel"
+                  )}`
               : "-"}{" "}
             <ExpandMoreIcon
               sx={{ color: "#5E5E5E" }}
@@ -53,7 +61,13 @@ export const FloorListbox: React.FC<FloorListboxProps> = ({
               className="group flex cursor-default items-center gap-2 rounded-lg py-1.5 px-3 select-none data-[focus]:bg-white/10"
             >
               <div className="dark:text-white text-sm/6">
-                {item < 0 ? `지하 ${-item}층` : `${item}층`}
+                {item > 0
+                  ? `${item}${t("PipeViewer.ModelProperty.listbox.floorLabel")}`
+                  : `${t(
+                      "PipeViewer.ModelProperty.listbox.basementLabel"
+                    )} ${-item}${t(
+                      "PipeViewer.ModelProperty.listbox.floorLabel"
+                    )}`}
               </div>
             </ListboxOption>
           ))}
