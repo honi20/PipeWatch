@@ -19,8 +19,9 @@ interface ModelPropertyProps {
 }
 
 export const ModelProperty: React.FC<ModelPropertyProps> = (props) => {
-  const { modelId, pipelines, modelName, onViewChange, building, floor } =
+  const { modelId, modelName, pipelines, onViewChange, building, floor } =
     props;
+  // const [modelName, setModelName] = useState<string>();
   const [pipelineProperty, setPipelineProperty] = useState<PropertyType>();
   const [pipeMaterialId, setPipeMaterialId] = useState<number>(1);
   const [pipeOuterDiameter, setPipeOuterDiameter] = useState<number>(0);
@@ -58,6 +59,7 @@ export const ModelProperty: React.FC<ModelPropertyProps> = (props) => {
       });
       console.log(res.data.header.httpStatusCode, res.data.header.message);
       console.log(res.data.body);
+      // setModelName(res.data.body.name);
       const property = res.data.body.property;
       setPipelineProperty(property);
 

@@ -9,7 +9,7 @@ import { useSelectView } from "@src/components/context/SelectViewContext";
 import { usePipe } from "@src/components/context/PipeContext";
 export const PipeModel: React.FC<{
   gltfUrl: string;
-  onModelLoad: (scene: THREE.Object3D) => void;
+  onModelLoad: (scene: THREE.Object3D, vector?: number[]) => void;
   cameraControlsRef: React.RefObject<CameraControls>;
   isTotalView: boolean;
   setIsTotalView: React.Dispatch<React.SetStateAction<boolean>>;
@@ -36,7 +36,9 @@ export const PipeModel: React.FC<{
   const ControlTotalView = () => {
     if (model.scene && isTotalView) {
       onModelLoad(model.scene);
-      console.log(model);
+      // 중심 좌표 줄 경우
+      // onModelLoad(model.scene, model.scenes[0].userData.extras.model_center);
+      // console.log(model.scenes[0].userData.extras.model_center);
       setIsTotalView(false);
     }
   };

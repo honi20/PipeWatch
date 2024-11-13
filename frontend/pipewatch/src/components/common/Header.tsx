@@ -67,7 +67,7 @@ export const Header = ({ handleTheme, currentTheme }: Props) => {
 
   useEffect(() => {
     const isLoggedIn = !!sessionStorage.getItem("accessToken");
-    console.log("Header: 로그인 상태 확인 ", isLoggedIn);
+    // console.log("Header: 로그인 상태 확인 ", isLoggedIn);
     setLogin(isLoggedIn);
 
     const role = sessionStorage.getItem("role") || "UNAUTHORIZED";
@@ -76,7 +76,7 @@ export const Header = ({ handleTheme, currentTheme }: Props) => {
     setName(name);
     const state = sessionStorage.getItem("userState") || "";
     setUserState(state);
-    console.log("useEffect 실행");
+    // console.log("useEffect 실행");
   }, []);
 
   useEffect(() => {

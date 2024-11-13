@@ -1,11 +1,12 @@
 import React, { useEffect, ChangeEvent, useState } from "react";
-import { Textarea } from "@headlessui/react";
+import { Textarea, Checkbox } from "@headlessui/react";
 import clsx from "clsx";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { useMemoStore } from "@src/stores/memoStore";
 import { usePipe } from "@src/components/context/PipeContext";
 import { getApiClient } from "@src/stores/apiClient";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import CheckIcon from "@mui/icons-material/Check";
 
 interface PipeMemoProps {
   modelName: string;
@@ -28,6 +29,7 @@ export const PipeMemo: React.FC<PipeMemoProps> = (props) => {
   } = props;
   const { selectedPipeId } = usePipe();
   const [pipeName, setPipeName] = useState<string>("");
+  const [enabled, setEnabled] = useState(false);
 
   // MODEL_MEMO 및 TOTEL_VIEW로 전환
   const handleTotalView = () => {
@@ -67,6 +69,7 @@ export const PipeMemo: React.FC<PipeMemoProps> = (props) => {
           hasDefect: hasDefect,
         },
       });
+      // 결함 여부 받아서 렌더링 해야햄
       console.log(res.data.header.httpStatusCode, res.data.header.message);
       console.log(res.data.body);
       setMemoList(res.data.body.memoList);
@@ -101,7 +104,7 @@ export const PipeMemo: React.FC<PipeMemoProps> = (props) => {
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter") {
       e.preventDefault();
-      createPipeMemoAndDefect(selectedPipeId, memo, false);
+      createPipeMemoAndDefect(selectedPipeId, memo, enabled);
       // postMemo(pipeId, memo);
       setMemo("");
     }
@@ -146,8 +149,17 @@ export const PipeMemo: React.FC<PipeMemoProps> = (props) => {
               {building} {floor > 0 ? `${floor}층` : `지하 ${-floor}층`}
             </p>
           </div>
-          <div className="flex flex-col w-full">
+          <div className="flex items-center w-full gap-2">
             <h3 className="text-[20px] font-bold self-start px-1">결함 체크</h3>
+            <Checkbox
+              checked={enabled}
+              onChange={setEnabled}
+              className="p-1 rounded-md group size-8 bg-black/60 ring-1 ring-white/15 ring-inset "
+            >
+              {enabled && (
+                <CheckIcon className="hidden size-4 fill-black group-data-[checked]:block" />
+              )}
+            </Checkbox>
           </div>
           {/* 메모 input */}
           <div className="flex flex-col w-full">
