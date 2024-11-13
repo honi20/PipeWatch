@@ -72,7 +72,7 @@ export const FluidMaterialListbox: React.FC<FluidMaterialListboxProps> = ({
                 ))}
             <ExpandMoreIcon
               sx={{ color: "#5E5E5E" }}
-              className="pl-1 transition-transform duration-200 group size-6"
+              className="absolute transition-transform duration-200 group size-6 right-3"
             />
           </ListboxButton>
         </div>

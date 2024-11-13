@@ -21,7 +21,6 @@ interface ModelPropertyProps {
 export const ModelProperty: React.FC<ModelPropertyProps> = (props) => {
   const { modelId, modelName, pipelines, onViewChange, building, floor } =
     props;
-  // const [modelName, setModelName] = useState<string>();
   const [pipelineProperty, setPipelineProperty] = useState<PropertyType>();
   const [pipeMaterialId, setPipeMaterialId] = useState<number>(1);
   const [pipeOuterDiameter, setPipeOuterDiameter] = useState<number>(0);
@@ -42,10 +41,22 @@ export const ModelProperty: React.FC<ModelPropertyProps> = (props) => {
       });
       console.log(res.data.header.httpStatusCode, res.data.header.message);
       console.log(res.data.body);
+
       const materialList = res.data.body;
-      setFluidMaterialList(materialList[0]);
-      setPipeMaterialList(materialList[1]);
+
+      // pipeMaterialList 필터링
+      const pipeMaterialList = materialList
+        .filter((item: MaterialListType) => item.type === "PIPE")
+        .flatMap((item: MaterialListType) => item.materials);
+
+      // fluidMaterialList 필터링
+      const fluidMaterialList = materialList
+        .filter((item: MaterialListType) => item.type === "FLUID")
+        .flatMap((item: MaterialListType) => item.materials);
+      setPipeMaterialList(pipeMaterialList);
+      setFluidMaterialList(fluidMaterialList);
     } catch (err) {
+      console.log(pipeMaterialList);
       console.log(err);
     }
   };
@@ -59,15 +70,22 @@ export const ModelProperty: React.FC<ModelPropertyProps> = (props) => {
       });
       console.log(res.data.header.httpStatusCode, res.data.header.message);
       console.log(res.data.body);
-      // setModelName(res.data.body.name);
-      const property = res.data.body.property;
-      setPipelineProperty(property);
 
-      setPipeMaterialId(property.pipeMaterial.materialId);
-      setPipeOuterDiameter(property.outerDiameter);
-      setPipeInnerDiameter(property.innerDiameter);
-      setFluidMaterialId(property.fluidMaterial.materialId);
-      setFluidFlowRate(property.velocity);
+      if (res.data.body.property) {
+        const property = res.data.body.property;
+        setPipelineProperty(property);
+        setPipeMaterialId(property.pipeMaterial.materialId);
+        setPipeOuterDiameter(property.outerDiameter);
+        setPipeInnerDiameter(property.innerDiameter);
+        setFluidMaterialId(property.fluidMaterial.materialId);
+        setFluidFlowRate(property.velocity);
+      } else {
+        setPipeMaterialId(1); // 기본값 설정
+        setPipeOuterDiameter(0); // 기본값 설정
+        setPipeInnerDiameter(0); // 기본값 설정
+        setFluidMaterialId(4); // 기본값 설정
+        setFluidFlowRate(0);
+      }
     } catch (err) {
       console.log(err);
     }
@@ -88,10 +106,10 @@ export const ModelProperty: React.FC<ModelPropertyProps> = (props) => {
 
   useEffect(() => {
     // pipeMaterialList와 fluidMaterialList가 없는 경우에만 fetch
-    if (!pipeMaterialList && !fluidMaterialList) {
+    if (!pipeMaterialList || !fluidMaterialList) {
       fetchMaterial();
     }
-  }, [pipeMaterialList, fluidMaterialList]);
+  }, []);
 
   useEffect(() => {
     getPipelineDetail();
@@ -164,8 +182,8 @@ export const ModelProperty: React.FC<ModelPropertyProps> = (props) => {
               {building} {floor > 0 ? floor : `지하 ${-floor}`}층
             </p>
           </div>
-          <div className="flex flex-col items-center w-full h-full gap-5">
-            <div>
+          <div className="flex flex-col items-center justify-between w-full h-full gap-5">
+            <div className="flex flex-col items-center gap-10">
               {/* 파이프 속성 */}
               <div className="flex flex-col w-full gap-4">
                 <h3 className="text-[20px] font-bold self-start px-1">
@@ -175,7 +193,7 @@ export const ModelProperty: React.FC<ModelPropertyProps> = (props) => {
                   <div className="w-[100px] px-1">재질</div>
                   <PipeMaterialListbox
                     pipeMaterialList={pipeMaterialList?.materials}
-                    value={pipeMaterialId}
+                    value={pipeMaterialId ? pipeMaterialId : 1}
                     onChange={setPipeMaterialId}
                   />
                 </div>

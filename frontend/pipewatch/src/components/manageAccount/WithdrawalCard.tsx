@@ -20,7 +20,6 @@ const WithdrawalCard = () => {
   const getUserInfo = async () => {
     try {
       const res = await apiClient.get(`/api/users/profile`);
-      console.log("userInfo: ", res.data.body);
       setEmail(res.data.body.email);
     } catch (err) {
       console.log(err);
@@ -133,7 +132,7 @@ const WithdrawalCard = () => {
           </span>
         ) : showPasswordMismatchError ? (
           <span className="w-full p-2 whitespace-normal text-warn break-keep">
-            비밀번호가 일치하지 않습니다. 다시 확인해주세요.
+            {t("manageAccount.withdrawal.passwordMismatchError")}
           </span>
         ) : null}
       </div>

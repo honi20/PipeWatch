@@ -15,6 +15,7 @@ import { statusStore } from "@src/stores/statusStore";
 
 export const EmpView = () => {
   const { isSuccess } = statusStore();
+  const [isEmpty, setIsEmpty] = useState(false);
 
   const [employeeList, setEmployeeList] = useState([]);
   const [tempEmployeeList, setTempEmployeeList] = useState([]);
@@ -28,12 +29,19 @@ export const EmpView = () => {
       const res = await apiClient.get(`/api/employees`);
 
       console.log("Current Employees Data: ", res.data.body.employees);
+      if (res.data.body.employees.length === 0) {
+        setIsEmpty(true);
+      }
       setEmployeeList(res.data.body.employees);
       setTempEmployeeList(res.data.body.employees);
     } catch (err) {
       console.log(err);
     }
   };
+
+  useEffect(() => {
+    getEmployeeList();
+  }, []);
 
   const [searchKeyword, setSearchKeyword] = useState("");
 
@@ -54,15 +62,10 @@ export const EmpView = () => {
     }
   };
 
-  useEffect(() => {
-    getEmployeeList();
-  }, []);
-
   return (
     <div className="flex flex-col gap-6">
       {isSuccess && (
         <StatusBar
-          // text={t("pipeGenerator.takePhoto.connectRCCar.statusMessages.failed")}
           text={t("enterprise.view.status.updateComplete")}
           icon={""}
           // icon={<CancelIcon sx={{ fontSize: "20px" }} />}
@@ -93,7 +96,7 @@ export const EmpView = () => {
           hoverColor={"hover:dark:bg-primary-500/80 hover:bg-primary-200/80"}
         />
       </div>
-      <EmployInfoTable data={employeeList} />
+      <EmployInfoTable data={employeeList} isEmpty={isEmpty} />
     </div>
   );
 };

@@ -48,24 +48,13 @@ const TestRendering = forwardRef<unknown, TestRenderingProps>(
 
       const canvas = canvasRef.current;
 
-      // Screenshot 찍는 함수
-      // const link = document.createElement("a");
-      // link.setAttribute("download", `screenshot${modelId}.png`);
-      // link.setAttribute(
-      //   "href",
-      //   canvas.toDataURL("image/png").replace("image/png", "image/octet-stream")
-      // );
-      // link.click();
-
       // PATCH 요청 수행하는 함수
-      // 캔버스 데이터를 Blob으로 변환
       canvas.toBlob(async (blob) => {
         if (!blob) {
           console.error("Canvas Blob creation failed");
           return;
         }
 
-        // FormData 생성 및 이미지 파일 추가
         const formData = new FormData();
 
         formData.append("file", blob, `screenshot${modelId}.png`);

@@ -135,7 +135,6 @@ export const PipeModel: React.FC<{
           return (
             <group key={index} name={groupName} scale={[1.5, 1.5, 1.5]}>
               {meshes.map(({ originalMesh, segmentName }, i) => {
-                console.log(originalMesh);
                 return (
                   <mesh
                     key={i}

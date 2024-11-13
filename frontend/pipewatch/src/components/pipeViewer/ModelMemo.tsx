@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import React, { useEffect, ChangeEvent, useState } from "react";
 import { Textarea, Checkbox } from "@headlessui/react";
 import clsx from "clsx";
@@ -17,6 +18,7 @@ interface PipeMemoProps {
 }
 
 export const ModelMemo: React.FC<PipeMemoProps> = (props) => {
+  const { t } = useTranslation();
   const { memo, setMemo, memoList, getMemoList, postMemo, deleteMemo } =
     useMemoStore();
   const { modelId, modelName, building, floor, updatedAt, onViewChange } =
@@ -28,9 +30,8 @@ export const ModelMemo: React.FC<PipeMemoProps> = (props) => {
     getMemoList(modelId);
   }, [modelId]);
 
-
   // useEffect 사용 -> enabled == true일 경우 결함 있는 파이프 체크
-  
+
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter") {
       e.preventDefault();
@@ -64,7 +65,7 @@ export const ModelMemo: React.FC<PipeMemoProps> = (props) => {
         {/* navigate */}
         <div className="flex justify-end cursor-pointer hover:text-primary-200">
           <div className="flex" onClick={onViewChange}>
-            <p>속성</p>
+            <p>{t("PipeViewer.ModelMemo.property")}</p>
             <ChevronRightIcon />
           </div>
         </div>
@@ -73,13 +74,18 @@ export const ModelMemo: React.FC<PipeMemoProps> = (props) => {
           <div className="flex flex-col items-center w-full">
             <ModelNameInput modelId={modelId} currentName={modelName} />
             <p className="text-[20px]">
-              {building} {floor > 0 ? `${floor}층` : `지하 ${-floor}층`}
+              {building}{" "}
+              {floor > 0
+                ? `${floor}${t("PipeViewer.ModelMemo.floorLabel")}`
+                : `${t("PipeViewer.ModelMemo.basementLabel")} ${-floor}${t(
+                    "PipeViewer.ModelMemo.floorLabel"
+                  )}`}
             </p>
           </div>
           {/* 결함 탐지 */}
           <div className="flex items-center w-full gap-2">
             <h3 className="text-[20px] font-bold self-start px-1">
-              결함 파이프 조회
+              {t("PipeViewer.ModelMemo.viewDefectivePipe")}
             </h3>
             <Checkbox
               checked={enabled}
@@ -94,7 +100,9 @@ export const ModelMemo: React.FC<PipeMemoProps> = (props) => {
 
           {/* 메모 input */}
           <div className="flex flex-col w-full">
-            <h3 className="text-[20px] font-bold self-start px-1">메모</h3>
+            <h3 className="text-[20px] font-bold self-start px-1">
+              {t("PipeViewer.ModelMemo.memoLabel")}
+            </h3>
             <Textarea
               value={memo}
               onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
@@ -138,9 +146,12 @@ export const ModelMemo: React.FC<PipeMemoProps> = (props) => {
         </div>
 
         {/* modified date */}
-        <div className="flex items-center justify-between w-full">
-          <div className="text-[20px]">수정일</div>
-          <div className="px-16 py-1 rounded-2xl bg-black/60">
+        <div className="flex items-center justify-between w-full gap-3">
+          <div className="text-[20px]">
+            {" "}
+            {t("PipeViewer.ModelMemo.modifiedDate")}
+          </div>
+          <div className="items-center justify-center flex-1 py-1 text-center px-auto rounded-2xl bg-black/60">
             {formatModifiedDate(new Date(updatedAt))}
           </div>
         </div>

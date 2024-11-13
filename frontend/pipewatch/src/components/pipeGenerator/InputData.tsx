@@ -44,7 +44,6 @@ export const InputData = () => {
   const getBuildingList = async () => {
     try {
       const res = await apiClient.get(`/api/enterprises/buildings`);
-      console.log("빌딩 리스트: ", res.data.body);
 
       const updatedList = [
         ...res.data.body.buildings,
@@ -91,9 +90,7 @@ export const InputData = () => {
       else {
         setFloorNum(Number(value) * -1);
       }
-
       setIsFloorNumInvalid(false); // 숫자면 경고 색상 해제
-      console.log("floorNumNext:", floorNum);
     } else {
       setIsFloorNumInvalid(true); // 숫자가 아니면 경고
     }

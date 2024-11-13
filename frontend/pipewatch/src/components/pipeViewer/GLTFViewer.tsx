@@ -42,7 +42,7 @@ const GLTFViewer: React.FC<GLTFViewerProps> = (props) => {
         />
       </Canvas>
       <button
-        className="sticky z-10 transform -translate-x-1/2 -translate-y-10 bottom-10 left-1/2"
+        className="sticky z-10 px-1 py-1 text-black transform -translate-x-1/2 -translate-y-10 bg-white border border-black bottom-10 left-1/2 rounded-xl text-[18px] hover:text-primary-500 hover:border-primary-200"
         onClick={handleTotalViewButton}
       >
         {t("PipeViewer.GLTFViewer.viewFullModel")}
