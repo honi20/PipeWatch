@@ -37,6 +37,7 @@
     "signUp": "Sign Up",
     "email": "Email",
     "emailError": "Please enter a valid email.",
+    "duplicateEmail": "The email is already registered",
     "requestVerification": "Verify",
     "verificationCode": "Verification Code",
     "verificationComplete": "Verification Complete",
