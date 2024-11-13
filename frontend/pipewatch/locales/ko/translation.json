@@ -298,6 +298,7 @@
         "pipelineName": "파이프라인 이름",
         "location": "장소",
         "select": "선택",
+        "input": "직접 입력",
         "floorInfo": "층 정보",
         "ground": "지상",
         "underground": "지하",
@@ -308,6 +309,7 @@
     "rendering": {
       "title": "모델 렌더링 안내",
       "instructions": {
+        "preparing": "모델을 준비하고 있습니다.",
         "completed": {
           "message": "모델 렌더링이 완료되었습니다.",
           "previewAndSave": "아래 미리보기를 확인하고 저장 버튼을 눌러 저장하세요."

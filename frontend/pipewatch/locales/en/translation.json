@@ -298,6 +298,7 @@
         "pipelineName": "Pipeline Name",
         "location": "Location",
         "select": "select location",
+        "input": "Enter Manually",
         "floorInfo": "Floor Information",
         "ground": "G",
         "underground": "UG",
@@ -308,6 +309,7 @@
     "rendering": {
       "title": "Model Rendering Guide",
       "instructions": {
+        "preparing": "Preparing Model Rendering",
         "completed": {
           "message": "Model rendering is complete.",
           "previewAndSave": "Check the preview below and press the save button to save."

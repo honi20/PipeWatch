@@ -30,7 +30,7 @@ export const InputData = () => {
   const [newLocation, setNewLocation] = useState("");
 
   const [selectedLocation, setSelectedLocation] = useState<string | null>(
-    "선택"
+    t("pipeGenerator.inputData.formData.select")
   );
 
   const apiClient = getApiClient();
@@ -46,7 +46,10 @@ export const InputData = () => {
       const res = await apiClient.get(`/api/enterprises/buildings`);
       console.log("빌딩 리스트: ", res.data.body);
 
-      const updatedList = [...res.data.body.buildings, "직접 입력"];
+      const updatedList = [
+        ...res.data.body.buildings,
+        t("pipeGenerator.inputData.formData.input"),
+      ];
       setLocationList(updatedList);
     } catch (err) {
       console.log(err);
@@ -100,7 +103,10 @@ export const InputData = () => {
   const isFormValid: boolean =
     pipelineName !== "" &&
     selectedLocation !== "" &&
-    !(selectedLocation === "직접 입력" && !newLocation) &&
+    !(
+      selectedLocation === t("pipeGenerator.inputData.formData.input") &&
+      !newLocation
+    ) &&
     groundInfo !== "" &&
     !!floorNum &&
     !isFloorNumInvalid &&
@@ -114,7 +120,9 @@ export const InputData = () => {
       const res = await apiClient.patch(`/api/models/${modelId}/init`, {
         name: pipelineName,
         building:
-          selectedLocation === "직접 입력" ? newLocation : selectedLocation,
+          selectedLocation === t("pipeGenerator.inputData.formData.input")
+            ? newLocation
+            : selectedLocation,
         floor: floorNum,
       });
 
@@ -201,22 +209,24 @@ export const InputData = () => {
               </Combobox>
             </div>
 
-            {selectedLocation && selectedLocation === "직접 입력" && (
-              <div className="flex items-center w-full h-full">
-                <div className="flex-[2]" />
-                <div className="relative flex-[4] h-full">
-                  <Input
-                    type="text"
-                    value={newLocation}
-                    onChange={(event: ChangeEvent<HTMLInputElement>) =>
-                      setNewLocation(event.target.value)
-                    }
-                    className="w-full focus:outline-success h-full px-5 py-[12px] bg-white rounded-[5px] box-border"
-                    required
-                  />
+            {selectedLocation &&
+              selectedLocation ===
+                t("pipeGenerator.inputData.formData.input") && (
+                <div className="flex items-center w-full h-full">
+                  <div className="flex-[2]" />
+                  <div className="relative flex-[4] h-full">
+                    <Input
+                      type="text"
+                      value={newLocation}
+                      onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                        setNewLocation(event.target.value)
+                      }
+                      className="w-full focus:outline-success h-full px-5 py-[12px] bg-white rounded-[5px] box-border"
+                      required
+                    />
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
           </div>
 
           <div className="flex items-center w-full h-full">
