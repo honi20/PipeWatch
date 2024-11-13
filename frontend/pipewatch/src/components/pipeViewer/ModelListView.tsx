@@ -28,8 +28,8 @@ export const ModelListView: React.FC<ModelListViewProps> = ({ models }) => {
         method: "get",
         url: "/api/enterprises/buildings/floors",
       });
-      console.log(res.data.header.httpStatusCode, res.data.header.message);
-      console.log(res.data.body);
+      // console.log(res.data.header.httpStatusCode, res.data.header.message);
+      // console.log(res.data.body);
       setBuildingList(res.data.body.buildings);
     } catch (err) {
       console.log(err);
