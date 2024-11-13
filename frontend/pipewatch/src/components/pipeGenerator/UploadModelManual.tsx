@@ -32,7 +32,6 @@ export const UploadModelManual = () => {
       if (allowedFormats.some((format) => file.name.endsWith(format))) {
         setStatus("initial");
         setFile(file);
-        console.log("file:", file);
       } else {
         alert(
           t(
@@ -75,8 +74,6 @@ export const UploadModelManual = () => {
         });
         setStatus("success");
 
-        console.log("upload model: ", response.data.header.message);
-        console.log("modelId in UploadModel: ", response.data.body.modelId);
         setModelId(response.data.body.modelId);
       } catch (error) {
         console.error(error);
@@ -147,13 +144,13 @@ export const UploadModelManual = () => {
             />
             {status === "initial" || status === "uploading" ? (
               <DriveFolderUploadIcon
-                sx={{ fontSize: "96px", color: "#D9D9D9" }}
+                sx={{ fontSize: "60px", color: "#D9D9D9" }}
               />
             ) : status === "success" ? (
-              <CheckCircleIcon sx={{ fontSize: "96px", color: "#499B50" }} />
+              <CheckCircleIcon sx={{ fontSize: "60px", color: "#499B50" }} />
             ) : (
               status === "fail" && (
-                <CancelIcon sx={{ fontSize: "96px", color: "#FF5353" }} />
+                <CancelIcon sx={{ fontSize: "60px", color: "#FF5353" }} />
               )
             )}
             {status === "initial" ? (
@@ -192,8 +189,8 @@ export const UploadModelManual = () => {
 
       {file && status === "initial" && (
         <div className="flex items-center justify-center gap-6 w-full text-[16px]">
-          <div className="flex items-center justify-center gap-2">
-            <FilePresentIcon sx={{ fontSize: "40px", color: "#499B50" }} />
+          <div className="flex items-center justify-center gap-4">
+            <FilePresentIcon sx={{ fontSize: "24px", color: "#499B50" }} />
             <p>
               {t(
                 "pipeGenerator.uploadModel.directUpload.uploadBox.uploadedFile"

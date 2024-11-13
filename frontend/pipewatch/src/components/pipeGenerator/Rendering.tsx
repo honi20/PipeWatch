@@ -28,7 +28,6 @@ export const Rendering = () => {
   const getGLTFUrl = async () => {
     try {
       const res = await apiClient.get(`/api/models/${modelId}`);
-      console.log("모델 상세 조회 in Rendering: ", res.data.body.modelingUrl);
       setGltfUrl(res.data.body.modelingUrl);
     } catch (err) {
       console.log(err);

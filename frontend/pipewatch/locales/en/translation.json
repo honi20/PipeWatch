@@ -294,7 +294,7 @@
         "instructions": {
           "uploadModel": "Please upload the 3D model file of the pipe.",
           "Format": "Allowed Upload Formats",
-          "imageFileMessage": "(Uploading an image file will initiate the model rendering process, which may take some time.)",
+          "imageFileMessage": "(Uploading an image file will initiate the model rendering process, which may take additional time.)",
           "allowedFileTypes": "Only GLTF or IMG files (.gltf, .png, .jpg, .jpeg) can be uploaded.",
           "noFile": "No File"
         },

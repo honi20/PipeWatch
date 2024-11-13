@@ -294,7 +294,7 @@
         "instructions": {
           "uploadModel": "파이프 3D 모델 파일을 업로드 해주세요.",
           "Format": "업로드 가능 형식",
-          "imageFileMessage": "(이미지 파일을 업로드하시면, 모델 렌더링 프로세스가 실행되어 처리 시간이 소요될 수 있습니다.)",
+          "imageFileMessage": "(이미지 파일을 업로드하시면, 모델 렌더링 프로세스가 실행되어 추가 처리 시간이 소요될 수 있습니다.)",
           "allowedFileTypes": "GLTF 또는 IMG 파일(.gltf, .png, .jpg, .jpeg)만 업로드 가능합니다.",
           "noFile": "파일 없음"
         },
