@@ -108,6 +108,7 @@ public class PipelineResponse {
 	public static class MemoDto {
 		private Long memoId;
 		private String memo;
+		private Boolean hasDefect;
 		private Creator writer;
 		private String createdAt;
 
@@ -115,6 +116,7 @@ public class PipelineResponse {
 			return MemoDto.builder()
 					.memoId(memo.getId())
 					.memo(memo.getMemo())
+					.hasDefect(memo.getHasDefect())
 					.writer(new Creator(memo.getUser().getUuid(), memo.getUser().getName()))
 					.createdAt(convertToDateFormat(memo.getCreatedAt()))
 					.build();
