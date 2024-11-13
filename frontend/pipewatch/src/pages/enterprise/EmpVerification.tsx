@@ -24,8 +24,18 @@ export const EmpVerification = () => {
   };
 
   useEffect(() => {
-    getWaitingList();
+    if (waitingList.length === 0) {
+      getWaitingList();
+      console.log("test1");
+    }
   }, []);
+
+  useEffect(() => {
+    if (waitingList.length === 0) {
+      console.log("test2");
+      // 없음 값.
+    }
+  }, [waitingList]);
 
   return (
     <div className="flex flex-col gap-10">
