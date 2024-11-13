@@ -13,20 +13,21 @@ else:
     host=os.getenv("SERVER_HOST")
     port=os.getenv("SERVER_PORT")
 
-from fastapi import FastAPI
-from pydantic import BaseModel
-from typing import List
-from PIL import Image
-import pyrender
-import numpy as np
-import subprocess
-import cadquery as cq
-import trimesh
 import math
-import boto3
-import uvicorn
-import requests
 import shutil
+import subprocess
+from typing import List
+
+import boto3
+import cadquery as cq
+import numpy as np
+import pyrender
+import requests
+import trimesh
+import uvicorn
+from fastapi import FastAPI
+from PIL import Image
+from pydantic import BaseModel
 
 # S3 환경 변수
 AWS_REGION = os.getenv("S3_REGION_NAME")
@@ -42,32 +43,32 @@ S3_client = boto3.client(
     region_name=AWS_REGION
  )
 
+app = FastAPI()
+
 # 경로 설정
 NODE_PATH = os.getenv("NODE_PATH")
 GLTF_PIPELINE_PATH = os.getenv("GLTF_PIPELINE_PATH")
 BASE_WORK_DIR = os.getenv("BASE_WORK_DIR")
 
-app = FastAPI()
-
 # 파이프 모델 생성 요청
-class CreatePipelineModelRequest(BaseModel):
+class CreateModelRequest(BaseModel):
     modelUuid: str
     coords: List[List[List[float]]]
     radius: float = 1
 
 # 파이프라인 모델 생성 api
 @app.post("/pipelineModel")
-def create_pipeline_model(data: CreatePipelineModelRequest):
+def create_model(data: CreateModelRequest):
     work_dir = os.path.join(BASE_WORK_DIR, data.modelUuid)
     os.makedirs(work_dir, exist_ok=True)
 
     # 파이프 분류
-    pipelines = gather_pipes(data.coords)
+    pipelines = segment_pipelines(data.coords)
 
     # 파일 생성
     stl_paths = create_stl_files(pipelines, data.radius, work_dir)
     gltf_path = os.path.join(work_dir, f"origin_Pipeline_{data.modelUuid}.gltf")
-    compressed_gltf_path = create_gltf(stl_paths, data.modelUuid, work_dir, gltf_path)
+    compressed_gltf_path = create_gltf(data.modelUuid, stl_paths, gltf_path, work_dir)
 
     # gltf S3 업로드
     model_key = f"models/PipeLine_{data.modelUuid}.gltf"
@@ -85,75 +86,89 @@ def create_pipeline_model(data: CreatePipelineModelRequest):
     shutil.rmtree(work_dir)
 
     # 결과 전송
-    send_data(data.modelUuid, pipeModel_URL, thumbnail_URL)
+    BE_response = send_data(data.modelUuid, pipeModel_URL, thumbnail_URL)
 
-    return {"pipeModel_URL": pipeModel_URL, "thumbnail_URL": thumbnail_URL}
+    return {"BE_response": BE_response, "pipeModel_URL": pipeModel_URL, "thumbnail_URL": thumbnail_URL}
 
 # 파이프 분류 함수
-def gather_pipes(request_coords: List[List[List[float]]]):
+def segment_pipelines(request_coords: List[List[List[float]]]):
     pipelines = []
 
     for coord_pair in request_coords:
-        coord1, coord2 = coord_pair[0], coord_pair[1]
-        coord1_connected_pipeline = None
-        coord2_connected_pipeline = None
-
+        pipe_coord1, pipe_coord2 = coord_pair[0], coord_pair[1]
+        pipe_coord1_connected_pipeline = None
+        pipe_coord2_connected_pipeline = None
+        
+        # 파이프 연결 가능 여부 조회
         for pipeline in pipelines:
-            if coord1 == pipeline[0]:
-                coord1_connected_pipeline = pipeline
-            elif coord1 == pipeline[-1]:
-                coord1_connected_pipeline = pipeline
+            if pipe_coord1 == pipeline[0] or pipe_coord1 == pipeline[-1]:
+                pipe_coord1_connected_pipeline = pipeline
 
-            if coord2 == pipeline[0]:
-                coord2_connected_pipeline = pipeline
-            elif coord2 == pipeline[-1]:
-                coord2_connected_pipeline = pipeline
+            if pipe_coord2 == pipeline[0] or pipe_coord2 == pipeline[-1]:
+                pipe_coord2_connected_pipeline = pipeline
 
-            if coord1_connected_pipeline and coord2_connected_pipeline:
+            if pipe_coord1_connected_pipeline and pipe_coord2_connected_pipeline:
                 break
 
-        if coord1_connected_pipeline and coord2_connected_pipeline:
-            if coord1_connected_pipeline[-1] == coord1:
-                coord1_connected_pipeline.extend(
-                coord2_connected_pipeline if coord2_connected_pipeline[0] == coord2 else coord2_connected_pipeline[::-1]
+        # 새 파이프가 두 파이프라인 연결 시
+        if pipe_coord1_connected_pipeline and pipe_coord2_connected_pipeline:
+            if pipe_coord1_connected_pipeline[-1] == pipe_coord1:
+                pipe_coord1_connected_pipeline.extend(
+                pipe_coord2_connected_pipeline if pipe_coord2_connected_pipeline[0] == pipe_coord2 else pipe_coord2_connected_pipeline[::-1]
             )
-            elif coord1_connected_pipeline[0] == coord1:
-                coord1_connected_pipeline[:0] = (
-                coord2_connected_pipeline if coord2_connected_pipeline[-1] == coord2 else coord2_connected_pipeline[::-1]
+            elif pipe_coord1_connected_pipeline[0] == pipe_coord1:
+                pipe_coord1_connected_pipeline[:0] = (
+                pipe_coord2_connected_pipeline if pipe_coord2_connected_pipeline[-1] == pipe_coord2 else pipe_coord2_connected_pipeline[::-1]
             )
-            pipelines.remove(coord2_connected_pipeline)
+                
+            pipelines.remove(pipe_coord2_connected_pipeline)
 
-        elif coord1_connected_pipeline:
-            if coord1_connected_pipeline[-1] == coord1:
-                coord1_connected_pipeline.append(coord2)
-            elif coord1_connected_pipeline[0] == coord1:
-                coord1_connected_pipeline.insert(0, coord2)
+        # 새 파이프가 한 파이프라인에 속할 시
+        elif pipe_coord1_connected_pipeline:
+            if pipe_coord1_connected_pipeline[-1] == pipe_coord1:
+                pipe_coord1_connected_pipeline.append(pipe_coord2)
+            elif pipe_coord1_connected_pipeline[0] == pipe_coord1:
+                pipe_coord1_connected_pipeline.insert(0, pipe_coord2)
 
-        elif coord2_connected_pipeline:
-            if coord2_connected_pipeline[-1] == coord2:
-                coord2_connected_pipeline.append(coord1)
-            elif coord2_connected_pipeline[0] == coord2:
-                coord2_connected_pipeline.insert(0, coord1)
-
+        elif pipe_coord2_connected_pipeline:
+            if pipe_coord2_connected_pipeline[-1] == pipe_coord2:
+                pipe_coord2_connected_pipeline.append(pipe_coord1)
+            elif pipe_coord2_connected_pipeline[0] == pipe_coord2:
+                pipe_coord2_connected_pipeline.insert(0, pipe_coord1)
+                
+        # 새 파이프가 새로운 파이프라인 형성 시
         else:
-            pipelines.append([coord1, coord2])
+            pipelines.append([pipe_coord1, pipe_coord2])
 
     return pipelines
 
-# 파이프라인 생성 함수
-def create_pipeline(coords, radius, pipeline_name, work_dir, segment_index):
+# STL 파일 생성
+def create_stl_files(pipelines_coords, radius, work_dir):
     stl_paths = []
-    start_coord = coords[0]
-    end_coord = coords[1]
+    segment_index = 1
 
-    for index in range(2, len(coords)):
-        if check_collinear(start_coord, end_coord, coords[index]):
-            end_coord = coords[index]
+    for pipeline_coords in pipelines_coords:
+        pipeline_name = "PipeObj_1"
+        new_stl_paths, segment_index = create_pipeline(pipeline_coords, radius, pipeline_name, work_dir, segment_index)
+        stl_paths.extend(new_stl_paths)
+
+    return stl_paths
+
+# 파이프라인 생성 함수
+def create_pipeline(pipeline_coords, radius, pipeline_name, work_dir, segment_index):
+    stl_paths = []
+    start_coord = pipeline_coords[0]
+    end_coord = pipeline_coords[1]
+
+    for index in range(2, len(pipeline_coords)):
+        if check_collinear(start_coord, end_coord, pipeline_coords[index]):
+            end_coord = pipeline_coords[index]
         else:
             create_cylinder(start_coord, end_coord, radius, f"{pipeline_name}_Segment_{segment_index}", work_dir, stl_paths)
             create_connector(end_coord, radius, f"{pipeline_name}_Connector_{segment_index}", work_dir, stl_paths)
+            
             start_coord = end_coord
-            end_coord = coords[index]
+            end_coord = pipeline_coords[index]
             segment_index += 1
 
     create_cylinder(start_coord, end_coord, radius, f"{pipeline_name}_Segment_{segment_index}", work_dir, stl_paths)
@@ -177,9 +192,9 @@ def check_collinear(p1, p2, p3):
     return angle <= ANGLE_TOLERANCE
 
 # 파이프 생성 함수
-def create_cylinder(p1, p2, radius, name, work_dir, stl_paths):
-    distance = math.sqrt((p2[0] - p1[0]) ** 2 + (p2[1] - p1[1]) ** 2)
-    angle = math.degrees(math.atan2(p2[1] - p1[1], p2[0] - p1[0]))
+def create_cylinder(start_coord, end_coord, radius, name, work_dir, stl_paths):
+    distance = math.sqrt((end_coord[0] - start_coord[0]) ** 2 + (end_coord[1] - start_coord[1]) ** 2)
+    angle = math.degrees(math.atan2(end_coord[1] - start_coord[1], end_coord[0] - start_coord[0]))
 
     cylinder = (
         cq.Workplane("XY")
@@ -188,7 +203,7 @@ def create_cylinder(p1, p2, radius, name, work_dir, stl_paths):
         .extrude(distance)
         .rotate((0, 0, 0), (0, 1, 0), 90)
         .rotate((0, 0, 0), (0, 0, 1), angle)
-        .translate((p1[0], p1[1], 0))
+        .translate((start_coord[0], start_coord[1], 0))
     )
 
     cylinder_path = os.path.join(work_dir, f"{name}.stl")
@@ -196,11 +211,11 @@ def create_cylinder(p1, p2, radius, name, work_dir, stl_paths):
     stl_paths.append(cylinder_path)
 
     # 플렌지 좌표 계산
-    p1_flange_x = p1[0] + (radius * 2) * math.cos(math.radians(angle))
-    p1_flange_y = p1[1] + (radius * 2) * math.sin(math.radians(angle))
+    p1_flange_x = start_coord[0] + (radius * 2) * math.cos(math.radians(angle))
+    p1_flange_y = start_coord[1] + (radius * 2) * math.sin(math.radians(angle))
 
-    p2_flange_x = p2[0] - (radius * 2) * math.cos(math.radians(angle))
-    p2_flange_y = p2[1] - (radius * 2) * math.sin(math.radians(angle))
+    p2_flange_x = end_coord[0] - (radius * 2) * math.cos(math.radians(angle))
+    p2_flange_y = end_coord[1] - (radius * 2) * math.sin(math.radians(angle))
 
     # 플랜지 생성
     create_flange((p1_flange_x, p1_flange_y), radius, name + "_Flange_1", work_dir, stl_paths, angle)
@@ -233,20 +248,8 @@ def create_connector(center, radius, name, work_dir, stl_paths):
     connector.val().exportStl(connector_path)
     stl_paths.append(connector_path)
 
-# STL 파일 생성
-def create_stl_files(coords, radius, work_dir):
-    stl_paths = []
-    segment_index = 1
-
-    for i, pipeline_coords in enumerate(coords):
-        pipeline_name = "PipeObj_1"
-        new_stl_paths, segment_index = create_pipeline(pipeline_coords, radius, pipeline_name, work_dir, segment_index)
-        stl_paths.extend(new_stl_paths)
-
-    return stl_paths
-
 # GLTF 생성 함수
-def create_gltf(stl_paths, modelUuid, work_dir, gltf_path):
+def create_gltf(modelUuid, stl_paths, gltf_path, work_dir):
     scene = trimesh.Scene()
 
     # 각 STL 파일을 GLTF에 추가
@@ -254,6 +257,14 @@ def create_gltf(stl_paths, modelUuid, work_dir, gltf_path):
         mesh = trimesh.load(stl_path)
         mesh.metadata['name'] = os.path.splitext(os.path.basename(stl_path))[0]
         scene.add_geometry(mesh)
+
+    # 중앙값 계산
+    min_bound, max_bound = scene.bounds
+    center = (min_bound + max_bound) / 2
+
+    # 씬의 중앙을 원점으로 조정
+    for geometry in scene.geometry.values():
+        geometry.apply_translation(-center)
 
     # GLTF 파일 생성
     scene.export(gltf_path, file_type='gltf')
@@ -324,15 +335,20 @@ def upload_S3(file_path, S3_key):
 def send_data(model_uuid: str, model_url: str, preview_img_url: str) -> dict:
     target_url = "https://api.pipewatch.co.kr/api/models/modeling"
     
+    # NOTE:
+    # BE 변수명 변경 시 동일하게 변경 필요
     payload = {
         "modelUuid": model_uuid,
         "modelUrl": model_url,
         "previewImgUrl": preview_img_url
     }
 
-    response = requests.post(target_url, json=payload)
+    BE_response = requests.post(target_url, json=payload)
 
-    if response.status_code == 201:
+    # NOTE:
+    # BE 데이터 전송 성공 여부 판단
+    # 불필요 할 경우 주석 처리
+    if BE_response.status_code == 201:
         return {
             "status": "성공",
             "message": "결과 전송 완료",
@@ -343,7 +359,7 @@ def send_data(model_uuid: str, model_url: str, preview_img_url: str) -> dict:
         return {
             "status": "실패",
             "message": "결과 전송 실패",
-            "error": response.text
+            "error": BE_response.text
         }
 
 if __name__ == "__main__":
