@@ -6,6 +6,8 @@ import member4 from "@assets/images/members/member4.png";
 import member5 from "@assets/images/members/member5.png";
 import member6 from "@assets/images/members/member6.png";
 
+import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
+
 export const AboutTeam = () => {
   const { t } = useTranslation();
   const members = [
@@ -29,17 +31,27 @@ export const AboutTeam = () => {
           return (
             <div
               key={index}
-              className="flex flex-col items-center justify-center my-10"
+              className="flex flex-col items-center justify-start my-10"
             >
               <img src={member.image} width={"150px"} />
               <div className="flex flex-col items-center my-4 gap-y-4">
-                <p className="flex flex-col items-center font-bold text-[20px]">
+                <p className="flex gap-[4px] items-center font-bold text-[20px]">
                   {t(`aboutTeam.${member.id}.name`)}
+                  {["팀장", "Lead"].some((role) =>
+                    t(`aboutTeam.${member.id}.role`).includes(role)
+                  ) && <AutoAwesomeIcon sx={{ color: "#FFEB3B" }} />}
                 </p>
-                <p className="flex flex-col items-center text-[16px]">
-                  {t(`aboutTeam.${member.id}.email`)}
+                <p
+                  className={`flex flex-col items-center text-[16px] bg-primary-500 text-white px-[12px] py-[4px] rounded-[20px]
+                    ${
+                      t(`aboutTeam.${member.id}.role`).includes("FE") &&
+                      "bg-success"
+                    }
+                      `}
+                >
+                  {t(`aboutTeam.${member.id}.role`)}
                 </p>
-                <p className="flex flex-col items-center text-[16px]">
+                <p className="flex flex-col items-center text-center text-[16px] whitespace-pre-line">
                   {t(`aboutTeam.${member.id}.description`)}
                 </p>
               </div>

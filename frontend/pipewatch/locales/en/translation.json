@@ -185,34 +185,40 @@
   "aboutTeam": {
     "description": "Innovating with Better Technology, Together with TEAM PAORI.",
     "member1": {
-      "name": "Kyeong-Deok Seo | Team Lead, BE",
+      "name": "Kyeong-Deok Seo",
+      "role": "Team Lead, BE",
       "email": "zoo54245424@gmail.com",
-      "description": "3D Model Rendering (Blender)"
+      "description": "Coordinate Data Preprocessing\n3D Modeling Implementation"
     },
     "member2": {
-      "name": "Ye-Heon Choi | BE",
+      "name": "Ye-Heon Choi",
+      "role": "BE",
       "email": "1594cyh@gmail.com",
       "description": "Role Description"
     },
     "member3": {
-      "name": "Min-Hyeok Ko | AI",
-      "email": "rhalsgur0086@gmail.comI",
-      "description": "Role Description"
+      "name": "Min-Hyeok Ko",
+      "role": "AI",
+      "email": "rhalsgur0086@gmail.com",
+      "description": "Deep Learning Model Training,\nPre- and Post-processing of Training Data"
     },
     "member4": {
-      "name": "Cheol-Min Seong | Infra",
+      "name": "Cheol-Min Seong",
+      "role": "Infra",
       "email": "tjdcjfals@gmail.com",
       "description": "Role Description"
     },
     "member5": {
-      "name": "Ju-Yeon Park | FE, UX/UI Design",
+      "name": "Ju-Yeon Park",
+      "role": "FE, UX/UI Design",
       "email": "krozv.code@gmail.com",
-      "description": "Role Description"
+      "description": "Pipe Model Rendering and Viewing\nUX/UI Design and Planning"
     },
     "member6": {
-      "name": "Ji-Hyeon Jang | UX/UI Design, FE",
+      "name": "Ji-Hyeon Jang",
+      "role": "UX/UI Design, FE",
       "email": "jjhoneyyyy@gmail.com",
-      "description": "Role Description"
+      "description": "UX/UI Design and Planning\nAccount Management\nModel Creation Data Processing"
     }
   },
   "pipeGenerator": {

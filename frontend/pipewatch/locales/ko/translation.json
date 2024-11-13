@@ -185,34 +185,40 @@
   "aboutTeam": {
     "description": "더 나은 기술의 혁신, TEAM PAORI와 함께합니다.",
     "member1": {
-      "name": "서경덕 | 팀장, BE",
+      "name": "서경덕",
+      "role": "팀장 | BE",
       "email": "zoo54245424@gmail.com",
-      "description": "3D 모델 렌더링(Blender)"
+      "description": "좌표 데이터 전처리\n3D 모델링 구현"
     },
     "member2": {
-      "name": "최예헌 | BE",
+      "name": "최예헌",
+      "role": "BE",
       "email": "1594cyh@gmail.com",
       "description": "역할 설명"
     },
     "member3": {
-      "name": "고민혁 | AI",
+      "name": "고민혁",
+      "role": "AI",
       "email": "rhalsgur0086@gmail.comI",
-      "description": "역할 설명"
+      "description": "딥러닝 모델 학습 및 학습 데이터 전/후 처리"
     },
     "member4": {
-      "name": "성철민 | Infra",
+      "name": "성철민",
+      "role": "Infra",
       "email": "tjdcjfals@gmail.com",
       "description": "역할 설명"
     },
     "member5": {
-      "name": "박주연 | FE, UX/UI Design",
+      "name": "박주연",
+      "role": "FE, UX/UI Design",
       "email": "krozv.code@gmail.com",
-      "description": "역할 설명"
+      "description": "파이프 모델 렌더링 및 조회 구현\nUX/UI 설계, 디자인"
     },
     "member6": {
-      "name": "장지현 | UX/UI Design, FE",
+      "name": "장지현",
+      "role": "UX/UI Design, FE",
       "email": "jjhoneyyyy@gmail.com",
-      "description": "역할 설명"
+      "description": "UX/UI 설계, 디자인\n계정 관리\n모델 생성 과정 데이터 처리"
     }
   },
   "pipeGenerator": {
