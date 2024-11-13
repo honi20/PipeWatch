@@ -14,9 +14,10 @@ interface EmployeeData {
 
 interface TableProps {
   data: EmployeeData[];
+  isEmpty: boolean;
 }
 
-export const EmployInfoTable: React.FC<TableProps> = ({ data }) => {
+export const EmployInfoTable: React.FC<TableProps> = ({ data, isEmpty }) => {
   const { t } = useTranslation();
 
   return (
@@ -63,6 +64,11 @@ export const EmployInfoTable: React.FC<TableProps> = ({ data }) => {
           ))}
         </tbody>
       </table>
+      {isEmpty && (
+        <div className="flex items-center justify-center w-full h-[600px]">
+          {t("enterprise.verification.noData")}
+        </div>
+      )}
     </div>
   );
 };

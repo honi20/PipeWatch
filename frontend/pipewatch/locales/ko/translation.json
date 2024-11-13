@@ -207,7 +207,7 @@
       "name": "성철민",
       "role": "Infra",
       "email": "tjdcjfals@gmail.com",
-      "description": "역할 설명"
+      "description": "쿠버네티스 환경 구축\nCI/CD Pipeline 구축\n데이터 라벨링\nUCC 감독"
     },
     "member5": {
       "name": "박주연",
@@ -396,7 +396,8 @@
       "buttons": {
         "approve": "승인",
         "reject": "거부"
-      }
+      },
+      "noData": "현재 인증 신청 중인 사원이 없습니다."
     },
     "view": {
       "sidebarTitle": "조회/변경",

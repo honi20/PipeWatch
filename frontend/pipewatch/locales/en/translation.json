@@ -207,7 +207,7 @@
       "name": "Cheol-Min Seong",
       "role": "Infra",
       "email": "tjdcjfals@gmail.com",
-      "description": "Role Description"
+      "description": "Setting up a Kubernetes Environment\nBuilding a CI/CD Pipeline\nData Labeling\nUCC Director"
     },
     "member5": {
       "name": "Ju-Yeon Park",
@@ -396,7 +396,8 @@
       "buttons": {
         "approve": "Approve",
         "reject": "Reject"
-      }
+      },
+      "noData": "There are no employees currently pending verification."
     },
     "view": {
       "sidebarTitle": "View/Update",
