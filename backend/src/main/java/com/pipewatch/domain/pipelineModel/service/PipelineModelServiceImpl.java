@@ -234,7 +234,12 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 		List<Pipe> pipes = pipelineModelCustomRepository.findPipeByModel(modelId);
 		List<PipelineModelResponse.PipelineDto> pipelines = getPipelineDto(pipes);
 
-		return PipelineModelResponse.DetailDto.fromEntity(model, pipelines);
+		List<Long> defectPipeIds = pipes.stream()
+				.filter(Pipe::getHasDefect)
+				.map(Pipe::getId)
+				.toList();
+
+		return PipelineModelResponse.DetailDto.fromEntity(model, defectPipeIds, pipelines);
 	}
 
 	@Override
@@ -257,11 +262,10 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 		// 만약 속한 파이프라인이 1개라면, 해당 파이프라인 이름도 변경
 		List<Pipeline> pipelines = pipelineRepository.findByPipelineModelId(pipelineModel.getId());
 
-		if (pipelines != null && pipelines.size() == 1) {
-			Pipeline pipeline = pipelines.getFirst();
+		for (Pipeline pipeline : pipelines) {
 			pipeline.updateName(requestDto.getName());
-			pipelineRepository.save(pipeline);
 		}
+		pipelineRepository.saveAll(pipelines);
 
 		pipelineModelRepository.save(pipelineModel);
 	}

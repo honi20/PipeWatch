@@ -74,10 +74,11 @@ public class PipelineModelResponse {
 		private Integer floor;
 		private Boolean isCompleted;
 		private String updatedAt;
+		private List<Long> defectPipeList;
 		private List<PipelineDto> pipelines;
 		private Creator creator;
 
-		public static DetailDto fromEntity(PipelineModel model, List<PipelineDto> pipelines) {
+		public static DetailDto fromEntity(PipelineModel model, List<Long> defectList, List<PipelineDto> pipelines) {
 			return DetailDto.builder()
 					.name(model.getName())
 					.modelingUrl(model.getModelingUrl())
@@ -85,6 +86,7 @@ public class PipelineModelResponse {
 					.floor(model.getBuildingAndFloor() == null ? null : model.getBuildingAndFloor().getFloor())
 					.isCompleted(model.getIsCompleted())
 					.updatedAt(convertToDateFormat(model.getUpdatedAt()))
+					.defectPipeList(defectList)
 					.pipelines(pipelines)
 					.creator(new Creator(model.getUser().getUuid(), model.getUser().getName()))
 					.build();

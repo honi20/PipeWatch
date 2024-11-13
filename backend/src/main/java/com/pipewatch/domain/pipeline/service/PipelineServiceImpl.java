@@ -58,14 +58,9 @@ public class PipelineServiceImpl implements PipelineService {
 		Pipeline pipeline = pipelineRepository.findById(pipelineId)
 				.orElseThrow(() -> new BaseException(PIPELINE_NOT_FOUND));
 
-		// 모델의 단일 파이프라면, 모델명도 수정
-		List<Pipeline> pipelines = pipelineRepository.findByPipelineModelId(pipeline.getPipelineModel().getId());
-
-		if (pipelines != null && pipelines.size() == 1) {
-			PipelineModel model = pipelines.get(0).getPipelineModel();
-			model.updateName(requestDto.getName());
-			pipelineModelRepository.save(model);
-		}
+		PipelineModel model = pipeline.getPipelineModel();
+		model.updateName(requestDto.getName());
+		pipelineModelRepository.save(model);
 
 		pipeline.updateName(requestDto.getName());
 		pipelineRepository.save(pipeline);
@@ -163,6 +158,7 @@ public class PipelineServiceImpl implements PipelineService {
 		return PipelineResponse.MemoListDto.builder()
 				.pipeId(pipe.getId())
 				.pipeName(pipe.getName())
+				.hasDefect(pipe.getHasDefect())
 				.memoList(memoList)
 				.build();
 	}
@@ -189,6 +185,7 @@ public class PipelineServiceImpl implements PipelineService {
 				.map(entry -> PipelineResponse.MemoListDto.builder()
 						.pipeId(entry.getKey().getId())
 						.pipeName(entry.getKey().getName())
+						.hasDefect(entry.getKey().getHasDefect())
 						.memoList(entry.getValue())
 						.build())
 				.toList();
@@ -216,6 +213,7 @@ public class PipelineServiceImpl implements PipelineService {
 		return PipelineResponse.MemoListDto.builder()
 				.pipeId(pipe.getId())
 				.pipeName(pipe.getName())
+				.hasDefect(pipe.getHasDefect())
 				.memoList(memoList)
 				.build();
 	}
@@ -232,6 +230,16 @@ public class PipelineServiceImpl implements PipelineService {
 		}
 
 		pipeMemoRepository.delete(memo);
+	}
+
+	@Override
+	@Transactional
+	public void modifyPipeDefect(Long userId, Long pipeId) {
+		Pipe pipe = pipeRepository.findById(pipeId)
+				.orElseThrow(() -> new BaseException(PIPE_NOT_FOUND));
+
+		pipe.updateHasDefect(!pipe.getHasDefect());
+		pipeRepository.save(pipe);
 	}
 
 	// 허용 안되는 Role 제공

@@ -73,6 +73,7 @@ public class PipelineResponse {
 	public static class MemoListDto {
 		private Long pipeId;
 		private String pipeName;
+		private Boolean hasDefect;
 		private List<MemoDto> memoList;
 	}
 
