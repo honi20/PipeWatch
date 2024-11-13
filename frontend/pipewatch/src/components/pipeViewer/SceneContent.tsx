@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useThree } from "@react-three/fiber";
 import * as THREE from "three";
 import { PipeModel } from "@src/components/pipeViewer/renderer/PipeModel";
-import { CameraControls } from "@react-three/drei";
+import { CameraControls, OrbitControls } from "@react-three/drei";
 import { PipelineType } from "./Type/PipeType";
 
 export const SceneContent: React.FC<{
@@ -20,7 +20,8 @@ export const SceneContent: React.FC<{
 }) => {
   const { camera, scene } = useThree();
   const helper = new THREE.CameraHelper(camera);
-
+  const clock = new THREE.Clock();
+  const delta = clock.getDelta();
   useEffect(() => {
     scene.add(helper);
     return () => {
@@ -29,40 +30,46 @@ export const SceneContent: React.FC<{
   }, [camera, scene, helper]);
 
   // 모델 로드 시 카메라 제어
-  const adjustCameraOnModelLoad = (scene: THREE.Object3D) => {
-    if (camera instanceof THREE.PerspectiveCamera) {
-      const box = new THREE.Box3().setFromObject(scene);
-      const size = new THREE.Vector3();
-      box.getSize(size);
-      const center = new THREE.Vector3();
-      box.getCenter(center);
-
-      // 카메라가 Z 축에서 XY 평면에 위치한 모델을 바라보도록 조정
-      const maxDim = Math.max(size.x, size.y, size.z);
-      const fov = camera.fov * (Math.PI / 180);
-      const cameraZ = Math.abs(maxDim / (2 * Math.tan(fov / 2))) * 1.5; // 적절한 거리 계산
-
-      // 카메라를 Z 축 상의 적절한 위치로 설정
-      camera.position.set(center.x, center.y, center.z + cameraZ * 2);
-      camera.lookAt(center.x, center.y, center.z); // 모델의 중심을 바라봄
-      camera.updateProjectionMatrix();
-
+  const adjustCameraOnModelLoad = (
+    scene: THREE.Object3D,
+    vector?: number[]
+  ) => {
+    console.log(scene);
+    if (vector) {
+      console.log(vector);
       if (cameraControlsRef.current) {
-        cameraControlsRef.current.setTarget(center.x, center.y, center.z, true);
-        cameraControlsRef.current.fitToBox(scene, true, {
-          paddingLeft: 20,
-          paddingRight: 20,
-        });
-        console.log(" gltfviewer");
-      }
+        // cameraControlsRef를 사용하여 카메라 위치와 타겟을 설정
+        cameraControlsRef.current.setPosition(vector[0], vector[1], 50);
+        cameraControlsRef.current.setTarget(vector[0], vector[1], vector[2]);
 
-      console.log(
-        "Camera adjusted to view from Z-axis:",
-        camera.position,
-        cameraControlsRef
-      );
+        cameraControlsRef.current.update(delta);
+        console.log("카메라 조정 중", cameraControlsRef.current);
+      }
     } else {
-      console.warn("Camera type is not PerspectiveCamera");
+      if (cameraControlsRef.current) {
+        const box = new THREE.Box3().setFromObject(scene);
+        const size = new THREE.Vector3();
+        box.getSize(size);
+        const center = new THREE.Vector3();
+        box.getCenter(center);
+
+        // 모델을 보기 위한 적절한 거리 계산
+        // console.log(camera);
+        const maxDim = Math.max(size.x, size.y, size.z);
+        // const fov = camera.fov * (Math.PI / 180);
+        // const cameraZ = Math.abs(maxDim / (2 * Math.tan(fov / 2))) * 1.5;
+
+        // 카메라 위치 설정 (cameraControlsRef를 통해 제어)
+        if (cameraControlsRef.current) {
+          cameraControlsRef.current.setPosition(center.x, center.y, maxDim * 2);
+          cameraControlsRef.current.setTarget(center.x, center.y, center.z);
+          cameraControlsRef.current.update(delta);
+          console.log(
+            "Camera adjusted using cameraControlsRef",
+            cameraControlsRef.current
+          );
+        }
+      }
     }
   };
   return (
@@ -80,6 +87,10 @@ export const SceneContent: React.FC<{
         enabled={true}
         dollyToCursor={true}
         minDistance={5}
+        maxDistance={50}
+        minPolarAngle={0}
+        maxPolarAngle={Math.PI}
+        dampingFactor={0.25}
       />
       <axesHelper args={[10]} />
       <gridHelper />

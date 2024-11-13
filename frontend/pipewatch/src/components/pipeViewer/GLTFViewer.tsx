@@ -21,9 +21,9 @@ const GLTFViewer: React.FC<GLTFViewerProps> = (props) => {
   const cameraControlsRef = useRef<CameraControls | null>(null);
   const [isTotalView, setIsTotalView] = useState<boolean>(true);
 
-  useEffect(() => {
-    console.log("selectView or modelDetail changed", selectView, modelDetail);
-  }, [selectView, modelDetail]);
+  // useEffect(() => {
+  //   console.log("selectView or modelDetail changed", selectView, modelDetail);
+  // }, [selectView, modelDetail]);
 
   const handleTotalViewButton = () => {
     setIsTotalView(true);
