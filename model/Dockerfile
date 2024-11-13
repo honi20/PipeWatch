@@ -16,7 +16,7 @@ RUN apt-get update && \
 WORKDIR /app/
 
 # 필요한 파일 복사
-COPY createPipeModel.py requirements.txt /app/
+COPY util.py requirements.txt /app/
 
 # Python 가상 환경 설정 및 종속성 설치
 RUN python -m venv venv && \
@@ -26,4 +26,4 @@ RUN python -m venv venv && \
 
 # 가상 환경 활성화 후 앱 실행
 EXPOSE 8000
-CMD ["sh", "-c", ". venv/bin/activate && uvicorn --host=0.0.0.0 --port 8000 createPipeModel:app"]
+CMD ["sh", "-c", ". venv/bin/activate && uvicorn --host=0.0.0.0 --port 8000 main:app"]
