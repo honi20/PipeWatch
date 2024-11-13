@@ -143,7 +143,8 @@
         "Re-registration with the same email may be restricted after deletion.",
         "Some information may be retained for a period of time in accordance with legal obligations, even after account deletion."
       ],
-      "complete": "Your account has been successfully deleted."
+      "complete": "Your account has been successfully deleted.",
+      "passwordMismatchError": "The passwords do not match. Please check again."
     }
   },
   "verification": {
