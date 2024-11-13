@@ -1,9 +1,11 @@
 import NoAccessImage from "@assets/images/status/no_access.png";
 import { Button } from "@headlessui/react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 export const AccessBlocked = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   return (
     <div
@@ -13,7 +15,7 @@ export const AccessBlocked = () => {
       <img src={NoAccessImage} width="350px" alt="No Access" />
 
       <div className="text-center font-bold text-[40px] my-[20px]">
-        접근 권한이 없습니다.
+        {t("error.accessBlocked")}
       </div>
 
       <Button
@@ -23,7 +25,7 @@ export const AccessBlocked = () => {
         disabled={false}
         onClick={() => navigate("/")}
       >
-        홈으로
+        {t("error.toHome")}
       </Button>
     </div>
   );

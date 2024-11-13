@@ -20,13 +20,12 @@ export const Home = () => {
   const { t } = useTranslation();
 
   const tabs = [
-    { icon: "🍅", label: t("home.introduction.tabs.allPipe"), url: Manage1 },
+    { label: t("home.introduction.tabs.allPipe"), url: Manage1 },
     {
-      icon: "🥬",
       label: t("home.introduction.tabs.individualPipe"),
       url: Manage2,
     },
-    { icon: "🧀", label: t("home.introduction.tabs.memo"), url: Manage3 },
+    { label: t("home.introduction.tabs.memo"), url: Manage3 },
   ];
 
   const [selectedTab, setSelectedTab] = useState(tabs[0]);
@@ -105,7 +104,7 @@ export const Home = () => {
         </motion.div>
       </div>
 
-      <div className="flex my-[100px] w-full justify-center gap-[100px] ">
+      <div className="flex my-[100px] justify-between w-full px-[50px] gap-[20px]">
         <div className="text-left">
           <div className="font-bold text-[50px]">
             {t("home.introduction.uploadData.title")}
@@ -183,7 +182,7 @@ export const Home = () => {
                 <li
                   key={item.label}
                   className={`py-4 px-6 ${
-                    item === selectedTab
+                    item.label === selectedTab.label
                       ? "selected bg-primary-500/80 rounded-lg"
                       : ""
                   }`}

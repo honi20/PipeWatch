@@ -1,6 +1,8 @@
 {
   "error": {
-    "access": "Unauthorized Access."
+    "access": "Unauthorized Access.",
+    "accessBlocked": "Access Denied",
+    "toHome": "Home"
   },
   "header": {
     "lang": "Eng",
@@ -95,6 +97,7 @@
     "dashboard": {
       "title": "Account Management",
       "editInfo": "Edit Personal Information",
+      "reverificationRequest": "Request Company Reverification",
       "updatePassword": "Update Password",
       "withdrawal": "WithDrawal",
       "inquiry": "1:1 Inquiry"
@@ -109,6 +112,14 @@
       "position": "Position",
       "editPersonalInfo": "Edit Personal Information",
       "complete": "Your personal information has been successfully updated."
+    },
+    "reverificationRequest": {
+      "title": "Request Company Reverification",
+      "reverificationMessage": "Request company reverification for <b>{{enterpriseName}}</b>.",
+      "cancel": "Cancel",
+      "submitReverification": "Submit Reverification",
+      "reverificationComplete": "Reverification Request Completed.",
+      "close": "Close"
     },
     "updatePassword": {
       "currentPassword": "Current Password",

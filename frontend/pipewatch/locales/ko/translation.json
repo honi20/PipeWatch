@@ -1,6 +1,8 @@
 {
   "error": {
-    "access": "잘못된 접근입니다."
+    "access": "잘못된 접근입니다.",
+    "accessBlocked": "접근 권한이 없습니다.",
+    "toHome": "홈으로"
   },
   "header": {
     "lang": "한국어",
@@ -17,7 +19,7 @@
     "logout": "로그아웃",
     "userRoles": {
       "admin": "관리자",
-      "employee": "일반 사원",
+      "employee": "사원",
       "pending": "사원 인증중"
     },
     "accessError": {
@@ -95,6 +97,7 @@
     "dashboard": {
       "title": "계정 관리",
       "editInfo": "개인정보 수정",
+      "reverificationRequest": "기업 재인증 신청",
       "updatePassword": "비밀번호 수정",
       "withdrawal": "회원 탈퇴",
       "inquiry": "1:1 문의"
@@ -109,6 +112,14 @@
       "position": "직책",
       "editPersonalInfo": "개인정보 수정",
       "complete": "개인정보 수정이 완료되었습니다."
+    },
+    "reverificationRequest": {
+      "title": "기업 재인증 신청",
+      "reverificationMessage": "<b>{{enterpriseName}}</b>의 기업 재인증 신청을 요청합니다.",
+      "cancel": "취소",
+      "submitReverification": "재인증 신청",
+      "reverificationComplete": "재인증 신청이 완료되었습니다.",
+      "close": "닫기"
     },
     "updatePassword": {
       "currentPassword": "기존 비밀번호",

@@ -39,8 +39,7 @@ const Dashboard = () => {
             onClick={() => setIsOpen(true)}
           >
             <ChevronRightIcon />
-            {/* {t("manageAccount.dashboard.editInfo")} */}
-            기업 재인증 신청
+            {t("manageAccount.dashboard.reverificationRequest")}
           </Button>
         )}
 
@@ -63,7 +62,7 @@ const Dashboard = () => {
 
       <div className="flex justify-center gap-2 whitespace-normal space-normal">
         {t("manageAccount.dashboard.inquiry")}
-        <a className="underline">paori@gmail.com</a>
+        <a className="underline cursor-pointer">paori@gmail.com</a>
       </div>
     </div>
   );
