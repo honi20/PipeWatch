@@ -3,8 +3,7 @@ import GLTFViewer from "@src/components/pipeViewer/GLTFViewer";
 import "./viewer.css";
 import { getApiClient } from "@src/stores/apiClient";
 import { ModelDetailType } from "./Type/PipeType";
-import { PipeProvider } from "@src/components/context/PipeContext";
-import { SelectViewProvider } from "@src/components/context/SelectViewContext";
+import { useSelectView } from "../context/SelectViewContext";
 
 interface ModelDetailViewProps {
   modelId: number;
@@ -13,6 +12,7 @@ interface ModelDetailViewProps {
 export const ModelDetailView: React.FC<ModelDetailViewProps> = ({
   modelId,
 }) => {
+  const { selectView } = useSelectView();
   const [modelDetail, setModelDetail] = useState<ModelDetailType>();
 
   // model 상세 정보 조회해야함
@@ -33,22 +33,18 @@ export const ModelDetailView: React.FC<ModelDetailViewProps> = ({
 
   useEffect(() => {
     getModelDetail();
-  }, [modelId]);
+  }, [modelId, selectView]);
 
   return (
     <div className="w-full h-full">
-      <SelectViewProvider>
-        <PipeProvider>
-          {modelDetail && (
-            <GLTFViewer
-              gltfUrl={modelDetail.modelingUrl}
-              pipelines={modelDetail.pipelines}
-              modelId={modelId}
-              modelDetail={modelDetail}
-            />
-          )}
-        </PipeProvider>
-      </SelectViewProvider>
+      {modelDetail && (
+        <GLTFViewer
+          gltfUrl={modelDetail.modelingUrl}
+          pipelines={modelDetail.pipelines}
+          modelId={modelId}
+          modelDetail={modelDetail}
+        />
+      )}
     </div>
   );
 };

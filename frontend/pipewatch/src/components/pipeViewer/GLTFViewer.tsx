@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { Canvas } from "@react-three/fiber";
 import { CameraControls } from "@react-three/drei";
 import { ModelDetailType, PipelineType } from "./Type/PipeType";
@@ -20,6 +20,10 @@ const GLTFViewer: React.FC<GLTFViewerProps> = (props) => {
   const { gltfUrl, pipelines, modelId, modelDetail } = props;
   const cameraControlsRef = useRef<CameraControls | null>(null);
   const [isTotalView, setIsTotalView] = useState<boolean>(true);
+
+  useEffect(() => {
+    console.log("selectView or modelDetail changed", selectView, modelDetail);
+  }, [selectView, modelDetail]);
 
   const handleTotalViewButton = () => {
     setIsTotalView(true);
@@ -50,28 +54,28 @@ const GLTFViewer: React.FC<GLTFViewerProps> = (props) => {
           (selectView === "MODEL_MEMO" ? (
             <ModelMemo
               modelId={modelId}
-              modelName={modelDetail!.name}
-              building={modelDetail!.building}
-              floor={modelDetail!.floor}
-              updatedAt={modelDetail!.updatedAt}
+              modelName={modelDetail.name}
+              building={modelDetail.building}
+              floor={modelDetail.floor}
+              updatedAt={modelDetail.updatedAt}
               onViewChange={() => setSelectView("PROPERTY")}
             />
           ) : selectView === "PROPERTY" ? (
             <ModelProperty
               modelId={modelId}
-              modelName={modelDetail!.name}
-              pipelines={modelDetail!.pipelines}
-              building={modelDetail!.building}
+              modelName={modelDetail.name}
+              pipelines={modelDetail.pipelines}
+              building={modelDetail.building}
               floor={modelDetail!.floor}
               onViewChange={() => setSelectView("MODEL_MEMO")}
             />
           ) : (
             selectView === "PIPE_MEMO" && (
               <PipeMemo
-                modelName={modelDetail!.name}
-                building={modelDetail!.building}
-                floor={modelDetail!.floor}
-                updatedAt={modelDetail!.updatedAt}
+                modelName={modelDetail.name}
+                building={modelDetail.building}
+                floor={modelDetail.floor}
+                updatedAt={modelDetail.updatedAt}
                 onViewChange={() => setSelectView("MODEL_MEMO")}
                 setIsTotalView={setIsTotalView}
               />
