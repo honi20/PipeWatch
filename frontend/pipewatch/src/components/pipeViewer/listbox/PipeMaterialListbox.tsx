@@ -21,20 +21,30 @@ export const PipeMaterialListbox: React.FC<PipeMaterialListboxProps> = ({
   onChange,
 }) => {
   // 초기 선택된 재질 설정
-  const [selected, setSelected] = useState<number>(value || 0);
-  const language = localStorage.getItem("language");
+  const [selected, setSelected] = useState<number>(value || 1);
+  const [language, setLanguage] = useState<string>(
+    localStorage.getItem("language") || "kr"
+  );
 
+  // language를 localStorage에서 초기화
   useEffect(() => {
-    setSelected(value || 0);
+    const savedLanguage = localStorage.getItem("language") || "kr";
+    setLanguage(savedLanguage);
+  }, []);
+
+  // value가 변경될 때마다 selected 값을 업데이트
+  useEffect(() => {
+    setSelected(value || 1);
   }, [value]);
 
+  // materialId 선택 변경될 경우
   const handleChange = (materialId: number) => {
     const material = pipeMaterialList?.find(
       (item) => item.materialId === materialId
     );
     if (material) {
-      setSelected(0);
-      onChange(materialId); // materialId를 전달
+      setSelected(materialId);
+      onChange(materialId);
     }
   };
 
@@ -48,7 +58,18 @@ export const PipeMaterialListbox: React.FC<PipeMaterialListboxProps> = ({
               "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25"
             )}
           >
-            {selected}
+            {pipeMaterialList &&
+              pipeMaterialList
+                .filter((item) => item.materialId === selected)
+                .map((filteredItem) => (
+                  <div key={filteredItem.materialId}>
+                    <p>
+                      {language === "ko"
+                        ? filteredItem.koreanName
+                        : filteredItem.englishName}
+                    </p>
+                  </div>
+                ))}
             <ExpandMoreIcon
               sx={{ color: "#5E5E5E" }}
               className="pl-1 transition-transform duration-200 group size-6"

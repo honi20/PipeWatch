@@ -10,9 +10,9 @@ import { useState, useEffect } from "react";
 import { MaterialType } from "@src/components/pipeViewer/Type/MaterialType";
 
 interface FluidMaterialListboxProps {
-  value: string;
+  value: number;
   fluidMaterialList?: MaterialType[];
-  onChange: (material: string) => void;
+  onChange: (materialId: number) => void;
 }
 
 export const FluidMaterialListbox: React.FC<FluidMaterialListboxProps> = ({
@@ -21,16 +21,31 @@ export const FluidMaterialListbox: React.FC<FluidMaterialListboxProps> = ({
   onChange,
 }) => {
   // 초기 선택된 재질 설정
-  const [selected, setSelected] = useState<string>(value || "-");
-  const language = localStorage.getItem("language");
+  const [selected, setSelected] = useState<number>(value || 4);
+  const [language, setLanguage] = useState<string>(
+    localStorage.getItem("language") || "kr"
+  );
 
+  // language를 localStorage에서 초기화
   useEffect(() => {
-    setSelected(value || "-");
+    const savedLanguage = localStorage.getItem("language") || "kr";
+    setLanguage(savedLanguage);
+  }, []);
+
+  // value가 변경될 때마다 selected 값을 업데이트
+  useEffect(() => {
+    setSelected(value || 4);
   }, [value]);
 
-  const handleChange = (material: string) => {
-    setSelected(material);
-    onChange(material);
+  // materialId 선택 변경될 경우
+  const handleChange = (materialId: number) => {
+    const material = fluidMaterialList?.find(
+      (item) => item.materialId === materialId
+    );
+    if (material) {
+      setSelected(materialId);
+      onChange(materialId);
+    }
   };
 
   return (
@@ -43,7 +58,18 @@ export const FluidMaterialListbox: React.FC<FluidMaterialListboxProps> = ({
               "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25"
             )}
           >
-            {selected}
+            {fluidMaterialList &&
+              fluidMaterialList
+                .filter((item) => item.materialId === selected)
+                .map((filteredItem) => (
+                  <div key={filteredItem.materialId}>
+                    <p>
+                      {language === "ko"
+                        ? filteredItem.koreanName
+                        : filteredItem.englishName}
+                    </p>
+                  </div>
+                ))}
             <ExpandMoreIcon
               sx={{ color: "#5E5E5E" }}
               className="pl-1 transition-transform duration-200 group size-6"
@@ -62,7 +88,7 @@ export const FluidMaterialListbox: React.FC<FluidMaterialListboxProps> = ({
             fluidMaterialList.map((item, idx) => (
               <ListboxOption
                 key={idx}
-                value={language === "ko" ? item.koreanName : item.englishName}
+                value={item.materialId}
                 className="group flex cursor-default items-center gap-2 rounded-lg py-1.5 px-3 select-none data-[focus]:bg-white/10"
               >
                 <div className="dark:text-white text-sm/6">

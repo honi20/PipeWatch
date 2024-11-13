@@ -5,7 +5,7 @@ import { Input, Button } from "@headlessui/react";
 import clsx from "clsx";
 import { PipelineType } from "./Type/PipeType";
 import { getApiClient } from "@src/stores/apiClient";
-import { PropertyType } from "./Type/PipeType";
+import { PropertyType, UpdatePropertyType } from "./Type/PipeType";
 import { FluidMaterialListbox } from "@src/components/pipeViewer/listbox/FluidMaterialListbox";
 import { MaterialListType } from "@src/components/pipeViewer/Type/MaterialType";
 
@@ -22,21 +22,11 @@ export const ModelProperty: React.FC<ModelPropertyProps> = (props) => {
   const { modelId, pipelines, modelName, onViewChange, building, floor } =
     props;
   const [pipelineProperty, setPipelineProperty] = useState<PropertyType>();
-  const [pipeMaterialId, setPipeMaterialId] = useState<number>(
-    pipelineProperty ? pipelineProperty.pipeMaterialId : 0
-  );
-  const [pipeOuterDiameter, setPipeOuterDiameter] = useState<number>(
-    pipelineProperty ? pipelineProperty.outerDiameter : 0
-  );
-  const [pipeInnerDiameter, setPipeInnerDiameter] = useState<number>(
-    pipelineProperty ? pipelineProperty.innerDiameter : 0
-  );
-  const [fluidMaterial, setFluidMaterial] = useState<string>(
-    pipelineProperty ? pipelineProperty.fluidMaterial : "-"
-  );
-  const [fluidFlowRate, setFluidFlowRate] = useState<number>(
-    pipelineProperty ? pipelineProperty.velocity : 0
-  );
+  const [pipeMaterialId, setPipeMaterialId] = useState<number>(1);
+  const [pipeOuterDiameter, setPipeOuterDiameter] = useState<number>(0);
+  const [pipeInnerDiameter, setPipeInnerDiameter] = useState<number>(0);
+  const [fluidMaterialId, setFluidMaterialId] = useState<number>(4);
+  const [fluidFlowRate, setFluidFlowRate] = useState<number>(0);
   const [pipeMaterialList, setPipeMaterialList] = useState<MaterialListType>();
   const [fluidMaterialList, setFluidMaterialList] =
     useState<MaterialListType>();
@@ -68,11 +58,31 @@ export const ModelProperty: React.FC<ModelPropertyProps> = (props) => {
       });
       console.log(res.data.header.httpStatusCode, res.data.header.message);
       console.log(res.data.body);
-      setPipelineProperty(res.data.body.property);
+      const property = res.data.body.property;
+      setPipelineProperty(property);
+
+      setPipeMaterialId(property.pipeMaterial.materialId);
+      setPipeOuterDiameter(property.outerDiameter);
+      setPipeInnerDiameter(property.innerDiameter);
+      setFluidMaterialId(property.fluidMaterial.materialId);
+      setFluidFlowRate(property.velocity);
     } catch (err) {
       console.log(err);
     }
   };
+
+  useEffect(() => {
+    if (!pipelineProperty) {
+      setPipeMaterialId(1); // 기본값 설정
+      setPipeOuterDiameter(0); // 기본값 설정
+      setPipeInnerDiameter(0); // 기본값 설정
+      setFluidMaterialId(4); // 기본값 설정
+      setFluidFlowRate(0); // 기본값 설정
+    } else {
+      // pipelineProperty가 로드된 후에 isChanged를 false로 초기화
+      setIsChanged(false);
+    }
+  }, [pipelineProperty]);
 
   useEffect(() => {
     // pipeMaterialList와 fluidMaterialList가 없는 경우에만 fetch
@@ -83,56 +93,56 @@ export const ModelProperty: React.FC<ModelPropertyProps> = (props) => {
 
   useEffect(() => {
     getPipelineDetail();
-    setPipeMaterialId(0); // 기본값 설정
-    setPipeOuterDiameter(0); // 초기값으로 0 설정
-    setPipeInnerDiameter(0); // 초기값으로 0 설정
-    setFluidMaterial("-"); // 기본값 설정
-    setFluidFlowRate(0);
   }, [pipelines, modelId]);
-
-  useEffect(() => {
-    if (pipelineProperty) {
-      setPipeMaterialId(pipelineProperty!.pipeMaterialId);
-      setPipeOuterDiameter(pipelineProperty!.outerDiameter);
-    }
-  }, [pipelineProperty]);
 
   // input이 바뀌었을때 true
   const [isChanged, setIsChanged] = useState(false);
 
-  // 값이 변경될 때마다 isChanged 상태 업데이트
   useEffect(() => {
     if (pipelineProperty) {
-      setIsChanged(
-        pipeMaterialId !== pipelineProperty.pipeMaterialId ||
-          pipeOuterDiameter !== pipelineProperty.outerDiameter ||
-          pipeInnerDiameter !== pipelineProperty.innerDiameter ||
-          fluidMaterial !== pipelineProperty.fluidMaterial ||
-          fluidFlowRate !== pipelineProperty.velocity
-      );
-    } else {
-      setIsChanged(
-        pipeMaterialId !== 0 || // 기본값 설정
-          pipeOuterDiameter !== 0 || // 초기값으로 0 설정
-          pipeInnerDiameter !== 0 || // 초기값으로 0 설정
-          fluidMaterial !== "-" || // 기본값 설정
-          fluidFlowRate !== 0
-      ); // 초기값으로 0 설정
+      const hasChanged =
+        pipeMaterialId !== pipelineProperty.pipeMaterial.materialId ||
+        pipeOuterDiameter !== pipelineProperty.outerDiameter ||
+        pipeInnerDiameter !== pipelineProperty.innerDiameter ||
+        fluidMaterialId !== pipelineProperty.fluidMaterial.materialId ||
+        fluidFlowRate !== pipelineProperty.velocity;
+
+      setIsChanged(hasChanged);
     }
   }, [
     pipeMaterialId,
     pipeOuterDiameter,
     pipeInnerDiameter,
-    fluidMaterial,
+    fluidMaterialId,
     fluidFlowRate,
     pipelineProperty,
   ]);
 
+  const updatePipelineProperty = async (data: UpdatePropertyType) => {
+    const apiClient = getApiClient();
+    try {
+      const res = await apiClient({
+        method: "put",
+        url: `/api/pipelines/${pipelines[0].pipelineId}/property`,
+        data: data,
+      });
+      console.log(res.data.header.httpStatusCode, res.data.header.message);
+      setIsChanged(false);
+    } catch (err) {
+      console.log(err);
+    }
+  };
   const handleChangeButton = () => {
-    const data = {
-      pipeMaterialId: 1,
+    // data 만들기
+    const data: UpdatePropertyType = {
+      pipeMaterialId: pipeMaterialId,
+      outerDiameter: pipeOuterDiameter,
+      innerDiameter: pipeInnerDiameter,
+      fluidMaterialId: fluidMaterialId,
+      velocity: fluidFlowRate,
     };
-    console.log("test");
+    // 단일 파이프라인 속성 정보 수정 API
+    updatePipelineProperty(data);
   };
   return (
     <div className="w-[400px] h-[680px] flex flex-col bg-block rounded-[30px] px-[50px] py-[30px] text-white justify-between items-center gap-5">
@@ -224,8 +234,8 @@ export const ModelProperty: React.FC<ModelPropertyProps> = (props) => {
                 <div className="w-[100px] px-1">재질</div>
                 <FluidMaterialListbox
                   fluidMaterialList={fluidMaterialList?.materials}
-                  value={fluidMaterial}
-                  onChange={setFluidMaterial}
+                  value={fluidMaterialId}
+                  onChange={setFluidMaterialId}
                 />
               </div>
               <div className="flex items-center justify-between w-full gap-2 px-1">
