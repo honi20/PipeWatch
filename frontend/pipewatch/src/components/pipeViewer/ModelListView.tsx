@@ -6,6 +6,8 @@ import "./viewer.css";
 import { FloorListbox } from "./listbox/FloorListbox";
 import { getApiClient } from "@src/stores/apiClient";
 import { ModelDetailView } from "@src/components/pipeViewer/ModelDetailView";
+import { PipeProvider } from "@src/components/context/PipeContext";
+import { SelectViewProvider } from "@src/components/context/SelectViewContext";
 
 interface ModelListViewProps {
   models: ModelsType[];
@@ -114,7 +116,11 @@ export const ModelListView: React.FC<ModelListViewProps> = ({ models }) => {
       <div className="flex items-center justify-center gap-[20px] w-full h-full bg-gray-400">
         {selectModel ? (
           // 모델id에 따른 gltf url 넣기
-          <ModelDetailView modelId={selectModel.modelId} />
+          <SelectViewProvider>
+            <PipeProvider>
+              <ModelDetailView modelId={selectModel.modelId} />
+            </PipeProvider>
+          </SelectViewProvider>
         ) : (
           // 선택된 모델이 없는 경우
           <div className="flex items-center gap-2 h-svh">

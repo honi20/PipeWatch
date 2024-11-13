@@ -5,6 +5,7 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { useMemoStore } from "@src/stores/memoStore";
 
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import { ModelNameInput } from "@src/components/pipeViewer/input/ModelNameInput";
 interface PipeMemoProps {
   modelId: number;
   modelName: string;
@@ -65,7 +66,7 @@ export const ModelMemo: React.FC<PipeMemoProps> = (props) => {
         <div className="flex flex-col w-full h-full gap-7">
           {/* header */}
           <div className="flex flex-col items-center w-full">
-            <h2 className="text-[30px] font-bold">{modelName}</h2>
+            <ModelNameInput modelId={modelId} currentName={modelName} />
             <p className="text-[20px]">
               {building} {floor > 0 ? `${floor}층` : `지하 ${-floor}층`}
             </p>
