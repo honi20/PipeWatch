@@ -80,7 +80,6 @@ export const ModelProperty: React.FC<ModelPropertyProps> = (props) => {
       setFluidFlowRate(0); // 기본값 설정
     } else {
       // pipelineProperty가 로드된 후에 isChanged를 false로 초기화
-      console.log(pipelineProperty);
       setIsChanged(false);
     }
   }, [pipelineProperty]);
@@ -120,7 +119,6 @@ export const ModelProperty: React.FC<ModelPropertyProps> = (props) => {
   ]);
 
   const updatePipelineProperty = async (data: UpdatePropertyType) => {
-    console.log(data);
     const apiClient = getApiClient();
     try {
       const res = await apiClient({
@@ -144,7 +142,6 @@ export const ModelProperty: React.FC<ModelPropertyProps> = (props) => {
       velocity: fluidFlowRate,
     };
     // 단일 파이프라인 속성 정보 수정 API
-    console.log("단일 파이프라인 속성 정보 수정 API");
     updatePipelineProperty(data);
   };
   return (
