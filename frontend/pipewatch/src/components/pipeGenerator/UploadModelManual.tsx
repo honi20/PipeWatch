@@ -24,15 +24,21 @@ export const UploadModelManual = () => {
 
   const [modelId, setModelId] = useState<string>("");
 
+  const allowedFormats = [".gltf", ".png", ".jpg", ".jpeg"];
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
-      if (file.name.endsWith(".gltf")) {
+      if (allowedFormats.some((format) => file.name.endsWith(format))) {
         setStatus("initial");
         setFile(file);
         console.log("file:", file);
       } else {
-        alert("GLTF 파일로 업로드해주세요.");
+        alert(
+          t(
+            "pipeGenerator.uploadModel.directUpload.instructions.allowedFileTypes"
+          )
+        );
       }
     }
   };
@@ -42,32 +48,31 @@ export const UploadModelManual = () => {
 
   const handleUpload = async () => {
     if (!file) {
-      alert("파일 없음");
+      alert(t("pipeGenerator.uploadModel.directUpload.instructions.noFile"));
       return;
     } else {
-      setStatus("uploading");
-
       const formData = new FormData();
       formData.append("file", file);
 
+      setStatus("uploading");
+
       try {
-        const response = await apiClient.post(
-          "/api/models/upload-file",
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-            onUploadProgress: (progressEvent) => {
-              const percentage = Math.round(
-                (progressEvent.loaded * 100) / (progressEvent?.total ?? 1)
-              );
+        const isGltf = file.name.endsWith("gltf");
+        const apiPath = isGltf
+          ? "/api/models/upload-file"
+          : "/api/models/upload-img";
 
-              setUploadProgress(percentage);
-            },
-          }
-        );
-
+        const response = await apiClient.post(apiPath, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+          onUploadProgress: (progressEvent) => {
+            const percentage = Math.round(
+              (progressEvent.loaded * 100) / (progressEvent?.total ?? 1)
+            );
+            setUploadProgress(percentage);
+          },
+        });
         setStatus("success");
 
         console.log("upload model: ", response.data.header.message);
@@ -110,9 +115,24 @@ export const UploadModelManual = () => {
       <p className="text-[16px]">
         {t("pipeGenerator.uploadModel.directUpload.instructions.uploadModel")}
       </p>
-      <p className="text-[16px]">
+
+      <div className="text-[16px] flex items-center justify-start gap-2 my-[4px]">
         {t("pipeGenerator.uploadModel.directUpload.instructions.Format")}
-        <span className="font-bold">.gltf</span>
+        {allowedFormats.map((format) => (
+          <div
+            key={format}
+            className={`text-white px-[8px] py-[2px] rounded-[10px] text-[12px] ${
+              format === ".gltf" ? "bg-primary-500" : "bg-primary-200"
+            }`}
+          >
+            {format}
+          </div>
+        ))}
+      </div>
+      <p className="text-[14px]">
+        {t(
+          "pipeGenerator.uploadModel.directUpload.instructions.imageFileMessage"
+        )}
       </p>
 
       <div className="flex justify-center w-full my-[20px]">
@@ -123,7 +143,7 @@ export const UploadModelManual = () => {
               className="hidden"
               multiple={false}
               onChange={handleFileChange}
-              accept=".gltf"
+              accept=".gltf, .png, .jpg, .jpeg"
             />
             {status === "initial" || status === "uploading" ? (
               <DriveFolderUploadIcon

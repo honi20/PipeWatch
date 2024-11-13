@@ -293,7 +293,10 @@
       "directUpload": {
         "instructions": {
           "uploadModel": "Please upload the 3D model file of the pipe.",
-          "Format": "Format"
+          "Format": "Allowed Upload Formats",
+          "imageFileMessage": "(Uploading an image file will initiate the model rendering process, which may take some time.)",
+          "allowedFileTypes": "Only GLTF or IMG files (.gltf, .png, .jpg, .jpeg) can be uploaded.",
+          "noFile": "No File"
         },
         "uploadBox": {
           "selectFile": "Select File",
