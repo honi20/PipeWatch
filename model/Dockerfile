@@ -16,7 +16,7 @@ RUN apt-get update && \
 WORKDIR /app/
 
 # 필요한 파일 복사
-COPY util.py requirements.txt /app/
+COPY . /app/
 
 # Python 가상 환경 설정 및 종속성 설치
 RUN python -m venv venv && \
