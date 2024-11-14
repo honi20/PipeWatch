@@ -476,5 +476,187 @@
       "memoLabel": "Memo",
       "modifiedDate": "Modified Date"
     }
+  },
+  "terms": {
+    "title": "Pipewatch Terms of Service",
+    "chapter1": {
+      "title": "Chapter 1: General Provisions",
+      "article1": {
+        "title": "Article 1 (Purpose)",
+        "content": {
+          "circle": [
+            "① These Terms of Service (hereinafter referred to as 'Terms') set forth the conditions and procedures for using the services (hereinafter referred to as 'Services') provided by Pipewatch (hereinafter referred to as 'Pipewatch'), as well as the rights, obligations, and responsibilities of Pipewatch and its users, and other necessary matters."
+          ],
+          "number": []
+        }
+      },
+      "article2": {
+        "title": "Article 2 (Effectiveness and Amendment of Terms)",
+        "content": {
+          "circle": [
+            "① These Terms take effect upon the user's agreement to their content as a condition for using the Services. If the user agrees to the Terms, the Terms shall take precedence over other conditions in relation to the use of the Services.",
+            "② These Terms may be amended when necessary, and such amendments shall be announced on the initial screen of Pipewatch at least seven days prior to the effective date, along with the reasons for the amendment and the effective date. For changes that are unfavorable to users, a notice period of at least 30 days shall be provided."
+          ],
+          "number": [
+            "1. Users who do not agree with the amended Terms may terminate the service agreement by canceling their membership. Continuing to use the Services after the effective date of the amended Terms shall be deemed as consent to the changes."
+          ]
+        }
+      },
+      "article3": {
+        "title": "Article 3 (Other Applicable Rules)",
+        "content": {
+          "circle": [
+            "① For matters not specified in these Terms, relevant laws such as the Act on the Consumer Protection in Electronic Commerce Transactions, the Act on Promotion of Information and Communications Network Utilization and Information Protection, and the Personal Information Protection Act shall apply.",
+            "② Separate terms or policies specific to certain services may apply in conjunction with these Terms."
+          ],
+          "number": []
+        }
+      },
+      "article4": {
+        "title": "Article 4 (Definitions of Terms)",
+        "content": {
+          "circle": [
+            "① User: Any individual or entity who uses the Services provided by Pipewatch under these Terms.",
+            "② Member: A user who has completed membership registration by providing personal information to Pipewatch.",
+            "③ Non-Member: A user who uses the Services without registering as a member.",
+            "④ Administrator: A user who has been granted administrator rights following corporate member authentication.",
+            "⑤ Pipe Model: Data generated based on pipe information, including location and floor details.",
+            "⑥ Withdrawal: The act of a member terminating the service agreement.",
+            "⑦ For terms not defined in these Terms, relevant laws and individual service-specific terms shall apply."
+          ],
+          "number": []
+        }
+      }
+    },
+    "chapter2": {
+      "title": "Chapter 2: Provision and Use of Services",
+      "article5": {
+        "title": "Article 5 (Provision of Services)",
+        "content": {
+          "circle": [
+            "① Pipewatch provides the following Services:",
+            "② Pipewatch may modify or add to the content of the Services and shall notify members of such changes."
+          ],
+          "number": [
+            "1. Membership registration, login, and withdrawal",
+            "2. Pipe model creation and collection of location and floor information",
+            "3. Uploading pipe model files and 3D model rendering",
+            "4. Corporate member authentication, member management, and role changes (administrator/general member)"
+          ]
+        }
+      },
+      "article6": {
+        "title": "Article 6 (Membership Registration and Agreement Formation)",
+        "content": {
+          "circle": [
+            "① The service agreement is formed when a user agrees to these Terms during the membership registration process.",
+            "② Pipewatch may refuse membership registration in the following cases:"
+          ],
+          "number": [
+            "1. If false information is provided",
+            "2. If another person's identity is used",
+            "3. If other violations of laws or these Terms occur"
+          ]
+        }
+      },
+      "article7": {
+        "title": "Article 7 (Information Security)",
+        "content": {
+          "circle": [
+            "① Members are responsible for managing their IDs and passwords.",
+            "② In the event of unauthorized use of a password, members must report it to Pipewatch immediately."
+          ],
+          "number": []
+        }
+      },
+      "article8": {
+        "title": "Article 8 (Service Availability)",
+        "content": {
+          "circle": [
+            "① The Services are available 24/7 throughout the year.",
+            "② However, availability may be restricted due to regular maintenance or other reasons."
+          ],
+          "number": []
+        }
+      }
+    },
+    "chapter3": {
+      "title": "Chapter 3: Member Information and Privacy Protection",
+      "article9": {
+        "title": "Article 9 (Collection and Use of Personal Information)",
+        "content": {
+          "circle": [
+            "① Pipewatch collects only the minimum personal information necessary during membership registration.",
+            "② Members can modify or delete their personal information through the personal information management menu."
+          ],
+          "number": []
+        }
+      },
+      "article10": {
+        "title": "Article 10 (Privacy Protection)",
+        "content": {
+          "circle": [
+            "① Members' personal information shall not be provided to third parties without their consent.",
+            "② Exceptions may apply when there is a legal request."
+          ],
+          "number": []
+        }
+      }
+    },
+    "chapter4": {
+      "title": "Chapter 4: Termination and Restriction of Use",
+      "article11": {
+        "title": "Article 11 (Membership Withdrawal and Termination)",
+        "content": {
+          "circle": [
+            "① Members may request membership withdrawal at any time.",
+            "② After withdrawal, certain information may be retained for a specified period in accordance with applicable laws."
+          ],
+          "number": []
+        }
+      },
+      "article12": {
+        "title": "Article 12 (Restriction and Suspension of Use)",
+        "content": {
+          "circle": [
+            "① The use of Services may be restricted in the following cases:"
+          ],
+          "number": [
+            "1. Violation of laws or these Terms",
+            "2. Interference with service operations"
+          ]
+        }
+      }
+    },
+    "chapter5": {
+      "title": "Chapter 5: Miscellaneous",
+      "article12": {
+        "title": "Article 13 (Limitation of Liability)",
+        "content": {
+          "circle": [
+            "① Pipewatch shall not be held liable for damages caused by force majeure events, such as natural disasters or system failures.",
+            "② Pipewatch is not responsible for the reliability or accuracy of information provided by members."
+          ],
+          "number": []
+        }
+      },
+      "article13": {
+        "title": "Article 14 (Governing Law and Jurisdiction)",
+        "content": {
+          "circle": [
+            "① Any disputes related to these Terms shall be subject to the jurisdiction of the court located in the region of Pipewatch's headquarters.",
+            "② These Terms shall be governed by the laws of the Republic of Korea."
+          ],
+          "number": []
+        }
+      }
+    },
+    "appendix": {
+      "title": "Appendix",
+      "content": {
+        "circle": ["These Terms take effect as of November 11, 2024."],
+        "number": []
+      }
+    }
   }
 }

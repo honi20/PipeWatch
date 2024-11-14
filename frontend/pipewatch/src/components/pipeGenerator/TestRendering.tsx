@@ -85,7 +85,12 @@ const TestRendering = forwardRef<unknown, TestRenderingProps>(
     }));
 
     return (
-      <Canvas ref={canvasRef} shadows gl={{ preserveDrawingBuffer: true }}>
+      <Canvas
+        ref={canvasRef}
+        shadows
+        gl={{ preserveDrawingBuffer: true }}
+        style={{ background: "#ffffff" }}
+      >
         <ambientLight intensity={0.5} />
         <directionalLight position={[5, 10, 7.5]} intensity={5} castShadow />
         <Model />

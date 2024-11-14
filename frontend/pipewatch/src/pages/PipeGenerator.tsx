@@ -76,11 +76,11 @@ export const PipeGenerator = () => {
   //   navigate(path);
   // };
 
-  const handleTabClick = (path: string) => {
-    const modelId = "1";
-    const finalPath = path.replace(":modelId", modelId);
-    navigate(finalPath);
-  };
+  // const handleTabClick = (path: string) => {
+  //   const modelId = "1";
+  //   const finalPath = path.replace(":modelId", modelId);
+  //   navigate(finalPath);
+  // };
 
   return (
     <>
