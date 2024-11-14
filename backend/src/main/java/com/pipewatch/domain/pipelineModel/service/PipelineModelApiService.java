@@ -13,4 +13,9 @@ public interface PipelineModelApiService {
 			@RequestPart(value = "file") MultipartFile file,
 			@RequestPart(value = "modelUuid") String modelUuid
 	);
+
+	@PostMapping(value = "/modeling")
+	void transferModelUuid(
+			@RequestPart(value = "modelUuid") String modelUuid
+	);
 }
