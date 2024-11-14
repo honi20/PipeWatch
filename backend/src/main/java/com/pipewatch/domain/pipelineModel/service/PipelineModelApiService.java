@@ -15,7 +15,7 @@ public interface PipelineModelApiService {
 			@RequestPart(value = "modelUuid") String modelUuid
 	);
 
-	@PostMapping(value = "/modeling", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = "/modeling", consumes = MediaType.TEXT_PLAIN_VALUE)
 	void createModel(
 			@RequestBody String modelUuid
 	);
