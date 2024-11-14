@@ -23,7 +23,7 @@ from sklearn.decomposition import PCA
 import logging
 import numpy as np
 import uvicorn
-from fastapi import FastAPI, File, UploadFile, Form
+from fastapi import FastAPI, File, UploadFile, Form, Body
 from PIL import Image
 
 app = FastAPI()
@@ -115,7 +115,7 @@ async def inference(modelUuid: str = Form(...), file: UploadFile = File(...)):
 
 # 모델링 생성 요청 API
 @app.post("/modeling")
-def modeling(modelUuid: str = Form(...)):
+def modeling(modelUuid: str = Body(...)):
     response = create_model(result[modelUuid], modelUuid)
     del result[modelUuid]
 
