@@ -2,7 +2,10 @@ import { useTranslation } from "react-i18next";
 
 type Article = {
   title: string;
-  content: string[];
+  content: {
+    circle: string[];
+    number: string[];
+  };
 };
 
 type Chapter = {
@@ -12,7 +15,10 @@ type Chapter = {
 
 type Appendix = {
   title: string;
-  content: string[];
+  content: {
+    circle: string[];
+    number: string[];
+  };
 };
 
 type Terms = {
@@ -25,40 +31,58 @@ export const TermsAndPolicy = () => {
   const terms: Terms = t("terms", { returnObjects: true }) as Terms;
 
   return (
-    <div className="p-[30px] text-[20px]">
-      <h1 className="text-[40px]">{terms.title}</h1>
-      {Object.entries(terms).map(([chapterKey, chapter], chapterIndex) => {
-        if (chapterKey === "title") return null;
+    <div className="px-[30px] text-[20px]">
+      <div className="border-b-4 border-solid border-primary-200 dark:border-primary-500 my-[30px] py-[10px]">
+        <h1 className="text-[40px]">{terms.title}</h1>
+      </div>
+      {Object.entries(terms).map(([key, value], index) => {
+        if (key === "title") return null;
 
-        if (chapterKey === "appendix") {
-          const appendix = chapter as Appendix;
+        if (key === "appendix") {
+          const appendix = value as Appendix;
           return (
-            <section key={chapterIndex}>
+            <section key={index}>
               <h2 className="text-[30px]">{appendix.title}</h2>
               <ul>
-                {appendix.content.map((item, itemIndex) => (
-                  <li key={itemIndex}>{item}</li>
+                {appendix.content.circle.map((item, idx) => (
+                  <li key={`circle-${idx}`} className="text-[18px]">
+                    {item}
+                  </li>
+                ))}
+                {appendix.content.number.map((item, idx) => (
+                  <li key={`number-${idx}`} className="text-[18px]">
+                    {item}
+                  </li>
                 ))}
               </ul>
             </section>
           );
         }
 
-        const chapterData = chapter as Chapter;
-
+        const chapter = value as Chapter;
         return (
-          <section className="my-[40px]" key={chapterIndex}>
-            <h2 className="text-[30px]">{chapterData.title}</h2>
-            {Object.entries(chapterData)
+          <section className="mb-[50px]" key={index}>
+            <h2 className="text-[30px]">{chapter.title}</h2>
+            {Object.entries(chapter)
               .filter(([key]) => key.startsWith("article"))
               .map(([, article], articleIndex) => {
                 const articleData = article as Article;
                 return (
-                  <article className="my-[20px]" key={articleIndex}>
+                  <article key={articleIndex} className="my-[20px]">
                     <h3 className="text-[24px]">{articleData.title}</h3>
                     <ul>
-                      {articleData.content.map((item, itemIndex) => (
-                        <li key={itemIndex}>{item}</li>
+                      {articleData.content.circle.map((item, idx) => (
+                        <li key={`circle-${idx}`} className="text-[18px]">
+                          {item}
+                        </li>
+                      ))}
+
+                      {articleData.content.number.map((item, idx) => (
+                        <div className="mx-[20px]">
+                          <li key={`number-${idx}`} className="text-[18px]">
+                            {item}
+                          </li>
+                        </div>
                       ))}
                     </ul>
                   </article>
