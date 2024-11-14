@@ -1,4 +1,4 @@
-import os 
+import os
 from dotenv import load_dotenv
 
 # 환경 변수 주입
@@ -20,6 +20,7 @@ from scipy.spatial import distance
 from util import find_intersections, convert_numpy_types, create_model
 from sklearn.decomposition import PCA
 
+import logging
 import numpy as np
 import uvicorn
 from fastapi import FastAPI, File, UploadFile, Form
@@ -28,6 +29,8 @@ from PIL import Image
 app = FastAPI()
 trained_model=YOLO("./DLModel/best.pt")
 result ={}
+
+logging.basicConfig(level=logging.DEBUG)
 
 @app.post("/inference")
 async def inference(modelUuid: str = Form(...), file: UploadFile = File(...)):
@@ -105,18 +108,18 @@ async def inference(modelUuid: str = Form(...), file: UploadFile = File(...)):
         return False
     pipes = convert_numpy_types(pipes)
     scaled_pipes = [[[x / 20 for x in point] for point in pipe] for pipe in pipes]
-    data = {
-        "coords": scaled_pipes
-    }
     
-    result[modelUuid] = data
+    result[modelUuid] = scaled_pipes
 
     return True
 
+# 모델링 생성 요청 API
 @app.post("/modeling")
-def modeling(request):
-    create_model(result[request.modelUuid], request.modelUuid)
-    del result[request.modelUuid]
+def modeling(modelUuid: str = Form(...)):
+    response = create_model(result[modelUuid], modelUuid)
+    del result[modelUuid]
+
+    return response
 
 if __name__ == "__main__":
     uvicorn.run(app, host=host, port=int(port))

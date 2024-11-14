@@ -1,6 +1,5 @@
 import os
 import numpy as np
-from pydantic import BaseModel
 import pyrender
 import requests
 import trimesh
@@ -12,12 +11,6 @@ from PIL import Image
 import shutil
 
 from config import AWS_REGION, BASE_WORK_DIR, GLTF_PIPELINE_PATH, NODE_PATH, S3_BUCKET_NAME, S3_client
-
-# 파이프 모델 생성 요청
-class CreateModelRequest(BaseModel):
-    modelUuid: str
-    coords: List[List[List[float]]]
-    radius: float = 1
 
 def convert_numpy_types(obj):
     if isinstance(obj, np.generic):
