@@ -9,6 +9,8 @@ import { getApiClient } from "@src/stores/apiClient";
 import { ModelDetailView } from "@src/components/pipeViewer/ModelDetailView";
 import { PipeProvider } from "@src/components/context/PipeContext";
 import { SelectViewProvider } from "@src/components/context/SelectViewContext";
+import clsx from "clsx";
+import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 
 interface ModelListViewProps {
   models: ModelsType[];
@@ -30,8 +32,6 @@ export const ModelListView: React.FC<ModelListViewProps> = ({ models }) => {
         method: "get",
         url: "/api/enterprises/buildings/floors",
       });
-      // console.log(res.data.header.httpStatusCode, res.data.header.message);
-      // console.log(res.data.body);
       setBuildingList(res.data.body.buildings);
     } catch (err) {
       console.log(err);
@@ -75,38 +75,94 @@ export const ModelListView: React.FC<ModelListViewProps> = ({ models }) => {
     return matchesBuilding && matchesFloor;
   });
 
+  // 모델 삭제 기능 구현 및 편집 버튼
+  const [editMode, setEditMode] = useState(false);
+  const [deleteModelList, setDeleteModelList] = useState<number[]>([]);
+
+  // 삭제된 모델 제외
+  const visibleModelList = filteredModelList.filter(
+    (model) => !deleteModelList.includes(model.modelId)
+  );
+
+  const handleDeleteBtn = (modelId: number) => {
+    console.log("button click: ", modelId);
+    setDeleteModelList((prev) => [...prev, modelId]);
+    console.log(deleteModelList);
+  };
+  const deleteModel = async (modelId: number) => {
+    try {
+      const apiClient = getApiClient();
+      const res = await apiClient({
+        method: "delete",
+        url: `/api/models/${modelId}`,
+      });
+      console.log("삭제 성공: ", res.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const handleEditClick = async () => {
+    if (editMode) {
+      try {
+        await Promise.all(deleteModelList.map((item) => deleteModel(item)));
+        console.log("모든 모델 삭제 완료");
+      } catch (error) {
+        console.error("모델 삭제 중 오류 발생: ", error);
+      }
+    }
+    setEditMode((prev) => !prev);
+  };
   return (
     <div className="w-full h-full">
       {/* 장소 및 층 선택 */}
-      <div className="flex gap-5 mx-6">
-        <BuildingListbox
-          onBuildingChange={handleBuildingChange}
-          buildingList={buildingList}
-        />
-        <FloorListbox
-          onFloorChange={handleFloorChange}
-          floorList={floorList}
-          selectedFloor={selectedFloor} // 선택된 층을 prop으로 전달
-        />
+      <div className="flex items-center justify-between pb-5 mx-6">
+        <div className="flex gap-3">
+          <BuildingListbox
+            onBuildingChange={handleBuildingChange}
+            buildingList={buildingList}
+          />
+          <FloorListbox
+            onFloorChange={handleFloorChange}
+            floorList={floorList}
+            selectedFloor={selectedFloor} // 선택된 층을 prop으로 전달
+          />
+        </div>
+        <button
+          className="border dark:border-none rounded-lg bg-white dark:bg-white/5 py-1.5 px-10 flex justify-between text-left text-sm/6 text-black dark:text-white"
+          onClick={handleEditClick}
+        >
+          {editMode ? "완료" : "편집"}
+        </button>
       </div>
 
       {/* pipe list view */}
       <div className="flex justify-center w-full h-[140px] py-[20px] bg-block overflow-x-auto scrollable">
         <div className="flex gap-4 flex-nowrap ">
-          {filteredModelList.map((item) => (
+          {visibleModelList.map((item) => (
             <div className="relative w-[100px] h-[100px]" key={item.modelId}>
               {(selectModel === null ||
                 selectModel.modelId !== item.modelId) && (
                 <div
-                  className="absolute inset-0 bg-black opacity-50 rounded-[20px]"
+                  className={clsx(
+                    "absolute inset-0 bg-black opacity-50 rounded-[20px] z-1"
+                  )}
                   onClick={() => {
                     setSelectModel(item);
                   }}
                 />
               )}
+              {editMode && (
+                <HighlightOffIcon
+                  className="absolute z-10 text-gray-800 rounded-full h-[20px] w-[20px] top-1 left-1 animate-shake"
+                  onClick={() => handleDeleteBtn(item.modelId)}
+                />
+              )}
               <img
                 src={item.previewUrl}
-                className="h-full bg-gray-400 rounded-[20px] object-cover"
+                className={clsx(
+                  "h-full rounded-[20px] object-cover bg-white",
+                  editMode ? "animate-shake" : ""
+                )}
                 style={{ zIndex: -1 }}
               />
             </div>

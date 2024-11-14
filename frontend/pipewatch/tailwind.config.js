@@ -3,7 +3,18 @@ export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   darkMode: "class",
   theme: {
-    extend: {},
+    extend: { 
+      animation: {
+        shake: 'shake 0.5s cubic-bezier(0.5, 0.1, 0.5, 1) infinite',
+      },
+      keyframes: {
+        shake: {
+          '0%, 100%': { transform: 'rotate(0deg)' },
+          '25%': { transform: 'rotate(-2deg)' },
+          '75%': { transform: 'rotate(2deg)' },
+        },
+      },
+    },
     fontFamily: {
       Pretendard: ["Pretendard"],
       Esamanru: ["Esamanru"],
