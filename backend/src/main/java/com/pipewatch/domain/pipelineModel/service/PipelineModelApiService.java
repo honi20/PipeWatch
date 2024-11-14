@@ -3,6 +3,7 @@ package com.pipewatch.domain.pipelineModel.service;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -14,8 +15,8 @@ public interface PipelineModelApiService {
 			@RequestPart(value = "modelUuid") String modelUuid
 	);
 
-	@PostMapping(value = "/modeling", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+	@PostMapping(value = "/modeling", consumes = MediaType.APPLICATION_JSON_VALUE)
 	void createModel(
-			@RequestPart(value = "modelUuid") String modelUuid
+			@RequestBody String modelUuid
 	);
 }
