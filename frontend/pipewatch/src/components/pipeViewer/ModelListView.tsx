@@ -128,10 +128,12 @@ export const ModelListView: React.FC<ModelListViewProps> = ({ models }) => {
           />
         </div>
         <button
-          className="border dark:border-none rounded-lg bg-white dark:bg-white/5 py-1.5 px-10 flex justify-between text-left text-sm/6 text-black dark:text-white"
+          className="border dark:border-none rounded-lg bg-white dark:bg-white/5 py-1.5 text-sm/6 text-black dark:text-white w-[120px] font-center"
           onClick={handleEditClick}
         >
-          {editMode ? "완료" : "편집"}
+          {editMode
+            ? t("PipeViewer.ModelListView.done")
+            : t("PipeViewer.ModelListView.edit")}
         </button>
       </div>
 
