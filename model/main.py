@@ -116,6 +116,7 @@ def inference(modelUuid: str = Form(...), file: UploadFile = File(...)):
 @app.post("/modeling")
 def modeling(request):
     create_model(result[request.modelUuid], request.modelUuid)
+    del result[request.modelUuid]
 
 if __name__ == "__main__":
     uvicorn.run(app, host=host, port=int(port))
