@@ -138,10 +138,10 @@
       "enterPassword": "Enter Password",
       "confirmWithdrawal": "Confirm Account Deletion",
       "withdrawalNotices": [
-        "Once deleted, <strong>account recovery is not possible</strong>.",
-        "All personal information and usage history will be permanently erased.",
-        "Re-registration with the same email may be restricted after deletion.",
-        "Some information may be retained for a period of time in accordance with legal obligations, even after account deletion."
+        "Once deleted, account recovery is <strong>impossible.</strong>",
+        "All personal data will be permanently erased.",
+        "Re-registration with the same email may be restricted.",
+        "Some data may be retained temporarily due to legal obligations."
       ],
       "complete": "Your account has been successfully deleted.",
       "passwordMismatchError": "The passwords do not match. Please check again."
@@ -187,7 +187,7 @@
   "aboutTeam": {
     "description": "Innovating with Better Technology, Together with TEAM PAORI.",
     "member1": {
-      "name": "Kyeong-Deok Seo",
+      "name": "Gyeong-Deok Seo",
       "role": "Team Lead, BE",
       "email": "zoo54245424@gmail.com",
       "description": "Coordinate Data Preprocessing\n3D Modeling Implementation"
@@ -196,7 +196,7 @@
       "name": "Ye-Heon Choi",
       "role": "BE",
       "email": "1594cyh@gmail.com",
-      "description": "Role Description"
+      "description": "BE Logic Design and Implementation"
     },
     "member3": {
       "name": "Min-Hyeok Ko",
@@ -205,7 +205,7 @@
       "description": "Deep Learning Model Training\nPre- and Post-processing of Training Data"
     },
     "member4": {
-      "name": "Cheol-Min Seong",
+      "name": "Chul-Min Seung",
       "role": "Infra",
       "email": "tjdcjfals@gmail.com",
       "description": "Setting up a Kubernetes Environment\nBuilding a CI/CD Pipeline\nData Labeling\nUCC Director"

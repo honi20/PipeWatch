@@ -43,9 +43,8 @@ export const Header = ({ handleTheme, currentTheme }: Props) => {
         break;
       case "EMPLOYEE":
       case "ADMIN":
-        navigate("/account/manage");
-        break;
       case "USER":
+        navigate("/account/manage");
         break;
       default:
         console.log("Unknown role");
@@ -168,7 +167,7 @@ export const Header = ({ handleTheme, currentTheme }: Props) => {
                       isActive ? "text-primary-200 " : ""
                     }`
                   }
-                  to="/about-us"
+                  to="/about-us/service"
                 >
                   <PopoverButton className="flex gap-1 items-center bg-white dark:bg-black focus:outline-none data-[active]:text-primary-200  data-[hover]:text-primary-200 data-[focus]:outline-1 data-[focus]:outline-white">
                     {t("header.subMenu.aboutUs")}
