@@ -20,13 +20,13 @@ export const FloorListbox: React.FC<FloorListboxProps> = ({
   };
 
   return (
-    <div className="w-[150px] pb-5">
+    <div className="w-[150px] ">
       <Listbox value={selectedFloor} onChange={handleChange}>
         <div className="relative">
           <ListboxButton
             className={clsx(
               "relative w-full rounded-lg bg-white dark:bg-white/5 py-1.5 px-3 flex justify-between text-left text-sm/6 text-black dark:text-white",
-              "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25"
+              "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25 border dark:border-none"
             )}
           >
             {selectedFloor !== null
@@ -54,23 +54,27 @@ export const FloorListbox: React.FC<FloorListboxProps> = ({
             "transition duration-100 ease-in data-[leave]:data-[closed]:opacity-0"
           )}
         >
-          {floorList.map((item, idx) => (
-            <ListboxOption
-              key={idx}
-              value={item}
-              className="group flex cursor-default items-center gap-2 rounded-lg py-1.5 px-3 select-none data-[focus]:bg-white/10"
-            >
-              <div className="dark:text-white text-sm/6">
-                {item > 0
-                  ? `${item}${t("PipeViewer.ModelProperty.listbox.floorLabel")}`
-                  : `${t(
-                      "PipeViewer.ModelProperty.listbox.basementLabel"
-                    )} ${-item}${t(
-                      "PipeViewer.ModelProperty.listbox.floorLabel"
-                    )}`}
-              </div>
-            </ListboxOption>
-          ))}
+          {floorList &&
+            floorList.length > 0 &&
+            floorList.map((item, idx) => (
+              <ListboxOption
+                key={idx}
+                value={item}
+                className="group flex cursor-default items-center gap-2 rounded-lg py-1.5 px-3 select-none data-[focus]:bg-white/10"
+              >
+                <div className="dark:text-white text-sm/6">
+                  {item > 0
+                    ? `${item}${t(
+                        "PipeViewer.ModelProperty.listbox.floorLabel"
+                      )}`
+                    : `${t(
+                        "PipeViewer.ModelProperty.listbox.basementLabel"
+                      )} ${-item}${t(
+                        "PipeViewer.ModelProperty.listbox.floorLabel"
+                      )}`}
+                </div>
+              </ListboxOption>
+            ))}
         </ListboxOptions>
       </Listbox>
     </div>

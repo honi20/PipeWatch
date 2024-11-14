@@ -35,13 +35,13 @@ export const BuildingListbox = ({
   );
 
   return (
-    <div className="w-[150px] pb-5">
+    <div className="w-[150px]">
       <Listbox value={selected} onChange={handleChange}>
         <div className="relative">
           <ListboxButton
             className={clsx(
               "relative w-full rounded-lg bg-white dark:bg-white/5 py-1.5 px-3 flex justify-between text-left text-sm/6 text-black dark:text-white truncate",
-              "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25"
+              "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25 border dark:border-none"
             )}
           >
             {selected === "building" || selected === "장소"

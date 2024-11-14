@@ -425,7 +425,9 @@
     "noAccess": "No access permission.",
     "noAccessDescription": "Please check your corporate certification status.",
     "ModelListView": {
-      "selectModel": "Select Pipe Model."
+      "selectModel": "Select Pipe Model.",
+      "done": "Done",
+      "edit":"Edit"
     },
     "GLTFViewer": {
       "viewFullModel": "View Full Model"

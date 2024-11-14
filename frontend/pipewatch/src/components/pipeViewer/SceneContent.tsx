@@ -18,16 +18,15 @@ export const SceneContent: React.FC<{
   setIsTotalView,
   pipelines,
 }) => {
-  const { camera, scene } = useThree();
-  const helper = new THREE.CameraHelper(camera);
+  // const helper = new THREE.CameraHelper(camera);
   const clock = new THREE.Clock();
   const delta = clock.getDelta();
-  useEffect(() => {
-    scene.add(helper);
-    return () => {
-      scene.remove(helper); // 컴포넌트 언마운트 시 제거
-    };
-  }, [camera, scene, helper]);
+  // useEffect(() => {
+  //   scene.add(helper);
+  //   return () => {
+  //     scene.remove(helper); // 컴포넌트 언마운트 시 제거
+  //   };
+  // }, [camera, scene, helper]);
 
   // 모델 로드 시 카메라 제어
   const adjustCameraOnModelLoad = (
