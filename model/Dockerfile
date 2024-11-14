@@ -26,4 +26,4 @@ RUN python -m venv venv && \
 
 # 가상 환경 활성화 후 앱 실행
 EXPOSE 8000
-CMD ["sh", "-c", ". venv/bin/activate && uvicorn --host=0.0.0.0 --port 8000 main:app"]
+CMD ["sh", "-c", ". venv/bin/activate && uvicorn --host=0.0.0.0 --port 8000 main:app --log-level debug"]
