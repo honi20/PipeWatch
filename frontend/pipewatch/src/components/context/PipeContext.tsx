@@ -2,8 +2,8 @@
 import React, { createContext, useContext, useState, ReactNode } from "react";
 
 type PipeContextType = {
-  selectedPipeId: number;
-  setSelectedPipeId: React.Dispatch<React.SetStateAction<number>>;
+  selectedPipeId: number | null;
+  setSelectedPipeId: React.Dispatch<React.SetStateAction<number | null>>;
 };
 
 const PipeContext = createContext<PipeContextType | undefined>(undefined);
@@ -11,7 +11,7 @@ const PipeContext = createContext<PipeContextType | undefined>(undefined);
 export const PipeProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [selectedPipeId, setSelectedPipeId] = useState<number>(0);
+  const [selectedPipeId, setSelectedPipeId] = useState<number | null>(null);
   return (
     <PipeContext.Provider value={{ selectedPipeId, setSelectedPipeId }}>
       {children}

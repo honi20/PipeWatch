@@ -1,7 +1,6 @@
 import { CameraControls } from "@react-three/drei";
-import { useThree } from "@react-three/fiber";
 import { PipeModel } from "@src/components/pipeViewer/renderer/PipeModel";
-import React, { useEffect } from "react";
+import React from "react";
 import * as THREE from "three";
 import { PipelineType } from "./Type/PipeType";
 
@@ -11,12 +10,14 @@ export const SceneContent: React.FC<{
   isTotalView: boolean;
   setIsTotalView: React.Dispatch<React.SetStateAction<boolean>>;
   pipelines: PipelineType[];
+  modelId: number;
 }> = ({
   gltfUrl,
   cameraControlsRef,
   isTotalView,
   setIsTotalView,
   pipelines,
+  modelId,
 }) => {
   // const helper = new THREE.CameraHelper(camera);
   const clock = new THREE.Clock();
@@ -75,6 +76,7 @@ export const SceneContent: React.FC<{
         isTotalView={isTotalView}
         setIsTotalView={setIsTotalView}
         pipelines={pipelines}
+        modelId={modelId}
       />
       <CameraControls
         ref={cameraControlsRef}

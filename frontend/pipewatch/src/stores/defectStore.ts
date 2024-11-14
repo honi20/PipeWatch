@@ -3,6 +3,8 @@ import { persist } from "zustand/middleware";
 import { create } from "zustand";
 
 interface DefectState {
+  viewDefect: { [modelId: number]: boolean };
+  setViewDefect: (modelId: number, viewDefect: boolean) => void;
   defectedPipeList: number[] | null;
   setDefectedPipeList: (defectedPipeList: number[] | null) => void;
   getDefectedPipeList: (modelId: number) => Promise<void>;
@@ -15,6 +17,17 @@ export const useDefectStore = create<
 >(
   persist(
     (set, get) => ({
+      // 결함 조회 여부
+      viewDefect: {},
+      setViewDefect: (modelId, viewDefect) => {
+        const currentViewDefect = get().viewDefect;
+        set({
+          viewDefect: {
+            ...currentViewDefect,
+            [modelId]: viewDefect,
+          },
+        });
+      },
       defectedPipeList: null,
       setDefectedPipeList: (defectedPipeList) => set({ defectedPipeList }),
       getDefectedPipeList: async (modelId) => {
