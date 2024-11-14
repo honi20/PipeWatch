@@ -69,8 +69,9 @@ export const useMemoStore = create<MemoState>((set, get) => ({
         url: `/api/models/memos/${memoId}`,
       });
       console.log(res);
-      const updatedMemoList = get().memoList
-        ? get().memoList.filter((item) => item.memoId !== memoId)
+      const currentList = get().memoList || [];
+      const updatedMemoList = currentList
+        ? currentList.filter((item) => item.memoId !== memoId)
         : [];
       set({ memoList: updatedMemoList });
     } catch (err) {

@@ -7,6 +7,7 @@ import * as THREE from "three";
 import { PipelineType } from "../Type/PipeType";
 import { useSelectView } from "@src/components/context/SelectViewContext";
 import { usePipe } from "@src/components/context/PipeContext";
+import { useDefectStore } from "@src/stores/defectStore";
 export const PipeModel: React.FC<{
   gltfUrl: string;
   onModelLoad: (scene: THREE.Object3D, vector?: number[]) => void;
@@ -14,6 +15,7 @@ export const PipeModel: React.FC<{
   isTotalView: boolean;
   setIsTotalView: React.Dispatch<React.SetStateAction<boolean>>;
   pipelines: PipelineType[];
+  modelId: number;
 }> = ({
   gltfUrl,
   onModelLoad,
@@ -21,10 +23,12 @@ export const PipeModel: React.FC<{
   isTotalView,
   setIsTotalView,
   pipelines,
+  modelId,
 }) => {
   const { setSelectView } = useSelectView();
   // selectedPipe
-  const { setSelectedPipeId } = usePipe();
+  const { selectedPipeId, setSelectedPipeId } = usePipe();
+  const { viewDefect, defectedPipeList } = useDefectStore();
   // gltf loader
   const model = useLoader(GLTFLoader, gltfUrl, (loader) => {
     const dracoLoader = new DRACOLoader();
@@ -67,6 +71,18 @@ export const PipeModel: React.FC<{
     return groups;
   }, [model]);
 
+  // 결함 여부에 따른 색상 업데이트
+  useEffect(() => {
+    model.scene.traverse((child) => {
+      if (child instanceof THREE.Mesh) {
+        const isDefected = confirmDefection(child);
+        (child.material as THREE.MeshStandardMaterial).color.set(
+          viewDefect[modelId] && isDefected ? "red" : "white"
+        );
+      }
+    });
+  }, [defectedPipeList, model, viewDefect]);
+
   const [clickedSegment, setClickedSegment] = useState<string | null>(null);
 
   const handlePointerOver = (originalMesh: THREE.Mesh) => {
@@ -74,7 +90,9 @@ export const PipeModel: React.FC<{
   };
 
   const handlePointerOut = (originalMesh: THREE.Mesh) => {
-    if (clickedSegment !== originalMesh.name) {
+    if (viewDefect[modelId] && confirmDefection(originalMesh)) {
+      (originalMesh.material as THREE.MeshStandardMaterial).color.set("red");
+    } else if (clickedSegment !== originalMesh.name) {
       (originalMesh.material as THREE.MeshStandardMaterial).color.set("white");
     }
   };
@@ -106,8 +124,6 @@ export const PipeModel: React.FC<{
       });
     }
 
-    console.log(`Clicked on: ${originalMesh.name}`, originalMesh);
-
     (originalMesh.material as THREE.MeshStandardMaterial).color.set("#a6bdfc");
     setClickedSegment(originalMesh.name);
 
@@ -128,6 +144,14 @@ export const PipeModel: React.FC<{
     setSelectView("PIPE_MEMO");
   };
 
+  // 해당 파이프의 결함 유무 체크
+  const confirmDefection = (mesh: THREE.Mesh) => {
+    const pipe = pipelines[0].pipes.filter(
+      (item) => item.pipeUuid === mesh.name
+    );
+    return defectedPipeList?.includes(pipe[0].pipeId);
+  };
+
   return (
     <>
       <group position={[0, 0, 0]}>
@@ -135,6 +159,12 @@ export const PipeModel: React.FC<{
           return (
             <group key={index} name={groupName}>
               {meshes.map(({ originalMesh, segmentName }, i) => {
+                // 결함 확인
+                if (viewDefect[modelId] && confirmDefection(originalMesh)) {
+                  (
+                    originalMesh.material as THREE.MeshStandardMaterial
+                  ).color.set("red");
+                }
                 return (
                   <mesh
                     key={i}

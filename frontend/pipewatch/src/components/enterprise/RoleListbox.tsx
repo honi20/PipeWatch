@@ -25,7 +25,6 @@ type Props = {
 
 export const RoleListbox = ({ currentRole, uuid }: Props) => {
   const { setIsSuccess } = statusStore();
-  const apiClient = getApiClient();
 
   const { t, i18n } = useTranslation();
   const isKorean = i18n.language === "ko";
@@ -44,6 +43,7 @@ export const RoleListbox = ({ currentRole, uuid }: Props) => {
   };
 
   const handleRoleUpdate = async (newRole: string, uuid: string) => {
+    const apiClient = getApiClient();
     try {
       const res = await apiClient.patch(`/api/employees/role`, {
         userUuid: uuid,

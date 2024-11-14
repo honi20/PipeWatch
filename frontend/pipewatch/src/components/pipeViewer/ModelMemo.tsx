@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import React, { useEffect, ChangeEvent, useState } from "react";
+import React, { useEffect, ChangeEvent } from "react";
 import { Textarea, Checkbox } from "@headlessui/react";
 import clsx from "clsx";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
@@ -7,6 +7,7 @@ import { useMemoStore } from "@src/stores/memoStore";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { ModelNameInput } from "@src/components/pipeViewer/input/ModelNameInput";
 import CheckIcon from "@mui/icons-material/Check";
+import { useDefectStore } from "@src/stores/defectStore";
 
 interface PipeMemoProps {
   modelId: number;
@@ -19,18 +20,20 @@ interface PipeMemoProps {
 
 export const ModelMemo: React.FC<PipeMemoProps> = (props) => {
   const { t } = useTranslation();
+  const { viewDefect, setViewDefect } = useDefectStore();
   const { memo, setMemo, memoList, getMemoList, postMemo, deleteMemo } =
     useMemoStore();
   const { modelId, modelName, building, floor, updatedAt, onViewChange } =
     props;
-  const [enabled, setEnabled] = useState(false);
 
   // memoList renderer
   useEffect(() => {
     getMemoList(modelId);
   }, [modelId]);
 
-  // useEffect 사용 -> enabled == true일 경우 결함 있는 파이프 체크
+  const handleCheckboxChange = () => {
+    setViewDefect(modelId, !viewDefect[modelId]);
+  };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter") {
@@ -88,11 +91,11 @@ export const ModelMemo: React.FC<PipeMemoProps> = (props) => {
               {t("PipeViewer.ModelMemo.viewDefectivePipe")}
             </h3>
             <Checkbox
-              checked={enabled}
-              onChange={setEnabled}
+              checked={!!viewDefect[modelId]}
+              onChange={handleCheckboxChange}
               className="p-1 rounded-md group size-8 bg-black/60 ring-1 ring-white/15 ring-inset "
             >
-              {enabled && (
+              {viewDefect[modelId] && (
                 <CheckIcon className="hidden size-4 fill-black group-data-[checked]:block" />
               )}
             </Checkbox>

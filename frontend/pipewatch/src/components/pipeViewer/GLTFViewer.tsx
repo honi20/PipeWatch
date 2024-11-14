@@ -8,6 +8,7 @@ import { ModelMemo } from "@src/components/pipeViewer/ModelMemo";
 import { ModelProperty } from "@src/components/pipeViewer/ModelProperty";
 import { useSelectView } from "../context/SelectViewContext";
 import { PipeMemo } from "@src/components/pipeViewer/PipeMemo";
+import { usePipe } from "@src/components/context/PipeContext";
 
 interface GLTFViewerProps {
   gltfUrl: string;
@@ -18,6 +19,7 @@ interface GLTFViewerProps {
 
 const GLTFViewer: React.FC<GLTFViewerProps> = (props) => {
   const { t } = useTranslation();
+  const { setSelectedPipeId } = usePipe();
   const { selectView, setSelectView } = useSelectView();
   const { gltfUrl, pipelines, modelId, modelDetail } = props;
   const cameraControlsRef = useRef<CameraControls | null>(null);
@@ -26,6 +28,7 @@ const GLTFViewer: React.FC<GLTFViewerProps> = (props) => {
   const handleTotalViewButton = () => {
     setIsTotalView(true);
     setSelectView("MODEL_MEMO");
+    setSelectedPipeId(null);
   };
   return (
     <div className="relative w-full h-full">
@@ -39,6 +42,7 @@ const GLTFViewer: React.FC<GLTFViewerProps> = (props) => {
           isTotalView={isTotalView}
           setIsTotalView={setIsTotalView}
           pipelines={pipelines}
+          modelId={modelId}
         />
       </Canvas>
       <button

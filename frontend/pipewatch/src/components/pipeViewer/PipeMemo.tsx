@@ -8,6 +8,7 @@ import { usePipe } from "@src/components/context/PipeContext";
 import { getApiClient } from "@src/stores/apiClient";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import CheckIcon from "@mui/icons-material/Check";
+import { useDefectStore } from "@src/stores/defectStore";
 
 interface PipeMemoProps {
   modelName: string;
@@ -21,6 +22,7 @@ interface PipeMemoProps {
 export const PipeMemo: React.FC<PipeMemoProps> = (props) => {
   const { t } = useTranslation();
   const { memo, setMemo, memoList, setMemoList } = useMemoStore();
+  const { checkPipeDefection, defectedPipeList } = useDefectStore();
   const {
     modelName,
     building,
@@ -33,11 +35,21 @@ export const PipeMemo: React.FC<PipeMemoProps> = (props) => {
   const [pipeName, setPipeName] = useState<string>("");
   const [checked, setChecked] = useState(false);
 
+  // 결함 상태 업데이트
+  useEffect(() => {
+    if (defectedPipeList && selectedPipeId !== null) {
+      setChecked(defectedPipeList.includes(selectedPipeId));
+    } else {
+      setChecked(false);
+    }
+  }, [defectedPipeList, selectedPipeId]);
+
   // MODEL_MEMO 및 TOTEL_VIEW로 전환
   const handleTotalView = () => {
     setIsTotalView(true);
     onViewChange();
   };
+
   // 파이프 이름 및 메모 리스트 조회
   const getPipeInfo = async (pipeId: number) => {
     const apiClient = getApiClient();
@@ -55,19 +67,7 @@ export const PipeMemo: React.FC<PipeMemoProps> = (props) => {
       console.log(err);
     }
   };
-  // 파이프 결함 체크
-  const checkPipeDefection = async (pipeId: number) => {
-    const apiClient = getApiClient();
-    try {
-      const res = await apiClient({
-        method: "patch",
-        url: `/api/pipelines/pipes/${pipeId}/defect`,
-      });
-      console.log(res.data.header.httpStatusCode, res.data.header.message);
-    } catch (err) {
-      console.log(err);
-    }
-  };
+
   // 파이프 메모 생성
   const createPipeMemo = async (pipeId: number, memo: string) => {
     const apiClient = getApiClient();
@@ -79,7 +79,6 @@ export const PipeMemo: React.FC<PipeMemoProps> = (props) => {
           memo: memo,
         },
       });
-      // 결함 여부 받아서 렌더링 해야햄
       console.log(res.data.header.httpStatusCode, res.data.header.message);
       console.log(res.data.body);
       setMemoList(res.data.body.memoList);
@@ -109,6 +108,7 @@ export const PipeMemo: React.FC<PipeMemoProps> = (props) => {
   // memoList renderer
   useEffect(() => {
     getPipeInfo(selectedPipeId);
+    // 나중에 바꿔야 해 -> 결함 정보 업데이트 하는 방식으로
   }, [selectedPipeId]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
