@@ -30,8 +30,8 @@ trained_model=YOLO("./DLModel/best.pt")
 result ={}
 
 @app.post("/inference")
-def inference(modelUuid: str = Form(...), file: UploadFile = File(...)):
-    contents =  file.read()
+async def inference(modelUuid: str = Form(...), file: UploadFile = File(...)):
+    contents = await file.read()
 
     nparr = np.frombuffer(contents, np.uint8)
 
