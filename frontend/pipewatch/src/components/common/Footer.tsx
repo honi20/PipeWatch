@@ -29,7 +29,10 @@ export const Footer = ({ currentTheme }: Props) => {
           />
         </Link>
 
-        <div className="p-3 pb-2"> {t("footer.paoriTeam")}</div>
+        <div className="p-3 pb-2 font-bold text-black dark:text-white">
+          {" "}
+          {t("footer.paoriTeam")}
+        </div>
 
         <NavLink
           className={({ isActive }) =>
@@ -57,12 +60,12 @@ export const Footer = ({ currentTheme }: Props) => {
           {t("footer.contact")}
         </NavLink>
 
-        <button
+        {/* <button
           onClick={() => setIsOpen(true)}
           className="p-3 pb-2 bg-transparent hover:text-primary-200"
         >
           {t("footer.manageCookies.title")}
-        </button>
+        </button> */}
       </div>
       <div className="flex items-center gap-4">
         {t("home.greeting1")} {t("home.greeting2")}
