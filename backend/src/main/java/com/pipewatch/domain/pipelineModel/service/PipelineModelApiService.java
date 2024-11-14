@@ -15,7 +15,7 @@ public interface PipelineModelApiService {
 	);
 
 	@PostMapping(value = "/modeling")
-	void transferModelUuid(
+	void createModel(
 			@RequestPart(value = "modelUuid") String modelUuid
 	);
 }
