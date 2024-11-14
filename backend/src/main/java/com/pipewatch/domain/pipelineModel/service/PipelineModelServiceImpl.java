@@ -30,6 +30,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -93,12 +94,16 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 				.build();
 
 		pipelineModelRepository.save(pipelineModel);
-
-		pipelineModelApiService.createModel(modelUuid);
+		subTransactionForCreateModel(modelUuid);
 
 		return PipelineModelResponse.FileUploadDto.builder()
 				.modelId(pipelineModel.getId())
 				.build();
+	}
+
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public void subTransactionForCreateModel(String modelUuid) {
+		pipelineModelApiService.createModel(modelUuid);
 	}
 
 	@Override

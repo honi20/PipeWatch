@@ -72,7 +72,7 @@ jwt:
 
 logging:
   level:
-    root: debug
+    root: info
 
 cloud:
   aws:
