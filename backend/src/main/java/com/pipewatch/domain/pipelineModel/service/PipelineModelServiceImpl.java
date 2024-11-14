@@ -94,7 +94,7 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 
 		pipelineModelRepository.save(pipelineModel);
 
-		pipelineModelApiService.transferModelUuid(modelUuid);
+		pipelineModelApiService.createModel(modelUuid);
 
 		return PipelineModelResponse.FileUploadDto.builder()
 				.modelId(pipelineModel.getId())
