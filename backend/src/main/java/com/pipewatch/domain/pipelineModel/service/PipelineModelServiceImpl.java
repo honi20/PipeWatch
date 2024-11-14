@@ -94,10 +94,10 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 				.build();
 
 		pipelineModelRepository.save(pipelineModel);
-		subTransactionForCreateModel(modelUuid);
 
 		return PipelineModelResponse.FileUploadDto.builder()
 				.modelId(pipelineModel.getId())
+				.modelUuid(pipelineModel.getUuid())
 				.build();
 	}
 

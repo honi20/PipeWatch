@@ -51,6 +51,7 @@ public class PipelineModelResponse {
 	@AllArgsConstructor
 	public static class FileUploadDto {
 		private Long modelId;
+		private String modelUuid;
 	}
 
 	@Getter

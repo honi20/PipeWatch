@@ -14,6 +14,8 @@ public interface PipelineModelService {
 
 	PipelineModelResponse.CreateModelingDto createModeling(PipelineModelRequest.ModelingDto requestDto) throws IOException, ParseException;
 
+	void subTransactionForCreateModel(String modelUuid);
+
 	void initModel(Long userId, Long modelId, PipelineModelRequest.InitDto requestDto);
 
 	PipelineModelResponse.ListDto getModelList(Long userId, String building, Integer floor);
