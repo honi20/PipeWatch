@@ -27,10 +27,11 @@ from PIL import Image
 
 app = FastAPI()
 trained_model=YOLO("./DLModel/best.pt")
+result ={}
 
 @app.post("/inference")
-async def inference(modelUuid: str = Form(...), file: UploadFile = File(...)):
-    contents = await file.read()
+def inference(modelUuid: str = Form(...), file: UploadFile = File(...)):
+    contents =  file.read()
 
     nparr = np.frombuffer(contents, np.uint8)
 
@@ -108,9 +109,13 @@ async def inference(modelUuid: str = Form(...), file: UploadFile = File(...)):
         "coords": scaled_pipes
     }
     
-    create_model(scaled_pipes, modelUuid)
+    result[modelUuid] = data
 
     return True
+
+@app.post("/modeling")
+def modeling(request):
+    create_model(result[request.modelUuid], request.modelUuid)
 
 if __name__ == "__main__":
     uvicorn.run(app, host=host, port=int(port))
