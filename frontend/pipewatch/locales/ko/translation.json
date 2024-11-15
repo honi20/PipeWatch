@@ -475,7 +475,8 @@
       "checkDefect": "결함 체크",
       "memoLabel": "메모",
       "modifiedDate": "수정일"
-    }
+    },
+    "enterMemo": "메모를 입력하세요."
   },
   "terms": {
     "title": "Pipewatch 이용약관",
