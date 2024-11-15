@@ -149,6 +149,7 @@ export const PipeModel: React.FC<{
     const pipe = pipelines[0].pipes.filter(
       (item) => item.pipeUuid === mesh.name
     );
+    console.log(mesh.name, pipe);
     return defectedPipeList?.includes(pipe[0].pipeId);
   };
 
@@ -160,6 +161,7 @@ export const PipeModel: React.FC<{
             <group key={index} name={groupName}>
               {meshes.map(({ originalMesh, segmentName }, i) => {
                 // 결함 확인
+                console.log("test");
                 if (viewDefect[modelId] && confirmDefection(originalMesh)) {
                   (
                     originalMesh.material as THREE.MeshStandardMaterial

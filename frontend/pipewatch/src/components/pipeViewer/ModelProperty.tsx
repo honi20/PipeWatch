@@ -124,6 +124,9 @@ export const ModelProperty: React.FC<ModelPropertyProps> = (props) => {
     getPipelineDetail();
   }, [pipelines, modelId]);
 
+  useEffect(() => {
+    console.log(pipeOuterDiameter, pipeInnerDiameter);
+  }, [pipeOuterDiameter, pipeInnerDiameter]);
   // input이 바뀌었을때 true
   const [isChanged, setIsChanged] = useState(false);
 
@@ -221,9 +224,15 @@ export const ModelProperty: React.FC<ModelPropertyProps> = (props) => {
                     <Input
                       type="number"
                       value={pipeOuterDiameter}
-                      onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                        setPipeOuterDiameter(Number(e.target.value))
-                      }
+                      onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                        const value = Number(e.target.value);
+                        if (
+                          value >= 0 &&
+                          (pipeInnerDiameter === 0 || value > pipeInnerDiameter)
+                        ) {
+                          setPipeOuterDiameter(value);
+                        }
+                      }}
                       className={clsx(
                         "block w-full pl-5 pr-10 rounded-md border-none bg-black/40 py-2 px-3 text-sm/6 text-white",
                         "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25"
@@ -243,9 +252,16 @@ export const ModelProperty: React.FC<ModelPropertyProps> = (props) => {
                     <Input
                       type="number"
                       value={pipeInnerDiameter}
-                      onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                        setPipeInnerDiameter(Number(e.target.value))
-                      }
+                      onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                        const value = Number(e.target.value);
+                        // 내경이 0보다 큰 값이고, 외경보다 작은 값만 허용
+                        if (
+                          value >= 0 &&
+                          (pipeOuterDiameter === 0 || value < pipeOuterDiameter)
+                        ) {
+                          setPipeInnerDiameter(value);
+                        }
+                      }}
                       className={clsx(
                         "block w-full pl-5 pr-10 rounded-md border-none bg-black/40 py-2 px-3 text-sm/6 text-white",
                         "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25"

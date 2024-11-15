@@ -59,7 +59,7 @@ export const ModelNameInput: React.FC<NameInputProps> = ({
   };
 
   return (
-    <div className="flex flex-col items-center mx-3">
+    <div className="flex flex-col items-center mx-2">
       {isEditing ? (
         <input
           type="text"
@@ -73,7 +73,7 @@ export const ModelNameInput: React.FC<NameInputProps> = ({
         />
       ) : (
         <h2
-          className="text-[30px] font-bold cursor-pointer text-center whitespace-normal break-words"
+          className="text-[30px] font-bold cursor-pointer text-center whitespace-normal break-keep"
           onDoubleClick={handleDoubleClick}
           title="더블클릭해서 모델명을 변경하세요."
         >
