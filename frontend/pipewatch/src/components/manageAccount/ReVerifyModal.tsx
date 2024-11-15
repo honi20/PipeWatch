@@ -10,6 +10,8 @@ import { useState } from "react";
 
 import { getApiClient } from "@src/stores/apiClient";
 
+import { useUserStore } from "@src/stores/userStore";
+
 type ManageCookiesProps = {
   isOpen: boolean;
   onClose: () => void;
@@ -20,7 +22,7 @@ export const ReVerifyModal = ({ isOpen, onClose }: ManageCookiesProps) => {
 
   const [isRequested, setIsRequested] = useState(false);
 
-  const enterpriseName = sessionStorage.getItem("enterpriseName");
+  const { enterpriseName } = useUserStore();
 
   const apiClient = getApiClient();
   const roleRequest = async () => {

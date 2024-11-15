@@ -42,17 +42,43 @@ import { Completed } from "@components/pipeGenerator/Completed";
 
 import { CompletedContact } from "@pages/CompletedContact";
 
-const ScrollToTop = () => {
-  const { pathname } = useLocation();
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [pathname]);
-
-  return null;
-};
+import { getApiClient } from "@src/stores/apiClient";
+import { useUserStore } from "@src/stores/userStore";
 
 function App() {
+  const ScrollToTop = () => {
+    const { pathname } = useLocation();
+
+    useEffect(() => {
+      window.scrollTo(0, 0);
+    }, [pathname]);
+
+    return null;
+  };
+
+  const { setName, setEnterpriseName, setRole, setUserState } = useUserStore();
+
+  const saveUserInfo = async () => {
+    const apiClient = getApiClient();
+    try {
+      const res = await apiClient.get("/api/users/profile");
+      const userInfo = res.data.body;
+      console.log("userInfo in App.tsx: ", userInfo);
+      setName(userInfo.name);
+      setRole(userInfo.role);
+      setUserState(userInfo.state);
+      setEnterpriseName(userInfo.enterpriseName);
+    } catch (err) {
+      console.error("UserInfo 저장 실패", err);
+
+      throw err;
+    }
+  };
+
+  useEffect(() => {
+    saveUserInfo();
+  }, []);
+
   return (
     <>
       <Router>

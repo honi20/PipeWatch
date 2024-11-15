@@ -2,9 +2,10 @@ import { SideBar } from "@src/components/enterprise/SideBar";
 import { Outlet } from "react-router-dom";
 
 import { AccessBlocked } from "@src/components/common/AccessBlocked";
+import { useUserStore } from "@src/stores/userStore";
 
 export const Enterprise = () => {
-  const role = sessionStorage.getItem("role");
+  const { role } = useUserStore();
 
   return (
     <div className="flex">

@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useState, ChangeEvent, FocusEvent, useEffect } from "react";
 import { AxiosError } from "axios";
 import { getApiClient } from "@src/stores/apiClient";
+import { useUserStore } from "@src/stores/userStore";
 
 const WithdrawalCard = () => {
   const { t } = useTranslation();
@@ -16,6 +17,8 @@ const WithdrawalCard = () => {
   const [email, setEmail] = useState("");
 
   const apiClient = getApiClient();
+
+  const { setUserState } = useUserStore();
 
   const getUserInfo = async () => {
     try {
@@ -32,7 +35,7 @@ const WithdrawalCard = () => {
         data: { password: password },
       });
       console.log("탈퇴 성공 status: ", res.status);
-      sessionStorage.setItem("userState", "INACTIVE");
+      setUserState("INACTIVE");
       navigate("/account/manage/withdrawal/completed");
     } catch (err: unknown) {
       if (err instanceof AxiosError && err.response?.status === 403) {
