@@ -76,6 +76,11 @@ function App() {
   };
 
   useEffect(() => {
+    const accessToken = sessionStorage.getItem("accessToken");
+    if (!accessToken) {
+      console.log("accessToken이 없습니다.");
+      return;
+    }
     saveUserInfo();
   }, []);
 
