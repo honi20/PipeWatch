@@ -18,6 +18,7 @@ export const PipeViewer = () => {
         method: "get",
         url: "/api/models",
       });
+      console.log(res.data);
       console.log(res.data.header.httpStatusCode, res.data.header.message);
       console.log(res.data.body.models);
       setModels(res.data.body.models);

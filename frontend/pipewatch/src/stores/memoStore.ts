@@ -55,6 +55,7 @@ export const useMemoStore = create<MemoState>((set, get) => ({
       });
       console.log(res.data.header.httpStatusCode, res.data.header.message);
       // 메모 저장
+      console.log(res.data)
       await get().getMemoList(modelId);
     } catch (err) {
       console.log(err);

@@ -17,6 +17,7 @@ interface PipeMemoProps {
   updatedAt: string;
   onViewChange: () => void;
   setIsTotalView: React.Dispatch<React.SetStateAction<boolean>>;
+  hasPipeId: boolean;
 }
 
 export const PipeMemo: React.FC<PipeMemoProps> = (props) => {
@@ -30,6 +31,7 @@ export const PipeMemo: React.FC<PipeMemoProps> = (props) => {
     updatedAt,
     onViewChange,
     setIsTotalView,
+    hasPipeId,
   } = props;
   const { selectedPipeId } = usePipe();
   const [pipeName, setPipeName] = useState<string>("");
@@ -107,12 +109,14 @@ export const PipeMemo: React.FC<PipeMemoProps> = (props) => {
 
   // memoList renderer
   useEffect(() => {
-    getPipeInfo(selectedPipeId);
+    if (selectedPipeId) {
+      getPipeInfo(selectedPipeId);
+    }
     // 나중에 바꿔야 해 -> 결함 정보 업데이트 하는 방식으로
   }, [selectedPipeId]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === "Enter") {
+    if (e.key === "Enter" && selectedPipeId) {
       e.preventDefault();
       createPipeMemo(selectedPipeId, memo);
       // postMemo(pipeId, memo);
@@ -164,23 +168,27 @@ export const PipeMemo: React.FC<PipeMemoProps> = (props) => {
                   )}`}
             </p>
           </div>
-          <div className="flex items-center w-full gap-2">
-            <h3 className="text-[20px] font-bold self-start px-1">
-              {t("PipeViewer.PipeMemo.checkDefect")}
-            </h3>
-            <Checkbox
-              checked={checked}
-              onChange={(isChecked: boolean) => {
-                setChecked(isChecked);
-                checkPipeDefection(selectedPipeId);
-              }}
-              className="p-1 rounded-md group size-8 bg-black/60 ring-1 ring-white/15 ring-inset "
-            >
-              {checked && (
-                <CheckIcon className="hidden size-4 fill-black group-data-[checked]:block" />
-              )}
-            </Checkbox>
-          </div>
+          {hasPipeId && (
+            <div className="flex items-center w-full gap-2">
+              <h3 className="text-[20px] font-bold self-start px-1">
+                {t("PipeViewer.PipeMemo.checkDefect")}
+              </h3>
+              <Checkbox
+                checked={checked}
+                onChange={(isChecked: boolean) => {
+                  setChecked(isChecked);
+                  if (selectedPipeId) {
+                    checkPipeDefection(selectedPipeId);
+                  }
+                }}
+                className="p-1 rounded-md group size-8 bg-black/60 ring-1 ring-white/15 ring-inset "
+              >
+                {checked && (
+                  <CheckIcon className="hidden size-4 fill-black group-data-[checked]:block" />
+                )}
+              </Checkbox>
+            </div>
+          )}
           {/* 메모 input */}
           <div className="flex flex-col w-full">
             <h3 className="text-[20px] font-bold self-start px-1">

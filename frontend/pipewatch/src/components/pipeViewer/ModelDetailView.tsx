@@ -46,6 +46,7 @@ export const ModelDetailView: React.FC<ModelDetailViewProps> = ({
           pipelines={modelDetail.pipelines}
           modelId={modelId}
           modelDetail={modelDetail}
+          hasPipeId={modelDetail.pipelines.length > 0}
         />
       )}
     </div>

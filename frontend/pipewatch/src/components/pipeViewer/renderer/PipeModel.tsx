@@ -16,6 +16,7 @@ export const PipeModel: React.FC<{
   setIsTotalView: React.Dispatch<React.SetStateAction<boolean>>;
   pipelines: PipelineType[];
   modelId: number;
+  hasPipeId: boolean;
 }> = ({
   gltfUrl,
   onModelLoad,
@@ -24,6 +25,7 @@ export const PipeModel: React.FC<{
   setIsTotalView,
   pipelines,
   modelId,
+  hasPipeId,
 }) => {
   const { setSelectView } = useSelectView();
   // selectedPipe
@@ -146,10 +148,12 @@ export const PipeModel: React.FC<{
 
   // 해당 파이프의 결함 유무 체크
   const confirmDefection = (mesh: THREE.Mesh) => {
-    const pipe = pipelines[0].pipes.filter(
-      (item) => item.pipeUuid === mesh.name
-    );
-    return defectedPipeList?.includes(pipe[0].pipeId);
+    if (hasPipeId) {
+      const pipe = pipelines[0].pipes.filter(
+        (item) => item.pipeUuid === mesh.name
+      );
+      return defectedPipeList?.includes(pipe[0].pipeId);
+    }
   };
 
   return (
@@ -160,7 +164,11 @@ export const PipeModel: React.FC<{
             <group key={index} name={groupName}>
               {meshes.map(({ originalMesh, segmentName }, i) => {
                 // 결함 확인
-                if (viewDefect[modelId] && confirmDefection(originalMesh)) {
+                if (
+                  hasPipeId &&
+                  viewDefect[modelId] &&
+                  confirmDefection(originalMesh)
+                ) {
                   (
                     originalMesh.material as THREE.MeshStandardMaterial
                   ).color.set("red");
