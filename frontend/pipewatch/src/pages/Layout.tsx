@@ -35,7 +35,7 @@ function Layout() {
       {isAuth ? null : (
         <Header handleTheme={handleTheme} currentTheme={localStorage.theme} />
       )}
-      <div className="py-[108px] min-h-full">
+      <div className="py-[108px] min-h-full dark:bg-black bg-white">
         <Outlet />
       </div>
       <Footer currentTheme={localStorage.theme} />

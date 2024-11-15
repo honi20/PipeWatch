@@ -48,7 +48,7 @@ export const Home = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center">
+    <div className="flex flex-col items-center justify-center h-full">
       <div className="flex flex-col items-center justify-center mb-[100px]">
         <h1 className="font-bold text-[80px]">{t("home.greeting1")}</h1>
         <h1 className="font-bold text-[80px]">{t("home.greeting2")}</h1>
