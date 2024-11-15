@@ -15,13 +15,14 @@ interface GLTFViewerProps {
   pipelines: PipelineType[];
   modelId: number;
   modelDetail: ModelDetailType;
+  hasPipeId: boolean;
 }
 
 const GLTFViewer: React.FC<GLTFViewerProps> = (props) => {
   const { t } = useTranslation();
   const { setSelectedPipeId } = usePipe();
   const { selectView, setSelectView } = useSelectView();
-  const { gltfUrl, pipelines, modelId, modelDetail } = props;
+  const { gltfUrl, pipelines, modelId, modelDetail, hasPipeId } = props;
   const cameraControlsRef = useRef<CameraControls | null>(null);
   const [isTotalView, setIsTotalView] = useState<boolean>(true);
 
@@ -61,6 +62,7 @@ const GLTFViewer: React.FC<GLTFViewerProps> = (props) => {
               floor={modelDetail.floor}
               updatedAt={modelDetail.updatedAt}
               onViewChange={() => setSelectView("PROPERTY")}
+              hasPipeId={hasPipeId}
             />
           ) : selectView === "PROPERTY" ? (
             <ModelProperty
@@ -80,6 +82,7 @@ const GLTFViewer: React.FC<GLTFViewerProps> = (props) => {
                 updatedAt={modelDetail.updatedAt}
                 onViewChange={() => setSelectView("MODEL_MEMO")}
                 setIsTotalView={setIsTotalView}
+                hasPipeId={hasPipeId}
               />
             )
           ))}

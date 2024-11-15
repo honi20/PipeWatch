@@ -16,6 +16,7 @@ interface PipeMemoProps {
   floor: number;
   updatedAt: string;
   onViewChange: () => void;
+  hasPipeId: boolean;
 }
 
 export const ModelMemo: React.FC<PipeMemoProps> = (props) => {
@@ -23,8 +24,15 @@ export const ModelMemo: React.FC<PipeMemoProps> = (props) => {
   const { viewDefect, setViewDefect } = useDefectStore();
   const { memo, setMemo, memoList, getMemoList, postMemo, deleteMemo } =
     useMemoStore();
-  const { modelId, modelName, building, floor, updatedAt, onViewChange } =
-    props;
+  const {
+    modelId,
+    modelName,
+    building,
+    floor,
+    updatedAt,
+    onViewChange,
+    hasPipeId,
+  } = props;
 
   // memoList renderer
   useEffect(() => {
@@ -86,20 +94,22 @@ export const ModelMemo: React.FC<PipeMemoProps> = (props) => {
             </p>
           </div>
           {/* 결함 탐지 */}
-          <div className="flex items-center w-full gap-2">
-            <h3 className="text-[20px] font-bold self-start px-1">
-              {t("PipeViewer.ModelMemo.viewDefectivePipe")}
-            </h3>
-            <Checkbox
-              checked={!!viewDefect[modelId]}
-              onChange={handleCheckboxChange}
-              className="p-1 rounded-md group size-8 bg-black/60 ring-1 ring-white/15 ring-inset "
-            >
-              {viewDefect[modelId] && (
-                <CheckIcon className="hidden size-4 fill-black group-data-[checked]:block" />
-              )}
-            </Checkbox>
-          </div>
+          {hasPipeId && (
+            <div className="flex items-center w-full gap-2">
+              <h3 className="text-[20px] font-bold self-start px-1">
+                {t("PipeViewer.ModelMemo.viewDefectivePipe")}
+              </h3>
+              <Checkbox
+                checked={!!viewDefect[modelId]}
+                onChange={handleCheckboxChange}
+                className="p-1 rounded-md group size-8 bg-black/60 ring-1 ring-white/15 ring-inset "
+              >
+                {viewDefect[modelId] && (
+                  <CheckIcon className="hidden size-4 fill-black group-data-[checked]:block" />
+                )}
+              </Checkbox>
+            </div>
+          )}
 
           {/* 메모 input */}
           <div className="flex flex-col w-full">
