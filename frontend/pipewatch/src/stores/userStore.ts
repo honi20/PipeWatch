@@ -24,6 +24,8 @@ interface UserState {
   setRole: (role: string) => void;
   userState: string | null;
   setUserState: (state: string) => void;
+  enterpriseName: string | null;
+  setEnterpriseName: (state: string) => void;
   userInfo: UserInfo | null;
   setUserInfo: (userinfo: UserInfo | null) => void;
 }
@@ -37,6 +39,8 @@ export const useUserStore = create<UserState>((set) => ({
   setRole: (role) => set({ role }),
   userState: null,
   setUserState: (userState) => set({ userState }),
+  enterpriseName: null,
+  setEnterpriseName: (enterpriseName) => set({ enterpriseName }),
   userInfo: null,
   setUserInfo: (userInfo) =>
     set({ userInfo, isLogin: true, role: userInfo?.role }),

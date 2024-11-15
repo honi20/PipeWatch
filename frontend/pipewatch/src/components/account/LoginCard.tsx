@@ -6,9 +6,13 @@ import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import { PuffLoader } from "react-spinners";
 
+import { useUserStore } from "@src/stores/userStore";
+
 const LoginCard = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+
+  const { setName, setEnterpriseName, setRole, setUserState } = useUserStore();
 
   const saveUserInfo = async () => {
     const apiClient = getApiClient();
@@ -17,10 +21,10 @@ const LoginCard = () => {
       const userInfo = res.data.body;
       console.log("userInfo in LoginCard: ", userInfo);
 
-      sessionStorage.setItem("role", userInfo.role);
-      sessionStorage.setItem("name", userInfo.name);
-      sessionStorage.setItem("userState", userInfo.state);
-      sessionStorage.setItem("enterpriseName", userInfo.enterpriseName);
+      setName(userInfo.name);
+      setRole(userInfo.role);
+      setUserState(userInfo.state);
+      setEnterpriseName(userInfo.enterpriseName);
     } catch (err) {
       console.error("UserInfo 저장 실패", err);
 

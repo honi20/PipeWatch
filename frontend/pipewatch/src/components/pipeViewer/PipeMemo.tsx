@@ -201,9 +201,10 @@ export const PipeMemo: React.FC<PipeMemoProps> = (props) => {
               }
               onKeyDown={handleKeyDown}
               className={clsx(
-                "mt-3 block w-full rounded-lg border-none bg-black/60 py-1.5 px-3 text-sm/6 text-white",
+                "mt-3 h-[50px] resize-none block w-full rounded-lg border-none bg-black/60 py-1.5 px-3 text-sm/6 text-white",
                 "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25"
               )}
+              placeholder={t("PipeViewer.enterMemo")}
             />
 
             {/* 메모 조회창 */}

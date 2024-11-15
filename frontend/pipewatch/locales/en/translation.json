@@ -427,7 +427,7 @@
     "ModelListView": {
       "selectModel": "Select Pipe Model.",
       "done": "Done",
-      "edit":"Edit"
+      "edit": "Edit"
     },
     "GLTFViewer": {
       "viewFullModel": "View Full Model"
@@ -475,7 +475,8 @@
       "checkDefect": "Check Defection",
       "memoLabel": "Memo",
       "modifiedDate": "Modified Date"
-    }
+    },
+    "enterMemo": "Enter a memo."
   },
   "terms": {
     "title": "Pipewatch Terms of Service",

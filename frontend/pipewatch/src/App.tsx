@@ -1,3 +1,6 @@
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
+
 import "./App.css";
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
@@ -39,10 +42,52 @@ import { Completed } from "@components/pipeGenerator/Completed";
 
 import { CompletedContact } from "@pages/CompletedContact";
 
+import { getApiClient } from "@src/stores/apiClient";
+import { useUserStore } from "@src/stores/userStore";
+
 function App() {
+  const ScrollToTop = () => {
+    const { pathname } = useLocation();
+
+    useEffect(() => {
+      window.scrollTo(0, 0);
+    }, [pathname]);
+
+    return null;
+  };
+
+  const { setName, setEnterpriseName, setRole, setUserState } = useUserStore();
+
+  const saveUserInfo = async () => {
+    const apiClient = getApiClient();
+    try {
+      const res = await apiClient.get("/api/users/profile");
+      const userInfo = res.data.body;
+      console.log("userInfo in App.tsx: ", userInfo);
+      setName(userInfo.name);
+      setRole(userInfo.role);
+      setUserState(userInfo.state);
+      setEnterpriseName(userInfo.enterpriseName);
+    } catch (err) {
+      console.error("UserInfo 저장 실패", err);
+
+      throw err;
+    }
+  };
+
+  useEffect(() => {
+    const accessToken = sessionStorage.getItem("accessToken");
+    if (!accessToken) {
+      console.log("accessToken이 없습니다.");
+      return;
+    }
+    saveUserInfo();
+  }, []);
+
   return (
     <>
       <Router>
+        <ScrollToTop />
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />

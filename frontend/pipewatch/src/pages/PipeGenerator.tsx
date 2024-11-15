@@ -17,12 +17,14 @@ import { Completed } from "@components/pipeGenerator/Completed";
 
 import { AccessBlocked } from "@src/components/common/AccessBlocked";
 
+import { useUserStore } from "@src/stores/userStore";
+
 export const PipeGenerator = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
 
-  const role = sessionStorage.getItem("role");
+  const { role } = useUserStore();
 
   useEffect(() => {
     if (location.pathname === "/pipe-generator") {
@@ -63,18 +65,10 @@ export const PipeGenerator = () => {
     },
   ];
 
-  // const activeIndex = menus.findIndex(
-  //   (menu) => menu.path === location.pathname
-  // );
-
   const activeIndex = menus.findIndex((menu) => {
     const menuPath = menu.path.replace(/:modelId/, "");
     return location.pathname.startsWith(menuPath);
   });
-
-  // const handleTabClick = (path: string) => {
-  //   navigate(path);
-  // };
 
   // const handleTabClick = (path: string) => {
   //   const modelId = "1";

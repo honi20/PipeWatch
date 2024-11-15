@@ -57,8 +57,9 @@ export const Header = ({ handleTheme, currentTheme }: Props) => {
     role,
     userState,
     isLogin,
-    setName,
     setLogin,
+    setName,
+    setEnterpriseName,
     setRole,
     setUserState,
   } = useUserStore();
@@ -66,16 +67,8 @@ export const Header = ({ handleTheme, currentTheme }: Props) => {
 
   useEffect(() => {
     const isLoggedIn = !!sessionStorage.getItem("accessToken");
-    // console.log("Header: 로그인 상태 확인 ", isLoggedIn);
-    setLogin(isLoggedIn);
 
-    const role = sessionStorage.getItem("role") || "UNAUTHORIZED";
-    setRole(role);
-    const name = sessionStorage.getItem("name") || "";
-    setName(name);
-    const state = sessionStorage.getItem("userState") || "";
-    setUserState(state);
-    // console.log("useEffect 실행");
+    setLogin(isLoggedIn);
   }, []);
 
   useEffect(() => {
@@ -95,10 +88,11 @@ export const Header = ({ handleTheme, currentTheme }: Props) => {
     } finally {
       // 로그아웃 처리
       sessionStorage.removeItem("accessToken");
-      sessionStorage.removeItem("role");
-      sessionStorage.removeItem("name");
-      sessionStorage.removeItem("userState");
-      sessionStorage.removeItem("enterpriseName");
+
+      setName("");
+      setRole("");
+      setUserState("");
+      setEnterpriseName("");
 
       window.location.href = "/";
     }
