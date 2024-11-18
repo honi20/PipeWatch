@@ -39,19 +39,24 @@ export const AboutService = () => {
             </div>
 
             <div className="flex flex-col items-center my-4 text-center">
-              <h2 className="font-bold text-[60px]">
+              <h2
+                className={`font-bold text-[60px] ${
+                  index === 0 && "text-primary-200"
+                }`}
+              >
                 {t(`aboutService.${feature.item}.title`)}
               </h2>
               <p
                 className={`flex flex-col items-center text-[24px] ${
                   index === 0 && "text-[60px] font-bold mt-[40px]"
-                }`}
+                } `}
               >
                 {t(`aboutService.${feature.item}.description1`)}
               </p>
               <p
                 className={`flex flex-col items-center text-[24px] ${
-                  index === 0 && "text-[60px] font-bold mt-[40px]"
+                  index === 0 &&
+                  "text-[60px] font-bold mt-[40px] text-primary-200"
                 }`}
               >
                 {t(`aboutService.${feature.item}.description2`)}
