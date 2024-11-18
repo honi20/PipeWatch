@@ -84,7 +84,7 @@ export const SceneContent: React.FC<{
         maxPolarAngle={Math.PI}
         dampingFactor={0.25}
       />
-      <gridHelper />
+      {/* <gridHelper /> */}
     </>
   );
 };
