@@ -8,6 +8,8 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { ModelNameInput } from "@src/components/pipeViewer/input/ModelNameInput";
 import CheckIcon from "@mui/icons-material/Check";
 import { useDefectStore } from "@src/stores/defectStore";
+import DownloadIcon from "@mui/icons-material/Download";
+import { usePipe } from "@src/components/context/PipeContext";
 
 interface PipeMemoProps {
   modelId: number;
@@ -24,6 +26,7 @@ export const ModelMemo: React.FC<PipeMemoProps> = (props) => {
   const { viewDefect, setViewDefect } = useDefectStore();
   const { memo, setMemo, memoList, getMemoList, postMemo, deleteMemo } =
     useMemoStore();
+  const { isButtonClicked, setIsButtonClicked } = usePipe();
   const {
     modelId,
     modelName,
@@ -70,6 +73,11 @@ export const ModelMemo: React.FC<PipeMemoProps> = (props) => {
     return `${year}. ${month}. ${day}`;
   };
 
+  // screen shot download handler
+  const handleDownloadButton = () => {
+    console.log("test");
+    setIsButtonClicked(!isButtonClicked);
+  };
   return (
     <div className="w-[400px] h-[680px] flex flex-col bg-block rounded-[30px] px-[50px] py-[30px] text-white justify-between items-center gap-5">
       <div className="flex flex-col w-full h-full">
@@ -112,8 +120,14 @@ export const ModelMemo: React.FC<PipeMemoProps> = (props) => {
           )}
 
           <div className="flex items-center w-full gap-2">
-            <h3 className="text-[20px] font-bold self-start px-1">다운로드</h3>
-            <button>버튼</button>
+            <h3 className="text-[20px] font-bold self-start px-1">
+              {t("PipeViewer.ModelMemo.downloadScreenShot")}
+            </h3>
+            <DownloadIcon
+              onClick={handleDownloadButton}
+              className="rounded-md bg-black/60 hover:bg-primary-500 h-[30px]"
+              style={{ width: "30px", height: "30px" }}
+            />
           </div>
 
           {/* 메모 input */}

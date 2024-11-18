@@ -438,7 +438,8 @@
       "floorLabel": "F",
       "basementLabel": "B",
       "memoLabel": "Memo",
-      "modifiedDate": "Modified Date"
+      "modifiedDate": "Modified Date",
+      "downloadScreenShot":"Download Screenshot"
     },
     "ModelProperty": {
       "memoLabel": "Memo",
