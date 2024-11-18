@@ -1,12 +1,15 @@
 server:
   port: ${APPLICATION_PORT}
 
-
 spring:
   application:
     name: pipewatch
   main:
     allow-bean-definition-overriding: true
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
   datasource:
     url: ${DATASOURCE_URL}
     username: ${DATASOURCE_USERNAME}
@@ -20,9 +23,9 @@ spring:
     properties:
       hibernate:
         globally_quoted_identifiers: true
-#    defer-datasource-initialization: true
-#  sql:
-#    init:
+      #    defer-datasource-initialization: true
+      #  sql:
+      #    init:
       mode: always
   data:
     redis:
