@@ -11,7 +11,12 @@ const LOGIN =
 export const createApiClient = (accessToken: string | null) => {
   if (!accessToken && window.location.href !== LOGIN) {
     console.error("createApiClient: accessToken이 제공되지 않았습니다.");
-    window.location.href = LOGIN;
+    if (
+      window.location.pathname.startsWith("/pipe-generator") ||
+      window.location.pathname.startsWith("/pipe-viewer")
+    ) {
+      window.location.href = LOGIN;
+    }
   }
 
   return axios.create({
