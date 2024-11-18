@@ -193,6 +193,11 @@ def check_collinear(p1, p2, p3):
     dot_product = vec1[0] * vec2[0] + vec1[1] * vec2[1]
     mag1 = math.sqrt(vec1[0] ** 2 + vec1[1] ** 2)
     mag2 = math.sqrt(vec2[0] ** 2 + vec2[1] ** 2)
+
+    # 벡터 크기 0인 경우 처리
+    if mag1 == 0 or mag2 == 0:
+        return True
+    
     angle = math.degrees(math.acos(dot_product / (mag1 * mag2)))
 
     return angle <= ANGLE_TOLERANCE
