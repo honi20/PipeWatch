@@ -119,7 +119,7 @@ export const Home = () => {
         </motion.div>
       </div>
 
-      <div className="flex my-[100px] justify-between w-full px-[50px] gap-[20px]">
+      <div className="flex my-[100px] justify-center w-full px-[50px] gap-[100px]">
         <div className="text-left">
           <div className="font-bold text-[50px]">
             {t("home.introduction.uploadData.title")}
@@ -192,7 +192,7 @@ export const Home = () => {
             duration: 0.7,
           }}
         >
-          <div className="flex flex-col items-center">
+          <div className="flex flex-col items-center text-center">
             <div className="font-bold text-[50px]">
               {" "}
               {t("home.introduction.managePipes.title")}
@@ -204,7 +204,7 @@ export const Home = () => {
         </motion.div>
         <div className="flex flex-col items-center">
           <nav>
-            <ul className="flex">
+            <ul className="flex mb-[20px]">
               {tabs.map((item) => (
                 <li
                   key={item.label}
@@ -230,7 +230,11 @@ export const Home = () => {
                 transition={{ duration: 0.2 }}
               >
                 {selectedTab ? (
-                  <img src={selectedTab.url} width={"1000px"} />
+                  <img
+                    src={selectedTab.url}
+                    width={"1000px"}
+                    className="object-fill rounded-[16px]"
+                  />
                 ) : (
                   "😋"
                 )}

@@ -352,11 +352,11 @@ const SignUpCard = () => {
       <div className="text-center whitespace-normal">
         <Trans i18nKey="account.termsAndPrivacyConsent">
           회원가입 시, 귀하는 당사의
-          <Link to="." className="underline">
+          <Link to="/terms-and-policy" className="underline">
             서비스 약관
           </Link>
           과
-          <Link to="." className="underline">
+          <Link to="/terms-and-policy" className="underline">
             개인정보 처리방침
           </Link>
           에 동의하는 것으로 간주됩니다.

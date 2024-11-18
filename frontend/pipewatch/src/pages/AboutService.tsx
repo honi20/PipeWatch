@@ -15,7 +15,7 @@ export const AboutService = () => {
   ];
 
   return (
-    <div className="flex flex-col items-center justify-center">
+    <div className="flex flex-col items-center justify-center text-center">
       <h1 className="font-bold text-[80px] font-Esamanru">We are PIPE WATCH</h1>
       <div className="flex flex-col items-center my-4">
         <p className="text-[32px]">{t("aboutService.description1")}</p>
@@ -38,7 +38,7 @@ export const AboutService = () => {
               ) : null}
             </div>
 
-            <div className="flex flex-col items-center my-4">
+            <div className="flex flex-col items-center my-4 text-center">
               <h2 className="font-bold text-[60px]">
                 {t(`aboutService.${feature.item}.title`)}
               </h2>
