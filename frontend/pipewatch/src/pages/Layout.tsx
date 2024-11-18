@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 
 import { Header } from "@components/common/Header";
+import { HeaderAccount } from "@components/common/HeaderAccount";
 import { Footer } from "@components/common/Footer";
 
 function Layout() {
@@ -31,7 +32,9 @@ function Layout() {
 
   return (
     <div className="min-w-[850px] w-screen  text-black bg-white dark:bg-black dark:text-white">
-      {isAuth ? null : (
+      {isAuth ? (
+        <HeaderAccount currentTheme={localStorage.theme} />
+      ) : (
         <Header handleTheme={handleTheme} currentTheme={localStorage.theme} />
       )}
       <div className="py-[108px] min-h-full dark:bg-black bg-white">

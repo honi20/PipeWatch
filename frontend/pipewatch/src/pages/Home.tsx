@@ -7,25 +7,40 @@ import { motion, AnimatePresence } from "framer-motion";
 import DoubleArrowIcon from "@mui/icons-material/DoubleArrow";
 
 import HomePipe from "@assets/images/home_pipe.png";
-import Upload1 from "@assets/images/home/upload_1.png";
-import Upload2 from "@assets/images/home/upload_2.png";
-import Upload3 from "@assets/images/home/upload_3.png";
-import Manage1 from "@assets/images/home/manage_1.png";
-import Manage2 from "@assets/images/home/manage_2.png";
-import Manage3 from "@assets/images/home/manage_3.png";
+import Upload1_ko from "@assets/images/home/upload_1_ko.png";
+import Upload2_ko from "@assets/images/home/upload_2_ko.png";
+import Upload3_ko from "@assets/images/home/upload_3_ko.png";
+import Manage1_ko from "@assets/images/home/manage_1_ko.png";
+import Manage2_ko from "@assets/images/home/manage_2_ko.png";
+import Manage3_ko from "@assets/images/home/manage_3_ko.png";
+import Upload1_en from "@assets/images/home/upload_1_en.png";
+import Upload2_en from "@assets/images/home/upload_2_en.png";
+import Upload3_en from "@assets/images/home/upload_3_en.png";
+import Manage1_en from "@assets/images/home/manage_1_en.png";
+import Manage2_en from "@assets/images/home/manage_2_en.png";
+import Manage3_en from "@assets/images/home/manage_3_en.png";
 
 import { useUserStore } from "@src/stores/userStore";
 
 export const Home = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+
+  const isKorean = i18n.language === "ko";
+  const currentLanguage = isKorean ? "한국어" : "English";
 
   const tabs = [
-    { label: t("home.introduction.tabs.allPipe"), url: Manage1 },
+    {
+      label: t("home.introduction.tabs.allPipe"),
+      url: currentLanguage === "한국어" ? Manage1_ko : Manage1_en,
+    },
     {
       label: t("home.introduction.tabs.individualPipe"),
-      url: Manage2,
+      url: currentLanguage === "한국어" ? Manage2_ko : Manage2_en,
     },
-    { label: t("home.introduction.tabs.memo"), url: Manage3 },
+    {
+      label: t("home.introduction.tabs.memo"),
+      url: currentLanguage === "한국어" ? Manage3_ko : Manage3_en,
+    },
   ];
 
   const [selectedTab, setSelectedTab] = useState(tabs[0]);
@@ -125,7 +140,11 @@ export const Home = () => {
               ease: [0, 0.71, 0.2, 1.01],
             }}
           >
-            <img src={Upload1} width={"400px"} className="my-[10px]" />
+            <img
+              src={currentLanguage === "한국어" ? Upload1_ko : Upload1_en}
+              width={"400px"}
+              className="my-[10px]"
+            />
           </motion.div>
           <motion.div
             variants={item}
@@ -137,7 +156,11 @@ export const Home = () => {
               ease: [0, 0.71, 0.2, 1.01],
             }}
           >
-            <img src={Upload2} width={"400px"} className="my-[10px]" />
+            <img
+              src={currentLanguage === "한국어" ? Upload2_ko : Upload2_en}
+              width={"400px"}
+              className="my-[10px]"
+            />
           </motion.div>
           <motion.div
             variants={item}
@@ -149,7 +172,11 @@ export const Home = () => {
               ease: [0, 0.71, 0.2, 1.01],
             }}
           >
-            <img src={Upload3} width={"400px"} className="my-[10px]" />
+            <img
+              src={currentLanguage === "한국어" ? Upload3_ko : Upload3_en}
+              width={"400px"}
+              className="my-[10px]"
+            />
           </motion.div>
         </div>
       </div>
