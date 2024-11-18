@@ -44,6 +44,7 @@ const GLTFViewer: React.FC<GLTFViewerProps> = (props) => {
           setIsTotalView={setIsTotalView}
           pipelines={pipelines}
           modelId={modelId}
+          hasPipeId={hasPipeId}
         />
       </Canvas>
       <button
