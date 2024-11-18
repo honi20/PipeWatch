@@ -170,12 +170,12 @@
     },
     "feature2": {
       "title": "파이프 세그멘테이션 모델",
-      "description1": "약 2,000개의 파이프 데이터셋을 활용한 고정밀 세그멘테이션 기술",
+      "description1": "약 2,500개의 파이프 데이터셋을 활용한 고정밀 세그멘테이션 기술",
       "description2": ""
     },
     "feature3": {
       "title": "파이프 렌더링 자동화",
-      "description1": "Blender API를 활용한 3D 모델링",
+      "description1": "CadQuery를 활용한 3D 모델링",
       "description2": ""
     },
     "feature4": {

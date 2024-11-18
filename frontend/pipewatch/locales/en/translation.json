@@ -170,12 +170,12 @@
     },
     "feature2": {
       "title": "Pipe Segmentation Model",
-      "description1": "High-Precision Segmentation Using 2,000+ Pipe Datasets",
+      "description1": "High-Precision Segmentation Using 2,500+ Pipe Datasets",
       "description2": ""
     },
     "feature3": {
       "title": "Automated Pipe Rendering",
-      "description1": "3D Modeling Powered by the Blender API",
+      "description1": "3D Modeling Powered by the CadQuery",
       "description2": ""
     },
     "feature4": {
