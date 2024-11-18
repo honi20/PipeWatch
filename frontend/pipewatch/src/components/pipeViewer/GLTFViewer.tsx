@@ -9,6 +9,7 @@ import { ModelProperty } from "@src/components/pipeViewer/ModelProperty";
 import { useSelectView } from "../context/SelectViewContext";
 import { PipeMemo } from "@src/components/pipeViewer/PipeMemo";
 import { usePipe } from "@src/components/context/PipeContext";
+import * as THREE from "three";
 
 interface GLTFViewerProps {
   gltfUrl: string;
@@ -26,14 +27,58 @@ const GLTFViewer: React.FC<GLTFViewerProps> = (props) => {
   const cameraControlsRef = useRef<CameraControls | null>(null);
   const [isTotalView, setIsTotalView] = useState<boolean>(true);
 
+  const canvasRef = useRef<HTMLCanvasElement | null>(null); // 캔버스 참조
+  const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
+
   const handleTotalViewButton = () => {
     setIsTotalView(true);
     setSelectView("MODEL_MEMO");
     setSelectedPipeId(null);
   };
+
+  // const handleScreenshot = () => {
+  //   if (!canvasRef.current) return;
+
+  //   const canvas = canvasRef.current;
+  //   const link = document.createElement("a");
+  //   link.setAttribute("download", `screenshot_${modelId}.png`);
+  //   link.setAttribute(
+  //     "href",
+  //     canvas.toDataURL("image/png").replace("image/png", "image/octet-stream")
+  //   );
+  //   link.click();
+  // };
+
+  // 캡처 로직
+  const handleScreenshot = () => {
+    if (!rendererRef.current) return;
+
+    const renderer = rendererRef.current;
+    const canvas = renderer.domElement;
+
+    // 캡처 데이터 생성
+    const link = document.createElement("a");
+    link.setAttribute("download", `screenshot_${modelId}.png`);
+    link.setAttribute(
+      "href",
+      canvas.toDataURL("image/png").replace("image/png", "image/octet-stream")
+    );
+    link.click();
+  };
+
   return (
     <div className="relative w-full h-full">
-      <Canvas style={{ height: "100vh" }}>
+      <button className="z-50 m-[30px] text-warn" onClick={handleScreenshot}>
+        스크린샷 버튼
+      </button>
+
+      <Canvas
+        style={{ height: "100vh" }}
+        // ref={canvasRef}
+        onCreated={({ gl }) => (rendererRef.current = gl)}
+        shadows
+        gl={{ preserveDrawingBuffer: true }}
+      >
         <ambientLight intensity={1} />
         <directionalLight position={[5, 10, 7.5]} intensity={1} castShadow />
         <directionalLight position={[5, 10, -7.5]} intensity={1} castShadow />

@@ -111,6 +111,11 @@ export const ModelMemo: React.FC<PipeMemoProps> = (props) => {
             </div>
           )}
 
+          <div className="flex items-center w-full gap-2">
+            <h3 className="text-[20px] font-bold self-start px-1">다운로드</h3>
+            <button>버튼</button>
+          </div>
+
           {/* 메모 input */}
           <div className="flex flex-col w-full">
             <h3 className="text-[20px] font-bold self-start px-1">
