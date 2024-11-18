@@ -22,6 +22,8 @@ export const EmpView = () => {
 
   const { t } = useTranslation();
 
+  const apiClient = getApiClient();
+
   const getEmployeeList = async () => {
     const apiClient = getApiClient();
     try {
