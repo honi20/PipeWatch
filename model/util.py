@@ -166,16 +166,28 @@ def create_pipeline(pipeline_coords, radius, pipeline_name, work_dir, segment_in
     start_coord = pipeline_coords[0]
     end_coord = pipeline_coords[1]
 
-    for index in range(2, len(pipeline_coords)):
-        if check_collinear(start_coord, end_coord, pipeline_coords[index]):
-            end_coord = pipeline_coords[index]
-        else:
-            create_cylinder(start_coord, end_coord, radius, f"{pipeline_name}_Segment_{segment_index}", work_dir, stl_paths)
-            create_connector(end_coord, radius, f"{pipeline_name}_Connector_{segment_index}", work_dir, stl_paths)
+    # NOTE:
+    # AI의 좌표 직선이 보장되지 않을 경우 사용
+    # for index in range(2, len(pipeline_coords)):
+    #     if check_collinear(start_coord, end_coord, pipeline_coords[index]):
+    #         end_coord = pipeline_coords[index]
+    #     else:
+    #         create_cylinder(start_coord, end_coord, radius, f"{pipeline_name}_Segment_{segment_index}", work_dir, stl_paths)
+    #         create_connector(end_coord, radius, f"{pipeline_name}_Connector_{segment_index}", work_dir, stl_paths)
 
-            start_coord = end_coord
-            end_coord = pipeline_coords[index]
-            segment_index += 1
+    #         start_coord = end_coord
+    #         end_coord = pipeline_coords[index]
+    #         segment_index += 1
+
+    # NOTE:
+    # AI의 좌표 직선이 보장될 경우 사용
+    for index in range(2, len(pipeline_coords)):
+        create_cylinder(start_coord, end_coord, radius, f"{pipeline_name}_Segment_{segment_index}", work_dir, stl_paths)
+        create_connector(end_coord, radius, f"{pipeline_name}_Connector_{segment_index}", work_dir, stl_paths)
+
+        start_coord = end_coord
+        end_coord = pipeline_coords[index]
+        segment_index += 1
 
     create_cylinder(start_coord, end_coord, radius, f"{pipeline_name}_Segment_{segment_index}", work_dir, stl_paths)
     segment_index += 1
