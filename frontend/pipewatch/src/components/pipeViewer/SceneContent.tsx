@@ -21,15 +21,8 @@ export const SceneContent: React.FC<{
   modelId,
   hasPipeId,
 }) => {
-  // const helper = new THREE.CameraHelper(camera);
   const clock = new THREE.Clock();
   const delta = clock.getDelta();
-  // useEffect(() => {
-  //   scene.add(helper);
-  //   return () => {
-  //     scene.remove(helper); // 컴포넌트 언마운트 시 제거
-  //   };
-  // }, [camera, scene, helper]);
 
   // 모델 로드 시 카메라 제어
   const adjustCameraOnModelLoad = (
@@ -58,7 +51,7 @@ export const SceneContent: React.FC<{
 
         // 카메라 위치 설정 (cameraControlsRef를 통해 제어)
         if (cameraControlsRef.current) {
-          cameraControlsRef.current.setPosition(center.x, center.y, maxDim * 2);
+          cameraControlsRef.current.setPosition(center.x, center.y, maxDim);
           cameraControlsRef.current.setTarget(center.x, center.y, center.z);
           cameraControlsRef.current.update(delta);
           console.log(
@@ -91,8 +84,7 @@ export const SceneContent: React.FC<{
         maxPolarAngle={Math.PI}
         dampingFactor={0.25}
       />
-      {/* <axesHelper args={[10]} /> */}
-      {/* <gridHelper /> */}
+      <gridHelper />
     </>
   );
 };

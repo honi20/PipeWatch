@@ -158,7 +158,7 @@ export const PipeModel: React.FC<{
 
   return (
     <>
-      <group position={[0, 0, 0]}>
+      <group position={[-10, +5, 0]}>
         {Object.entries(meshesByGroup).map(([groupName, meshes], index) => {
           return (
             <group key={index} name={groupName}>
