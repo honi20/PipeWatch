@@ -438,7 +438,8 @@
       "floorLabel": "층",
       "basementLabel": "지하",
       "memoLabel": "메모",
-      "modifiedDate": "수정일"
+      "modifiedDate": "수정일",
+      "downloadScreenShot":"스크린샷 다운로드"
     },
     "ModelProperty": {
       "memoLabel": "메모",

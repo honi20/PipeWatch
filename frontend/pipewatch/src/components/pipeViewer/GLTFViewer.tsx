@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { CameraControls } from "@react-three/drei";
 import { ModelDetailType, PipelineType } from "./Type/PipeType";
@@ -21,13 +21,11 @@ interface GLTFViewerProps {
 
 const GLTFViewer: React.FC<GLTFViewerProps> = (props) => {
   const { t } = useTranslation();
-  const { setSelectedPipeId } = usePipe();
+  const { setSelectedPipeId, isButtonClicked, setIsButtonClicked } = usePipe();
   const { selectView, setSelectView } = useSelectView();
   const { gltfUrl, pipelines, modelId, modelDetail, hasPipeId } = props;
   const cameraControlsRef = useRef<CameraControls | null>(null);
   const [isTotalView, setIsTotalView] = useState<boolean>(true);
-
-  const canvasRef = useRef<HTMLCanvasElement | null>(null); // 캔버스 참조
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
 
   const handleTotalViewButton = () => {
@@ -36,25 +34,19 @@ const GLTFViewer: React.FC<GLTFViewerProps> = (props) => {
     setSelectedPipeId(null);
   };
 
-  // const handleScreenshot = () => {
-  //   if (!canvasRef.current) return;
-
-  //   const canvas = canvasRef.current;
-  //   const link = document.createElement("a");
-  //   link.setAttribute("download", `screenshot_${modelId}.png`);
-  //   link.setAttribute(
-  //     "href",
-  //     canvas.toDataURL("image/png").replace("image/png", "image/octet-stream")
-  //   );
-  //   link.click();
-  // };
+  useEffect(() => {
+    if (isButtonClicked) {
+      handleScreenshot();
+      setIsButtonClicked(!isButtonClicked);
+    }
+  }, [isButtonClicked]);
 
   // 캡처 로직
   const handleScreenshot = () => {
-    if (!rendererRef.current) return;
+    if (!isButtonClicked && !rendererRef.current) return;
 
     const renderer = rendererRef.current;
-    const canvas = renderer.domElement;
+    const canvas = renderer!.domElement;
 
     // 캡처 데이터 생성
     const link = document.createElement("a");
@@ -68,13 +60,8 @@ const GLTFViewer: React.FC<GLTFViewerProps> = (props) => {
 
   return (
     <div className="relative w-full h-full">
-      <button className="z-50 m-[30px] text-warn" onClick={handleScreenshot}>
-        스크린샷 버튼
-      </button>
-
       <Canvas
         style={{ height: "100vh" }}
-        // ref={canvasRef}
         onCreated={({ gl }) => (rendererRef.current = gl)}
         shadows
         gl={{ preserveDrawingBuffer: true }}
