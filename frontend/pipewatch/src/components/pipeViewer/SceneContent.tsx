@@ -11,6 +11,7 @@ export const SceneContent: React.FC<{
   setIsTotalView: React.Dispatch<React.SetStateAction<boolean>>;
   pipelines: PipelineType[];
   modelId: number;
+  hasPipeId: boolean;
 }> = ({
   gltfUrl,
   cameraControlsRef,
@@ -18,6 +19,7 @@ export const SceneContent: React.FC<{
   setIsTotalView,
   pipelines,
   modelId,
+  hasPipeId,
 }) => {
   // const helper = new THREE.CameraHelper(camera);
   const clock = new THREE.Clock();
@@ -77,6 +79,7 @@ export const SceneContent: React.FC<{
         setIsTotalView={setIsTotalView}
         pipelines={pipelines}
         modelId={modelId}
+        hasPipeId={hasPipeId}
       />
       <CameraControls
         ref={cameraControlsRef}

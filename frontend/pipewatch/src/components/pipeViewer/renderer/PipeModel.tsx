@@ -163,7 +163,6 @@ export const PipeModel: React.FC<{
           return (
             <group key={index} name={groupName}>
               {meshes.map(({ originalMesh, segmentName }, i) => {
-                // 결함 확인
                 if (
                   hasPipeId &&
                   viewDefect[modelId] &&
