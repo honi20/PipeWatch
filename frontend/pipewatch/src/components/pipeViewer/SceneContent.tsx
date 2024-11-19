@@ -29,7 +29,6 @@ export const SceneContent: React.FC<{
     scene: THREE.Object3D,
     vector?: number[]
   ) => {
-    console.log(scene);
     if (vector) {
       console.log(vector);
       if (cameraControlsRef.current) {
@@ -78,8 +77,8 @@ export const SceneContent: React.FC<{
         ref={cameraControlsRef}
         enabled={true}
         dollyToCursor={true}
-        minDistance={10}
-        maxDistance={30}
+        minDistance={5}
+        maxDistance={100}
         minPolarAngle={0}
         maxPolarAngle={Math.PI}
         dampingFactor={0.25}

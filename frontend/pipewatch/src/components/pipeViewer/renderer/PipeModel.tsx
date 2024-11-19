@@ -111,18 +111,29 @@ export const PipeModel: React.FC<{
         }
       }
     });
-    const meshPosition = new THREE.Vector3();
-    originalMesh.getWorldPosition(meshPosition);
+    // const meshPosition = new THREE.Vector3();
+    // originalMesh.getWorldPosition(meshPosition);
 
     if (cameraControlsRef.current) {
+      // cameraControlsRef.current.setPosition(
+      //   originalMesh.geometry.boundingBox!.max.x +
+      //     originalMesh.geometry.boundingBox!.min.x,
+      //   originalMesh.geometry.boundingBox!.max.y +
+      //     originalMesh.geometry.boundingBox!.min.y,
+      //   10
+      // );
       cameraControlsRef.current.setTarget(
-        originalMesh.geometry.boundingBox!.max.x,
-        originalMesh.geometry.boundingBox!.max.y,
-        originalMesh.geometry.boundingBox!.max.z
+        originalMesh.geometry.boundingBox!.max.x +
+          originalMesh.geometry.boundingBox!.min.x,
+        originalMesh.geometry.boundingBox!.max.y +
+          originalMesh.geometry.boundingBox!.min.y,
+        originalMesh.geometry.boundingBox!.max.z +
+          originalMesh.geometry.boundingBox!.min.z
       );
+
       cameraControlsRef.current.fitToBox(originalMesh, true, {
-        paddingLeft: 5,
-        paddingRight: 5,
+        paddingLeft: 20,
+        paddingRight: 10,
       });
     }
 
@@ -158,7 +169,7 @@ export const PipeModel: React.FC<{
 
   return (
     <>
-      <group position={[-10, +5, 0]}>
+      <group position={[-10, 0, 0]}>
         {Object.entries(meshesByGroup).map(([groupName, meshes], index) => {
           return (
             <group key={index} name={groupName}>

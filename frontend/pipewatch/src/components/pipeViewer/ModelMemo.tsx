@@ -125,7 +125,7 @@ export const ModelMemo: React.FC<PipeMemoProps> = (props) => {
             </h3>
             <DownloadIcon
               onClick={handleDownloadButton}
-              className="rounded-md bg-black/60 hover:bg-primary-500 h-[30px]"
+              className="rounded-md bg-black/60 hover:bg-primary-500 h-[30px] cursor-pointer"
               style={{ width: "30px", height: "30px" }}
             />
           </div>
