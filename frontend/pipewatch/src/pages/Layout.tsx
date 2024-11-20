@@ -6,6 +6,8 @@ import { Header } from "@components/common/Header";
 import { HeaderAccount } from "@components/common/HeaderAccount";
 import { Footer } from "@components/common/Footer";
 
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
+
 function Layout() {
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "dark");
   const handleTheme = () => {
@@ -41,6 +43,15 @@ function Layout() {
         <Outlet />
       </div>
       <Footer currentTheme={localStorage.theme} />
+      <button
+        onClick={() => window.scrollTo(0, 0)}
+        className="fixed bottom-[30px] right-[30px] dark:bg-black border-solid border-2 border-white rounded-[30px] py-[10px] px-[16px]"
+      >
+        <div className="flex flex-col items-center justify-center">
+          <ArrowUpwardIcon />
+          <p className="">Top</p>
+        </div>
+      </button>
     </div>
   );
 }
