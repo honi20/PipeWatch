@@ -2,35 +2,15 @@ import { SideBar } from "@src/components/enterprise/SideBar";
 import { Outlet } from "react-router-dom";
 
 import { AccessBlocked } from "@src/components/common/AccessBlocked";
-// import { useUserStore } from "@src/stores/userStore";
-import { useState } from "react";
-import { getApiClient } from "@src/stores/apiClient";
+import { Loading } from "@src/components/common/Loading";
 
-import { useEffect } from "react";
+import useRole from "@src/hooks/useRole";
 
 export const Enterprise = () => {
-  const [role, setRole] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-
-  const saveRole = async () => {
-    const apiClient = getApiClient();
-    try {
-      const res = await apiClient.get("/api/users/profile");
-      const userInfo = res.data.body;
-      setRole(userInfo.role);
-    } catch (err) {
-      console.error("UserInfo 저장 실패", err);
-    } finally {
-      setIsLoading(true);
-    }
-  };
-
-  useEffect(() => {
-    saveRole();
-  }, []);
+  const { role, isLoading } = useRole();
 
   if (role === null && isLoading) {
-    return <div>로딩중</div>;
+    return <Loading />;
   }
 
   if (role !== "ENTERPRISE") {
