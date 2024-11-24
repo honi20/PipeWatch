@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
@@ -26,9 +26,21 @@ export const UploadModelManual = () => {
 
   const allowedFormats = [".gltf", ".png", ".jpg", ".jpeg"];
 
+  const [imgFile, setImgFile] = useState("");
+  const fileRef = useRef<HTMLInputElement>(null);
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
+      const fileImg = fileRef?.current?.files?.[0];
+      if (fileImg) {
+        const reader = new FileReader();
+        reader.readAsDataURL(fileImg);
+        reader.onloadend = () => {
+          setImgFile(reader.result as string);
+        };
+      }
+
       if (allowedFormats.some((format) => file.name.endsWith(format))) {
         setStatus("initial");
         setFile(file);
@@ -141,11 +153,21 @@ export const UploadModelManual = () => {
               multiple={false}
               onChange={handleFileChange}
               accept=".gltf, .png, .jpg, .jpeg"
+              ref={fileRef}
             />
+
             {status === "initial" || status === "uploading" ? (
-              <DriveFolderUploadIcon
-                sx={{ fontSize: "60px", color: "#D9D9D9" }}
-              />
+              file ? (
+                <img
+                  className="max-w-[200px] max-h-[200px] my-[20px]"
+                  src={imgFile}
+                  alt="미리보기 이미지"
+                />
+              ) : (
+                <DriveFolderUploadIcon
+                  sx={{ fontSize: "60px", color: "#D9D9D9" }}
+                />
+              )
             ) : status === "success" ? (
               <CheckCircleIcon sx={{ fontSize: "60px", color: "#499B50" }} />
             ) : (
@@ -153,11 +175,16 @@ export const UploadModelManual = () => {
                 <CancelIcon sx={{ fontSize: "60px", color: "#FF5353" }} />
               )
             )}
+
             {status === "initial" ? (
               <p className="text-gray-500 underline preview_msg">
-                {t(
-                  "pipeGenerator.uploadModel.directUpload.uploadBox.selectFile"
-                )}
+                {file
+                  ? t(
+                      "pipeGenerator.uploadModel.directUpload.uploadBox.reselectFile"
+                    )
+                  : t(
+                      "pipeGenerator.uploadModel.directUpload.uploadBox.selectFile"
+                    )}
               </p>
             ) : (
               status === "uploading" && (
