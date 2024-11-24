@@ -98,7 +98,7 @@ export const PipeGenerator = () => {
           // onChange={(index) => handleTabClick(menus[index].path)}
           className="flex h-full rounded-lg shadow-lg shadow-gray-500 dark:shadow-none"
         >
-          <TabList className="flex flex-col w-[300px] bg-block p-8 rounded-s-lg">
+          <TabList className="flex flex-col w-[300px] bg-whiteBox p-8 rounded-s-lg">
             <div className="py-3 text-[16px] text-primary-500">
               {t("pipeGenerator.procedure")}
             </div>
@@ -109,7 +109,7 @@ export const PipeGenerator = () => {
                 <Tab
                   key={menu.key}
                   id={index.toString()}
-                  className="flex gap-2 items-center p-5 text-[16px] text-left text-gray-500 cursor-default focus:outline-none rounded-xl bg-block data-[selected]:bg-primary-500 data-[selected]:text-white"
+                  className="flex gap-2 items-center p-5 text-[16px] text-left text-gray-500 cursor-default focus:outline-none rounded-xl bg-whiteBox data-[selected]:bg-primary-500 data-[selected]:text-white"
                   // className="flex gap-2 items-center p-5 text-[16px] text-left text-gray-500 cursor-default focus:outline-none rounded-xl bg-block data-[selected]:bg-white data-[selected]:text-gray-800"
                 >
                   <IconComponent className="w-5 h-5" />

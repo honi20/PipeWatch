@@ -217,7 +217,7 @@ export const UploadModelManual = () => {
       {file && status === "initial" && (
         <div className="flex items-center justify-center gap-6 w-full text-[16px]">
           <div className="flex items-center justify-center gap-4">
-            <FilePresentIcon sx={{ fontSize: "24px", color: "#499B50" }} />
+            <FilePresentIcon sx={{ fontSize: "24px", color: "#245795" }} />
             <p>
               {t(
                 "pipeGenerator.uploadModel.directUpload.uploadBox.uploadedFile"
