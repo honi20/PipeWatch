@@ -31,10 +31,12 @@ export default {
         200: "#447FC7",
         // 200: "#1428A0",
         // 500: "#245795",
+        300: "#5C89F6",
         500: "#1428A0",
       },
       white: "#EDEDED",
       whiteBox: "#FFFFFF",
+      newBlock: "#F7F7FD",
       black: "#141414",
       gray: {
         200: "#D9D9D9",

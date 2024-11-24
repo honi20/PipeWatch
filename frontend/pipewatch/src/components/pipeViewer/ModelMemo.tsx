@@ -79,10 +79,10 @@ export const ModelMemo: React.FC<PipeMemoProps> = (props) => {
     setIsButtonClicked(!isButtonClicked);
   };
   return (
-    <div className="w-[400px] h-[680px] flex flex-col bg-block rounded-[30px] px-[50px] py-[30px] text-white justify-between items-center gap-5">
+    <div className="w-[400px] h-[680px] flex flex-col bg-whiteBox rounded-[30px] px-[50px] py-[30px] text-black justify-between items-center gap-5">
       <div className="flex flex-col w-full h-full">
         {/* navigate */}
-        <div className="flex justify-end cursor-pointer hover:text-primary-200">
+        <div className="flex justify-end cursor-pointer hover:text-primary-300">
           <div className="flex" onClick={onViewChange}>
             <p>{t("PipeViewer.ModelMemo.property")}</p>
             <ChevronRightIcon />
@@ -101,6 +101,7 @@ export const ModelMemo: React.FC<PipeMemoProps> = (props) => {
                   )}`}
             </p>
           </div>
+          <div className="bg-gray-500 h-[1px]" />
           {/* 결함 탐지 */}
           {hasPipeId && (
             <div className="flex items-center w-full gap-2">
@@ -110,7 +111,7 @@ export const ModelMemo: React.FC<PipeMemoProps> = (props) => {
               <Checkbox
                 checked={!!viewDefect[modelId]}
                 onChange={handleCheckboxChange}
-                className="p-1 rounded-md group size-8 bg-black/60 ring-1 ring-white/15 ring-inset "
+                className="p-1 rounded-md group size-8 border-solid border-[1px] border-black ring-1 ring-white/15 ring-inset "
               >
                 {viewDefect[modelId] && (
                   <CheckIcon className="hidden size-4 fill-black group-data-[checked]:block" />
@@ -125,7 +126,7 @@ export const ModelMemo: React.FC<PipeMemoProps> = (props) => {
             </h3>
             <DownloadIcon
               onClick={handleDownloadButton}
-              className="rounded-md bg-black/60 hover:bg-primary-500 h-[30px] cursor-pointer"
+              className="rounded-md border-solid border-[1px] border-black hover:bg-primary-300 h-[30px] cursor-pointer"
               style={{ width: "30px", height: "30px" }}
             />
           </div>
@@ -142,7 +143,7 @@ export const ModelMemo: React.FC<PipeMemoProps> = (props) => {
               }
               onKeyDown={handleKeyDown}
               className={clsx(
-                "mt-3 h-[50px] resize-none block w-full rounded-lg border-none bg-black/60 py-1.5 px-3 text-sm/6 text-white",
+                "mt-3 h-[50px] resize-none block w-full rounded-lg border-solid border-[1px] border-black focus:border-primary-300 focus:border-[2px] py-1.5 px-3 text-sm/6 text-white",
                 "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25"
               )}
               placeholder={t("PipeViewer.enterMemo")}
@@ -183,7 +184,7 @@ export const ModelMemo: React.FC<PipeMemoProps> = (props) => {
           <div className="text-[20px]">
             {t("PipeViewer.ModelMemo.modifiedDate")}
           </div>
-          <div className="items-center justify-center flex-1 py-1 text-center px-auto rounded-2xl bg-black/60">
+          <div className="items-center justify-center flex-1 py-1 text-center px-auto rounded-[10px] ">
             {formatModifiedDate(new Date(updatedAt))}
           </div>
         </div>

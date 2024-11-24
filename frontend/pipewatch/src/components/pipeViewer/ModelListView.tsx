@@ -138,7 +138,8 @@ export const ModelListView: React.FC<ModelListViewProps> = ({ models }) => {
       </div>
 
       {/* pipe list view */}
-      <div className="flex justify-center w-full h-[140px] py-[20px] bg-block overflow-x-auto scrollable">
+      <div className="flex justify-center w-full h-[140px] py-[20px] bg-newBlock overflow-x-auto scrollable">
+        {/* <div className="flex justify-center w-full h-[140px] py-[20px] bg-block overflow-x-auto scrollable"> */}
         <div className="flex gap-4 flex-nowrap ">
           {visibleModelList.map((item) => (
             <div className="relative w-[100px] h-[100px]" key={item.modelId}>
