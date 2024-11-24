@@ -3,21 +3,22 @@ export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   darkMode: "class",
   theme: {
-    extend: { 
+    extend: {
       animation: {
-        shake: 'shake 0.5s cubic-bezier(0.5, 0.1, 0.5, 1) infinite',
+        shake: "shake 0.5s cubic-bezier(0.5, 0.1, 0.5, 1) infinite",
       },
       keyframes: {
         shake: {
-          '0%, 100%': { transform: 'rotate(0deg)' },
-          '25%': { transform: 'rotate(-2deg)' },
-          '75%': { transform: 'rotate(2deg)' },
+          "0%, 100%": { transform: "rotate(0deg)" },
+          "25%": { transform: "rotate(-2deg)" },
+          "75%": { transform: "rotate(2deg)" },
         },
       },
     },
     fontFamily: {
       Pretendard: ["Pretendard"],
       Esamanru: ["Esamanru"],
+      Samsung: ["Samsung"],
     },
     screens: {
       sm: "480px",
@@ -28,7 +29,9 @@ export default {
     colors: {
       primary: {
         200: "#447FC7",
-        500: "#245795",
+        // 200: "#1428A0",
+        // 500: "#245795",
+        500: "#1428A0",
       },
       white: "#EDEDED",
       whiteBox: "#FFFFFF",
@@ -39,7 +42,9 @@ export default {
         500: "#9A9A9A",
         800: "#5E5E5E",
       },
-      block: "#313F4F",
+      // block: "#1428A0",
+      block: "#FFFFFF",
+      // block: "#313F4F",
       warn: "#FF5353",
       warnBackground: "#F1CCCC",
       success: "#499B50",

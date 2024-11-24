@@ -13,9 +13,15 @@
   font-weight: bold;
   src: url("../src/assets/fonts/esamanruBold.ttf") format("truetype");
 }
+@font-face {
+  font-family: "Samsung";
+  font-weight: normal;
+  src: url("../src/assets/fonts/SamsungRegular.ttf") format("truetype");
+}
 
 body {
-  font-family: "Pretendard";
+  /* font-family: "Pretendard"; */
+  font-family: "Samsung";
   min-width: 768px;
   /* min-height: 1024px; */
 }
