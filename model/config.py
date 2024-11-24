@@ -11,7 +11,7 @@ AWS_REGION = os.getenv("S3_REGION_NAME")
 AWS_ACCESS_KEY_ID = os.getenv("S3_PUBLIC_ACCESS_KEY")
 AWS_SECRET_ACCESS_KEY = os.getenv("S3_PRIVATE_ACCESS_KEY")
 S3_BUCKET_NAME = os.getenv("S3_BUCKET_NAME")
-
+자
 # S3 클라이언트 생성
 S3_client = boto3.client(
     "s3",

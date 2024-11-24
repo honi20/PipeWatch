@@ -69,7 +69,7 @@ def create_model(coords, modelUuid):
 
     # HACK:
     # 임시 반지름 설정
-    radius = 0.5
+    radius = 1.0
 
     # 파일 생성
     stl_paths = create_stl_files(pipelines, radius, work_dir)
