@@ -177,7 +177,7 @@ export const ModelProperty: React.FC<ModelPropertyProps> = (props) => {
     updatePipelineProperty(data);
   };
   return (
-    <div className="w-[400px] h-[680px] flex flex-col bg-block rounded-[30px] px-[50px] py-[30px] text-white justify-between items-center gap-5">
+    <div className="w-[400px] h-[680px] flex flex-col bg-whiteBox rounded-[30px] px-[50px] py-[30px] text-black justify-between items-center gap-5">
       <div className="flex flex-col w-full h-full">
         {/* navigate */}
         <div className="flex justify-start cursor-pointer hover:text-primary-200">
@@ -234,7 +234,7 @@ export const ModelProperty: React.FC<ModelPropertyProps> = (props) => {
                         }
                       }}
                       className={clsx(
-                        "block w-full pl-5 pr-10 rounded-md border-none bg-black/40 py-2 px-3 text-sm/6 text-white",
+                        "block w-full pl-5 pr-10 rounded-md border-solid border-[1px] border-black py-2 px-3 text-sm/6 text-gray-800",
                         "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25"
                       )}
                       style={{ paddingRight: "3rem" }} // 단위 공간 확보
@@ -263,7 +263,7 @@ export const ModelProperty: React.FC<ModelPropertyProps> = (props) => {
                         }
                       }}
                       className={clsx(
-                        "block w-full pl-5 pr-10 rounded-md border-none bg-black/40 py-2 px-3 text-sm/6 text-white",
+                        "block w-full pl-5 pr-10 rounded-md border-solid border-[1px] border-black py-2 px-3 text-sm/6 text-gray-800",
                         "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25"
                       )}
                       style={{ paddingRight: "3rem" }}
@@ -302,7 +302,7 @@ export const ModelProperty: React.FC<ModelPropertyProps> = (props) => {
                         setFluidFlowRate(Number(e.target.value))
                       }
                       className={clsx(
-                        "block w-full pl-5 pr-10 rounded-md border-none bg-black/40 py-2 px-3 text-sm/6 text-white",
+                        "block w-full pl-5 pr-10 rounded-md border-solid border-[1px] border-black py-2 px-3 text-sm/6 text-gray-800",
                         "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25"
                       )}
                       style={{ paddingRight: "3rem" }}
@@ -317,7 +317,7 @@ export const ModelProperty: React.FC<ModelPropertyProps> = (props) => {
             <Button
               className={`h-fit w-fit px-5 py-2 text-white rounded-3xl ${
                 isChanged
-                  ? "bg-primary-500"
+                  ? "bg-primary-300"
                   : "bg-button-background cursor-not-allowed"
               }`}
               disabled={!isChanged}

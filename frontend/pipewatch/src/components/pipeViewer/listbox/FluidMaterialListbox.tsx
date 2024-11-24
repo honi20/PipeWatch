@@ -47,7 +47,7 @@ export const FluidMaterialListbox: React.FC<FluidMaterialListboxProps> = ({
         <div className="relative">
           <ListboxButton
             className={clsx(
-              "relative w-full rounded-md bg-black/40 py-2 pr-3 pl-5  flex justify-between text-left text-sm/6 text-white",
+              "relative w-full bg-whiteBox rounded-md border-solid border-[1px] border-black py-2 pr-3 pl-5  flex justify-between text-left text-sm/6 text-gray-800",
               "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25"
             )}
           >

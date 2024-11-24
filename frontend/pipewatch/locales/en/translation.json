@@ -301,6 +301,7 @@
         },
         "uploadBox": {
           "selectFile": "Select File",
+          "reselectFile": "Re-Select File",
           "uploadedFile": "Uploaded File",
           "upload": "Upload",
           "statusMessages": {
@@ -439,7 +440,7 @@
       "basementLabel": "B",
       "memoLabel": "Memo",
       "modifiedDate": "Modified Date",
-      "downloadScreenShot":"Download Screenshot"
+      "downloadScreenShot": "Download Screenshot"
     },
     "ModelProperty": {
       "memoLabel": "Memo",
