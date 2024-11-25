@@ -29,14 +29,14 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -63,7 +63,7 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 
 	@Override
 	@Transactional
-	public PipelineModelResponse.FileUploadDto uploadImage(Long userId, MultipartFile imageFile) {
+	public PipelineModelResponse.FileUploadDto uploadImage(Long userId, MultipartFile imageFile) throws IOException {
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new BaseException(USER_NOT_FOUND));
 
@@ -79,6 +79,18 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 		Enterprise enterprise = getEnterprise(user);
 
 		String modelUuid = java.util.UUID.randomUUID().toString();
+
+		// 시연용 계정
+		if (user.getId() == 1) {
+			String relativePath = "static/images/test.jpg";
+
+			try {
+				// 파일을 MultipartFile로 변환
+				imageFile = convertFileToMultipartFile(relativePath);
+			} catch (IOException e) {
+				throw new BaseException(FILE_UPLOAD_FAIL);
+			}
+		}
 
 		boolean fastApiResponse = pipelineModelApiService.transferImgFile(imageFile, modelUuid);
 		if (!fastApiResponse) {
@@ -390,6 +402,23 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 		}
 
 		pipelineModelMemoRepository.delete(memo);
+	}
+
+	private MultipartFile convertFileToMultipartFile(String relativePath) throws IOException {
+		ClassPathResource resource = new ClassPathResource(relativePath);
+
+		// 파일이 존재하지 않거나 읽을 수 없는 경우 예외 발생
+		if (!resource.exists()) {
+			throw new IOException("File not found: " + relativePath);
+		}
+
+		// InputStream을 사용하여 MockMultipartFile 생성
+		return new MockMultipartFile(
+				"file",
+				resource.getFilename(),
+				"image/jpg",
+				resource.getInputStream()
+		);
 	}
 
 	private List<PipelineModelResponse.PipelineDto> getPipelineDto(List<Pipe> pipes) {
