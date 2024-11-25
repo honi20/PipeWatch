@@ -143,7 +143,7 @@ export const ModelMemo: React.FC<PipeMemoProps> = (props) => {
               }
               onKeyDown={handleKeyDown}
               className={clsx(
-                "mt-3 h-[50px] resize-none block w-full rounded-lg border-solid border-[1px] border-black focus:border-primary-300 focus:border-[2px] py-1.5 px-3 text-sm/6 text-white",
+                "mt-3 h-[50px] resize-none block w-full rounded-lg border-solid border-[1px] border-black focus:border-primary-300 focus:border-[2px] py-1.5 px-3 text-sm/6 text-black",
                 "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25"
               )}
               placeholder={t("PipeViewer.enterMemo")}
