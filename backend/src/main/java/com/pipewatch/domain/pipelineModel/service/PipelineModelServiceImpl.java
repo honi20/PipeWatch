@@ -81,7 +81,7 @@ public class PipelineModelServiceImpl implements PipelineModelService {
 		String modelUuid = java.util.UUID.randomUUID().toString();
 
 		// 시연용 계정
-		if (user.getId() == 1) {
+		if (user.getId() == 7) {
 			String relativePath = "static/images/test.jpg";
 
 			try {
