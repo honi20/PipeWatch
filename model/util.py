@@ -9,6 +9,7 @@ import cadquery as cq
 import math
 from PIL import Image
 import shutil
+from sympy import Line, Point
 
 from config import AWS_REGION, BASE_WORK_DIR, GLTF_PIPELINE_PATH, NODE_PATH, S3_BUCKET_NAME, S3_client
 
@@ -20,6 +21,19 @@ def convert_numpy_types(obj):
     elif isinstance(obj, dict):
         return {key: convert_numpy_types(value) for key, value in obj.items()}
     return obj
+
+def find_intersection_point(line1_start, line1_end, line2_start, line2_end):
+    """
+    Calculate the intersection point of two lines if they intersect.
+    """
+    line1 = Line(Point(line1_start), Point(line1_end))
+    line2 = Line(Point(line2_start), Point(line2_end))
+    intersection = line1.intersection(line2)
+    if intersection:
+        # Convert to a tuple of floats
+        intersection_point = intersection[0]
+        return float(intersection_point.x), float(intersection_point.y)
+    return None
 
 def find_intersections(point1, point2, x_min, y_min, x_max, y_max):
     intersections = []
