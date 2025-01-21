@@ -1,0 +1,52 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: "Pretendard";
+  font-weight: normal;
+  src: url("../src/assets/fonts/PretendardVariable.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Esamanru";
+  font-weight: bold;
+  src: url("../src/assets/fonts/esamanruBold.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Samsung";
+  font-weight: normal;
+  src: url("../src/assets/fonts/SamsungRegular.ttf") format("truetype");
+}
+
+body {
+  /* font-family: "Pretendard"; */
+  font-family: "Samsung";
+  min-width: 768px;
+  /* min-height: 1024px; */
+}
+
+body,
+html {
+  width: 100%;
+  margin: 0;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #f9f9f9;
+  }
+}

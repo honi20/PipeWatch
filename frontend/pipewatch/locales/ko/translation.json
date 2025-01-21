@@ -1,0 +1,663 @@
+{
+  "error": {
+    "access": "잘못된 접근입니다.",
+    "accessBlocked": "접근 권한이 없습니다.",
+    "toHome": "홈으로"
+  },
+  "header": {
+    "lang": "한국어",
+    "subMenu": {
+      "home": "홈",
+      "aboutUs": "PipeWatch 소개",
+      "aboutService": "서비스 소개",
+      "aboutTeam": "팀 소개",
+      "pipeViewer": "파이프 조회",
+      "pipeGenerator": "파이프 생성",
+      "contact": "문의하기"
+    },
+    "login": "로그인",
+    "logout": "로그아웃",
+    "userRoles": {
+      "admin": "관리자",
+      "employee": "사원",
+      "pending": "사원 인증중"
+    },
+    "accessError": {
+      "noCompany": "등록된 기업이 없습니다. 기업 인증 상태를 확인해주세요.",
+      "moveForReverification": "재인증을 위해 이동"
+    }
+  },
+  "footer": {
+    "paoriTeam": "2024 팀 파오리",
+    "termsAndPolicy": "이용약관 및 정책",
+    "contact": "문의하기",
+    "manageCookies": {
+      "title": "쿠키 관리",
+      "description": "이 웹사이트를 제공하고 서비스 품질을 개선하기 위해 당사의 쿠키를 사용하여 이용자의 활동을 분석합니다.",
+      "buttonDeny": "모두 거부",
+      "buttonAccept": "모두 허용"
+    }
+  },
+  "home": {
+    "greeting1": "PipeWatch로",
+    "greeting2": "당신의 작업 효율을 높여보세요.",
+    "signUp": "회원가입",
+    "introduction": {
+      "create": "파이프 모델 생성하기",
+      "viewPage": "모델 조회 페이지로 이동",
+      "uploadData": {
+        "title": "가장 편리한 데이터 업로드",
+        "description": "파이프 데이터를 업로드하고\n자동화된 세그멘테이션 기술을\n경험해보세요."
+      },
+      "managePipes": {
+        "title": "건물별 파이프 통합 관리",
+        "description": "각 건물, 층, 구간 별 파이프를 한 곳에서 관리하세요.\n파이프의 속성을 실시간으로 수정하고, 메모를 남길 수도 있습니다."
+      },
+      "tabs": {
+        "allPipe": "전체 파이프 모델",
+        "individualPipe": "개별 파이프 모델",
+        "memo": "메모 작성"
+      }
+    }
+  },
+  "account": {
+    "login": "로그인",
+    "findPassword": "비밀번호 찾기",
+    "signUp": "회원가입",
+    "email": "이메일",
+    "emailError": "이메일을 다시 확인하세요.",
+    "duplicateEmail": "이미 가입된 이메일입니다.",
+    "requestVerification": "인증 요청",
+    "verificationCode": "인증 코드",
+    "verificationComplete": "인증 완료",
+    "confirm": "확인",
+    "verificationFailed": "이메일 인증에 실패했습니다. 다시 시도해주세요.",
+    "password": "비밀번호",
+    "confirmPassword": "비밀번호 확인",
+    "passwordError": "비밀번호는 최소 8자 이상이어야 하며, 최소 하나의 영문자, 숫자, 특수 문자(예: !@#$%^&*)를 포함해야 합니다.",
+    "passwordMismatchError": "입력한 비밀번호와 일치하지 않습니다.",
+    "name": "성명",
+    "companyName": "기업명",
+    "employeeId": "사번",
+    "employeeDepartment": "부서",
+    "employeePosition": "직급",
+    "employeeInformation": "사원 정보",
+    "termsAndPrivacyConsent": "회원가입 시, 귀하는 당사의 <1>서비스 약관</1>과 <3>개인정보 처리방침</3>에 동의하는 것으로 간주됩니다.",
+    "passwordReset": "가입하신 이메일 주소로<br />새로운 비밀번호 설정을 위한 안내 메일이 발송됩니다.",
+    "sendPasswordResetEmail": "비밀번호 변경 메일 보내기",
+    "goBackToLogin": "로그인 페이지로 돌아가기",
+    "enterYourName": "성명을 입력해주세요.",
+    "resetPassword": {
+      "title": " 비밀번호 재설정",
+      "instruction": "새롭게 사용할 비밀번호를 입력해주세요.",
+      "complete": "비밀번호 재설정이 완료되었습니다.",
+      "goToLoginPage": "로그인 페이지로 이동"
+    }
+  },
+  "manageAccount": {
+    "dashboard": {
+      "title": "계정 관리",
+      "editInfo": "개인정보 수정",
+      "reverificationRequest": "기업 재인증 신청",
+      "updatePassword": "비밀번호 수정",
+      "withdrawal": "회원 탈퇴",
+      "inquiry": "1:1 문의"
+    },
+    "goToHomepage": "홈으로 이동",
+    "goToPreviousCard": "이전 카드로 이동",
+    "editInfo": {
+      "registrationEmail": "가입 이메일",
+      "companyName": "회사명",
+      "employeeId": "사번",
+      "department": "부서",
+      "position": "직책",
+      "editPersonalInfo": "개인정보 수정",
+      "complete": "개인정보 수정이 완료되었습니다."
+    },
+    "reverificationRequest": {
+      "title": "기업 재인증 신청",
+      "reverificationMessage": "<b>{{enterpriseName}}</b>의 기업 재인증 신청을 요청합니다.",
+      "cancel": "취소",
+      "submitReverification": "재인증 신청",
+      "reverificationComplete": "재인증 신청이 완료되었습니다.",
+      "close": "닫기"
+    },
+    "updatePassword": {
+      "currentPassword": "기존 비밀번호",
+      "passwordMismatchError": "입력된 비밀번호가 현재 등록된 비밀번호와 일치하지 않습니다.",
+      "newPassword": "새 비밀번호",
+      "confirmNewPassword": "새 비밀번호 확인",
+      "updatePassword": "비밀번호 수정",
+      "complete": "비밀번호 수정이 완료되었습니다.",
+      "newPasswordMatchError": "새 비밀번호는 이전 비밀번호와 다르게 설정해주세요.",
+      "newPasswordMismatchError": "입력한 비밀번호와 일치하지 않습니다."
+    },
+    "withdrawal": {
+      "registrationEmail": "가입 이메일",
+      "withdrawalNoticeConfirmation": "탈퇴 시 주의사항을 확인하셨습니까?",
+      "enterPassword": "비밀번호 입력",
+      "confirmWithdrawal": "탈퇴 확인",
+      "withdrawalNotices": [
+        "회원 탈퇴 후에는 <strong>계정 복구가 불가능</strong>합니다.",
+        "탈퇴 시, 모든 개인 정보 및 이용 기록이 삭제됩니다.",
+        "탈퇴 후에는 동일한 이메일로 재가입이 제한될 수 있습니다.",
+        "회원 탈퇴를 완료한 후에도 법적 의무에 따라 일부 정보는 일정 기간 동안 보관될 수 있습니다."
+      ],
+      "complete": "회원 탈퇴가 정상적으로 처리되었습니다.",
+      "passwordMismatchError": "비밀번호가 일치하지 않습니다. 다시 확인해주세요."
+    }
+  },
+  "verification": {
+    "title": "요청이 접수되었습니다.",
+    "personal": [
+      "{{variable}}님의 인증 절차가 진행 중입니다.",
+      "기업 담당자의 승인 후 서비스를 사용하실 수 있습니다."
+    ],
+    "enterprise": [
+      "{{variable}}의 기업 등록을 처리하고 있습니다.",
+      "사전 컨택 및 승인 여부는 3일 이내에 입력하신 담당자 이메일로 발송됩니다.",
+      "이메일에 첨부된 대표 관리자 계정을 통해 홈페이지에 접속하시면 기업 등록이 완료됩니다."
+    ],
+    "toHome": "홈으로"
+  },
+  "aboutService": {
+    "description1": "파이프 시스템 관리, 유지보수의 혁신을 이끌다",
+    "description2": "파이프 유지보수의 새로운 기준.",
+    "feature1": {
+      "title": "디지털 전환",
+      "description1": "시간과 공간의 제약의 해소",
+      "description2": "파이프 렌더링 및 모니터링의 자동화"
+    },
+    "feature2": {
+      "title": "파이프 세그멘테이션 모델",
+      "description1": "약 2,500개의 파이프 데이터셋을 활용한 고정밀 세그멘테이션 기술",
+      "description2": ""
+    },
+    "feature3": {
+      "title": "파이프 렌더링 자동화",
+      "description1": "CadQuery를 활용한 3D 모델링",
+      "description2": ""
+    },
+    "feature4": {
+      "title": "사용자 친화 UX/UI",
+      "description1": "사용자의 생산성 증대를 위한 디자인",
+      "description2": "파이프 모니터링의 접근성 확대"
+    }
+  },
+  "aboutTeam": {
+    "description": "더 나은 기술의 혁신, TEAM PAORI와 함께합니다.",
+    "member1": {
+      "name": "서경덕",
+      "role": "팀장 | BE",
+      "email": "zoo54245424@gmail.com",
+      "description": "좌표 데이터 전처리\n3D 모델링 구현"
+    },
+    "member2": {
+      "name": "최예헌",
+      "role": "BE",
+      "email": "1594cyh@gmail.com",
+      "description": "BE 로직 설계 및 구현"
+    },
+    "member3": {
+      "name": "고민혁",
+      "role": "AI",
+      "email": "rhalsgur0086@gmail.comI",
+      "description": "딥러닝 모델 학습\n학습 데이터 전/후 처리"
+    },
+    "member4": {
+      "name": "성철민",
+      "role": "Infra",
+      "email": "tjdcjfals@gmail.com",
+      "description": "쿠버네티스 환경 구축\nCI/CD Pipeline 구축\n데이터 라벨링\nUCC 감독"
+    },
+    "member5": {
+      "name": "박주연",
+      "role": "FE, UX/UI Design",
+      "email": "krozv.code@gmail.com",
+      "description": "파이프 모델 렌더링 및 조회 구현\nUX/UI 설계, 디자인"
+    },
+    "member6": {
+      "name": "장지현",
+      "role": "UX/UI Design, FE",
+      "email": "jjhoneyyyy@gmail.com",
+      "description": "UX/UI 설계, 디자인\n계정 관리\n모델 생성 과정 데이터 처리"
+    }
+  },
+  "pipeGenerator": {
+    "title": "파이프 모델 생성",
+    "description": "관리할 파이프 모델을 생성해보세요.",
+    "commonButtons": {
+      "retry": "다시 시도",
+      "save": "저장",
+      "back": "이전"
+    },
+    "procedure": "모델 생성 절차",
+    "menus": {
+      "takePhoto": "파이프 사진 촬영",
+      "uploadModel": "파이프 모델 업로드",
+      "inputData": "파이프 데이터 입력",
+      "rendering": "모델 렌더링",
+      "completed": "모델 생성 완료"
+    },
+    "takePhoto": {
+      "connectRCCar": {
+        "title": "RC카 연결 안내",
+        "instructions": {
+          "checkPower": "1. RC카의 전원이 켜져 있는지 확인하세요.",
+          "pressConnectButton": "2. 연결 버튼을 누르면 RC카가 자동으로 연결됩니다.",
+          "connectionComplete": "3. 연결이 완료되면 연결 완료 메시지가 표시됩니다.",
+          "avoidMovement": "4. 연결 중에는 RC카를 움직이지 말아주세요."
+        },
+        "buttons": {
+          "connect": "RC카 연결"
+        },
+        "statusMessages": {
+          "connecting": "RC카 연결 중",
+          "completed": "RC카 연결 완료",
+          "failed": "RC카 연결 실패"
+        }
+      },
+      "caution": {
+        "title": "주의사항",
+        "instructions": {
+          "pageDescription": "파이프 사진 촬영을 위한 RC카 연결 페이지입니다.",
+          "manualUploadInstruction": "RC카 연결 없이 직접 파이프 모델을 업로드하려면, 아래 [파이프 모델 업로드] 버튼을 눌러주세요."
+        },
+        "buttons": {
+          "upload": "파이프 모델 업로드"
+        }
+      },
+      "takePipePhoto": {
+        "title": "파이프 촬영 안내",
+        "instructions": {
+          "startCapture": "1. 촬영 시작 버튼을 누르면 파이프 촬영이 시작됩니다.",
+          "avoidInterference": "2. 촬영 중에는 RC카 주변을 방해하지 않도록 주의해 주세요.",
+          "autoSave": "3. 촬영 완료 후 결과는 자동으로 저장됩니다.",
+          "stopOnError": "4. 촬영 도중 문제가 발생하면 즉시 중단됩니다."
+        },
+        "buttons": {
+          "startCapture": "촬영 시작"
+        }
+      }
+    },
+    "uploadModel": {
+      "title": "데이터 업로드 안내",
+      "captureStarted": {
+        "instructions": {
+          "modelingProcess": "--작업 중-- 촬영본 바탕으로 Blender 모델링 하는 과정 설명 --작업 중--"
+        },
+        "statusMessages": {
+          "success": "모델링 완료",
+          "failed": "모델링 실패"
+        }
+      },
+      "directUpload": {
+        "instructions": {
+          "uploadModel": "파이프 3D 모델 파일을 업로드 해주세요.",
+          "Format": "업로드 가능 형식",
+          "imageFileMessage": "(이미지 파일을 업로드하시면, 모델 렌더링 프로세스가 실행되어 추가 처리 시간이 소요될 수 있습니다.)",
+          "allowedFileTypes": "GLTF 또는 IMG 파일(.gltf, .png, .jpg, .jpeg)만 업로드 가능합니다.",
+          "noFile": "파일 없음"
+        },
+        "uploadBox": {
+          "selectFile": "파일 선택",
+          "reselectFile": "파일 다시 선택",
+          "uploadedFile": "첨부한 파일",
+          "upload": "업로드",
+          "statusMessages": {
+            "uploading": "파일 업로드 중",
+            "success": "업로드가 완료되었습니다.",
+            "failed": "업로드에 실패했습니다."
+          }
+        }
+      }
+    },
+    "inputData": {
+      "title": "데이터 입력 안내",
+      "instructions": {
+        "dataEntryPrompt": "등록할 파이프라인의 이름, 파이프가 위치한 장소와 층 정보를 입력하세요."
+      },
+      "formData": {
+        "pipelineName": "파이프라인 이름",
+        "location": "장소",
+        "select": "선택",
+        "input": "직접 입력",
+        "floorInfo": "층 정보",
+        "ground": "지상",
+        "underground": "지하",
+        "floor": "층",
+        "error": "숫자 형식으로 입력해 주세요."
+      }
+    },
+    "rendering": {
+      "title": "모델 렌더링 안내",
+      "instructions": {
+        "preparing": "모델을 준비하고 있습니다.",
+        "completed": {
+          "message": "모델 렌더링이 완료되었습니다.",
+          "previewAndSave": "아래 미리보기를 확인하고 저장 버튼을 눌러 저장하세요."
+        },
+        "failed": {
+          "message": "모델 렌더링에 실패하였습니다. 다시 파이프 촬영을 진행해주세요.",
+          "inquiries": "문제가 계속 발생하면 지원팀에 문의해 주시기 바랍니다."
+        }
+      },
+      "buttons": {
+        "capture": "파이프 사진 촬영"
+      }
+    },
+    "completed": {
+      "title": "생성 완료!",
+      "instructions": {
+        "completionMessage": "모델 생성이 완료되었습니다.",
+        "checkModelList": "모델 리스트에서 생성된 모델을 확인해주세요."
+      },
+      "buttons": {
+        "viewModel": "모델 보기"
+      }
+    }
+  },
+  "contact": {
+    "card": {
+      "title": "Contact Us",
+      "subtitle": "입력하신 담당자 이메일로<br/>기업 등록 안내 메일이 발송됩니다.",
+      "companyName": "기업명",
+      "industry": "산업",
+      "contactEmail": "담당자 이메일",
+      "contactPhoneNumber": "담당자 전화번호 (010-0000-0000)",
+      "button": "기업 등록",
+      "error": "입력을 확인해주세요."
+    },
+    "industryList": {
+      "manufacturing": "제조업",
+      "electricity": "전기, 가스, 증기 및 공기 조절 공급업",
+      "construction": "건설업",
+      "science": "과학 및 기술 서비스업",
+      "other": "기타"
+    },
+    "footer": {
+      "instructions": "사전 컨택 및 가입 관련 사항은 영업팀에 문의하세요.",
+      "connectEmail": "이메일로 연결"
+    }
+  },
+  "enterprise": {
+    "enterprise": "기업 계정",
+    "manage": "사원 관리",
+    "table": {
+      "name": "이름",
+      "email": "이메일",
+      "employeeId": "사번",
+      "department": "부서",
+      "position": "직급",
+      "requestManagement": "요청 관리"
+    },
+    "verification": {
+      "sidebarTitle": "인증",
+      "title": "사원 인증",
+      "instruction": "사원 인증 신청을 승인하거나 거부할 수 있습니다.",
+      "buttons": {
+        "approve": "승인",
+        "reject": "거부"
+      },
+      "noData": "현재 인증 신청 중인 사원이 없습니다."
+    },
+    "view": {
+      "sidebarTitle": "조회/변경",
+      "title": "사원 정보 조회/변경",
+      "instruction": "사원의 관리자 권한을 설정하고 관리할 수 있습니다.",
+      "buttons": {
+        "staff": "일반",
+        "admin": "관리자",
+        "update": "변경",
+        "search": {
+          "label": "검색",
+          "viewAllEmployees": "전체 사원 조회"
+        }
+      },
+      "status": {
+        "updateComplete": "변경 완료"
+      }
+    }
+  },
+  "PipeViewer": {
+    "readPipeModel": "파이프 모델 조회",
+    "noPipeModel": "등록된 파이프 모델이 없습니다.",
+    "noPipeModelDescription": "먼저 파이프 모델을 생성하세요.",
+    "noAccess": "접근 권한이 없습니다.",
+    "noAccessDescription": "기업 인증 상태를 확인하세요.",
+    "ModelListView": {
+      "selectModel": "파이프 모델을 선택하세요.",
+      "done": "완료",
+      "edit": "편집"
+    },
+    "GLTFViewer": {
+      "viewFullModel": "전체 모델 보기"
+    },
+    "ModelMemo": {
+      "property": "속성",
+      "viewDefectivePipe": "결함 파이프 조회",
+      "floorLabel": "층",
+      "basementLabel": "지하",
+      "memoLabel": "메모",
+      "modifiedDate": "수정일",
+      "downloadScreenShot": "스크린샷 다운로드"
+    },
+    "ModelProperty": {
+      "memoLabel": "메모",
+      "floorLabel": "층",
+      "basementLabel": "지하",
+      "pipeProperty": "파이프 속성",
+      "materialLabel": "재질",
+      "outerDiameter": "외경",
+      "innerDiameter": "내경",
+      "fluidProperty": "유체 속성",
+      "fluidFlowRate": "유속",
+      "changed": "속성 변경",
+      "pipeMaterialList": {
+        "1": "알루미늄",
+        "2": "철",
+        "3": "스테인리스"
+      },
+      "fluidMaterialList": {
+        "4": "수증기",
+        "5": "공기",
+        "6": "물",
+        "7": "기름",
+        "8": "증기"
+      },
+      "listbox": {
+        "place": "장소",
+        "floorLabel": "층",
+        "basementLabel": "지하"
+      }
+    },
+    "PipeMemo": {
+      "floorLabel": "층",
+      "basementLabel": "지하",
+      "checkDefect": "결함 체크",
+      "memoLabel": "메모",
+      "modifiedDate": "수정일"
+    },
+    "enterMemo": "메모를 입력하세요."
+  },
+  "terms": {
+    "title": "Pipewatch 이용약관 및 정책",
+    "chapter1": {
+      "title": "제1장 총칙",
+      "article1": {
+        "title": "제1조(목적)",
+        "content": {
+          "circle": [
+            "① 본 약관은 Pipewatch(이하 '파이프워치')가 제공하는 모든 서비스(이하 '서비스')의 이용조건 및 절차, 이용자와 파이프워치의 권리·의무·책임사항과 기타 필요한 사항을 규정함을 목적으로 합니다."
+          ],
+          "number": []
+        }
+      },
+      "article2": {
+        "title": "제2조(약관의 효력 및 변경)",
+        "content": {
+          "circle": [
+            "① 본 약관은 귀하가 본 약관의 내용에 동의하는 것을 조건으로 하여 서비스가 제공됩니다. 귀하가 본 약관에 동의하는 경우, 서비스 이용에 본 약관이 우선적으로 적용됩니다.",
+            "② 본 약관은 필요에 따라 변경될 수 있으며, 변경 시 적용일자 및 개정 사유를 명시하여 현행 약관과 함께 파이프워치 초기 화면에 변경 내용 적용일자 7일 전부터 공지합니다. 단, 이용자에게 불리한 변경의 경우 최소 30일 이상의 사전 공지 기간을 두고 안내합니다."
+          ],
+          "number": [
+            "1. 이용자는 변경된 약관에 동의하지 않을 경우 회원탈퇴를 통해 이용계약을 해지할 수 있으며, 변경된 약관 시행일 이후에도 서비스를 계속 사용할 경우 동의한 것으로 간주됩니다."
+          ]
+        }
+      },
+      "article3": {
+        "title": "제3조(약관 외 준칙)",
+        "content": {
+          "circle": [
+            "① 본 약관에서 정하지 않은 사항은 전자상거래 등에서의 소비자보호에 관한 법률, 정보통신망 이용촉진 및 정보보호 등에 관한 법률, 개인정보 보호법, 기타 관련 법령 및 상관례에 따릅니다.",
+            "② 개별 서비스에 대해 별도로 명시된 약관이나 이용규정이 있을 경우 본 약관과 함께 적용됩니다."
+          ],
+          "number": []
+        }
+      },
+      "article4": {
+        "title": "제4조(용어의 정의)",
+        "content": {
+          "circle": [
+            "① 이용자: 본 약관에 따라 파이프워치가 제공하는 서비스를 이용하는 모든 자.",
+            "② 회원: 파이프워치에 개인정보를 제공하여 회원 가입을 완료한 자.",
+            "③ 비회원: 회원가입 없이 서비스를 이용하는 자.",
+            "④ 관리자: 기업 회원 인증 후 관리자 권한을 부여받은 자.",
+            "⑤ 파이프 모델: 파이프 정보(장소, 층 정보 포함)를 기반으로 생성되는 데이터.",
+            "⑥ 탈퇴: 회원이 이용계약을 종료하는 행위.",
+            "⑦ 기타 본 약관에서 정의되지 않은 용어는 관련 법령 및 서비스 별 개별 약관에 따릅니다."
+          ],
+          "number": []
+        }
+      }
+    },
+    "chapter2": {
+      "title": "제2장 서비스 제공 및 이용",
+      "article5": {
+        "title": "제5조(서비스의 제공)",
+        "content": {
+          "circle": [
+            "① 파이프워치는 다음과 같은 서비스를 제공합니다:",
+            "② 파이프워치는 서비스의 내용을 변경하거나 추가할 수 있으며, 변경 시 이를 회원에게 공지합니다."
+          ],
+          "number": [
+            "1. 회원가입, 로그인, 회원탈퇴",
+            "2. 파이프 모델 생성 및 장소·층 정보 수집",
+            "3. 파이프 모델 파일 업로드 및 3D 모델 렌더링",
+            "4. 기업 회원 인증, 회원 관리, 관리자/일반 회원 역할 변경"
+          ]
+        }
+      },
+      "article6": {
+        "title": "제6조(회원가입 및 이용계약 성립)",
+        "content": {
+          "circle": [
+            "① 이용계약은 이용자가 회원가입 시 동의한 약관 내용에 따라 성립합니다.",
+            "② 다음 각 호에 해당하는 경우, 파이프워치는 회원가입을 승인하지 않을 수 있습니다:"
+          ],
+          "number": [
+            "1. 허위 정보를 기재한 경우",
+            "2. 타인의 명의를 도용한 경우",
+            "3. 기타 법령 및 본 약관을 위반하는 경우"
+          ]
+        }
+      },
+      "article7": {
+        "title": "제7조(정보보안)",
+        "content": {
+          "circle": [
+            "① 회원의 ID와 비밀번호는 본인이 관리할 책임이 있습니다.",
+            "② 비밀번호가 부정하게 사용된 경우 즉시 파이프워치에 신고해야 합니다."
+          ],
+          "number": []
+        }
+      },
+      "article8": {
+        "title": "제8조(서비스 이용시간)",
+        "content": {
+          "circle": [
+            "① 서비스 이용시간은 연중무휴, 1일 24시간을 원칙으로 합니다.",
+            "② 다만, 정기 점검 등의 사유로 이용이 제한될 수 있습니다."
+          ],
+          "number": []
+        }
+      }
+    },
+    "chapter3": {
+      "title": "제3장 회원 정보 및 개인정보 보호",
+      "article9": {
+        "title": "제9조(개인정보 수집 및 이용)",
+        "content": {
+          "circle": [
+            "① 파이프워치는 회원가입 시 최소한의 개인정보를 수집합니다.",
+            "② 회원은 개인정보 관리 메뉴를 통해 정보를 수정 또는 삭제할 수 있습니다."
+          ],
+          "number": []
+        }
+      },
+      "article10": {
+        "title": "제10조(개인정보 보호)",
+        "content": {
+          "circle": [
+            "① 회원의 개인정보는 회원의 동의 없이 제3자에게 제공되지 않습니다.",
+            "② 법령에 따라 요청이 있을 경우 예외적으로 제공될 수 있습니다."
+          ],
+          "number": []
+        }
+      }
+    },
+    "chapter4": {
+      "title": "제4장 계약 해지 및 이용 제한",
+      "article11": {
+        "title": "제11조(회원탈퇴 및 계약 해지)",
+        "content": {
+          "circle": [
+            "① 회원은 언제든지 회원탈퇴를 요청할 수 있습니다.",
+            "② 회원탈퇴 후 일부 정보는 관련 법령에 따라 일정 기간 보관될 수 있습니다."
+          ],
+          "number": []
+        }
+      },
+      "article12": {
+        "title": "제12조(서비스 이용 제한 및 중지)",
+        "content": {
+          "circle": ["① 다음과 같은 경우, 서비스 이용이 제한될 수 있습니다:"],
+          "number": [
+            "1. 법령 또는 본 약관을 위반한 경우",
+            "2. 서비스 운영을 방해한 경우"
+          ]
+        }
+      }
+    },
+    "chapter5": {
+      "title": "제5장 기타",
+      "article12": {
+        "title": "제13조(책임 제한)",
+        "content": {
+          "circle": [
+            "① 파이프워치는 천재지변, 시스템 장애 등 불가항력으로 인해 서비스를 제공할 수 없는 경우 책임을 지지 않습니다.",
+            "② 파이프워치는 회원이 제공한 정보의 신뢰성과 정확성에 대해 책임을 지지 않습니다."
+          ],
+          "number": []
+        }
+      },
+      "article13": {
+        "title": "제14조(관할법원 및 준거법)",
+        "content": {
+          "circle": [
+            "① 본 약관과 관련된 분쟁에 대해 소송이 제기될 경우, 파이프워치의 본사 소재지를 관할하는 법원을 전속 관할로 합니다.",
+            "② 본 약관은 대한민국 법령에 따릅니다."
+          ],
+          "number": []
+        }
+      }
+    },
+    "appendix": {
+      "title": "부칙",
+      "content": {
+        "circle": ["본 약관은 2024년 11월 11일부터 시행됩니다."],
+        "number": []
+      }
+    }
+  }
+}

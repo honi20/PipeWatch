@@ -1,0 +1,665 @@
+{
+  "error": {
+    "access": "Unauthorized Access.",
+    "accessBlocked": "Access Denied",
+    "toHome": "Home"
+  },
+  "header": {
+    "lang": "Eng",
+    "subMenu": {
+      "home": "Home",
+      "aboutUs": "About us",
+      "aboutService": "Our Service",
+      "aboutTeam": "Our Team",
+      "pipeViewer": "Pipe Viewer",
+      "pipeGenerator": "Pipe Generator",
+      "contact": "Contact"
+    },
+    "login": "Login",
+    "logout": "Logout",
+    "userRoles": {
+      "admin": "Admin",
+      "employee": "Employee",
+      "pending": "Verifying"
+    },
+    "accessError": {
+      "noCompany": "No registered company found. Please check the company verification status.",
+      "moveForReverification": "Proceed to Reverification"
+    }
+  },
+  "footer": {
+    "paoriTeam": "2024 Paori, Team",
+    "termsAndPolicy": "Terms & Policy",
+    "contact": "Contact",
+    "manageCookies": {
+      "title": "Manage Cookies",
+      "description": "We use our own cookies so that we can show you this website and understand how you use them to improve the services we offer.",
+      "buttonDeny": "Deny All",
+      "buttonAccept": "Accept All"
+    }
+  },
+  "home": {
+    "greeting1": "Boost your Efficiency",
+    "greeting2": "with PipeWatch.",
+    "signUp": "Sign Up",
+    "introduction": {
+      "create": "Create Pipe Model",
+      "viewPage": "Go to Model View Page",
+      "uploadData": {
+        "title": "The Most Convenient Data Upload",
+        "description": "Upload pipe data\nand experience automated segmentation technology."
+      },
+      "managePipes": {
+        "title": "Integrated Pipe Management by Building",
+        "description": "Manage pipes by building, floor, and section in one place.\nEdit pipe attributes in real time and leave notes."
+      },
+      "tabs": {
+        "allPipe": "All Pipe Models",
+        "individualPipe": "Individual Pipe Models",
+        "memo": "Write a Note"
+      }
+    }
+  },
+  "account": {
+    "login": "Login",
+    "findPassword": "Forgot Password?",
+    "signUp": "Sign Up",
+    "email": "Email",
+    "emailError": "Please enter a valid email.",
+    "duplicateEmail": "The email is already registered",
+    "requestVerification": "Verify",
+    "verificationCode": "Verification Code",
+    "verificationComplete": "Verification Complete",
+    "confirm": "Confirm",
+    "verificationFailed": "Email verification failed. Please try again.",
+    "password": "Password",
+    "confirmPassword": "Confirm password",
+    "passwordError": "Password must be at least 8 characters long and include at least one letter, one number, and one special character (e.g., !@#$%^&*).",
+    "passwordMismatchError": "The entered password does not match.",
+    "name": "Name",
+    "companyName": "Company name",
+    "employeeId": "Employee ID",
+    "employeeDepartment": "Department",
+    "employeePosition": "Position",
+    "employeeInformation": "Employee Information",
+    "termsAndPrivacyConsent": "By signing up, you consent to our <1>Terms of Service</1> and <3>Privacy Policy</3>.",
+    "passwordReset": "An email will be sent to your registered address.<br />Follow the instructions to set a new password.",
+    "sendPasswordResetEmail": "Send password reset email",
+    "goBackToLogin": "Return to login page",
+    "enterYourName": "Please enter your name.",
+    "resetPassword": {
+      "title": "Reset Your Password",
+      "instruction": "Please enter your new password.",
+      "complete": "Your password has been successfully reset.",
+      "goToLoginPage": "Go To Login Page"
+    }
+  },
+  "manageAccount": {
+    "dashboard": {
+      "title": "Account Management",
+      "editInfo": "Edit Personal Information",
+      "reverificationRequest": "Request Company Reverification",
+      "updatePassword": "Update Password",
+      "withdrawal": "WithDrawal",
+      "inquiry": "1:1 Inquiry"
+    },
+    "goToHomepage": "Go to Homepage",
+    "goToPreviousCard": "Go to Previous Card",
+    "editInfo": {
+      "registrationEmail": "Registered Email",
+      "companyName": "Company Name",
+      "employeeId": "Employee ID",
+      "department": "Department",
+      "position": "Position",
+      "editPersonalInfo": "Edit Personal Information",
+      "complete": "Your personal information has been successfully updated."
+    },
+    "reverificationRequest": {
+      "title": "Request Company Reverification",
+      "reverificationMessage": "Request company reverification for <b>{{enterpriseName}}</b>.",
+      "cancel": "Cancel",
+      "submitReverification": "Submit Reverification",
+      "reverificationComplete": "Reverification Request Completed.",
+      "close": "Close"
+    },
+    "updatePassword": {
+      "currentPassword": "Current Password",
+      "passwordMismatchError": "The entered password does not match your existing password.",
+      "newPassword": "New Password",
+      "confirmNewPassword": "Confirm New Password",
+      "updatePassword": "Update Password",
+      "complete": "Your password has been successfully updated.",
+      "newPasswordMatchError": " The new password must be different from the current password.",
+      "newPasswordMismatchError": "The entered password does not match."
+    },
+    "withdrawal": {
+      "registrationEmail": "Registered Email",
+      "withdrawalNoticeConfirmation": "Have you reviewed the withdrawal notice?",
+      "enterPassword": "Enter Password",
+      "confirmWithdrawal": "Confirm Account Deletion",
+      "withdrawalNotices": [
+        "Once deleted, account recovery is <strong>impossible.</strong>",
+        "All personal data will be permanently erased.",
+        "Re-registration with the same email may be restricted.",
+        "Some data may be retained temporarily due to legal obligations."
+      ],
+      "complete": "Your account has been successfully deleted.",
+      "passwordMismatchError": "The passwords do not match. Please check again."
+    }
+  },
+  "verification": {
+    "title": "Processing Your Authentication",
+    "personal": [
+      "The verification process for {{variable}} is underway.",
+      "You will be able to use the service after approval from the company representative."
+    ],
+    "enterprise": [
+      "We are processing the company registration for {{variable}}.",
+      "Pre-contact and approval status will be sent to the email address provided for the person in charge within 3 days.",
+      "Once you receive the email, you can complete the company registration by accessing the website through the attached admin account."
+    ],
+    "toHome": "Home"
+  },
+  "aboutService": {
+    "description1": "Leading Innovation in Pipe System Management and Maintenance.",
+    "description2": "New Standard in Pipe Maintenance.",
+    "feature1": {
+      "title": "Digital Transformation",
+      "description1": "Breaking the Boundaries of Time and Space",
+      "description2": "Automated Solutions for Pipe Rendering and Monitoring"
+    },
+    "feature2": {
+      "title": "Pipe Segmentation Model",
+      "description1": "High-Precision Segmentation Using 2,500+ Pipe Datasets",
+      "description2": ""
+    },
+    "feature3": {
+      "title": "Automated Pipe Rendering",
+      "description1": "3D Modeling Powered by the CadQuery",
+      "description2": ""
+    },
+    "feature4": {
+      "title": "User-Friendly UX/UI",
+      "description1": "Designed to Maximize User Productivity",
+      "description2": "Enhanced Accessibility for Seamless Pipe Monitoring"
+    }
+  },
+  "aboutTeam": {
+    "description": "Innovating with Better Technology, Together with TEAM PAORI.",
+    "member1": {
+      "name": "Gyeong-Deok Seo",
+      "role": "Team Lead, BE",
+      "email": "zoo54245424@gmail.com",
+      "description": "Coordinate Data Preprocessing\n3D Modeling Implementation"
+    },
+    "member2": {
+      "name": "Ye-Heon Choi",
+      "role": "BE",
+      "email": "1594cyh@gmail.com",
+      "description": "BE Logic Design and Implementation"
+    },
+    "member3": {
+      "name": "Min-Hyeok Ko",
+      "role": "AI",
+      "email": "rhalsgur0086@gmail.com",
+      "description": "Deep Learning Model Training\nPre- and Post-processing of Training Data"
+    },
+    "member4": {
+      "name": "Chul-Min Seung",
+      "role": "Infra",
+      "email": "tjdcjfals@gmail.com",
+      "description": "Setting up a Kubernetes Environment\nBuilding a CI/CD Pipeline\nData Labeling\nUCC Director"
+    },
+    "member5": {
+      "name": "Ju-Yeon Park",
+      "role": "FE, UX/UI Design",
+      "email": "krozv.code@gmail.com",
+      "description": "Pipe Model Rendering and Viewing\nUX/UI Design and Planning"
+    },
+    "member6": {
+      "name": "Ji-Hyeon Jang",
+      "role": "UX/UI Design, FE",
+      "email": "jjhoneyyyy@gmail.com",
+      "description": "UX/UI Design and Planning\nAccount Management\nModel Creation Data Processing"
+    }
+  },
+  "pipeGenerator": {
+    "title": "Create Pipe Model",
+    "description": "Create a pipe model to manage.",
+    "commonButtons": {
+      "retry": "Retry",
+      "save": "Save",
+      "back": "Back"
+    },
+    "procedure": "Model Creation Procedure",
+    "menus": {
+      "takePhoto": "Take Pipe Photo",
+      "uploadModel": "Upload Pipe Model",
+      "inputData": "Input Pipe Data",
+      "rendering": "Render Model",
+      "completed": "Model Creation Complete"
+    },
+    "takePhoto": {
+      "connectRCCar": {
+        "title": "RC Car Connection Guide",
+        "instructions": {
+          "checkPower": "1. Make sure the RC car is powered on.",
+          "pressConnectButton": "2. Press the connect button to automatically connect the RC car.",
+          "connectionComplete": "3. A connection complete message will be displayed once the connection is successful.",
+          "avoidMovement": "4. Do not move the RC car during the connection process."
+        },
+        "buttons": {
+          "connect": "Connect RC Car"
+        },
+        "statusMessages": {
+          "connecting": "Connecting...",
+          "completed": "Connected",
+          "failed": "Connection Failed"
+        }
+      },
+      "caution": {
+        "title": "Caution",
+        "instructions": {
+          "pageDescription": "This page is for connecting the RC car to take pipe photos.",
+          "manualUploadInstruction": "If you want to upload the pipe model without connecting the RC car, click the [Upload Pipe Model] button below."
+        },
+        "buttons": {
+          "upload": "Upload Pipe Model"
+        }
+      },
+      "takePipePhoto": {
+        "title": "Pipe Photo Guide",
+        "instructions": {
+          "startCapture": "1. Press the [Start Capture] button to begin taking pipe photos.",
+          "avoidInterference": "2. Avoid obstructing the RC car during photo capture.",
+          "autoSave": "3. The results will be saved automatically upon completion.",
+          "stopOnError": "4. The process will stop immediately if any issues occur."
+        },
+        "buttons": {
+          "startCapture": "Start Capture"
+        }
+      }
+    },
+    "uploadModel": {
+      "title": "Data Upload Guide",
+      "captureStarted": {
+        "instructions": {
+          "modelingProcess": "--In progress-- Description of the process using Blender to model based on captured photos --In progress--"
+        },
+        "statusMessages": {
+          "success": "Modeling Complete",
+          "failed": "Modeling Failed"
+        }
+      },
+      "directUpload": {
+        "instructions": {
+          "uploadModel": "Please upload the 3D model file of the pipe.",
+          "Format": "Allowed Upload Formats",
+          "imageFileMessage": "(Uploading an image file will initiate the model rendering process, which may take additional time.)",
+          "allowedFileTypes": "Only GLTF or IMG files (.gltf, .png, .jpg, .jpeg) can be uploaded.",
+          "noFile": "No File"
+        },
+        "uploadBox": {
+          "selectFile": "Select File",
+          "reselectFile": "Re-Select File",
+          "uploadedFile": "Uploaded File",
+          "upload": "Upload",
+          "statusMessages": {
+            "uploading": "Uploading File",
+            "success": "Upload Complete",
+            "failed": "Upload Failed"
+          }
+        }
+      }
+    },
+    "inputData": {
+      "title": "Data Entry Guide",
+      "instructions": {
+        "dataEntryPrompt": "Enter the pipeline name, location, and floor information."
+      },
+      "formData": {
+        "pipelineName": "Pipeline Name",
+        "location": "Location",
+        "select": "select location",
+        "input": "Enter Manually",
+        "floorInfo": "Floor Information",
+        "ground": "G",
+        "underground": "UG",
+        "floor": "F",
+        "error": "Please enter a valid number."
+      }
+    },
+    "rendering": {
+      "title": "Model Rendering Guide",
+      "instructions": {
+        "preparing": "Preparing Model Rendering",
+        "completed": {
+          "message": "Model rendering is complete.",
+          "previewAndSave": "Check the preview below and press the save button to save."
+        },
+        "failed": {
+          "message": "Model rendering failed. Please retry the pipe photo capture.",
+          "inquiries": "If the issue persists, please contact support."
+        }
+      },
+      "buttons": {
+        "capture": "Take Pipe Photo"
+      }
+    },
+    "completed": {
+      "title": "Creation Complete!",
+      "instructions": {
+        "completionMessage": "Model creation is complete.",
+        "checkModelList": "Please check the created model in the model list."
+      },
+      "buttons": {
+        "viewModel": "View Model"
+      }
+    }
+  },
+  "contact": {
+    "card": {
+      "title": "Contact Us",
+      "subtitle": "A registration guide email will be sent to the email address provided for the person in charge.",
+      "companyName": "Company Name",
+      "industry": "Industry",
+      "contactEmail": "Contact Email",
+      "contactPhoneNumber": "Contact Phone Number (010-0000-0000)",
+      "button": "Register your company now",
+      "error": "Please check your input."
+    },
+    "industryList": {
+      "manufacturing": "Manufacturing",
+      "electricity": "Electricity, Gas, Steam, and Air Conditioning Supply",
+      "construction": "Construction",
+      "science": "Scientific and Technical Services",
+      "other": "Other"
+    },
+    "footer": {
+      "instructions": "For any inquiries regarding pre-contact and registration,<br/>please reach out to our sales team.",
+      "connectEmail": "Go to connect via email"
+    }
+  },
+  "enterprise": {
+    "enterprise": "Enterprise Account",
+    "manage": "Employee Management",
+    "table": {
+      "name": "Name",
+      "email": "Email",
+      "employeeId": "Employee ID",
+      "department": "Department",
+      "position": "Position",
+      "requestManagement": "Request Management"
+    },
+    "verification": {
+      "sidebarTitle": "Verification",
+      "title": "Employee Verification",
+      "instruction": "You can approve or reject employee verification requests.",
+      "buttons": {
+        "approve": "Approve",
+        "reject": "Reject"
+      },
+      "noData": "There are no employees currently pending verification."
+    },
+    "view": {
+      "sidebarTitle": "View/Update",
+      "title": "View/Update Employee Information",
+      "instruction": "Manage and set administrative rights for employees.",
+      "buttons": {
+        "staff": "Employee",
+        "admin": "Administrator",
+        "update": "Update",
+        "search": {
+          "label": "Search",
+          "viewAllEmployees": "View All"
+        }
+      },
+      "status": {
+        "updateComplete": "Update Complete"
+      }
+    }
+  },
+  "PipeViewer": {
+    "readPipeModel": "Manage Pipe Model",
+    "noPipeModel": "No registered pipe model.",
+    "noPipeModelDescription": "Please create a pipe model first.",
+    "noAccess": "No access permission.",
+    "noAccessDescription": "Please check your corporate certification status.",
+    "ModelListView": {
+      "selectModel": "Select Pipe Model.",
+      "done": "Done",
+      "edit": "Edit"
+    },
+    "GLTFViewer": {
+      "viewFullModel": "View Full Model"
+    },
+    "ModelMemo": {
+      "property": "Property",
+      "viewDefectivePipe": "View Defective Pipe",
+      "floorLabel": "F",
+      "basementLabel": "B",
+      "memoLabel": "Memo",
+      "modifiedDate": "Modified Date",
+      "downloadScreenShot": "Download Screenshot"
+    },
+    "ModelProperty": {
+      "memoLabel": "Memo",
+      "floorLabel": "F",
+      "basementLabel": "B",
+      "pipeProperty": "Pipe Properties",
+      "materialLabel": "Material",
+      "outerDiameter": "Outer Diameter",
+      "innerDiameter": "Inner Diameter",
+      "fluidProperty": "Fluid Properties",
+      "fluidFlowRate": "Flow Rate",
+      "changed": "Changed Properties",
+      "pipeMaterialList": {
+        "1": "Aluminum",
+        "2": "Steel",
+        "3": "Stainless Steel"
+      },
+      "fluidMaterialList": {
+        "4": "Steam",
+        "5": "Air",
+        "6": "Water",
+        "7": "Oil",
+        "8": "Vapor"
+      },
+      "listbox": {
+        "place": "building",
+        "floorLabel": "F",
+        "basementLabel": "B"
+      }
+    },
+    "PipeMemo": {
+      "floorLabel": "F",
+      "basementLabel": "B",
+      "checkDefect": "Check Defection",
+      "memoLabel": "Memo",
+      "modifiedDate": "Modified Date"
+    },
+    "enterMemo": "Enter a memo."
+  },
+  "terms": {
+    "title": "Pipewatch Terms and Policy",
+    "chapter1": {
+      "title": "Chapter 1: General Provisions",
+      "article1": {
+        "title": "Article 1 (Purpose)",
+        "content": {
+          "circle": [
+            "① These Terms of Service (hereinafter referred to as 'Terms') set forth the conditions and procedures for using the services (hereinafter referred to as 'Services') provided by Pipewatch (hereinafter referred to as 'Pipewatch'), as well as the rights, obligations, and responsibilities of Pipewatch and its users, and other necessary matters."
+          ],
+          "number": []
+        }
+      },
+      "article2": {
+        "title": "Article 2 (Effectiveness and Amendment of Terms)",
+        "content": {
+          "circle": [
+            "① These Terms take effect upon the user's agreement to their content as a condition for using the Services. If the user agrees to the Terms, the Terms shall take precedence over other conditions in relation to the use of the Services.",
+            "② These Terms may be amended when necessary, and such amendments shall be announced on the initial screen of Pipewatch at least seven days prior to the effective date, along with the reasons for the amendment and the effective date. For changes that are unfavorable to users, a notice period of at least 30 days shall be provided."
+          ],
+          "number": [
+            "1. Users who do not agree with the amended Terms may terminate the service agreement by canceling their membership. Continuing to use the Services after the effective date of the amended Terms shall be deemed as consent to the changes."
+          ]
+        }
+      },
+      "article3": {
+        "title": "Article 3 (Other Applicable Rules)",
+        "content": {
+          "circle": [
+            "① For matters not specified in these Terms, relevant laws such as the Act on the Consumer Protection in Electronic Commerce Transactions, the Act on Promotion of Information and Communications Network Utilization and Information Protection, and the Personal Information Protection Act shall apply.",
+            "② Separate terms or policies specific to certain services may apply in conjunction with these Terms."
+          ],
+          "number": []
+        }
+      },
+      "article4": {
+        "title": "Article 4 (Definitions of Terms)",
+        "content": {
+          "circle": [
+            "① User: Any individual or entity who uses the Services provided by Pipewatch under these Terms.",
+            "② Member: A user who has completed membership registration by providing personal information to Pipewatch.",
+            "③ Non-Member: A user who uses the Services without registering as a member.",
+            "④ Administrator: A user who has been granted administrator rights following corporate member authentication.",
+            "⑤ Pipe Model: Data generated based on pipe information, including location and floor details.",
+            "⑥ Withdrawal: The act of a member terminating the service agreement.",
+            "⑦ For terms not defined in these Terms, relevant laws and individual service-specific terms shall apply."
+          ],
+          "number": []
+        }
+      }
+    },
+    "chapter2": {
+      "title": "Chapter 2: Provision and Use of Services",
+      "article5": {
+        "title": "Article 5 (Provision of Services)",
+        "content": {
+          "circle": [
+            "① Pipewatch provides the following Services:",
+            "② Pipewatch may modify or add to the content of the Services and shall notify members of such changes."
+          ],
+          "number": [
+            "1. Membership registration, login, and withdrawal",
+            "2. Pipe model creation and collection of location and floor information",
+            "3. Uploading pipe model files and 3D model rendering",
+            "4. Corporate member authentication, member management, and role changes (administrator/general member)"
+          ]
+        }
+      },
+      "article6": {
+        "title": "Article 6 (Membership Registration and Agreement Formation)",
+        "content": {
+          "circle": [
+            "① The service agreement is formed when a user agrees to these Terms during the membership registration process.",
+            "② Pipewatch may refuse membership registration in the following cases:"
+          ],
+          "number": [
+            "1. If false information is provided",
+            "2. If another person's identity is used",
+            "3. If other violations of laws or these Terms occur"
+          ]
+        }
+      },
+      "article7": {
+        "title": "Article 7 (Information Security)",
+        "content": {
+          "circle": [
+            "① Members are responsible for managing their IDs and passwords.",
+            "② In the event of unauthorized use of a password, members must report it to Pipewatch immediately."
+          ],
+          "number": []
+        }
+      },
+      "article8": {
+        "title": "Article 8 (Service Availability)",
+        "content": {
+          "circle": [
+            "① The Services are available 24/7 throughout the year.",
+            "② However, availability may be restricted due to regular maintenance or other reasons."
+          ],
+          "number": []
+        }
+      }
+    },
+    "chapter3": {
+      "title": "Chapter 3: Member Information and Privacy Protection",
+      "article9": {
+        "title": "Article 9 (Collection and Use of Personal Information)",
+        "content": {
+          "circle": [
+            "① Pipewatch collects only the minimum personal information necessary during membership registration.",
+            "② Members can modify or delete their personal information through the personal information management menu."
+          ],
+          "number": []
+        }
+      },
+      "article10": {
+        "title": "Article 10 (Privacy Protection)",
+        "content": {
+          "circle": [
+            "① Members' personal information shall not be provided to third parties without their consent.",
+            "② Exceptions may apply when there is a legal request."
+          ],
+          "number": []
+        }
+      }
+    },
+    "chapter4": {
+      "title": "Chapter 4: Termination and Restriction of Use",
+      "article11": {
+        "title": "Article 11 (Membership Withdrawal and Termination)",
+        "content": {
+          "circle": [
+            "① Members may request membership withdrawal at any time.",
+            "② After withdrawal, certain information may be retained for a specified period in accordance with applicable laws."
+          ],
+          "number": []
+        }
+      },
+      "article12": {
+        "title": "Article 12 (Restriction and Suspension of Use)",
+        "content": {
+          "circle": [
+            "① The use of Services may be restricted in the following cases:"
+          ],
+          "number": [
+            "1. Violation of laws or these Terms",
+            "2. Interference with service operations"
+          ]
+        }
+      }
+    },
+    "chapter5": {
+      "title": "Chapter 5: Miscellaneous",
+      "article12": {
+        "title": "Article 13 (Limitation of Liability)",
+        "content": {
+          "circle": [
+            "① Pipewatch shall not be held liable for damages caused by force majeure events, such as natural disasters or system failures.",
+            "② Pipewatch is not responsible for the reliability or accuracy of information provided by members."
+          ],
+          "number": []
+        }
+      },
+      "article13": {
+        "title": "Article 14 (Governing Law and Jurisdiction)",
+        "content": {
+          "circle": [
+            "① Any disputes related to these Terms shall be subject to the jurisdiction of the court located in the region of Pipewatch's headquarters.",
+            "② These Terms shall be governed by the laws of the Republic of Korea."
+          ],
+          "number": []
+        }
+      }
+    },
+    "appendix": {
+      "title": "Appendix",
+      "content": {
+        "circle": ["These Terms take effect as of November 11, 2024."],
+        "number": []
+      }
+    }
+  }
+}

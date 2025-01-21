@@ -1,0 +1,1 @@
+// propetyStore 사용 예정
