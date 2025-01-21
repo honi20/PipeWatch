@@ -25,6 +25,7 @@ build-backend:
     - docker --version
     - until docker info; do sleep 1; done
     - apk add --no-cache docker-cli
+
   tags:
     - paori
   rules:
@@ -48,6 +49,7 @@ build-frontend:
     - docker --version
     - until docker info; do sleep 1; done
     - apk add --no-cache docker-cli
+
   tags:
     - paori
   rules:
@@ -144,3 +146,4 @@ update-deployment-repo-model:
     - git add .
     - git commit -m "Update images to ${CI_COMMIT_SHA:0:8}"
     - git push origin master
+
