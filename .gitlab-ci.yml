@@ -7,54 +7,142 @@ variables:
   DOCKER_USERNAME: "churnobyl"
   BACKEND_IMAGE: "$DOCKER_USERNAME/pipewatch-backend"
   FRONTEND_IMAGE: "$DOCKER_USERNAME/pipewatch-frontend"
-  DOCKER_HOST: tcp://localhost:2375
+  MODEL_IMAGE: "$DOCKER_USERNAME/pipewatch-model"
+  DOCKER_HOST: tcp://docker:2375
   DOCKER_TLS_CERTDIR: ""
-
-before_script:
-  # 파이프라인 시작 시 UUID 생성
-  - export TAG=$(uuidgen)
+  DOCKER_BUILDKIT: 0
 
 # Backend build and push
 build-backend:
   stage: build
+  image: docker:24.0.5
+  services:
+    - name: docker:24.0.5-dind
+      command: [ "--tls=false" ]
+      variables:
+        HEALTHCHECK_TCP_PORT: "2375"
+  before_script:
+    - docker --version
+    - until docker info; do sleep 1; done
+    - apk add --no-cache docker-cli
+
   tags:
     - paori
   rules:
     - if: '$CI_COMMIT_REF_NAME == "develop-BE" && ($CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event")'
       when: always
   script:
-    - docker build -t $BACKEND_IMAGE:$TAG -f backend/Dockerfile backend/
+    - docker build -t $BACKEND_IMAGE:${CI_COMMIT_SHA:0:8} -f backend/Dockerfile backend/
     - echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
-    - docker push $BACKEND_IMAGE:$TAG
+    - docker push $BACKEND_IMAGE:${CI_COMMIT_SHA:0:8}
 
 # Frontend build and push
 build-frontend:
   stage: build
+  image: docker:24.0.5
+  services:
+    - name: docker:24.0.5-dind
+      command: [ "--tls=false" ]
+      variables:
+        HEALTHCHECK_TCP_PORT: "2375"
+  before_script:
+    - docker --version
+    - until docker info; do sleep 1; done
+    - apk add --no-cache docker-cli
+
   tags:
     - paori
   rules:
     - if: '$CI_COMMIT_REF_NAME == "develop-FE" && ($CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event")'
       when: always
   script:
-    - docker build -t $FRONTEND_IMAGE:$TAG -f frontend/pipewatch/Dockerfile frontend/pipewatch/
+    - docker build -t $FRONTEND_IMAGE:${CI_COMMIT_SHA:0:8} -f frontend/pipewatch/Dockerfile frontend/pipewatch/
     - echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
-    - docker push $FRONTEND_IMAGE:$TAG
+    - docker push $FRONTEND_IMAGE:${CI_COMMIT_SHA:0:8}
 
-# Deploy job to update deployment repository
-update-deployment-repo:
-  stage: deploy
+# Model build and push
+build-model:
+  stage: build
+  image: docker:24.0.5
+  services:
+    - name: docker:24.0.5-dind
+      command: [ "--tls=false" ]
+      variables:
+        HEALTHCHECK_TCP_PORT: "2375"
+  before_script:
+    - docker --version
+    - until docker info; do sleep 1; done
+    - apk add --no-cache docker-cli
   tags:
     - paori
   rules:
-    - if: '($CI_COMMIT_REF_NAME == "develop-FE" || $CI_COMMIT_REF_NAME == "develop-BE") && $CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_REF_NAME == "develop-model" && ($CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event")'
+      when: always
+  script:
+    - docker build -t $MODEL_IMAGE:${CI_COMMIT_SHA:0:8} -f model/Dockerfile model/
+    - echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
+    - docker push $MODEL_IMAGE:${CI_COMMIT_SHA:0:8}
+
+# Deploy job to update deployment repository
+update-deployment-repo-backend:
+  stage: deploy
+  needs: ["build-backend"]
+  image: alpine/git
+  before_script:
+    - apk add --no-cache bash sed
+  tags:
+    - paori
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "develop-BE" && ($CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event")'
       when: always
   script:
     - git config --global user.email "tjdcjfals3@naver.com"
     - git config --global user.name "성철민" 
-    - git clone https://$GITLAB_USER:$GITLAB_TOKEN@lab.ssafy.com/tjdcjfals3/s11p31a506-deploy.git
+    - git clone https://churnobyl:$GITLAB_TOKEN@lab.ssafy.com/tjdcjfals3/s11p31a506-deploy.git
     - cd s11p31a506-deploy
-    - 'sed -i "s|tag:.*|tag: \"$TAG\"|g" backend/values.yaml'
-    - 'sed -i "s|tag:.*|tag: \"$TAG\"|g" frontend/values.yaml'
+    - 'sed -i "s|tag:.*|tag: \"${CI_COMMIT_SHA:0:8}\"|g" backend/values.yaml'
     - git add .
-    - git commit -m "Update images to $TAG"
+    - git commit -m "Update images to ${CI_COMMIT_SHA:0:8}"
+    - git push origin master
+
+update-deployment-repo-frontend:
+  stage: deploy
+  needs: ["build-frontend"]
+  image: alpine/git
+  before_script:
+    - apk add --no-cache bash sed
+  tags:
+    - paori
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "develop-FE" && ($CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event")'
+      when: always
+  script:
+    - git config --global user.email "tjdcjfals3@naver.com"
+    - git config --global user.name "성철민" 
+    - git clone https://churnobyl:$GITLAB_TOKEN@lab.ssafy.com/tjdcjfals3/s11p31a506-deploy.git
+    - cd s11p31a506-deploy
+    - 'sed -i "s|tag:.*|tag: \"${CI_COMMIT_SHA:0:8}\"|g" frontend/values.yaml'
+    - git add .
+    - git commit -m "Update images to ${CI_COMMIT_SHA:0:8}"
+    - git push origin master
+
+update-deployment-repo-model:
+  stage: deploy
+  needs: ["build-model"]
+  image: alpine/git
+  before_script:
+    - apk add --no-cache bash sed
+  tags:
+    - paori
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "develop-model" && ($CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event")'
+      when: always
+  script:
+    - git config --global user.email "tjdcjfals3@naver.com"
+    - git config --global user.name "성철민" 
+    - git clone https://churnobyl:$GITLAB_TOKEN@lab.ssafy.com/tjdcjfals3/s11p31a506-deploy.git
+    - cd s11p31a506-deploy
+    - 'sed -i "s|tag:.*|tag: \"${CI_COMMIT_SHA:0:8}\"|g" model/values.yaml'
+    - git add .
+    - git commit -m "Update images to ${CI_COMMIT_SHA:0:8}"
     - git push origin master
