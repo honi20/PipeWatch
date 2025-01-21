@@ -25,6 +25,7 @@ build-backend:
     - docker --version
     - until docker info; do sleep 1; done
     - apk add --no-cache docker-cli
+
   tags:
     - paori
   rules:
@@ -48,6 +49,7 @@ build-frontend:
     - docker --version
     - until docker info; do sleep 1; done
     - apk add --no-cache docker-cli
+
   tags:
     - paori
   rules:
