@@ -8,6 +8,10 @@ import lombok.*;
 @Builder
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@Table(name = "building_and_floor", indexes = {
+		@Index(name = "idx_buildingandfloor_name", columnList = "name"),
+		@Index(name = "idx_buildingandfloor_floor", columnList = "floor")
+})
 public class BuildingAndFloor {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

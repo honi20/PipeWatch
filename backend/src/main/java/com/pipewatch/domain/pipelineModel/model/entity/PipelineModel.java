@@ -17,6 +17,9 @@ import java.util.List;
 @SuperBuilder
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@Table(name = "pipeline_model", indexes = {
+		@Index(name = "idx_pipeline_model_enterprise_id", columnList = "enterprise_id")
+})
 public class PipelineModel extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

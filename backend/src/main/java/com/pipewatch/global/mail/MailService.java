@@ -6,6 +6,7 @@ import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +18,7 @@ import java.util.UUID;
 import static com.pipewatch.global.statusCode.ErrorCode.MAIL_SEND_FAILURE;
 
 @Slf4j
+@Async
 @Transactional(readOnly = true)
 @Service
 @RequiredArgsConstructor
