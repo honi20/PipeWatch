@@ -22,21 +22,21 @@
 <table>
 <tr>
     <td align="center">
-        <img src="./docs/assets/파이프_모델_업로드.gif" alt="파이프 모델 업로드" >
+        <img src="./docs/assets/파이프_모델_업로드.gif" alt="파이프 모델 업로드" >
         <p><strong>파이프 모델 업로드</strong></center></p>
     </td>
     <td align="center">
-        <img src="./docs/assets/파이프_데이터_입력.gif" alt="파이프 데이터 입력" >
+        <img src="./docs/assets/파이프_데이터_입력.gif" alt="파이프 데이터 입력" >
         <p><strong>파이프 데이터 입력</strong></center></p>
     </td>
 </tr>
 <tr>
 	<td align="center">
-        <img src="./docs/assets/모델_렌더링.gif" alt="모델 렌더링" >
+        <img src="./docs/assets/모델_렌더링.gif" alt="모델 렌더링" >
         <p><strong>모델 렌더링</strong></center></p>
     </td>
 	<td align="center">
-        <img src="./docs/assets/모델_생성_완료.gif" alt="모델 생성 완료" >
+        <img src="./docs/assets/모델_생성_완료.gif" alt="모델 생성 완료" >
         <p><strong>모델 생성 완료</strong></center></p>
     </td>
 </tr>
